@@ -214,6 +214,39 @@
     }, 600000);
 </script>
 
+
+
+<script>
+    if ('wakeLock' in navigator) {
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock is active');
+            } catch (err) {
+                console.error('Failed to acquire wake lock', err);
+            }
+        }
+
+        // Spustit wake lock při načtení stránky
+        window.addEventListener('load', () => {
+            requestWakeLock();
+        });
+
+        // Pokud uživatel změní velikost okna, zrušíme a znovu aktivujeme wake lock
+        window.addEventListener('resize', () => {
+            if (wakeLock !== null) {
+                wakeLock.release().then(() => {
+                    requestWakeLock();
+                });
+            }
+        });
+    } else {
+        console.log("Wake Lock API není podporováno tímto prohlížečem.");
+    }
+</script>
+
 </body>
 </html>
 
