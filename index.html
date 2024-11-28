@@ -65,13 +65,13 @@
 
         #video-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            grid-template-rows: repeat(3, 33vh);  /* 3 řady pro mobil */
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatické sloupce pro videa */
+            grid-template-rows: repeat(auto-fill, 200px); /* Automatické řádky */
             width: 100vw;
             position: relative;
-            animation: scroll-up 60s linear infinite;
+            animation: scroll-up 60s linear infinite; /* Výchozí čas pro PC (60s) */
             overflow: hidden;
-            will-change: transform;
+            will-change: transform; /* Optimalizace vykreslování pro plynulejší animaci */
         }
 
         @keyframes scroll-up {
@@ -83,6 +83,7 @@
             }
         }
 
+        /* Zajištění, že videa mají poměr 1:1 */
         video {
             width: 100%;
             height: 100%;
@@ -94,22 +95,24 @@
         /* Media query pro mobilní zařízení */
         @media (max-width: 768px) {
             #video-container {
-                grid-template-columns: repeat(auto-fill, minmax(33%, 1fr)); /* 3 videa na řádku */
-                grid-template-rows: repeat(3, 33vh); /* Tři řady videí, každá s výškou 33% výšky obrazovky */
+                grid-template-columns: repeat(3, 1fr); /* 3 videa na řádku */
+                grid-template-rows: repeat(auto-fill, 33vw); /* Každé video na mobilu bude mít výšku 33% šířky */
             }
 
             /* Zajištění správného poměru stran 1:1 pro videa */
             video {
                 width: 100%;
-                height: 100%;
-                object-fit: cover;
+                height: auto;
+                aspect-ratio: 1 / 1; /* Poměr stran 1:1 */
+                object-fit: cover; /* Ujistíme se, že video správně vyplňuje prostor */
             }
 
             #video-container {
-                animation: scroll-up 180s linear infinite; /* Zpomalíme animaci pro mobil */
+                animation: scroll-up 180s linear infinite; /* Zpomalíme animaci pro mobil na 3 minuty (180s) */
             }
         }
 
+        /* Media query pro větší obrazovky */
         @media (min-width: 1024px) {
             #logo-section {
                 top: 10%;
@@ -153,6 +156,7 @@
                 flex-grow: 1;
             }
         }
+
     </style>
 </head>
 <body>
@@ -160,84 +164,85 @@
     <div id="logo-section"></div>
 
     <div id="center-section">
-        <div class="inner-text"><h2>Final Dimension</h2>Filip pracoval jako grafik ve firmě...</div>
-        <div class="inner-text"> <h2>Filip Duda</h2> si sedl k Veronice...</div>
+        <div class="inner-text"><h2>Final Dimension</h2>Filip pracoval jako grafik ve firmě, kterou měl rád, až jednoho dne přišel o práci. Bylo to zničující, ale věděl, že něco není v pořádku už delší dobu. Jeho kolegyně Veronika to věděla také, ale bála se mu to říct. Seděla vedle něj každý den, pozorovala, jak se věci zhoršují, ale měla strach, že by jí to mohlo stát její vlastní místo, pokud by promluvila.</div>
+        <div class="inner-text"> <h2>Filip Duda</h2> si sedl k Veronice a řekl: „Myslím, že bychom to asi měli přiznat – oběma nám to tady nevyšlo.“ Veronika se na něj podívala a odpověděla: „Já jsem to tušila, ale čekala jsem, až to řekneš ty, abych nebyla ta špatná.“ Filip se zasmál: „No jo, kdybych ti neustupoval, možná bychom tu byli pořád – ale zase, kdo by měl ty skvělé nápady?“ Společně se zasmáli a došlo jim, že hledání nové práce je vlastně jen další práce.</div>
     </div>
 
-    <div id="video-container"></div>
 
-    <script>
-        const videoFolder = 'videa/';
-        const videoCount = 8;
-        const videoContainer = document.getElementById('video-container');
+<div id="video-container"></div>
 
-        function addRandomVideo() {
-            const randomVideo = Math.floor(Math.random() * videoCount) + 1;
-            const videoElement = document.createElement('video');
-            videoElement.src = `${videoFolder}${randomVideo}.mp4`;
-            videoElement.autoplay = true;
-            videoElement.loop = true;
-            videoElement.muted = true;
-            videoElement.playsInline = true;
-            videoElement.preload = "auto";
-            videoElement.setAttribute('controls', ''); 
-            videoContainer.appendChild(videoElement);
+<script>
+    const videoFolder = 'videa/'; // Cesta k adresáři videí
+    const videoCount = 8; // Počet videí v adresáři
+    const videoContainer = document.getElementById('video-container');
+
+    function addRandomVideo() {
+        const randomVideo = Math.floor(Math.random() * videoCount) + 1;
+        const videoElement = document.createElement('video');
+        videoElement.src = `${videoFolder}${randomVideo}.mp4`;
+        videoElement.autoplay = true; // Videá začnú hneď
+        videoElement.loop = true;     // Videá sa budú opakovať
+        videoElement.muted = true;    // Videá začnú ztichnuté (aby nebránily prehrávanie)
+        videoElement.playsInline = true; // Pre mobilné zariadenia (prehrávať inline)
+        videoElement.preload = "auto";  // Prednačítanie videí pre rýchlejšie prehrávanie
+        videoElement.setAttribute('controls', ''); // Voliteľně přidat ovládací prvky pro video
+        videoContainer.appendChild(videoElement);
+    }
+
+    function fillVideos() {
+        const rows = Math.ceil(window.innerHeight / 200); // Počet řad, závislý na výšce obrazovky
+        const cols = Math.ceil(window.innerWidth / 200); // Počet sloupců, závislý na šířce obrazovky
+        const totalVideos = rows * cols; // Celkový počet videí, který bude na obrazovce
+        videoContainer.innerHTML = ''; // Vyčistíme předchozí videa
+        for (let i = 0; i < totalVideos; i++) {
+            addRandomVideo();
         }
 
-        function fillVideos() {
-            const rows = 3; // Počet řad (tři řady)
-            const cols = Math.ceil(window.innerWidth / (window.innerHeight / 3)); // Dynamicky přizpůsobíme sloupce na základě šířky
-            const totalVideos = rows * cols;
-            videoContainer.innerHTML = ''; // Vyčistíme předchozí videa
-            for (let i = 0; i < totalVideos; i++) {
-                addRandomVideo();
+        const containerHeight = Math.ceil(totalVideos / cols) * 200;
+        videoContainer.style.height = `${containerHeight}px`; // Nastavíme výšku kontejneru podle počtu videí
+    }
+
+    window.onload = () => {
+        fillVideos();
+    };
+
+    window.onresize = () => {
+        fillVideos();
+    };
+
+    setInterval(() => {
+        fillVideos();
+    }, 6000000);
+</script>
+
+<script>
+    if ('wakeLock' in navigator) {
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock is active');
+            } catch (err) {
+                console.error('Failed to acquire wake lock', err);
             }
-
-            const containerHeight = Math.ceil(totalVideos / cols) * (window.innerHeight / 3); // Dynamicky nastavujeme výšku
-            videoContainer.style.height = `${containerHeight}px`;
         }
 
-        window.onload = () => {
-            fillVideos();
-        };
+        window.addEventListener('load', () => {
+            requestWakeLock();
+        });
 
-        window.onresize = () => {
-            fillVideos();
-        };
-
-        setInterval(() => {
-            fillVideos();
-        }, 6000000);
-    </script>
-
-    <script>
-        if ('wakeLock' in navigator) {
-            let wakeLock = null;
-
-            async function requestWakeLock() {
-                try {
-                    wakeLock = await navigator.wakeLock.request('screen');
-                    console.log('Wake Lock is active');
-                } catch (err) {
-                    console.error('Failed to acquire wake lock', err);
-                }
+        window.addEventListener('resize', () => {
+            if (wakeLock !== null) {
+                wakeLock.release().then(() => {
+                    requestWakeLock();
+                });
             }
-
-            window.addEventListener('load', () => {
-                requestWakeLock();
-            });
-
-            window.addEventListener('resize', () => {
-                if (wakeLock !== null) {
-                    wakeLock.release().then(() => {
-                        requestWakeLock();
-                    });
-                }
-            });
-        } else {
-            console.log("Wake Lock API isn't supported by this browser.");
-        }
-    </script>
+        });
+    } else {
+        console.log("Wake Lock API není podporováno tímto prohlížečem.");
+    }
+</script>
 
 </body>
 </html>
