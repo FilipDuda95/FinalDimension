@@ -69,7 +69,7 @@
             grid-template-rows: repeat(auto-fill, 200px); /* Automatické řádky */
             width: 100vw;
             position: relative;
-            animation: scroll-up 60s linear infinite; /* Pomalá animace pro plynulý posun */
+            animation: scroll-up 120s linear infinite; /* Zpomalili jsme animaci na 120 sekund */
             overflow: hidden;
             will-change: transform; /* Optimalizace vykreslování pro plynulejší animaci */
         }
@@ -168,7 +168,7 @@
 
     <script>
         const videoFolder = 'videa/';
-        const videoCount = 40;
+        const videoCount = 8;
         const videoContainer = document.getElementById('video-container');
 
         function addRandomVideo() {
@@ -212,5 +212,6 @@
 
 </body>
 </html>
+
 
 
