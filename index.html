@@ -202,34 +202,40 @@
 
     window.onload = () => {
         fillVideos();
-        if ('wakeLock' in navigator) {
-            let wakeLock = null;
-
-            async function requestWakeLock() {
-                try {
-                    wakeLock = await navigator.wakeLock.request('screen');
-                    console.log('Wake Lock is active');
-                } catch (err) {
-                    console.error('Failed to acquire wake lock', err);
-                }
-            }
-
-            requestWakeLock();
-
-            // Re-request the wake lock if it is released
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible' && wakeLock === null) {
-                    requestWakeLock();
-                }
-            });
-        } else {
-            console.log("Wake Lock API není podporováno tímto prohlížečem.");
-        }
     };
 
     window.onresize = () => {
         fillVideos();
     };
+</script>
+
+<script>
+    if ('wakeLock' in navigator) {
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock is active');
+            } catch (err) {
+                console.error('Failed to acquire wake lock', err);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            requestWakeLock();
+        });
+
+        window.addEventListener('resize', () => {
+            if (wakeLock !== null) {
+                wakeLock.release().then(() => {
+                    requestWakeLock();
+                });
+            }
+        });
+    } else {
+        console.log("Wake Lock API není podporováno tímto prohlížečem.");
+    }
 </script>
 
 </body>
