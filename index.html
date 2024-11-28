@@ -90,21 +90,14 @@
             object-fit: cover;
             opacity: 0.7;
             border-radius: 15px;
+            aspect-ratio: 1 / 1; /* Poměr stran 1:1 */
         }
 
         /* Media query pro mobilní zařízení */
         @media (max-width: 768px) {
             #video-container {
                 grid-template-columns: repeat(3, 1fr); /* 3 videa na řádku */
-                grid-template-rows: repeat(auto-fill, 33vw); /* Každé video na mobilu bude mít výšku 33% šířky */
-            }
-
-            /* Zajištění správného poměru stran 1:1 pro videa */
-            video {
-                width: 100%;
-                height: auto;
-                aspect-ratio: 1 / 1; /* Poměr stran 1:1 */
-                object-fit: cover; /* Ujistíme se, že video správně vyplňuje prostor */
+                grid-template-rows: repeat(6, 33vw); /* Každé video bude mít výšku 33% šířky, 6 řádků */
             }
 
             #video-container {
@@ -246,5 +239,4 @@
 
 </body>
 </html>
-
 
