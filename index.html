@@ -183,12 +183,12 @@
         const randomVideo = Math.floor(Math.random() * 8) + 1; // Nyní načítáme náhodné video z většího rozsahu
         const videoElement = document.createElement('video');
         videoElement.src = `${videoFolder}${randomVideo}.mp4`;
-        videoElement.autoplay = true; // Videá začnú hneď
-        videoElement.loop = true;     // Videá sa budú opakovať
         videoElement.muted = true;    // Videá začnú ztichnuté (aby nebránily prehrávanie)
         videoElement.playsInline = true; // Pre mobilné zariadenia (prehrávať inline)
         videoElement.preload = "auto";  // Prednačítanie videí pre rýchlejšie prehrávanie
         videoContainer.appendChild(videoElement);
+videoElement.autoplay = true; // Videá začnú hneď
+videoElement.loop = true;     // Videá sa budú opakovať
     }
 
     function fillVideos() {
