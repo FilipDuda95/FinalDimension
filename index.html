@@ -180,11 +180,12 @@
         const randomVideo = Math.floor(Math.random() * videoCount) + 1;
         const videoElement = document.createElement('video');
         videoElement.src = `${videoFolder}${randomVideo}.mp4`;
-        videoElement.autoplay = true;
-        videoElement.loop = true;
-        videoElement.muted = true; // Ensure the video starts muted
-        videoElement.playsInline = true;
-        videoElement.preload = "auto";
+        videoElement.autoplay = true; // Videá začnú hneď
+        videoElement.loop = true;     // Videá sa budú opakovať
+        videoElement.muted = true;    // Videá začnú ztichnuté (aby nebránily prehrávaniu)
+        videoElement.playsInline = true; // Pre mobilné zariadenia (prehrávať inline)
+        videoElement.preload = "auto";  // Prednačítanie videí pre rýchlejšie prehrávanie
+        videoElement.setAttribute('controls', ''); // Voliteľně přidat ovládací prvky pro video
         videoContainer.appendChild(videoElement);
     }
 
@@ -192,7 +193,7 @@
         const rows = Math.ceil(window.innerHeight / 200);
         const cols = Math.ceil(window.innerWidth / 200);
         const totalVideos = rows * cols;
-        videoContainer.innerHTML = '';
+        videoContainer.innerHTML = ''; // Vyčistíme předchozí videa
         for (let i = 0; i < totalVideos; i++) {
             addRandomVideo();
         }
@@ -213,6 +214,7 @@
         fillVideos();
     }, 600000);
 </script>
+
 
 
 
