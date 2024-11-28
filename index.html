@@ -69,7 +69,7 @@
             grid-template-rows: repeat(auto-fill, 200px); /* Automatické řádky */
             width: 100vw;
             position: relative;
-            animation: scroll-up 120s linear infinite; /* Zpomalili jsme animaci na 120 sekund */
+            animation: scroll-up 60s linear infinite; /* Výchozí čas pro PC (60s) */
             overflow: hidden;
             will-change: transform; /* Optimalizace vykreslování pro plynulejší animaci */
         }
@@ -105,6 +105,10 @@
                 height: auto;
                 aspect-ratio: 1 / 1; /* Poměr stran 1:1 */
                 object-fit: cover; /* Ujistíme se, že video správně vyplňuje prostor */
+            }
+
+            #video-container {
+                animation: scroll-up 180s linear infinite; /* Zpomalíme animaci pro mobil na 3 minuty (180s) */
             }
         }
 
@@ -212,6 +216,3 @@
 
 </body>
 </html>
-
-
-
