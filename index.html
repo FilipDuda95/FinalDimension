@@ -8,9 +8,9 @@
         body {
             margin: 0;
             padding: 0;
-            background: black; /* Černé pozadí */
+            background: black;
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Skryje posuvníky */
+            overflow: hidden;
         }
 
         /* Text nadpisu */
@@ -24,126 +24,103 @@
             font-weight: bold;
             text-align: center;
             z-index: 10;
-            text-shadow: 2px 2px 4px black; /* Černé ohraničení textu */
+            text-shadow: 2px 2px 4px black;
         }
 
-        /* Oddíl pro logo s poměrem stran 1:1 */
+        /* Oddíl pro logo */
         #logo-section {
             position: absolute;
             top: 10%;
             left: 50%;
             transform: translateX(-50%);
-            width: 30vw; /* Základní šířka loga */
-            height: 30vw; /* Výška loga je stejná jako šířka pro poměr 1:1 */
-            background-image: url('style/logo.png'); /* Cesta k obrázku logo */
-            background-size: cover; /* Upraví velikost obrázku tak, aby vyplnil celý prostor */
-            background-position: center; /* Vycentrování obrázku */
-            border-radius: 50%; /* Zaoblení rohů pro kulatý tvar */
-            z-index: 20; /* Ujistí se, že logo je nahoře nad textem */
+            width: 30vw;
+            height: 30vw;
+            background-image: url('style/logo.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            z-index: 20;
         }
 
         /* Media query pro zvětšení loga při zobrazení na výšku (portrait mode) */
         @media (orientation: portrait) {
             #logo-section {
-                width: 45vw; /* Zvýšení šířky o 50 % při zobrazení na výšku */
-                height: 45vw; /* Zvýšení výšky o 50 % při zobrazení na výšku */
+                width: 45vw;
+                height: 45vw;
             }
         }
 
-        /* Nový textový oddíl s černým průhledným pozadím */
-        #text-section {
-            position: absolute;
-            top: 100%; /* Odsazení na spodní část obrazovky */
-            left: 0;
-            width: 100%;
-            height: 10vh; /* Výška oddílu je 10% výšky okna */
-            background: rgba(0, 0, 0, 0.7); /* Černé pozadí s průhledností */
-            color: white;
-            font-size: 2vw;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-            transform: translateY(-100%); /* Posune oddíl do spodní části okna */
-        }
-
-        /* Kontejner pro videa (multiscreen) */
+        /* Kontejner pro videa */
         #video-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Dynamické sloupce dle šířky */
-            grid-template-rows: repeat(auto-fill, 200px); /* Dynamické řádky */
+            grid-template-columns: repeat(3, 1fr); /* Tři sloupce */
+            gap: 10px; /* Mezera mezi videi */
             width: 100vw;
             position: relative;
-            animation: scroll-up 30s linear infinite; /* Pomalejší posun videí nahoru */
-            overflow: hidden; /* Skrytí videí, která se pohybují mimo obrazovku */
+            animation: scroll-up 30s linear infinite;
+            overflow: hidden;
         }
 
         /* Animace posunu nahoru */
         @keyframes scroll-up {
             0% {
-                transform: translateY(100%); /* Začínáme na začátku */
+                transform: translateY(100%);
             }
             100% {
-                transform: translateY(-100%); /* Posuneme celý obsah o 100% nahoru */
+                transform: translateY(-100%);
             }
         }
 
-        /* Videa ve stylu 1:1 */
+        /* Videa */
         video {
             width: 100%;
             height: 100%;
             aspect-ratio: 1 / 1;
-            object-fit: cover; /* Videa se přizpůsobí prostorům */
-            opacity: 0.7; /* Lehká průhlednost */
-            border-radius: 15px; /* Zaoblení rohů */
+            object-fit: cover;
+            opacity: 0.7;
+            border-radius: 15px;
         }
 
-        /* Nový středový oddíl s kulatými hranami */
+        /* Media query pro mobilní zařízení */
+        @media (max-width: 767px) {
+            #video-container {
+                grid-template-columns: repeat(3, 1fr); /* Tři videa na řádku */
+            }
+        }
+
+        /* Středový oddíl */
         #center-section {
             position: absolute;
-            top: 60%; /* Upravíme pozici tak, aby začínalo pod logem */
+            top: 60%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.7); /* Průhledné černé pozadí */
+            background: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 15px;
-            width: 80%; /* Šířka oddílu 80% šířky okna */
+            width: 80%;
             display: flex;
-            flex-direction: column; /* Vertikální zobrazení pro mobilní zařízení */
-            align-items: stretch; /* Texty budou roztaženy na celou šířku */
+            flex-direction: column;
+            align-items: stretch;
             z-index: 10;
         }
 
-        /* Vnitřní textové oddíly */
         .inner-text {
             color: white;
             font-size: 2vw;
-            margin: 10px 0; /* Mezera mezi texty */
-            text-align: center; /* Zarovnání textu na střed */
-            flex-grow: 1; /* Každý oddíl bude mít stejnou šířku */
+            margin: 10px 0;
+            text-align: center;
+            flex-grow: 1;
         }
 
-        /* Media query pro větší obrazovky - text vedle sebe */
         @media (min-width: 768px) {
             #center-section {
-                flex-direction: row; /* Texty vedle sebe */
-                justify-content: space-between; /* Rovnoměrně rozložené texty */
+                flex-direction: row;
+                justify-content: space-between;
             }
 
             .inner-text {
-                font-size: 1.5vw; /* Menší font pro větší obrazovky */
-                flex-grow: 1; /* Zajišťuje stejnou šířku pro každý text */
-            }
-        }
-
-        /* Media query pro zajištění správného zobrazení na šířku */
-        @media (min-width: 1024px) {
-            /* Upravíme pozici loga a textového oddílu */
-            #logo-section {
-                top: 10%; /* Zajistíme, že logo bude stále nahoře */
-            }
-            #center-section {
-                top: 60%; /* Udržujeme text pod logem */
+                font-size: 1.5vw;
+                flex-grow: 1;
             }
         }
 
@@ -154,64 +131,58 @@
     <!-- Oddíl pro logo -->
     <div id="logo-section"></div>
 
-    <!-- Nový středový oddíl s kulatými hranami a texty uvnitř -->
+    <!-- Středový oddíl -->
     <div id="center-section">
-        <div class="inner-text"><h2>Final Dimension</h2>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Aliquam erat volutpat. Nulla accumsan, elit sit amet varius semper, nulla mauris mollis quam, tempor suscipit diam n</div>
-        <div class="inner-text"><h2>Final Dimension</h2>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? In sem justo, commodo ut, suscipit at, pharetra vitae, orci. Aliquam erat volutpat. Nulla accumsan, elit sit amet varius semper, nulla mauri metus. Integer malesuada.</div>
+        <div class="inner-text"><h2>Final Dimension</h2>Texty...</div>
+        <div class="inner-text"><h2>Final Dimension</h2>Texty...</div>
     </div>
 
     <!-- Kontejner pro videa -->
     <div id="video-container"></div>
 
     <script>
-        // Simulace videí ze složky
-        const videoFolder = 'videa/'; // Cesta k adresáři s videy
-        const videoCount = 40; // Počet videí, která budeme používat
+        const videoFolder = 'videa/';
+        const videoCount = 40;
         const videoContainer = document.getElementById('video-container');
 
-        // Funkce pro náhodný výběr videa a přidání do kontejneru
         function addRandomVideo() {
-            const randomVideo = Math.floor(Math.random() * videoCount) + 1; // Generování náhodného čísla mezi 1 a 40
+            const randomVideo = Math.floor(Math.random() * videoCount) + 1;
             const videoElement = document.createElement('video');
-            videoElement.src = `${videoFolder}${randomVideo}.mp4`; // Nastavení cesty k náhodnému videu
-            videoElement.autoplay = true; // Automatické spuštění
-            videoElement.loop = true; // Smyčka
-            videoElement.muted = true; // Ztlumené video
-            videoElement.playsInline = true; // Pro mobilní zařízení
-            videoElement.preload = "auto"; // Automatické načítání videa
-            videoContainer.appendChild(videoElement); // Přidání videa do kontejneru
+            videoElement.src = `${videoFolder}${randomVideo}.mp4`;
+            videoElement.autoplay = true;
+            videoElement.loop = true;
+            videoElement.muted = true;
+            videoElement.playsInline = true;
+            videoElement.preload = "auto";
+            videoContainer.appendChild(videoElement);
         }
 
-        // Funkce pro naplnění videí (počet videí podle velikosti okna)
         function fillVideos() {
-            const rows = Math.ceil(window.innerHeight / 200); // Počet řádků videí podle výšky okna
-            const cols = Math.ceil(window.innerWidth / 200); // Počet sloupců videí podle šířky okna
-            const totalVideos = rows * cols; // Celkový počet videí na obrazovce
-            videoContainer.innerHTML = ''; // Vyčistí předchozí videa
+            const rows = Math.ceil(window.innerHeight / 200);
+            const cols = Math.ceil(window.innerWidth / 200);
+            const totalVideos = rows * cols;
+            videoContainer.innerHTML = '';
             for (let i = 0; i < totalVideos; i++) {
-                addRandomVideo(); // Přidáme náhodné video do kontejneru
+                addRandomVideo();
             }
 
-            // Dynamicky upravit výšku kontejneru na základě počtu videí
-            const containerHeight = Math.ceil(totalVideos / cols) * 200; // Výška kontejneru na základě počtu řádků
-            videoContainer.style.height = `${containerHeight}px`; // Nastavení výšky kontejneru
+            const containerHeight = Math.ceil(totalVideos / cols) * 200;
+            videoContainer.style.height = `${containerHeight}px`;
         }
 
-        // Načteme videa při načtení stránky a při změně velikosti okna
         window.onload = () => {
-            fillVideos(); // Naplníme videa při načtení
+            fillVideos();
         };
 
-        // Při změně velikosti okna aktualizujeme videa
         window.onresize = () => {
-            fillVideos(); // Přizpůsobíme videa nové velikosti okna
+            fillVideos();
         };
 
-        // Nastavení intervalového načítání každou minutu pro obnovení videí
         setInterval(() => {
-            fillVideos(); // Aktualizujeme videa každou minutu
-        }, 60000); // 60000 ms = 1 minuta
+            fillVideos();
+        }, 60000);
     </script>
 
 </body>
 </html>
+
