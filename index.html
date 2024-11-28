@@ -166,11 +166,10 @@
 
 <script>
     const videoFolder = 'videa/'; // Cesta k adresáři videí
-    const videoCount = 8; // Počet videí v adresáři
     const videoContainer = document.getElementById('video-container');
 
     function addRandomVideo() {
-        const randomVideo = Math.floor(Math.random() * videoCount) + 1;
+        const randomVideo = Math.floor(Math.random() * 8) + 1; // Nyní načítáme náhodné video z většího rozsahu
         const videoElement = document.createElement('video');
         videoElement.src = `${videoFolder}${randomVideo}.mp4`;
         videoElement.autoplay = true; // Videá začnú hneď
@@ -188,11 +187,11 @@
         const totalVideos = rows * cols; // Celkový počet videí, který bude na obrazovce
         videoContainer.innerHTML = ''; // Vyčistíme předchozí videa
         for (let i = 0; i < totalVideos; i++) {
-            addRandomVideo();
+            addRandomVideo(); // Přidání videí do gridu
         }
 
         const containerHeight = Math.ceil(totalVideos / cols) * 200;
-        videoContainer.style.height = `${containerHeight}px`; // Nastavíme výšku kontejneru podle počtu videí
+        videoContainer.style.height = `${containerHeight}px`;
     }
 
     window.onload = () => {
