@@ -84,19 +84,13 @@
         }
 
         /* Zajištění, že videa mají poměr 1:1 */
-        video, .fallback-logo {
+        video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             opacity: 0.7;
             border-radius: 15px;
             aspect-ratio: 1 / 1; /* Poměr stran 1:1 */
-        }
-
-        .fallback-logo {
-            background-image: url('path/to/logo.png'); /* Nahraďte cestu k logu */
-            background-size: cover;
-            background-position: center;
         }
 
         /* Media query pro mobilní zařízení */
@@ -181,9 +175,8 @@
     const videoFolder = 'videa/'; // Cesta k adresáři videí
     const videoContainer = document.getElementById('video-container');
 
-    // Funkce pro přidání videa nebo loga, pokud video selže
     function addRandomVideo() {
-        const randomVideo = Math.floor(Math.random() * 8) + 1; // Nyní načítáme náhodné video z většího rozsahu
+        const randomVideo = Math.floor(Math.random() * 100) + 1; // Nyní načítáme náhodné video z většího rozsahu
         const videoElement = document.createElement('video');
         videoElement.src = `${videoFolder}${randomVideo}.mp4`;
         videoElement.autoplay = true; // Videá začnú hneď
@@ -191,16 +184,6 @@
         videoElement.muted = true;    // Videá začnú ztichnuté (aby nebránily prehrávanie)
         videoElement.playsInline = true; // Pre mobilné zariadenia (prehrávať inline)
         videoElement.preload = "auto";  // Prednačítanie videí pre rýchlejšie prehrávanie
-        videoElement.setAttribute('controls', ''); // Voliteľně přidat ovládací prvky pro video
-
-        // Pokud video není možné načíst, nahradíme ho logem
-        videoElement.onerror = function() {
-            const logoFallback = document.createElement('div');
-            logoFallback.classList.add('fallback-logo'); // Použití třídy pro logo
-            videoContainer.appendChild(logoFallback); // Přidání loga místo videa
-            videoElement.remove(); // Odstranění videa z DOM, pokud selže
-        };
-
         videoContainer.appendChild(videoElement);
     }
 
@@ -226,6 +209,36 @@
     };
 </script>
 
+<script>
+    if ('wakeLock' in navigator) {
+        let wakeLock = null;
+
+        async function requestWakeLock() {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake Lock is active');
+            } catch (err) {
+                console.error('Failed to acquire wake lock', err);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            requestWakeLock();
+        });
+
+        window.addEventListener('resize', () => {
+            if (wakeLock !== null) {
+                wakeLock.release().then(() => {
+                    requestWakeLock();
+                });
+            }
+        });
+    } else {
+        console.log("Wake Lock API není podporováno tímto prohlížečem.");
+    }
+</script>
+
 </body>
 </html>
+
 
