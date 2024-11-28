@@ -102,7 +102,7 @@
 
             /* Zpomalíme animaci pro mobil na 3 minuty (180s) */
             #video-container {
-                animation: scroll-up 180s linear infinite;
+                animation: scroll-up 120s linear infinite;
             }
 
             video {
@@ -176,7 +176,7 @@
     const videoContainer = document.getElementById('video-container');
 
     function addRandomVideo() {
-        const randomVideo = Math.floor(Math.random() * 100) + 1; // Nyní načítáme náhodné video z většího rozsahu
+        const randomVideo = Math.floor(Math.random() * 8) + 1; // Nyní načítáme náhodné video z většího rozsahu
         const videoElement = document.createElement('video');
         videoElement.src = `${videoFolder}${randomVideo}.mp4`;
         videoElement.autoplay = true; // Videá začnú hneď
@@ -202,40 +202,34 @@
 
     window.onload = () => {
         fillVideos();
+        if ('wakeLock' in navigator) {
+            let wakeLock = null;
+
+            async function requestWakeLock() {
+                try {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock is active');
+                } catch (err) {
+                    console.error('Failed to acquire wake lock', err);
+                }
+            }
+
+            requestWakeLock();
+
+            // Re-request the wake lock if it is released
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && wakeLock === null) {
+                    requestWakeLock();
+                }
+            });
+        } else {
+            console.log("Wake Lock API není podporováno tímto prohlížečem.");
+        }
     };
 
     window.onresize = () => {
         fillVideos();
     };
-</script>
-
-<script>
-    if ('wakeLock' in navigator) {
-        let wakeLock = null;
-
-        async function requestWakeLock() {
-            try {
-                wakeLock = await navigator.wakeLock.request('screen');
-                console.log('Wake Lock is active');
-            } catch (err) {
-                console.error('Failed to acquire wake lock', err);
-            }
-        }
-
-        window.addEventListener('load', () => {
-            requestWakeLock();
-        });
-
-        window.addEventListener('resize', () => {
-            if (wakeLock !== null) {
-                wakeLock.release().then(() => {
-                    requestWakeLock();
-                });
-            }
-        });
-    } else {
-        console.log("Wake Lock API není podporováno tímto prohlížečem.");
-    }
 </script>
 
 </body>
