@@ -138,17 +138,16 @@
             // Kontrola, zda je zařízení mobilní podle šířky okna
             const isMobile = window.innerWidth <= 768;
 
-            // Seznam dostupných videí pro desktop zařízení
-            const desktopVideos = [];
-            for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 3 videa ve složce pozadi
-                desktopVideos.push(`pozadi/${i}.mp4`);
-            }
-
-
             // Seznam dostupných videí pro mobilní zařízení
             const mobileVideos = [];
             for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 3 videa ve složce pozadi2
                 mobileVideos.push(`pozadi2/${i}.mp4`);
+            }
+
+            // Seznam dostupných videí pro desktop zařízení
+            const desktopVideos = [];
+            for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 3 videa ve složce pozadi
+                desktopVideos.push(`pozadi/${i}.mp4`);
             }
 
             // Výběr videí podle zařízení
@@ -168,11 +167,18 @@
 
             // Načteme a přehrajeme video
             videoElement.load();
-            videoElement.play();
+            videoElement.play().catch(error => {
+                console.error("Chyba při přehrávání videa:", error);
+            });
         }
 
         // Nastavení náhodného videa při načtení stránky
         window.onload = () => {
+            setBackgroundVideo();
+        };
+
+        // Aktualizace videa při změně velikosti okna
+        window.onresize = () => {
             setBackgroundVideo();
         };
 
