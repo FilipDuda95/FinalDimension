@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -50,7 +50,6 @@
         #text-section {
             position: absolute;
             width: 100%;
-           
             background: rgba(0, 0, 0, 0.7);
             color: white;
             font-size: 2vw;
@@ -61,74 +60,19 @@
             transform: translateY(-100%);
         }
 
-        #video-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatické sloupce pro videa */
-            grid-template-rows: repeat(auto-fill, 200px); /* Automatické řádky */
-            width: 100vw;
-            position: relative;
-            animation: scroll-up 60s linear infinite; /* Výchozí čas pro PC (60s) */
-            overflow: hidden;
-            will-change: transform; /* Optimalizace vykreslování pro plynulejší animaci */
+        /* Úprava pro video na pozadí */
+        #background-video {
+            position: fixed;  /* Zajistí, že video zůstane na pozadí */
+            top: 0;
+            left: 0;
+            width: 100vw;  /* Video bude pokrývat celou šířku okna */
+            height: 100vh; /* Video pokryje celou výšku okna */
+            object-fit: cover;  /* Video vyplní celé okno a udrží si správný poměr stran */
+            z-index: -1; /* Video je pod vším ostatním */
+            opacity: 1;
         }
 
-        @keyframes scroll-up {
-            0% {
-                transform: translateY(100%);
-            }
-            100% {
-                transform: translateY(-100%);
-            }
-        }
-
-        /* Zajištění, že videa mají poměr 1:1 */
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.7;
-            border-radius: 15px;
-            aspect-ratio: 1 / 1; /* Poměr stran 1:1 */
-   aspect-ratio: 1 / 1; /* Poměr stran 1:1 */
-    autoplay: true; /* Autoplay pro mobilní zařízení */
-    muted: true; /* Ztišení pro mobilní zařízení */
-    playsinline: true; /* Aby se video přehrávalo inline na mobilních zařízeních */
-        }
-
-       @media (max-width: 768px) {
-    #video-container {
-        grid-template-columns: repeat(3, 1fr); /* 3 videa na řádku */
-        grid-template-rows: repeat(auto-fill, 33vw); /* Každé video bude mít výšku 33% šířky */
-    }
-
-    /* Zpomalíme animaci pro mobil na 3 minuty (180s) */
-    #video-container {
-        animation: scroll-up 120s linear infinite;
-    }
-}
-
-            video {
-                width: 100%;
-                height: 100%;
-                aspect-ratio: 1 / 1; /* Ujistíme se, že videa mají správný poměr */
-                object-fit: cover; /* Správné vyplnění prostoru */
-   aspect-ratio: 1 / 1; /* Poměr stran 1:1 */
-    autoplay: true; /* Autoplay pro mobilní zařízení */
-    muted: true; /* Ztišení pro mobilní zařízení */
-    playsinline: true; /* Aby se video přehrávalo inline na mobilních zařízeních */
-            }
-        }
-
-        /* Media query pro větší obrazovky */
-        @media (min-width: 1024px) {
-            #logo-section {
-                top: 10%;
-            }
-            #center-section {
-                top: 60%;
-            }
-        }
-
+        /* Sekce s textem a logem */
         #center-section {
             position: absolute;
             top: 60%;
@@ -168,83 +112,60 @@
 </head>
 <body>
 
+    <!-- Video na pozadí -->
+    <video id="background-video" autoplay muted loop>
+        <!-- Inicializační zdroj videa -->
+        <source id="video-source" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
     <div id="logo-section"></div>
 
     <div id="center-section">
-        <div class="inner-text"><h2>Final Dimension</h2>Filip pracoval jako grafik ve firmě, kterou měl rád, až jednoho dne přišel o práci. Bylo to zničující, ale věděl, že něco není v pořádku už delší dobu. Jeho kolegyně Veronika to věděla také, ale bála se mu to říct. Seděla vedle něj každý den, pozorovala, jak se věci zhoršují, ale měla strach, že by jí to mohlo stát její vlastní místo, pokud by promluvila.</div>
-        <div class="inner-text"> <h2>Filip Duda</h2> si sedl k Veronice a řekl: „Myslím, že bychom to asi měli přiznat – oběma nám to tady nevyšlo.“ Veronika se na něj podívala a odpověděla: „Já jsem to tušila, ale čekala jsem, až to řekneš ty, abych nebyla ta špatná.“ Filip se zasmál: „No jo, kdybych ti neustupoval, možná bychom tu byli pořád – ale zase, kdo by měl ty skvělé nápady?“ Společně se zasmáli a došlo jim, že hledání nové práce je vlastně jen další práce.</div>
+        <div class="inner-text">
+            <h2>Final Dimension</h2>
+            Filip pracoval jako grafik ve firmě, kterou měl rád, až jednoho dne přišel o práci. Bylo to zničující, ale věděl, že něco není v pořádku už delší dobu. Jeho kolegyně Veronika to věděla také, ale bála se mu to říct. Seděla vedle něj každý den, pozorovala, jak se věci zhoršují, ale měla strach, že by jí to mohlo stát její vlastní místo, pokud by promluvila.
+        </div>
+        <div class="inner-text">
+            <h2>Filip Duda</h2>
+            si sedl k Veronice a řekl: „Myslím, že bychom to asi měli přiznat – oběma nám to tady nevyšlo.“ Veronika se na něj podívala a odpověděla: „Já jsem to tušila, ale čekala jsem, až to řekneš ty, abych nebyla ta špatná.“ Filip se zasmál: „No jo, kdybych ti neustupoval, možná bychom tu byli pořád – ale zase, kdo by měl ty skvělé nápady?“ Společně se zasmáli a došlo jim, že hledání nové práce je vlastně jen další práce.
+        </div>
     </div>
 
-    <div id="video-container"></div>
-
-<script>
-    const videoFolder = 'videa/'; // Cesta k adresáři videí
-    const videoContainer = document.getElementById('video-container');
-
-   function addRandomVideo() {
-    const randomVideo = Math.floor(Math.random() * 8) + 1; // Nyní načítáme náhodné video z většího rozsahu
-    const videoElement = document.createElement('video');
-    videoElement.src = `${videoFolder}${randomVideo}.mp4`;
-    videoElement.muted = true;    // Videá začnú ztichnuté (aby nebránily prehrávanie)
-    videoElement.playsInline = true; // Pre mobilné zariadenia (prehrávať inline)
-    videoElement.preload = "auto";  // Prednačítanie videí pre rýchlejšie prehrávanie
-    videoElement.autoplay = true; // Videá začnú hneď
-    videoElement.loop = true;     // Videá sa budú opakovať
-    videoContainer.appendChild(videoElement);
-}
-
-function fillVideos() {
-    const rows = Math.ceil(window.innerHeight / 200); // Dynamicky se počítají řádky
-    const cols = Math.ceil(window.innerWidth / 200); // Dynamicky se počítají sloupce
-    const totalVideos = rows * cols;
-    videoContainer.innerHTML = ''; // Vyčistíme předchozí videa
-    for (let i = 0; i < totalVideos; i++) {
-        addRandomVideo(); // Přidání videí do gridu
-    }
-
-    const containerHeight = Math.ceil(totalVideos / cols) * 200;
-    videoContainer.style.height = `${containerHeight}px`;
-}
-
-    window.onload = () => {
-        fillVideos();
-    };
-
-    window.onresize = () => {
-        fillVideos();
-    };
-</script>
-
-<script>
-    if ('wakeLock' in navigator) {
-        let wakeLock = null;
-
-        async function requestWakeLock() {
-            try {
-                wakeLock = await navigator.wakeLock.request('screen');
-                console.log('Wake Lock is active');
-            } catch (err) {
-                console.error('Failed to acquire wake lock', err);
+    <script>
+        // Funkce pro náhodný výběr videa
+        function getRandomVideo() {
+            // Seznam dostupných videí (od 1.mp4 do 1.mp4)
+            const videoFiles = [];
+            for (let i = 1; i <= 1; i++) {
+                videoFiles.push(`pozadi/${i}.mp4`);
             }
+            // Výběr náhodného videa ze seznamu
+            const randomIndex = Math.floor(Math.random() * videoFiles.length);
+            return videoFiles[randomIndex];
         }
 
-        window.addEventListener('load', () => {
-            requestWakeLock();
-        });
+        // Nastavení video pozadí
+        function setBackgroundVideo() {
+            const videoElement = document.getElementById('background-video');
+            const videoSource = getRandomVideo(); // Získáme náhodné video
+            const sourceElement = document.getElementById('video-source'); // Najdeme tag source v elementu video
+            sourceElement.src = videoSource; // Nastavíme zdroj videa
 
-        window.addEventListener('resize', () => {
-            if (wakeLock !== null) {
-                wakeLock.release().then(() => {
-                    requestWakeLock();
-                });
-            }
-        });
-    } else {
-        console.log("Wake Lock API není podporováno tímto prohlížečem.");
-    }
-</script>
+            // Načteme a přehrajeme video
+            videoElement.load();
+            videoElement.play();
+        }
+
+        // Nastavení náhodného videa při načtení stránky
+        window.onload = () => {
+            setBackgroundVideo();
+        };
+
+    </script>
 
 </body>
 </html>
+
 
 
