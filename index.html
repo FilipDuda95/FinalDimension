@@ -168,24 +168,26 @@ function getRandomVideo() {
     }
 
     // Seznam dostupných videí pro mobilní zařízení v portrait orientaci
-    const mobileVideos = [];
-    for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 1 video ve složce pozadi2
-        mobileVideos.push(`pozadi2/${i}.mp4`);
+    if (isMobile) {
+        const mobileVideos = [];
+        for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 1 video ve složce pozadi2
+            mobileVideos.push(`pozadi2/${i}.mp4`);
+        }
+        const randomIndex = Math.floor(Math.random() * mobileVideos.length);
+        return mobileVideos[randomIndex];
     }
 
-    // Seznam dostupných videí pro desktop zařízení
+    // Seznam dostupných videí pro desktop zařízení (defaultně pro desktop)
     const desktopVideos = [];
     for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 1 video ve složce pozadi
         desktopVideos.push(`pozadi/${i}.mp4`);
     }
 
-    // Výběr videí podle zařízení
-    const videoFiles = isMobile ? mobileVideos : desktopVideos;
-
-    // Výběr náhodného videa
-    const randomIndex = Math.floor(Math.random() * videoFiles.length);
-    return videoFiles[randomIndex];
+    // Výběr náhodného videa pro desktop (pokud není mobilní)
+    const randomIndex = Math.floor(Math.random() * desktopVideos.length);
+    return desktopVideos[randomIndex];
 }
+
 
 
         // Nastavení video pozadí
