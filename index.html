@@ -135,8 +135,8 @@
     <script>
         // Funkce pro náhodný výběr videa
         function getRandomVideo() {
-            // Kontrola, zda je zařízení mobilní
-            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+            // Kontrola, zda je zařízení mobilní podle šířky okna
+            const isMobile = window.innerWidth <= 768;
 
             // Seznam dostupných videí pro mobilní zařízení
             const mobileVideos = [];
