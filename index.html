@@ -11,7 +11,20 @@
             background: black;
             font-family: Arial, sans-serif;
         }
-
+#black-section {
+    position: absolute;
+    top: 100vh;  /* Umístíme oddíl za hlavní obrazovku */
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;  /* Vertikální zobrazení jako výchozí pro menší obrazovky */
+    justify-content: center;  /* Vertikální centrování obsahu */
+    align-items: center;  /* Horizontální centrování obsahu */
+}
         #overlay-text {
             position: absolute;
             top: 20%;
@@ -101,6 +114,10 @@
                 flex-direction: row;
                 justify-content: space-between;
             }
+    #black-section {
+        flex-direction: row;  /* Zobrazí texty vedle sebe */
+        justify-content: space-evenly;  /* Rovnoměrné rozestupy mezi texty */
+    }
 
             .inner-text {
                 font-size: 1.5vw;
@@ -116,6 +133,14 @@
                 padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
             }
 
+
+
+        #black-section {
+                flex-direction: row;  /* Zobrazí položky vedle sebe */
+                justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
+                padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
+        }
+
             .inner-text {
                 font-size: 1.7vw;
                 margin: 1vw;  /* Snížíme mezery mezi texty */
@@ -124,16 +149,11 @@
             }
         }
 
+
+
+
+
         /* Nový oddíl s černým pozadím */
-        #black-section {
-            position: absolute;  /* Absolutní pozice pro plynulé scrollování */
-            top: 100vh;  /* Posunutí dolů o výšku obrazovky */
-            left: 0;
-            width: 100%;  /* Celá šířka obrazovky */
-            height: 100vh;  /* Výška obrazovky */
-            background-color: black;  /* Černé pozadí */
-            z-index: 999;  /* Ujistíme se, že je nad ostatními prvky */
-        }
     </style>
 </head>
 <body>
@@ -144,8 +164,6 @@
         Your browser does not support the video tag.
     </video>
 
-    <!-- Nový oddíl s černým pozadím -->
-    <div id="black-section"></div>
 
     <div id="center-section">
         <div id="logo-section"></div>
@@ -158,6 +176,20 @@
             si sedl k Veronice a řekl: „Myslím, že bychom to asi měli přiznat – oběma nám to tady nevyšlo.“ Veronika se na něj podívala a odpověděla: „Já jsem to tušila, ale čekala jsem, až to řekneš ty, abych nebyla ta špatná.“ Filip se zasmál: „No jo, kdybych ti neustupoval, možná bychom tu byli pořád – ale zase, kdo by měl ty skvělé nápady?“ Společně se zasmáli a došlo jim, že hledání nové práce je vlastně jen další práce.
         </div>
     </div>
+
+
+    <!-- Nový oddíl s černým pozadím -->
+<div id="black-section">
+    <div class="inner-text">
+        <h2>Black Section Title</h2>
+        Some content for the black section that should behave similarly to the center section.
+    </div>
+    <div class="inner-text">
+        <h2>Another Title</h2>
+        More content for the black section.
+    </div>
+</div>
+
 
     <script>
         // Funkce pro náhodný výběr videa
