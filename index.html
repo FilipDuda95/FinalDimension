@@ -209,6 +209,20 @@
         };
 
 
+
+let previousWidth = window.innerWidth;
+
+window.onresize = () => {
+    const currentWidth = window.innerWidth;
+    
+    // Pokud se šířka okna změnila
+    if (currentWidth !== previousWidth) {
+        setBackgroundVideo();
+        previousWidth = currentWidth; // Uložení nové šířky okna
+    }
+};
+
+
     </script>
 
 </body>
