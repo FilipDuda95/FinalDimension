@@ -31,8 +31,8 @@
             top: 10%;
             left: 50%;
             transform: translateX(-50%);
-            width: 25vw;
-            height: 25vw;
+            width: 30vw;
+            height: 30vw;
             background-image: url('style/logo.png');
             background-size: cover;
             background-position: center;
@@ -42,8 +42,8 @@
 
         @media (orientation: portrait) {
             #logo-section {
-                width: 35vw;
-                height: 35vw;
+                width: 45vw;
+                height: 45vw;
             }
         }
 
@@ -59,6 +59,7 @@
             z-index: 5;
             transform: translateY(-100%);
         }      
+
 
         /* Úprava pro video na pozadí */
         #background-video {
@@ -108,40 +109,13 @@
             }
         }
 
-        /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
-        @media (max-width: 768px) and (orientation: landscape) {
-            #center-section {
-                flex-direction: row;  /* Zobrazí položky vedle sebe */
-                justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
-                padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
-            }
-
-            .inner-text {
-                font-size: 2vw;
-                margin: 1vw;  /* Snížíme mezery mezi texty */
-                text-align: center;  
-                flex-grow: 1;  /* Texty se budou roztahovat, pokud bude místo */
-            }
-        }
-
-        /* Úprava pro mobilní zobrazení na výšku */
-        @media (max-width: 768px) and (orientation: portrait) {
-            #logo-section {
-                width: 50vw;
-                height: 50vw;
-            }
-
-            .inner-text {
-                font-size: 4vw;
-                margin: 2vw;
-            }
-        }
     </style>
 </head>
 <body>
 
     <!-- Video na pozadí -->
     <video id="background-video" autoplay muted loop>
+        <!-- Inicializační zdroj videa -->
         <source id="video-source" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -208,8 +182,10 @@
         window.onresize = () => {
             setBackgroundVideo();
         };
+
     </script>
 
 </body>
 </html>
+
 
