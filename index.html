@@ -58,7 +58,7 @@
             align-items: center;
             z-index: 5;
             transform: translateY(-100%);
-        }
+        }      
 
         /* Úprava pro video na pozadí */
         #background-video {
@@ -91,7 +91,7 @@
         .inner-text {
             color: white;
             font-size: 2vw;
-            margin: 10px 0;
+            margin: 2.5vw;
             text-align: center;
             flex-grow: 1;
         }
@@ -108,13 +108,28 @@
             }
         }
 
+        /* Úprava pro zobrazení na šířku */
+        @media (orientation: landscape) {
+            #center-section {
+                flex-direction: row;  /* Zobrazí položky vedle sebe */
+                justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
+                padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
+            }
+
+            .inner-text {
+                font-size: 2vw;
+                margin: 1vw;  /* Snížíme mezery mezi texty */
+                text-align: left;  /* Text bude zarovnán na levý okraj */
+                flex-grow: 1;  /* Texty se budou roztahovat, pokud bude místo */
+            }
+        }
+
     </style>
 </head>
 <body>
 
     <!-- Video na pozadí -->
     <video id="background-video" autoplay muted loop>
-        <!-- Inicializační zdroj videa -->
         <source id="video-source" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -135,23 +150,23 @@
     <script>
         // Funkce pro náhodný výběr videa
         function getRandomVideo() {
-            // Detekce orientace zařízení (širokoúhlý nebo na výšku)
-            const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+            // Kontrola, zda je zařízení mobilní podle šířky okna
+            const isMobile = window.innerWidth <= 768;
 
-            // Seznam dostupných videí pro orientaci na výšku
-            const portraitVideos = [];
+            // Seznam dostupných videí pro mobilní zařízení
+            const mobileVideos = [];
             for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 3 videa ve složce pozadi2
-                portraitVideos.push(`pozadi2/${i}.mp4`);
+                mobileVideos.push(`pozadi2/${i}.mp4`);
             }
 
-            // Seznam dostupných videí pro orientaci na šířku
-            const landscapeVideos = [];
+            // Seznam dostupných videí pro desktop zařízení
+            const desktopVideos = [];
             for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 3 videa ve složce pozadi
-                landscapeVideos.push(`pozadi/${i}.mp4`);
+                desktopVideos.push(`pozadi/${i}.mp4`);
             }
 
-            // Výběr videí podle orientace zařízení
-            const videoFiles = isPortrait ? portraitVideos : landscapeVideos;
+            // Výběr videí podle zařízení
+            const videoFiles = isMobile ? mobileVideos : desktopVideos;
 
             // Výběr náhodného videa
             const randomIndex = Math.floor(Math.random() * videoFiles.length);
@@ -174,11 +189,6 @@
 
         // Nastavení náhodného videa při načtení stránky
         window.onload = () => {
-            setBackgroundVideo();
-        };
-
-        // Aktualizace videa při změně orientace okna
-        window.onorientationchange = () => {
             setBackgroundVideo();
         };
 
