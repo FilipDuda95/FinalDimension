@@ -60,7 +60,6 @@
             transform: translateY(-100%);
         }      
 
-
         /* Úprava pro video na pozadí */
         #background-video {
             position: fixed;  /* Zajistí, že video zůstane na pozadí */
@@ -109,13 +108,28 @@
             }
         }
 
+        /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
+        @media (max-width: 768px) and (orientation: landscape) {
+            #center-section {
+                flex-direction: row;  /* Zobrazí položky vedle sebe */
+                justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
+                padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
+            }
+
+            .inner-text {
+                font-size: 2vw;
+                margin: 1vw;  /* Snížíme mezery mezi texty */
+                text-align: center;  /* Text bude zarovnán na levý okraj */
+                flex-grow: 1;  /* Texty se budou roztahovat, pokud bude místo */
+            }
+        }
+
     </style>
 </head>
 <body>
 
     <!-- Video na pozadí -->
     <video id="background-video" autoplay muted loop>
-        <!-- Inicializační zdroj videa -->
         <source id="video-source" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -187,5 +201,6 @@
 
 </body>
 </html>
+
 
 
