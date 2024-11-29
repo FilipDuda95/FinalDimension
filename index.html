@@ -135,12 +135,25 @@
     <script>
         // Funkce pro náhodný výběr videa
         function getRandomVideo() {
-            // Seznam dostupných videí (od 1.mp4 do 1.mp4)
-            const videoFiles = [];
+            // Kontrola, zda je zařízení mobilní
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+            // Seznam dostupných videí pro mobilní zařízení
+            const mobileVideos = [];
             for (let i = 1; i <= 1; i++) {
-                videoFiles.push(`pozadi/${i}.mp4`);
+                mobileVideos.push(`pozadi2/${i}.mp4`);
             }
-            // Výběr náhodného videa ze seznamu
+
+            // Seznam dostupných videí pro desktop zařízení
+            const desktopVideos = [];
+            for (let i = 1; i <= 1; i++) {
+                desktopVideos.push(`pozadi/${i}.mp4`);
+            }
+
+            // Výběr videí podle zařízení
+            const videoFiles = isMobile ? mobileVideos : desktopVideos;
+
+            // Výběr náhodného videa
             const randomIndex = Math.floor(Math.random() * videoFiles.length);
             return videoFiles[randomIndex];
         }
