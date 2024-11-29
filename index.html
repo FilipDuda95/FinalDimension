@@ -108,8 +108,8 @@
             }
         }
 
-        /* Úprava pro zobrazení na šířku */
-        @media (orientation: landscape) {
+        /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
+        @media (max-width: 768px) and (orientation: landscape) {
             #center-section {
                 flex-direction: row;  /* Zobrazí položky vedle sebe */
                 justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
@@ -201,5 +201,6 @@
 
 </body>
 </html>
+
 
 
