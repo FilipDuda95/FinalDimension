@@ -10,7 +10,6 @@
             padding: 0;
             background: black;
             font-family: Arial, sans-serif;
-            overflow: hidden;
         }
 
         #overlay-text {
@@ -44,10 +43,8 @@
             #logo-section {
                 width: 45vw;
                 height: 45vw;
- 		top: -45%;
+                top: -45%;
             }
-
-
         }
 
         #text-section {
@@ -119,9 +116,6 @@
                 padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
             }
 
-
-
-
             .inner-text {
                 font-size: 1.7vw;
                 margin: 1vw;  /* Snížíme mezery mezi texty */
@@ -130,6 +124,16 @@
             }
         }
 
+        /* Nový oddíl s černým pozadím */
+        #black-section {
+            position: absolute;  /* Absolutní pozice pro plynulé scrollování */
+            top: 100vh;  /* Posunutí dolů o výšku obrazovky */
+            left: 0;
+            width: 100%;  /* Celá šířka obrazovky */
+            height: 100vh;  /* Výška obrazovky */
+            background-color: black;  /* Černé pozadí */
+            z-index: 999;  /* Ujistíme se, že je nad ostatními prvky */
+        }
     </style>
 </head>
 <body>
@@ -140,13 +144,14 @@
         Your browser does not support the video tag.
     </video>
 
-   
+    <!-- Nový oddíl s černým pozadím -->
+    <div id="black-section"></div>
 
     <div id="center-section">
-<div id="logo-section"></div>
+        <div id="logo-section"></div>
         <div class="inner-text">
             <h2>Final Dimension</h2>
-            Filip pracoval jako grafik ve firmě, kterou měl rád, až jednoho dne přišel o práci. Bylo to zničující, ale věděl, že něco není v pořádku už delší dobu. Jeho kolegyně Veronika to věděla také, ale bála se mu to říct. Seděla vedle něj každý den, pozorovala, jak se věci zhoršují, ale měla strach, že by jí to mohlo stát její vlastní místo, pokud by promluvila.
+            Filip pracoval jako grafik ve firmě, kterou měl rád, až jednoho dne přišel o práci. Bylo to zničující, ale věděl, že něco není v pořádku už delší dobu. Jeho kolegyně Veronika to vědela také, ale bála se mu to říct. Seděla vedle něj každý den, pozorovala, jak se věci zhoršují, ale měla strach, že by jí to mohlo stát její vlastní místo, pokud by promluvila.
         </div>
         <div class="inner-text">
             <h2>Filip Duda</h2>
@@ -156,71 +161,56 @@
 
     <script>
         // Funkce pro náhodný výběr videa
-// Funkce pro náhodný výběr videa
-function getRandomVideo() {
-    // Kontrola, zda je zařízení mobilní podle šířky okna
-    const isMobile = window.innerWidth <= 768;
+        function getRandomVideo() {
+            const isMobile = window.innerWidth <= 768;
+            const isLandscape = window.innerWidth > window.innerHeight;
 
-    // Kontrola orientace (landscape)
-    const isLandscape = window.innerWidth > window.innerHeight;
+            if (isMobile && isLandscape) {
+                const desktopVideos = [];
+                for (let i = 1; i <= 1; i++) {
+                    desktopVideos.push(`pozadi/${i}.mp4`);
+                }
+                const randomIndex = Math.floor(Math.random() * desktopVideos.length);
+                return desktopVideos[randomIndex];
+            }
 
-    // Pokud je zařízení v landscape režimu na mobilu, načti video ze složky 'pozadi' (stejně jako na počítači)
-    if (isMobile && isLandscape) {
-        const desktopVideos = [];
-        for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 1 video ve složce pozadi
-            desktopVideos.push(`pozadi/${i}.mp4`);
+            if (isMobile) {
+                const mobileVideos = [];
+                for (let i = 1; i <= 1; i++) {
+                    mobileVideos.push(`pozadi2/${i}.mp4`);
+                }
+                const randomIndex = Math.floor(Math.random() * mobileVideos.length);
+                return mobileVideos[randomIndex];
+            }
+
+            const desktopVideos = [];
+            for (let i = 1; i <= 1; i++) {
+                desktopVideos.push(`pozadi/${i}.mp4`);
+            }
+
+            const randomIndex = Math.floor(Math.random() * desktopVideos.length);
+            return desktopVideos[randomIndex];
         }
-        const randomIndex = Math.floor(Math.random() * desktopVideos.length);
-        return desktopVideos[randomIndex];
-    }
-
-    // Seznam dostupných videí pro mobilní zařízení v portrait orientaci
-    if (isMobile) {
-        const mobileVideos = [];
-        for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 1 video ve složce pozadi2
-            mobileVideos.push(`pozadi2/${i}.mp4`);
-        }
-        const randomIndex = Math.floor(Math.random() * mobileVideos.length);
-        return mobileVideos[randomIndex];
-    }
-
-    // Seznam dostupných videí pro desktop zařízení (defaultně pro desktop)
-    const desktopVideos = [];
-    for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 1 video ve složce pozadi
-        desktopVideos.push(`pozadi/${i}.mp4`);
-    }
-
-    // Výběr náhodného videa pro desktop (pokud není mobilní)
-    const randomIndex = Math.floor(Math.random() * desktopVideos.length);
-    return desktopVideos[randomIndex];
-}
-
-
 
         // Nastavení video pozadí
         function setBackgroundVideo() {
             const videoElement = document.getElementById('background-video');
-            const videoSource = getRandomVideo(); // Získáme náhodné video
-            const sourceElement = document.getElementById('video-source'); // Najdeme tag source v elementu video
-            sourceElement.src = videoSource; // Nastavíme zdroj videa
-
-            // Načteme a přehrajeme video
+            const videoSource = getRandomVideo();
+            const sourceElement = document.getElementById('video-source');
+            sourceElement.src = videoSource;
             videoElement.load();
             videoElement.play().catch(error => {
                 console.error("Chyba při přehrávání videa:", error);
             });
         }
 
-        // Nastavení náhodného videa při načtení stránky
         window.onload = () => {
             setBackgroundVideo();
         };
 
-        // Aktualizace videa při změně velikosti okna
         window.onresize = () => {
             setBackgroundVideo();
         };
-
     </script>
 
 </body>
