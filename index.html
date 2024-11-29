@@ -135,23 +135,23 @@
     <script>
         // Funkce pro náhodný výběr videa
         function getRandomVideo() {
-            // Kontrola, zda je zařízení mobilní podle šířky okna
-            const isMobile = window.innerWidth <= 768;
+            // Detekce orientace zařízení (širokoúhlý nebo na výšku)
+            const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
-            // Seznam dostupných videí pro mobilní zařízení
-            const mobileVideos = [];
+            // Seznam dostupných videí pro orientaci na výšku
+            const portraitVideos = [];
             for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 3 videa ve složce pozadi2
-                mobileVideos.push(`pozadi2/${i}.mp4`);
+                portraitVideos.push(`pozadi2/${i}.mp4`);
             }
 
-            // Seznam dostupných videí pro desktop zařízení
-            const desktopVideos = [];
+            // Seznam dostupných videí pro orientaci na šířku
+            const landscapeVideos = [];
             for (let i = 1; i <= 1; i++) {  // Předpokládám, že máte 3 videa ve složce pozadi
-                desktopVideos.push(`pozadi/${i}.mp4`);
+                landscapeVideos.push(`pozadi/${i}.mp4`);
             }
 
-            // Výběr videí podle zařízení
-            const videoFiles = isMobile ? mobileVideos : desktopVideos;
+            // Výběr videí podle orientace zařízení
+            const videoFiles = isPortrait ? portraitVideos : landscapeVideos;
 
             // Výběr náhodného videa
             const randomIndex = Math.floor(Math.random() * videoFiles.length);
@@ -174,6 +174,11 @@
 
         // Nastavení náhodného videa při načtení stránky
         window.onload = () => {
+            setBackgroundVideo();
+        };
+
+        // Aktualizace videa při změně orientace okna
+        window.onorientationchange = () => {
             setBackgroundVideo();
         };
 
