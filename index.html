@@ -9,9 +9,87 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+background-color:black;
     overflow-x: hidden;  /* Zabrání horizontálnímu posouvání */
                 font-family: Arial, sans-serif;
 }
+
+
+        #top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            z-index: 100; /* Nad všemi prvky */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
+		
+	
+        }
+
+        #icon, #dropdown-button {
+            cursor: pointer;
+            font-size: calc(0.6 * var(--top-bar-height)); /* Velikost ikon relativní k výšce */
+            height: 100%; /* Ikona se přizpůsobí výšce topbaru */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+		   background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+        }
+
+        #dropdown-container {
+            position: relative;
+            height: 100%;
+        }
+
+        #dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: rgba(50, 50, 50, 0.95);
+            color: white;
+            list-style: none;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+        }
+
+
+#menu-icon {
+    height: 100%; /* Ikona bude 80 % výšky topbaru */
+    width: auto; /* Automaticky přizpůsobí šířku poměru stran */
+    object-fit: contain; /* Zachová proporce obrázku */
+    display: block; /* Ujistí se, že neovlivňuje layout */
+    margin: auto; /* Centrovaní vertikálně i horizontálně */
+}
+
+
+
+
+        #dropdown-menu li {
+            padding: 5px 10px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        #dropdown-menu li:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+
+
+
+
 
 #black-section {
     position: absolute;
@@ -21,7 +99,7 @@ html, body {
     height: 100vh;
     background-color: black;
     color: white;
-    z-index: 999;
+    z-index: 20;
     display: flex;
     flex-direction: column;  /* Vertikální zobrazení jako výchozí pro menší obrazovky */
     justify-content: center;  /* Vertikální centrování obsahu */
@@ -40,10 +118,15 @@ html, body {
             background-size: cover;
             background-position: center;
             border-radius: 50%;
-            z-index: 20;
+            z-index: 22;
         }
 
         @media (orientation: portrait) {
+
+#top-bar {
+height: 8%;	
+        }
+
             #logo-section {
                 width: 50%;
                 height: 50%;
@@ -61,7 +144,7 @@ html, body {
             width: 100%;  /* Video bude pokrývat celou šířku okna */
             height: 100%; /* Video pokryje celou výšku okna */
             object-fit: cover;  /* Video vyplní celé okno a udrží si správný poměr stran */
-            z-index: -1; /* Video je pod vším ostatním */
+            z-index: 1; /* Video je pod vším ostatním */
             opacity: 1;
         }
 
@@ -92,6 +175,12 @@ html, body {
         }
 
         @media (min-width: 768px) {
+
+
+#top-bar {
+height: 8%;	
+        }
+
             #center-section {
                 flex-direction: row;
                 justify-content: space-between;
@@ -122,6 +211,11 @@ html, body {
 
         /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
         @media (max-width: 768px) and (orientation: landscape) {
+#top-bar {
+height:15%;	
+        }
+
+
             #center-section {
                 flex-direction: row;  /* Zobrazí položky vedle sebe */
                 justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
@@ -158,6 +252,24 @@ html, body {
     </style>
 </head>
 <body>
+
+    <!-- Horní lišta -->
+    <div id="top-bar">
+
+        <div id="icon"></div>
+        <div id="dropdown-container">
+            <button id="dropdown-button"> <img src="style/logo.png" alt="Menu Icon" id="menu-icon"></button> <!-- Ikona místo nápisu -->
+            <ul id="dropdown-menu">
+                <li>Odkaz 1</li>
+                <li>Odkaz 2</li>
+                <li>Odkaz 3</li>
+                <li>Odkaz 4</li>
+            </ul>
+        </div>
+    </div>
+
+
+
 
     <!-- Video na pozadí -->
     <video id="background-video" autoplay muted loop>
@@ -228,6 +340,26 @@ Návrh a tvorba uživatelsky přívětivého designu.
 
 
     <script>
+
+        // Ovládání rozbalovacího menu
+        const dropdownButton = document.getElementById('dropdown-button');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        dropdownButton.addEventListener('click', () => {
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // Zavřít menu při kliknutí mimo něj
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('#dropdown-container')) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+
+
+
         // Funkce pro náhodný výběr videa
         function getRandomVideo() {
             const isMobile = window.innerWidth <= 768;
@@ -295,6 +427,5 @@ window.onresize = () => {
 
 </body>
 </html>
-
 
 
