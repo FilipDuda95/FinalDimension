@@ -28,20 +28,23 @@ body {
 }
 
 
-#scrollbutton{
+
+
+.button-container {
+margin-left:50%;
+z-index: 30;
+bottom:5%;
+transform: translateX(-50%);
+}
+.scrollbutton {
 position:absolute;
 bottom:5%;
 left:50%;
+z-index: 30;
 transform: translateX(-50%);
 }
-
-.button-container {
-    text-align: center;
-z-index: 30;
-}
-
 .gallery-button {
-    background: linear-gradient(45deg, #6a5af9, #c4a8ff);
+    background: rgba(58, 35, 255, 0.8);
     color: white;
     border: none;
     border-radius: 25px;
@@ -161,6 +164,7 @@ z-index: 30;
     color: white;
     z-index:23;
     display: flex;
+    padding-bottom:15%;
     flex-direction: column;  /* Vertikální zobrazení jako výchozí pro menší obrazovky */
     justify-content: center;  /* Vertikální centrování obsahu */
     align-items: center;  /* Horizontální centrování obsahu */
@@ -399,8 +403,8 @@ z-index: 30;
 
 
     </div>
-   <div class="button-container" id="scrollbutton">
-        <button class="gallery-button" id="scroll-button">Down</button>
+   <div class="scrollbutton">
+        <button class="gallery-button" id="scroll-button">▼</button>
     </div>
 
 
@@ -456,13 +460,13 @@ z-index: 30;
 
 
    <div class="button-container">
-        <button class="gallery-button" id="scroll-button">Open Gallery</button>
+        <button class="gallery-button" id="scroll-button">Galerie</button>
     </div>
 
     <script>
         document.getElementById("scroll-button").addEventListener("click", function() {
             window.scrollBy({
-                top: window.innerHeight, // Posune o výšku aktuálního okna (200%)
+                top: window.innerHeight, // Posune o výšku aktuálního okna (100vh)
                 behavior: "smooth"       // Plynulý přechod
             });
         });
@@ -603,5 +607,3 @@ window.onresize = () => {
 
 </body>
 </html>
-
-
