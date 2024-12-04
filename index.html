@@ -140,7 +140,7 @@ transform: translateX(-50%);
         #dropdown-menu {
             display: none;
             position: absolute;
-            right: 20%;
+            right: 2vw;
             top: 100%;
             background-color: rgba(50, 50, 50, 0.95);
             color: white;
@@ -213,7 +213,12 @@ transform: translateX(-50%);
 @media (orientation: portrait) {
 
         #dropdown-menu {
-	    width:80vw;
+   position: fixed;  /* Zajistí, že video zůstane na pozadí */
+            top: 0;
+            left: 0%;
+            width: 100%;  /* Video bude pokrývat celou šířku okna */
+            height: 100%;
+
         }
 .gallery-button {
     font-size: 3vw;
@@ -280,7 +285,8 @@ transform: translateX(-50%);
 
 
 	#top-bar {
-	height: 8%;	
+	height: 8%;
+	
         }
 
 
