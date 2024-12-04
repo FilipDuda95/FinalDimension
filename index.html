@@ -15,6 +15,65 @@ background-color:black;
 }
 
 
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+
+#scrollbutton{
+position:absolute;
+bottom:5%;
+left:50%;
+transform: translateX(-50%);
+}
+
+.button-container {
+    text-align: center;
+z-index: 30;
+}
+
+.gallery-button {
+    background: linear-gradient(45deg, #6a5af9, #c4a8ff);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 30px;
+    font-size: 1.3vw;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+}
+
+
+
+
+
+
+
+
+
+
+
         #top-bar {
             position: fixed;
             top: 0;
@@ -40,10 +99,10 @@ background-color:black;
             align-items: center;
             justify-content: center;
 		   background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
+  	  border: none;
+  	  cursor: pointer;
+ 	   padding: 0;
+ 	   margin: 0;
         }
 
         #dropdown-container {
@@ -54,7 +113,7 @@ background-color:black;
         #dropdown-menu {
             display: none;
             position: absolute;
-            right: 0;
+            right: 20%;
             top: 100%;
             background-color: rgba(50, 50, 50, 0.95);
             color: white;
@@ -62,16 +121,18 @@ background-color:black;
             padding: 40px;
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+	    text-align:center;
+	    width:40vw;
         }
 
 
-#menu-icon {
-    height: 100%; /* Ikona bude 80 % výšky topbaru */
-    width: auto; /* Automaticky přizpůsobí šířku poměru stran */
-    object-fit: contain; /* Zachová proporce obrázku */
-    display: block; /* Ujistí se, že neovlivňuje layout */
-    margin: auto; /* Centrovaní vertikálně i horizontálně */
-}
+	#menu-icon {
+    	height: 100%; /* Ikona bude 80 % výšky topbaru */
+   	 width: auto; /* Automaticky přizpůsobí šířku poměru stran */
+  	  object-fit: contain; /* Zachová proporce obrázku */
+   	 display: block; /* Ujistí se, že neovlivňuje layout */
+   	 margin: auto; /* Centrovaní vertikálně i horizontálně */
+	}
 
 
 
@@ -93,10 +154,9 @@ background-color:black;
 
 #black-section {
     position: absolute;
-    top: 120%;  /* Umístíme oddíl za hlavní obrazovku */
+    top: 100%;  /* Umístíme oddíl za hlavní obrazovku */
     left: 0;
     width: 100%;
-    height: 120%;
     background-color: black;
     color: white;
     z-index:23;
@@ -105,9 +165,6 @@ background-color:black;
     justify-content: center;  /* Vertikální centrování obsahu */
     align-items: center;  /* Horizontální centrování obsahu */
 
-}
-#padding{
-padding:0%:20%;
 }
         .logo-section {
             position: absolute;
@@ -124,10 +181,19 @@ padding:0%:20%;
             z-index: 24;
         }
 
-        @media (orientation: portrait) {
 
-#top-bar {
-height: 8%;	
+@media (orientation: portrait) {
+
+        #dropdown-menu {
+	    width:80vw;
+        }
+.gallery-button {
+    font-size: 3vw;
+}
+
+
+	#top-bar {
+	height: 8%;	
         }
 
             .logo-section {
@@ -140,7 +206,7 @@ height: 8%;
      
 
 
-.gallery {
+	.gallery {
             display: grid;
             grid-template-columns: repeat(4, 1fr); /* 4 sloupce pro 8 obrázků */
             gap: 15px;
@@ -209,11 +275,11 @@ height: 8%;
             flex-grow: 1;
         }
 
-        @media (min-width: 768px) {
+@media (min-width: 768px) {
 
 
-#top-bar {
-height: 8%;	
+	#top-bar {
+	height: 8%;	
         }
 
 
@@ -246,11 +312,13 @@ height: 8%;
 
 
         /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
-        @media (max-width: 768px) and (orientation: landscape) {
-#top-bar {
-height:15%;	
+@media (max-width: 768px) and (orientation: landscape) {
+	#top-bar {
+	height:15%;	
         }
-
+        #dropdown-menu {
+	    width:35vw;
+        }
 
             #center-section {
                 flex-direction: row;  /* Zobrazí položky vedle sebe */
@@ -297,10 +365,10 @@ height:15%;
         <div id="dropdown-container">
             <button id="dropdown-button"> <img src="style/menu2.png" alt="Menu Icon" id="menu-icon"></button> <!-- Ikona místo nápisu -->
             <ul id="dropdown-menu">
-                <li>Odkaz 1</li>
-                <li>Odkaz 2</li>
-                <li>Odkaz 3</li>
-                <li>Odkaz 4</li>
+                <li>Hlavní</li>
+                <li>Galerie</li>
+                <li>Info</li>
+                <li>Promo</li>
             </ul>
         </div>
     </div>
@@ -327,7 +395,14 @@ height:15%;
       Jmenuji se Filip Duda a jsem grafik, designér, prodejce, programátor a tester (Vývojář). Mým zaměřením je tvorba PC grafiky, 3D tisku, 2D grafiky pro tisk a jednoduchá tvorba webových stránek.
 
         </div>
+
+
+
     </div>
+   <div class="button-container" id="scrollbutton">
+        <button class="gallery-button" id="scroll-button">Down</button>
+    </div>
+
 
 
     <!-- Nový oddíl s černým pozadím -->
@@ -379,7 +454,24 @@ height:15%;
         });
     </script>
 
+
+   <div class="button-container">
+        <button class="gallery-button" id="scroll-button">Open Gallery</button>
     </div>
+
+    <script>
+        document.getElementById("scroll-button").addEventListener("click", function() {
+            window.scrollBy({
+                top: window.innerHeight, // Posune o výšku aktuálního okna (200%)
+                behavior: "smooth"       // Plynulý přechod
+            });
+        });
+    </script>
+
+    </div>
+
+
+
     <div class="inner-text">
         <h2> Hlavní oblasti tvorby</h2>
        
