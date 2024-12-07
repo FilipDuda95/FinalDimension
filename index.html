@@ -323,7 +323,9 @@ transform: translateX(-50%);
 
 @media (min-width: 768px) {
 
-
+    .modal-arrow {
+        display: block;
+    }
 	#top-bar {
 	height: 8%;
 	
@@ -375,6 +377,9 @@ transform: translateX(-50%);
             border-radius: 5px;
             transition: transform 0.2s, border-color 0.2s;
         }
+    .modal-arrow {
+        display: none;
+    }
 }
 
 
@@ -517,23 +522,21 @@ randomImages.forEach((image, index) => {
     const imageContainer = document.createElement('div');
     imageContainer.classList.add('image-container');
     
-    // Vytvoření odkazu pro každý obrázek
     const link = document.createElement('a');
-    link.href = `kuchyne/${image}.jpg`; // Odkaz na obrázek ve složce 'kuchyne'
-    link.dataset.index = index; // Uložení indexu obrázku pro zobrazení v modálním okně
+    link.href = `kuchyne/${image}.jpg`;
+    link.dataset.index = index;
     link.classList.add('gallery-link');
 
     const img = document.createElement('img');
-    img.src = `kuchyne/${image}.jpg`; // Odkaz na obrázek
+    img.src = `kuchyne/${image}.jpg`;
     img.alt = `Obrázek číslo ${image}`;
 
-    // Přidání obrázku do odkazu a odkazu do galerie
     link.appendChild(img);
     imageContainer.appendChild(link);
     gallery.appendChild(imageContainer);
 });
 
-// Modální okno pro zobrazení obrázků
+// Modální okno
 const modal = document.createElement('div');
 modal.id = 'modal';
 modal.style.display = 'none';
@@ -551,6 +554,7 @@ modal.style.alignItems = 'center';
 const modalImg = document.createElement('img');
 modalImg.style.maxWidth = '90%';
 modalImg.style.maxHeight = '90%';
+modalImg.style.transition = 'transform 0.3s ease-in-out';
 
 const closeButton = document.createElement('button');
 closeButton.textContent = 'X';
@@ -563,9 +567,9 @@ closeButton.style.border = 'none';
 closeButton.style.borderRadius = '50%';
 closeButton.style.cursor = 'pointer';
 
-// Šipky pro navigaci na počítači
 const leftArrow = document.createElement('button');
 leftArrow.textContent = '←';
+leftArrow.classList.add('modal-arrow', 'modal-arrow-left');
 leftArrow.style.position = 'absolute';
 leftArrow.style.left = '20px';
 leftArrow.style.fontSize = '3rem';
@@ -576,6 +580,7 @@ leftArrow.style.cursor = 'pointer';
 
 const rightArrow = document.createElement('button');
 rightArrow.textContent = '→';
+rightArrow.classList.add('modal-arrow', 'modal-arrow-right');
 rightArrow.style.position = 'absolute';
 rightArrow.style.right = '20px';
 rightArrow.style.fontSize = '3rem';
@@ -590,41 +595,53 @@ modal.appendChild(leftArrow);
 modal.appendChild(rightArrow);
 document.body.appendChild(modal);
 
-// Funkce pro otevření modálního okna s obrázkem
 let currentImageIndex = 0;
+let isZoomed = false;
+
 function openModal(index) {
     currentImageIndex = index;
     modalImg.src = `kuchyne/${randomImages[currentImageIndex]}.jpg`;
     modal.style.display = 'flex';
 }
 
-// Funkce pro zavření modálního okna
 function closeModal() {
     modal.style.display = 'none';
+    resetZoom();
 }
 
-// Funkce pro přechod na další/předchozí obrázek
 function changeImage(direction) {
+    resetZoom();
     currentImageIndex += direction;
     if (currentImageIndex < 0) currentImageIndex = randomImages.length - 1;
     if (currentImageIndex >= randomImages.length) currentImageIndex = 0;
     modalImg.src = `kuchyne/${randomImages[currentImageIndex]}.jpg`;
 }
 
-// Přidání událostí pro otevírání modálu při kliknutí na obrázek
+function toggleZoom() {
+    if (!isZoomed) {
+        modalImg.style.transform = 'scale(2)';
+        isZoomed = true;
+    } else {
+        resetZoom();
+    }
+}
+
+function resetZoom() {
+    modalImg.style.transform = 'scale(1)';
+    isZoomed = false;
+}
+
 document.querySelectorAll('.gallery-link').forEach((link, index) => {
     link.addEventListener('click', (e) => {
-        e.preventDefault(); // Zabráníme otevření odkazu
-        openModal(index); // Otevřeme modální okno pro konkrétní obrázek
+        e.preventDefault();
+        openModal(index);
     });
 });
 
-// Přidání událostí pro zavření modálu a přepínání obrázků
 closeButton.addEventListener('click', closeModal);
 leftArrow.addEventListener('click', () => changeImage(-1));
 rightArrow.addEventListener('click', () => changeImage(1));
 
-// Funkce pro detekci přejetí prstem (pro mobilní zařízení)
 let startX = 0;
 modal.addEventListener('touchstart', (e) => {
     startX = e.changedTouches[0].pageX;
@@ -633,25 +650,26 @@ modal.addEventListener('touchstart', (e) => {
 modal.addEventListener('touchend', (e) => {
     const endX = e.changedTouches[0].pageX;
     if (startX > endX + 50) {
-        changeImage(1); // Přejít na další obrázek při přejetí doprava
+        changeImage(1);
     } else if (startX < endX - 50) {
-        changeImage(-1); // Přejít na předchozí obrázek při přejetí doleva
+        changeImage(-1);
     }
 });
 
-// Přidání události pro zavření modálu při kliknutí mimo obrázek
 modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal(); // Zavření modálu při kliknutí mimo obrázek
+    if (e.target === modal) closeModal();
 });
 
-// Přidání klávesových zkratek pro ovládání modálu
+modalImg.addEventListener('dblclick', toggleZoom);
+
 window.addEventListener('keydown', (e) => {
     if (modal.style.display === 'flex') {
-        if (e.key === 'ArrowRight') changeImage(1); // Přejít na další obrázek
-        if (e.key === 'ArrowLeft') changeImage(-1); // Přejít na předchozí obrázek
-        if (e.key === 'Escape') closeModal(); // Zavřít modál při stisku klávesy Esc
+        if (e.key === 'ArrowRight') changeImage(1);
+        if (e.key === 'ArrowLeft') changeImage(-1);
+        if (e.key === 'Escape') closeModal();
     }
 });
+
 </script>
 
 
