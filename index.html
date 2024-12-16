@@ -192,7 +192,7 @@ transform: translateX(-50%);
         }
 
 
-	.menu-icon {
+	#menu-icon {
     	height: 100%; /* Ikona bude 80 % výšky topbaru */
    	 width: auto; /* Automaticky přizpůsobí šířku poměru stran */
   	  object-fit: contain; /* Zachová proporce obrázku */
@@ -221,7 +221,8 @@ transform: translateX(-50%);
 #black-section {
     position: absolute;
     top: 100%;  /* Umístíme oddíl za hlavní obrazovku */
-    width: auto;
+    left: 0;
+    width: 100%;
     background-color: black;
     color: white;
     z-index:23;
@@ -232,7 +233,20 @@ transform: translateX(-50%);
     align-items: center;  /* Horizontální centrování obsahu */
 
 }
-
+        .logo-section {
+            position: absolute;
+            width: 45%;
+            height: 45%;
+            top: -60%;
+            left: 50%;
+	    padding: 5%;
+            transform: translateX(-50%);
+            background-image: url('style/logo.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            z-index: 24;
+        }
 .footer.visible {
             opacity: 1;
         }
@@ -279,23 +293,7 @@ transform: translateX(-50%);
 
 
 
-
-
-
-        .logo-section {
-            position: absolute;
-            width: 45%;
-            height: 45%;
-            top: -60%;
-            left: 50%;
-	    padding: 5%;
-            transform: translateX(-50%);
-            background-image: url('style/logo.png');
-            background-size: cover;
-            background-position: center;
-            border-radius: 50%;
-            z-index: 24;
-        }
+	    
 
 
 @media (orientation: portrait) {
@@ -305,7 +303,7 @@ transform: translateX(-50%);
             top: 8%;
             left: 50%;
             transform: translateX(-50%);
-            width: auto;
+            width: 100%;  /* Video bude pokrývat celou šířku okna */
             height: auto;
 
         }
@@ -464,7 +462,7 @@ transform: translateX(-50%);
                 width: 30%;
                 height: 30%;
                 top: -33%;
-		padding: 5%;
+		padding: 5;
  		
             }
 
@@ -493,10 +491,10 @@ transform: translateX(-50%);
     <!-- Horní lišta -->
     <div id="top-bar">
 
-        <div id="icon"><img src="style/logo.png" alt="Logo" class="menu-icon"></div>
+        <div id="icon"><img src="style/logo.png" alt="Logo" id="menu-icon"></div>
 
         <div id="dropdown-container">
-            <button id="dropdown-button"> <img src="style/menu2.png" alt="Menu Icon" class="menu-icon"></button> <!-- Ikona místo nápisu -->
+            <button id="dropdown-button"> <img src="style/menu2.png" alt="Menu Icon" id="menu-icon"></button> <!-- Ikona místo nápisu -->
             <ul id="dropdown-menu">
                 <li>Hlavní</li>
                 <li>Galerie</li>
@@ -533,7 +531,7 @@ transform: translateX(-50%);
 
     </div>
    <div class="scrollbutton">
-        <button class="gallery-button" class="scroll-button">▼</button>
+        <button class="gallery-button" id="scroll-button">▼</button>
     </div>
 
 
@@ -723,11 +721,11 @@ window.addEventListener('keydown', (e) => {
 
 
    <div class="button-container">
-        <button class="gallery-button" class="scroll-button">Galerie</button>
+        <button class="gallery-button" id="scroll-button">Galerie</button>
     </div>
 
     <script>
-        document.getElementByClassName("scroll-button").addEventListener("click", function() {
+        document.getElementById("scroll-button").addEventListener("click", function() {
             window.scrollBy({
                 top: window.innerHeight, // Posune o výšku aktuálního okna (100vh)
                 behavior: "smooth"       // Plynulý přechod
@@ -805,7 +803,6 @@ Návrh a tvorba uživatelsky přívětivého designu.
             }
         });
     </script>
-
 
 
 
