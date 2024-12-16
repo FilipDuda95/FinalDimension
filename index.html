@@ -249,11 +249,12 @@ transform: translateX(-50%);
         }
 .footer.visible {
             opacity: 1;
+	 width: 100%;
         }
 
         .footer {
  	 opacity: 0;
-	 width: 100%;	
+	 width: 50px;	
  	position: absolute;
 	bottom:0px;
 	z-index:23;
@@ -440,8 +441,11 @@ transform: translateX(-50%);
 
         /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
 @media (max-width: 768px) and (orientation: landscape) {
+	.footer.visible {
+            opacity: 1;
+	 width: 100%;
+        }
         .footer {
-	 width: 80%;
          border-radius: 15px;
         }
         .gallery img {
