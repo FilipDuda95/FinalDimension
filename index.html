@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -249,15 +250,15 @@ transform: translateX(-50%);
         }
 .footer.visible {
             opacity: 1;
-	 width: 100%;
+	z-index:40;
         }
 
         .footer {
  	 opacity: 0;
-	 width: 50px;	
+	 width: auto;	
  	position: absolute;
 	bottom:0px;
-	z-index:23;
+	z-index:1;
 	    color:black;
             background-color: #f8f8f8;
             padding: 40px 20px;
@@ -404,8 +405,6 @@ transform: translateX(-50%);
         }
 
 
-
-
 @media (max-width: 1000px){
         .gallery img {
             width: 50px;
@@ -418,10 +417,6 @@ transform: translateX(-50%);
         }
 }
 @media (max-width: 768px){
-        .footer {
-	 width: auto;	
-        }
-	
         .gallery img {
             width: 140px;
             height: 140px;
@@ -441,13 +436,7 @@ transform: translateX(-50%);
 
         /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
 @media (max-width: 768px) and (orientation: landscape) {
-	.footer.visible {
-            opacity: 1;
-	 width: 100%;
-        }
-        .footer {
-         border-radius: 15px;
-        }
+
         .gallery img {
             width: 50px;
             height: 50px;
