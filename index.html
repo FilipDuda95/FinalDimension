@@ -534,7 +534,7 @@ transform: translateX(-50%);
 
     </div>
    <div class="scrollbutton">
-        <button class="gallery-button" id="scroll-button">▼</button>
+        <button class="gallery-button" class="scroll-button">▼</button>
     </div>
 
 
@@ -724,11 +724,11 @@ window.addEventListener('keydown', (e) => {
 
 
    <div class="button-container">
-        <button class="gallery-button" id="scroll-button">Galerie</button>
+        <button class="gallery-button" class="scroll-button">Galerie</button>
     </div>
 
     <script>
-        document.getElementById("scroll-button").addEventListener("click", function() {
+        document.getElementByClassName("scroll-button").addEventListener("click", function() {
             window.scrollBy({
                 top: window.innerHeight, // Posune o výšku aktuálního okna (100vh)
                 behavior: "smooth"       // Plynulý přechod
