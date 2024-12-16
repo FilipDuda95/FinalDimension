@@ -9,10 +9,12 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color:black;
+background-color:black;
     overflow-x: hidden;  /* Zabrání horizontálnímu posouvání */
                 font-family: Arial, sans-serif;
 }
+
+
 
 
 body {
@@ -23,7 +25,6 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-box-sizing: border-box;
 }
 
 
@@ -218,21 +219,22 @@ transform: translateX(-50%);
 
 
 #black-section {
-    width: 100%;
-    padding-bottom:20%;
     position: absolute;
     top: 100%;  /* Umístíme oddíl za hlavní obrazovku */
     left: 0;
+    width: 100%;
     background-color: black;
     color: white;
     z-index:23;
     display: flex;
+    padding-bottom:15%;
     flex-direction: column;  /* Vertikální zobrazení jako výchozí pro menší obrazovky */
     justify-content: center;  /* Vertikální centrování obsahu */
     align-items: center;  /* Horizontální centrování obsahu */
-   box-sizing: border-box;
+
 }
-	.footer.visible {
+
+.footer.visible {
             opacity: 1;
         }
 
@@ -274,6 +276,13 @@ transform: translateX(-50%);
             height: 30px;
         }
 
+
+
+
+
+
+
+
         .logo-section {
             position: absolute;
             width: 45%;
@@ -283,7 +292,7 @@ transform: translateX(-50%);
 	    padding: 5%;
             transform: translateX(-50%);
             background-image: url('style/logo.png');
-            background-size: 100%;
+            background-size: cover;
             background-position: center;
             border-radius: 50%;
             z-index: 24;
@@ -317,6 +326,8 @@ transform: translateX(-50%);
 		padding: 0%;
             }
         }
+    
+
 
 
 
@@ -355,7 +366,8 @@ transform: translateX(-50%);
             color: white;
             font-size: 2vw; /* velikost na mobilu */
 	    margin:4%;
-            text-align: center;	
+            text-align: center;
+	
             flex-grow: 1;
         }
 
@@ -375,14 +387,12 @@ transform: translateX(-50%);
                 justify-content: space-between;
             }
             .logo-section {
-                width: 30%;
+                width: 45%;
                 height: 45%;
                 top: -48%; 
-
             }
 
     #black-section {
- 	width: 100%;
         flex-direction: row;  /* Zobrazí texty vedle sebe */
         justify-content: space-evenly;  /* Rovnoměrné rozestupy mezi texty */
     }
@@ -420,8 +430,6 @@ transform: translateX(-50%);
     .modal-arrow {
         display: none;
     }
-
-
 }
 
 
@@ -458,12 +466,11 @@ transform: translateX(-50%);
                 height: 30%;
                 top: -33%;
 		padding: 5;
- 		background-size: 100%;
+ 		
             }
 
 
         #black-section {
- 		width: 100%;
                 flex-direction: row;  /* Zobrazí položky vedle sebe */
                 justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
                 padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
@@ -770,8 +777,7 @@ Jednoduché a funkční webové prezentace.
 Návrh a tvorba uživatelsky přívětivého designu.
 
     </div>
-
-    <div class="footer">
+<div class="footer">
         <img src="style/profilovka.png" alt="Team Photo or Logo">
         <h2>Kontaktujte mě</h2>
         <p><strong>Telefon:</strong> +420 608 122 052</p>
@@ -782,9 +788,11 @@ Návrh a tvorba uživatelsky přívětivého designu.
 	    <a href="mailto:filip.duda.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
 	    <a href="https://wa.me/420608122052" target="_blank"><img src="style/whatsapp.png" alt="Whatsapp"></a>
         </div>
- </div>    
+ </div> 
+
 </div>
-    <script>
+   
+<script>
         const footer = document.querySelector('.footer');
 
         window.addEventListener('scroll', () => {
@@ -798,6 +806,8 @@ Návrh a tvorba uživatelsky přívětivého designu.
             }
         });
     </script>
+
+
 
 
     <script>
@@ -885,5 +895,6 @@ window.onresize = () => {
 
 
     </script>
+
 </body>
 </html>
