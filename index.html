@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <<title>Final dimension</title>
+    <title>Final dimension</title>
+	
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon"> 
 	
 </head>
@@ -514,7 +515,11 @@ color: white;
             }
         }
 
-
+#konec{
+position:absolute;
+z-index:2;
+top:200%;
+}
 
     </style>
 </head>
@@ -807,7 +812,7 @@ Návrh a tvorba uživatelsky přívětivého designu.
 <br>
 
    <div class="button-container">
-        <a href=""><button class="gallery-button" id="scroll-button">Kontakt</button></a>
+        <a href="#konec"><button class="gallery-button" id="scroll-button">Kontakt</button></a>
     </div>
     </div>
 <div class="footer">
@@ -934,5 +939,12 @@ window.onresize = () => {
 
 
     </script>
+
+
+
+ <div id="konec">
+        <h2>Konec stránky</h2>
+        <p>Dostali jste se na konec stránky!</p>
+    </div>
 </body>
 </html>
