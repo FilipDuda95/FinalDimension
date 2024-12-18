@@ -518,7 +518,9 @@ color: white;
 #konec{
 position:absolute;
 z-index:2;
-top:200%;
+bottom:0px;
+color:black;
+height:0px;
 }
 
     </style>
@@ -828,8 +830,12 @@ Návrh a tvorba uživatelsky přívětivého designu.
         </div>
  </div> 
 
+
 </div>
-   
+ <div id="konec">
+        <h2>Konec stránky</h2>
+        <p>Dostali jste se na konec stránky!</p>
+    </div>   
 <script>
 
 //zobrazí, schová kontakt
@@ -940,11 +946,5 @@ window.onresize = () => {
 
     </script>
 
-
-
- <div id="konec">
-        <h2>Konec stránky</h2>
-        <p>Dostali jste se na konec stránky!</p>
-    </div>
 </body>
 </html>
