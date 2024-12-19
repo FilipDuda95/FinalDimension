@@ -602,10 +602,23 @@ font-size:0.1em;
         <h2>Filip Duda</h2>
        Moje portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.
 
+<br>
+<br>
 
 <div class="gallery" id="gallery"></div>
 
+
+<button id="reloadGallery" class="gallery-button">
+Další vizualizace    
+</button>
+
+<br>
+<br>
+
 <script>
+// Globální proměnná pro seznam obrázků
+let randomImages = [];
+
 // Funkce pro získání náhodného čísla mezi 1 a 66
 function getRandomImages(numImages) {
     const images = [];
@@ -618,28 +631,38 @@ function getRandomImages(numImages) {
     return images;
 }
 
-// Vygeneruj náhodná čísla obrázků (např. 12 obrázků)
-const randomImages = getRandomImages(12);
+// Funkce pro vytvoření galerie
+function generateGallery() {
+    randomImages = getRandomImages(12); // Aktualizace seznamu obrázků
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = ''; // Vyprázdní galerii
 
-// Vygeneruj HTML pro galerii
-const gallery = document.getElementById('gallery');
-randomImages.forEach((image, index) => {
-    const imageContainer = document.createElement('div');
-    imageContainer.classList.add('image-container');
-    
-    const link = document.createElement('a');
-    link.href = `kuchyne/${image}.jpg`;
-    link.dataset.index = index;
-    link.classList.add('gallery-link');
+    randomImages.forEach((image, index) => {
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('image-container');
 
-    const img = document.createElement('img');
-    img.src = `kuchyne/${image}.jpg`;
-    img.alt = `Obrázek číslo ${image}`;
+        const link = document.createElement('a');
+        link.href = `kuchyne/${image}.jpg`;
+        link.dataset.index = index;
+        link.classList.add('gallery-link');
 
-    link.appendChild(img);
-    imageContainer.appendChild(link);
-    gallery.appendChild(imageContainer);
-});
+        const img = document.createElement('img');
+        img.src = `kuchyne/${image}.jpg`;
+        img.alt = `Obrázek číslo ${image}`;
+
+        link.appendChild(img);
+        imageContainer.appendChild(link);
+        gallery.appendChild(imageContainer);
+    });
+
+    // Přidání event listenerů na nově vytvořené obrázky
+    document.querySelectorAll('.gallery-link').forEach((link, index) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal(index);
+        });
+    });
+}
 
 // Modální okno
 const modal = document.createElement('div');
@@ -736,17 +759,11 @@ function resetZoom() {
     isZoomed = false;
 }
 
-document.querySelectorAll('.gallery-link').forEach((link, index) => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        openModal(index);
-    });
-});
-
 closeButton.addEventListener('click', closeModal);
 leftArrow.addEventListener('click', () => changeImage(-1));
 rightArrow.addEventListener('click', () => changeImage(1));
 
+// Přidání dotykových událostí pro mobilní zařízení
 let startX = 0;
 modal.addEventListener('touchstart', (e) => {
     startX = e.changedTouches[0].pageX;
@@ -775,6 +792,11 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
+// Znovu načtení galerie při kliknutí na tlačítko
+document.getElementById('reloadGallery').addEventListener('click', generateGallery);
+
+// Načtení galerie při prvním načtení stránky
+generateGallery();
 </script>
 
 
