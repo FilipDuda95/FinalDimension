@@ -34,6 +34,27 @@ body {
 
 
 
+//obrazek
+.image-container {
+  width: 100%;       
+  height: 300px;     /* Nastavte pevnou výšku kontejneru */
+  overflow: hidden;  /* Skryje přetékající části obrázku */
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Obrázek vyplní prostor, ořízne se podle potřeby */
+  display: block;    /* Odstraní mezery způsobené inline prvkem */
+}
+
+
+
+
+
+
+
+
 
 .button-container {
 margin-left:50%;
@@ -773,8 +794,11 @@ window.addEventListener('keydown', (e) => {
     </div>
 
 
-
     <div class="inner-text">
+
+<div class="image-container">
+  <img src="style/1.jpg" alt="Responsive Image">
+</div>
         <h2> Hlavní oblasti tvorby</h2>
        
 
