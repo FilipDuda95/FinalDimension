@@ -619,11 +619,11 @@ Další vizualizace
 // Globální proměnná pro seznam obrázků
 let randomImages = [];
 
-// Funkce pro získání náhodného čísla mezi 1 a 115
+// Funkce pro získání náhodného čísla mezi 1 a 66
 function getRandomImages(numImages) {
     const images = [];
     while (images.length < numImages) {
-        const randomIndex = Math.floor(Math.random() * 115) + 1;
+        const randomIndex = Math.floor(Math.random() * 108) + 1;
         if (!images.includes(randomIndex)) {
             images.push(randomIndex);
         }
@@ -801,8 +801,8 @@ generateGallery();
 
 
    <div class="button-container">
-      <button class="gallery-button"  onclick="window.location.href='#konec'">Galerie</button>
-    </div>
+       <button class="gallery-button" onclick="window.location.href='#konec'" >Kontakt</button>
+   </div>
 
     <script>
         document.getElementById("scroll-button").addEventListener("click", function() {
@@ -857,10 +857,11 @@ Jednoduché a funkční webové prezentace.
 Návrh a tvorba uživatelsky přívětivého designu.
 <br>
 <br>
-
    <div class="button-container">
-       <button class="gallery-button" onclick="window.location.href='#konec'" >Kontakt</button>
-   </div>
+      <button class="gallery-button">Galerie</button>
+    </div>
+
+
     </div>
 <div class="footer">
         <img src="style/profilovka.png" alt="Team Photo or Logo">
