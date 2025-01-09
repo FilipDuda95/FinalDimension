@@ -569,17 +569,30 @@ font-size:0.1em;
         </div>
     </div>
 
+  <script>
+
+        // Ovládání rozbalovacího menu
+        const dropdownButton = document.getElementById('dropdown-button');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        dropdownButton.addEventListener('click', () => {
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // Zavřít menu při kliknutí mimo něj
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('#dropdown-container')) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+
+</script>
 
 
 
-    <!-- Video na pozadí -->
-    <video id="background-video" autoplay muted loop>
-        <source id="video-source" type="video/mp4" src="video-source">
-        Your browser does not support the video tag.
-    </video>
-
-
-    <div id="center-section">
+ <div id="center-section">
         <div class="logo-section"></div>
         <div class="inner-text">
             <h2>Vítejte</h2>
@@ -588,290 +601,43 @@ font-size:0.1em;
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      Jmenuji se Filip Duda a jsem grafik, designér, prodejce, programátor a tester (Vývojář). Mým zaměřením je tvorba PC grafiky, 3D tisku, 2D grafiky pro tisk a jednoduchá tvorba webových stránek.
+      Jmenuji se Filip Duda a jsem grafik, designér, prodejce, programátor a tester (Vývojář). Mým zaměřením je tvorba PC grafiky, 3D tisku, 2D grafiky pro tisk a jednoduchá tvorba 	webových stránek.
 
         </div>
-
-
-
-    </div>
-   <div class="scrollbutton">
+  </div>
+    <div class="scrollbutton">
        <button class="gallery-button" id="scroll-button">▼</button>
     </div>
 
-
-
-    <!-- Nový oddíl s černým pozadím -->
-<div id="black-section">
-
-
-    <div class="inner-text" id="padding">
-        <h2>Filip Duda</h2>
-       Moje portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.
-
-<br>
-<br>
-
-
-<div class="gallery" id="gallery"></div>
-
-
-<button id="reloadGallery" class="gallery-button">
-Další vizualizace    
-</button>
-<br>
-<br>
-   <div class="button-container">
-       <button class="gallery-button" onclick="window.location.href='#konec'" >Kontakt</button>
-   </div>
-
-<br>
-<br>
-
 <script>
-// Globální proměnná pro seznam obrázků
-let randomImages = [];
-
-// Funkce pro získání náhodného čísla mezi 1 a 66
-function getRandomImages(numImages) {
-    const images = [];
-    while (images.length < numImages) {
-        const randomIndex = Math.floor(Math.random() * 108) + 1;
-        if (!images.includes(randomIndex)) {
-            images.push(randomIndex);
-        }
-    }
-    return images;
-}
-
-// Funkce pro vytvoření galerie
-function generateGallery() {
-    randomImages = getRandomImages(12); // Aktualizace seznamu obrázků
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = ''; // Vyprázdní galerii
-
-    randomImages.forEach((image, index) => {
-        const imageContainer = document.createElement('div');
-        imageContainer.classList.add('image-container');
-
-        const link = document.createElement('a');
-        link.href = `kuchyne/${image}.jpg`;
-        link.dataset.index = index;
-        link.classList.add('gallery-link');
-
-        const img = document.createElement('img');
-        img.src = `kuchyne/${image}.jpg`;
-        img.alt = `Obrázek číslo ${image}`;
-
-        link.appendChild(img);
-        imageContainer.appendChild(link);
-        gallery.appendChild(imageContainer);
-    });
-
-    // Přidání event listenerů na nově vytvořené obrázky
-    document.querySelectorAll('.gallery-link').forEach((link, index) => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(index);
-        });
-    });
-}
-
-// Modální okno
-const modal = document.createElement('div');
-modal.id = 'modal';
-modal.style.display = 'none';
-modal.style.position = 'fixed';
-modal.style.top = '0';
-modal.style.left = '0';
-modal.style.width = '100vw';
-modal.style.height = '100vh';
-modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-modal.style.zIndex = '999';
-modal.style.display = 'none';
-modal.style.justifyContent = 'center';
-modal.style.alignItems = 'center';
-
-const modalImg = document.createElement('img');
-modalImg.style.maxWidth = '90%';
-modalImg.style.maxHeight = '90%';
-modalImg.style.transition = 'transform 0.3s ease-in-out';
-
-const closeButton = document.createElement('button');
-closeButton.textContent = 'X';
-closeButton.style.position = 'absolute';
-closeButton.style.top = '10px';
-closeButton.style.right = '10px';
-closeButton.style.fontSize = '2rem';
-closeButton.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-closeButton.style.border = 'none';
-closeButton.style.borderRadius = '50%';
-closeButton.style.cursor = 'pointer';
-
-const leftArrow = document.createElement('button');
-leftArrow.textContent = '←';
-leftArrow.classList.add('modal-arrow', 'modal-arrow-left');
-leftArrow.style.position = 'absolute';
-leftArrow.style.left = '20px';
-leftArrow.style.fontSize = '3rem';
-leftArrow.style.color = '#fff';
-leftArrow.style.background = 'transparent';
-leftArrow.style.border = 'none';
-leftArrow.style.cursor = 'pointer';
-
-const rightArrow = document.createElement('button');
-rightArrow.textContent = '→';
-rightArrow.classList.add('modal-arrow', 'modal-arrow-right');
-rightArrow.style.position = 'absolute';
-rightArrow.style.right = '20px';
-rightArrow.style.fontSize = '3rem';
-rightArrow.style.color = '#fff';
-rightArrow.style.background = 'transparent';
-rightArrow.style.border = 'none';
-rightArrow.style.cursor = 'pointer';
-
-modal.appendChild(modalImg);
-modal.appendChild(closeButton);
-modal.appendChild(leftArrow);
-modal.appendChild(rightArrow);
-document.body.appendChild(modal);
-
-let currentImageIndex = 0;
-let isZoomed = false;
-
-function openModal(index) {
-    currentImageIndex = index;
-    modalImg.src = `kuchyne/${randomImages[currentImageIndex]}.jpg`;
-    modal.style.display = 'flex';
-}
-
-function closeModal() {
-    modal.style.display = 'none';
-    resetZoom();
-}
-
-function changeImage(direction) {
-    resetZoom();
-    currentImageIndex += direction;
-    if (currentImageIndex < 0) currentImageIndex = randomImages.length - 1;
-    if (currentImageIndex >= randomImages.length) currentImageIndex = 0;
-    modalImg.src = `kuchyne/${randomImages[currentImageIndex]}.jpg`;
-}
-
-function toggleZoom() {
-    if (!isZoomed) {
-        modalImg.style.transform = 'scale(2)';
-        isZoomed = true;
-    } else {
-        resetZoom();
-    }
-}
-
-function resetZoom() {
-    modalImg.style.transform = 'scale(1)';
-    isZoomed = false;
-}
-
-closeButton.addEventListener('click', closeModal);
-leftArrow.addEventListener('click', () => changeImage(-1));
-rightArrow.addEventListener('click', () => changeImage(1));
-
-// Přidání dotykových událostí pro mobilní zařízení
-let startX = 0;
-modal.addEventListener('touchstart', (e) => {
-    startX = e.changedTouches[0].pageX;
-});
-
-modal.addEventListener('touchend', (e) => {
-    const endX = e.changedTouches[0].pageX;
-    if (startX > endX + 50) {
-        changeImage(1);
-    } else if (startX < endX - 50) {
-        changeImage(-1);
-    }
-});
-
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-});
-
-modalImg.addEventListener('dblclick', toggleZoom);
-
-window.addEventListener('keydown', (e) => {
-    if (modal.style.display === 'flex') {
-        if (e.key === 'ArrowRight') changeImage(1);
-        if (e.key === 'ArrowLeft') changeImage(-1);
-        if (e.key === 'Escape') closeModal();
-    }
-});
-
-// Znovu načtení galerie při kliknutí na tlačítko
-document.getElementById('reloadGallery').addEventListener('click', generateGallery);
-
-// Načtení galerie při prvním načtení stránky
-generateGallery();
-</script>
-
-
-    <script>
         document.getElementById("scroll-button").addEventListener("click", function() {
             window.scrollBy({
                 top: window.innerHeight, // Posune o výšku aktuálního okna (100vh)
                 behavior: "smooth"       // Plynulý přechod
             });
         });
-    </script>
-
-    </div>
-
-
-    <div class="inner-text">
-
-<div class="image-container">
-  <img src="style/1.jpg" alt="Responsive Image">
+</script>
 </div>
-        <h2> Hlavní oblasti tvorby</h2>
-       
 
-1. 3D grafika
 
-Modelování objektů a prostředí pro PC hry.
 
-Příprava modelů pro 3D tisk, včetně optimalizace a přípravy pro výrobu.
+
+
+
+
+    <!-- Nový oddíl s černým pozadím -->
+<div id="black-section">
 <br>
 <br>
+<div>
+</div>
 
 
 
-2. 2D grafika
-
-Grafické návrhy pro tisk (letáky, plakáty, vizitky).
-
-Digitální ilustrace a koncepty.
-
-<br>
-<br>
-
-3. Animace a vizuální efekty
-
-Krátké animace pro marketingové účely nebo herní projekty.
-
-<br>
-<br>
-
-4. Webové stránky
-
-Jednoduché a funkční webové prezentace.
-
-Návrh a tvorba uživatelsky přívětivého designu.
-<br>
-<br>
-   <div class="button-container">
-      <button class="gallery-button">Galerie</button>
-    </div>
 
 
-    </div>
+
+
 <div class="footer">
 
         <img src="style/profilovka.png" alt="Team Photo or Logo">
@@ -910,100 +676,7 @@ Návrh a tvorba uživatelsky přívětivého designu.
                 footer.classList.remove('visible');
             }
         });
-
-
-
-
-
-    </script>
-
-
-
-    <script>
-
-        // Ovládání rozbalovacího menu
-        const dropdownButton = document.getElementById('dropdown-button');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-
-        dropdownButton.addEventListener('click', () => {
-            const isVisible = dropdownMenu.style.display === 'block';
-            dropdownMenu.style.display = isVisible ? 'none' : 'block';
-        });
-
-        // Zavřít menu při kliknutí mimo něj
-        window.addEventListener('click', (e) => {
-            if (!e.target.closest('#dropdown-container')) {
-                dropdownMenu.style.display = 'none';
-            }
-        });
-
-
-
-
-        // Funkce pro náhodný výběr videa
-        function getRandomVideo() {
-            const isMobile = window.innerWidth <= 768;
-            const isLandscape = window.innerWidth > window.innerHeight;
-
-            if (isMobile && isLandscape) {
-                const desktopVideos = [];
-                for (let i = 1; i <= 1; i++) {
-                    desktopVideos.push(`pozadi/${i}.mp4`);
-                }
-                const randomIndex = Math.floor(Math.random() * desktopVideos.length);
-                return desktopVideos[randomIndex];
-            }
-
-            if (isMobile) {
-                const mobileVideos = [];
-                for (let i = 1; i <= 1; i++) {
-                    mobileVideos.push(`pozadi2/${i}.mp4`);
-                }
-                const randomIndex = Math.floor(Math.random() * mobileVideos.length);
-                return mobileVideos[randomIndex];
-            }
-
-            const desktopVideos = [];
-            for (let i = 1; i <= 1; i++) {
-                desktopVideos.push(`pozadi/${i}.mp4`);
-            }
-
-            const randomIndex = Math.floor(Math.random() * desktopVideos.length);
-            return desktopVideos[randomIndex];
-        }
-
-        // Nastavení video pozadí
-        function setBackgroundVideo() {
-            const videoElement = document.getElementById('background-video');
-            const videoSource = getRandomVideo();
-            const sourceElement = document.getElementById('video-source');
-            sourceElement.src = videoSource;
-            videoElement.load();
-            videoElement.play().catch(error => {
-                console.error("Chyba při přehrávání videa:", error);
-            });
-        }
-
-        window.onload = () => {
-            setBackgroundVideo();
-        };
-
-
-
-let previousWidth = window.innerWidth;
-
-window.onresize = () => {
-    const currentWidth = window.innerWidth;
-    
-    // Pokud se šířka okna změnila
-    if (currentWidth !== previousWidth) {
-        setBackgroundVideo();
-        previousWidth = currentWidth; // Uložení nové šířky okna
-    }
-};
-
-
-    </script>
+</script>
 
 </body>
 </html>
