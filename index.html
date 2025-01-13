@@ -655,12 +655,12 @@ function generateGallery() {
         imageContainer.classList.add('image-container');
 
         const link = document.createElement('a');
-        link.href = `kuchyne/${image}.jpg`;
+        link.href = `vizualizace/${image}.png`;
         link.dataset.index = index;
         link.classList.add('gallery-link');
 
         const img = document.createElement('img');
-        img.src = `kuchyne/${image}.jpg`;
+        img.src = `vizualizace/${image}.png`;
         img.alt = `Obrázek číslo ${image}`;
 
         link.appendChild(img);
@@ -741,7 +741,7 @@ let isZoomed = false;
 
 function openModal(index) {
     currentImageIndex = index;
-    modalImg.src = `kuchyne/${randomImages[currentImageIndex]}.jpg`;
+    modalImg.src = `vizualizace/${randomImages[currentImageIndex]}.png`;
     modal.style.display = 'flex';
 }
 
@@ -755,7 +755,7 @@ function changeImage(direction) {
     currentImageIndex += direction;
     if (currentImageIndex < 0) currentImageIndex = randomImages.length - 1;
     if (currentImageIndex >= randomImages.length) currentImageIndex = 0;
-    modalImg.src = `kuchyne/${randomImages[currentImageIndex]}.jpg`;
+    modalImg.src = `vizualizace/${randomImages[currentImageIndex]}.png`;
 }
 
 function toggleZoom() {
