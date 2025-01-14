@@ -26,7 +26,7 @@ html, body {
 
 body {
     font-family: 'Arial', sans-serif;
-    background: #f4f4f9;
+    background:blac;
     background-image:url("style/1.jpg");
     background-size: cover;
     background-repeat: no-repeat;
@@ -704,12 +704,13 @@ const closeButton = document.createElement('button');
 closeButton.textContent = 'X';
 closeButton.style.position = 'absolute';
 closeButton.style.top = '10px';
-closeButton.style.right = '10px';
+closeButton.style.right = '2.5%'; // Umístění 2% od pravého kraje
 closeButton.style.width = '40px';
 closeButton.style.height = '40px';
 closeButton.style.lineHeight = '40px'; // Zajištění vertikálního zarovnání textu
 closeButton.style.textAlign = 'center'; // Zajištění horizontálního zarovnání textu
 closeButton.style.fontSize = '1.5rem';
+closeButton.style.color = '#000002'; // Nastavení bílé barvy textu
 closeButton.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
 closeButton.style.border = 'none';
 closeButton.style.borderRadius = '50%';
@@ -814,6 +815,11 @@ window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     }
 });
+
+
+
+
+
 
 // Znovu načtení galerie při kliknutí na tlačítko
 document.getElementById('reloadGallery').addEventListener('click', generateGallery);
