@@ -157,17 +157,25 @@ color:white;
         #next {
             right: 20px;
         }
+
+
+
         #close-lightbox {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            color: white;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            color: black;
             border: none;
-            font-size: 2rem;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             cursor: pointer;
-        }
-
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }	
 
 
 
@@ -703,10 +711,10 @@ modalImg.style.transition = 'transform 0.3s ease-in-out';
 
 const closeButton = document.createElement('button');
 closeButton.textContent = 'X';
-closeButton.style.position = 'absolute';
+closeButton.style.position = 'relative';
 
-closeButton.style.top = '85%';
-closeButton.style.right = '48%'; // Umístění 2% od pravého kraje
+closeButton.style.top = '-45%';
+closeButton.style.right = '20px'; 
 closeButton.style.width = '40px';
 closeButton.style.height = '40px';
 closeButton.style.lineHeight = '40px'; // Zajištění vertikálního zarovnání textu
