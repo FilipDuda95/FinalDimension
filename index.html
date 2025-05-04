@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google Drive Galerie</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 1rem;
+    }
+    h1 {
+      text-align: center;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .gallery img,
+    .gallery video {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .folder {
+      display: block;
+      padding: 1rem;
+      background: white;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .folder:hover {
+      background: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Galerie ze složky Google Disku</h1>
+<div class="gallery" id="gallery"></div>
+
+<script>
+  const API_KEY = 'AIzaSyD0ab0gUeKPMTtNUMhzjKPh4PPgEmOljsI';
+  const ROOT_FOLDER_ID = '1jdBs8c75Dh3EbzNdF8-jXkhtkZTBclhY';
+
+  async function loadFolder(folderId) {
+    const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+    const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id,name,mimeType)`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = '';
+
+    data.files.forEach(file => {
+      if (file.mimeType === 'application/vnd.google-apps.folder') {
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = `📁 ${file.name}`;
+        a.className = 'folder';
+        a.onclick = () => {
+          loadFolder(file.id);
+          return false;
+        };
+        gallery.appendChild(a);
+      } else if (file.mimeType.startsWith('image/')) {
+        const img = document.createElement('img');
+        img.src = `https://drive.google.com/uc?id=${file.id}`;
+        img.alt = file.name;
+        gallery.appendChild(img);
+      } else if (file.mimeType.startsWith('video/')) {
+        const video = document.createElement('video');
+        video.src = `https://drive.google.com/uc?id=${file.id}`;
+        video.controls = true;
+        gallery.appendChild(video);
+      }
+    });
+  }
+
+  loadFolder(ROOT_FOLDER_ID);
+</script>
+
+</body>
+</html>
