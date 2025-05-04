@@ -1,0 +1,948 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final dimension</title>
+	
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon"> 
+	
+    <style>
+
+
+
+    .back-button {
+      background-color: #007bff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .gallery a {
+      text-decoration: none;
+      color: silver;
+    }
+    .square {
+      position: relative;
+      width: 100px;
+      padding-bottom: 100px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .square img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: contain;
+    }
+    .folder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-weight: bold;
+      height: 100%;
+      transition: background 0.2s;
+    }
+    .folder:hover {
+      background: #e0e0e0;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-image:url("style/1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow-x: hidden;  /* Zabrání horizontálnímu posouvání */
+                font-family: Arial, sans-serif;
+}
+
+
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    background:black;
+    background-image:url("style/1.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+ 
+}
+
+
+
+
+//obrazek
+.image-container {
+  width: 100%;       
+  height: 300px;     /* Nastavte pevnou výšku kontejneru */
+  overflow: hidden;  /* Skryje přetékající části obrázku */
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Obrázek vyplní prostor, ořízne se podle potřeby */
+  display: block;    /* Odstraní mezery způsobené inline prvkem */
+}
+
+
+
+
+
+
+
+
+
+.button-container {
+margin-left:50%;
+z-index: 30;
+bottom:5%;
+transform: translateX(-50%);
+}
+.scrollbutton {
+position:absolute;
+bottom:5%;
+left:50%;
+z-index: 20;
+transform: translateX(-50%);
+}
+.gallery-button {
+    background: rgba(58, 35, 255, 0.8);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 30px;
+    font-size: 1.3vw;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.gallery-button a {
+text-decoration:none;
+color:white;
+}
+.gallery-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+}
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 2%;
+            justify-content: center;
+        }
+        .gallery img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 0px solid #ddd;
+            border-radius: 5px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+            border-color: #444;
+        }
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            color: white;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        #prev {
+            left: 20px;
+        }
+        #next {
+            right: 20px;
+        }
+
+
+
+        #close-lightbox {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            color: black;
+            border: none;
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }	
+
+
+
+
+
+
+
+
+
+        #top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            z-index: 100; /* Nad všemi prvky */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
+		
+	
+        }
+#top-bar a{
+text-decoration: none;
+color: white;		
+}
+
+        #icon, #dropdown-button {
+            cursor: pointer;
+            font-size: calc(0.6 * var(--top-bar-height)); /* Velikost ikon relativní k výšce */
+            height: 100%; /* Ikona se přizpůsobí výšce topbaru */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+		   background: none;
+  	  border: none;
+  	  cursor: pointer;
+ 	   padding: 0;
+ 	   margin: 0;
+        }
+
+        #dropdown-container {
+            position: relative;
+            height: 100%;
+        }
+
+        #dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 2vw;
+            top: 100%;
+            background-color: rgba(50, 50, 50, 0.95);
+            color: white;
+            list-style: none;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+	    text-align:center;
+	    width:40vw;
+        }
+
+
+	.menu-icon {
+    	height: 100%; /* Ikona bude 80 % výšky topbaru */
+   	 width: auto; /* Automaticky přizpůsobí šířku poměru stran */
+  	  object-fit: contain; /* Zachová proporce obrázku */
+   	 display: block; /* Ujistí se, že neovlivňuje layout */
+   	 margin: auto; /* Centrovaní vertikálně i horizontálně */
+	}
+
+
+
+
+        #dropdown-menu li {
+            padding: 5px 10px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        #dropdown-menu li:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+
+
+
+
+
+#black-section {
+    position: absolute;
+    top: 100%;  /* Umístíme oddíl za hlavní obrazovku */
+    left: 0;
+    width: 100%;
+    background-color: black;
+    color: white;
+    z-index:23;
+    display: flex;
+    padding-bottom:15%;
+    flex-direction: column;  /* Vertikální zobrazení jako výchozí pro menší obrazovky */
+    justify-content: center;  /* Vertikální centrování obsahu */
+    align-items: center;  /* Horizontální centrování obsahu */
+
+}
+
+
+        .logo-section {
+            position: absolute;
+            width: 45%;
+            height: 45%;
+            top: -60%;
+            left: 50%;
+	    padding: 5%;
+            transform: translateX(-50%);
+            background-image: url('style/logo.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            z-index: 24;
+        }
+.footer.visible {
+            opacity: 1;
+	z-index:40;
+	width:100vw;
+	display: block;
+        }
+
+        .footer {
+        display: none;
+ 	 opacity: 0;
+	 width: 10px;	
+ 	position: absolute;
+	bottom:0px;
+	z-index:1;
+	    color:black;
+            background-color: #f8f8f8;
+            padding: 40px 20px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .footer img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .footer h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .footer p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .footer a {
+            text-decoration: none;
+            color: #333;
+            margin: 0 10px;
+        }
+        .social-icons a {
+            margin: 0 15px;
+        }
+        .social-icons img {
+            width: 30px;
+            height: 30px;
+        }
+
+
+
+
+
+	    
+
+
+@media (orientation: portrait) {
+
+        #dropdown-menu {
+   position: fixed;  /* Zajistí, že video zůstane na pozadí */
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;  /* Video bude pokrývat celou šířku okna */
+            height: auto;
+
+        }
+.gallery-button {
+    font-size: 3vw;
+}
+
+
+	#top-bar {
+	height: 8%;	
+        }
+
+            .logo-section {
+                width: 50%;
+                height: 50%;
+                top: -30%;
+		padding: 0px;
+            }
+        }
+    
+
+
+
+
+
+        /* Úprava pro video na pozadí */
+        #background-video {
+            position: fixed;  /* Zajistí, že video zůstane na pozadí */
+            top: 0;
+            left: 0;
+            width: 100%;  /* Video bude pokrývat celou šířku okna */
+            height: 100%; /* Video pokryje celou výšku okna */
+            object-fit: cover;  /* Video vyplní celé okno a udrží si správný poměr stran */
+            z-index: 1; /* Video je pod vším ostatním */
+            opacity: 1;
+        }
+
+        /* Sekce s textem a logem */
+        #center-section {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            width: 75%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            z-index: 10;
+        }
+
+        .inner-text {
+	    position:relative;
+	    width:92%;
+            color: white;
+            font-size: 2vw; /* velikost na mobilu */
+	    margin:4%;
+            text-align: center;
+	
+            flex-grow: 1;
+        }
+
+@media (min-width: 768px) {
+
+    .modal-arrow {
+        display: block;
+    }
+	#top-bar {
+	height: 8%;
+	
+        }
+
+
+            #center-section {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            .logo-section {
+                width: 45%;
+                height: 45%;
+                top: -48%; 
+	        z-index: 200;
+		 position: absolute;
+
+            }
+
+    #black-section {
+        flex-direction: row;  /* Zobrazí texty vedle sebe */
+        justify-content: space-evenly;  /* Rovnoměrné rozestupy mezi texty */
+    }
+
+            .inner-text {
+		width:92%;
+		padding:2%;
+                font-size: 1.1vw;
+                flex-grow: 1;
+            }
+        }
+
+
+@media (max-width: 1000px){
+        .gallery img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 0px solid #ddd;
+            border-radius: 5px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+}
+@media (max-width: 768px){
+.footer.visible{
+	 z-index: 40;
+	  opacity: 1;
+	display: block;
+}
+
+	
+.footer{
+	display: none;
+	  opacity: 0;
+	 z-index: 1;
+	width: auto;
+	 border: 2px solid #ddd;
+}	
+        .gallery img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 0px solid #ddd;
+            border-radius: 5px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+    .modal-arrow {
+        display: none;
+    }
+}
+
+
+
+
+        /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
+@media (max-width: 768px) and (orientation: landscape) {
+
+        .gallery img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 0px solid #ddd;
+            border-radius: 5px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+	#top-bar {
+	height:15%;	
+        }
+        #dropdown-menu {
+	    width:35vw;
+        }
+
+            #center-section {
+                flex-direction: row;  /* Zobrazí položky vedle sebe */
+                justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
+                padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
+            }
+
+
+            .logo-section {
+                width: 30%;
+                height: 30%;
+                top: -33%;
+		padding: 5%;
+ 		
+            }
+
+
+        #black-section {
+                flex-direction: row;  /* Zobrazí položky vedle sebe */
+                justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
+                padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
+        }
+
+            .inner-text {
+                font-size: 1.6vw;
+                width:92%;
+		margin:2%;  /* Snížíme mezery mezi texty */
+                text-align: center;  /* Text bude zarovnán na levý okraj */
+                flex-grow: 1;  /* Texty se budou roztahovat, pokud bude místo */
+            }
+        }
+
+#konec{
+position:absolute;
+z-index:2;
+bottom:0px;
+color:black;
+font-size:0.1em;
+}
+
+    </style>
+
+<body>
+
+    <!-- Horní lišta -->
+    <div id="top-bar">
+
+        <div id="icon"><img src="style/logo.png" alt="Logo" class="menu-icon"></div>
+
+        <div id="dropdown-container">
+            <button id="dropdown-button"> <img src="style/menu2.png" alt="Menu Icon" class="menu-icon"></button> <!-- Ikona místo nápisu -->
+            <ul id="dropdown-menu">
+                <li><a href="index.html">Hlavní</a></li>
+                <li><a href="#black-section">Galerie</a></li>
+                <li><a href="#konec">Kontakt</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+    <!-- Video na pozadí -->
+    <video id="background-video" autoplay muted loop>
+        <source id="video-source" type="video/mp4" src="video-source">
+        Your browser does not support the video tag.
+    </video>
+
+
+    <div id="center-section">
+        <div class="logo-section"></div>
+        <div class="inner-text">
+            <h2>Vítejte</h2>
+            Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!
+        </div>
+
+        <div class="inner-text">
+            <h2>Portfolio</h2>
+      Jmenuji se Filip Duda a jsem grafik, designér, prodejce, programátor a tester (Vývojář). Mým zaměřením je tvorba PC grafiky, 3D tisku, 2D grafiky pro tisk a jednoduchá tvorba webových stránek.
+
+        </div>
+
+
+
+    </div>
+   <div class="scrollbutton">
+       <button class="gallery-button" id="scroll-button">▼</button>
+    </div>
+
+<script>
+        document.getElementById("scroll-button").addEventListener("click", function() {
+            window.scrollBy({
+                top: window.innerHeight, // Posune o výšku aktuálního okna (100vh)
+                behavior: "smooth"       // Plynulý přechod
+            });
+        });
+</script>
+
+
+
+
+    <!-- Nový oddíl s černým pozadím -->
+<div id="black-section">
+
+
+    <div class="inner-text" id="padding">
+        <h2>Filip Duda</h2>
+       Moje portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.
+
+<br>
+<br>
+
+<h1 id="galerie">Galerie</h1>
+<div class="controls">
+  <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;">← Zpět</button>
+</div>
+<div class="gallery" id="gallery"></div>
+
+<script>
+  const API_KEY = 'AIzaSyD0ab0gUeKPMTtNUMhzjKPh4PPgEmOljsI';
+  const ROOT_FOLDER_ID = '1jdBs8c75Dh3EbzNdF8-jXkhtkZTBclhY';
+  const folderStack = [ROOT_FOLDER_ID];
+
+  async function loadFolder(folderId, addToHistory = true) {
+    if (addToHistory) {
+      history.pushState({ folderId }, '');
+    }
+
+    const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+    const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink,thumbnailLink)`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const gallery = document.getElementById('gallery');
+    const backBtn = document.getElementById('backBtn');
+    gallery.innerHTML = '';
+    backBtn.style.display = folderStack.length > 1 ? 'inline-block' : 'none';
+
+    data.files.forEach(file => {
+      const container = document.createElement('div');
+      container.className = 'square';
+
+      if (file.mimeType === 'application/vnd.google-apps.folder') {
+        const folderLink = document.createElement('a');
+        folderLink.href = '#';
+        folderLink.onclick = () => {
+          folderStack.push(file.id);
+          loadFolder(file.id);
+          return false;
+        };
+        const folderDiv = document.createElement('div');
+        folderDiv.className = 'folder';
+        folderDiv.textContent = `📁 ${file.name}`;
+        folderLink.appendChild(folderDiv);
+        container.appendChild(folderLink);
+      } else {
+        const link = document.createElement('a');
+        link.href = file.webViewLink;
+        link.target = '_blank';
+        link.title = file.name;
+
+        const img = document.createElement('img');
+        img.src = file.thumbnailLink || 'https://via.placeholder.com/250?text=Soubor';
+        img.alt = file.name;
+        img.loading = 'lazy';
+
+        link.appendChild(img);
+        container.appendChild(link);
+      }
+
+      gallery.appendChild(container);
+    });
+  }
+
+  function goBack() {
+    if (folderStack.length > 1) {
+      folderStack.pop();
+      const previousFolderId = folderStack[folderStack.length - 1];
+      loadFolder(previousFolderId, false);
+    }
+  }
+
+  // Zpětné tlačítko pro prohlížeč a mobil
+  window.onpopstate = function(event) {
+    if (event.state && event.state.folderId) {
+      if (folderStack.length > 1) folderStack.pop();
+      loadFolder(event.state.folderId, false);
+    }
+  };
+
+  loadFolder(ROOT_FOLDER_ID);
+</script>
+
+
+    </div>
+<div class="footer">
+
+        <img src="style/profilovka.png" alt="Team Photo or Logo">
+        <h2>Kontaktujte mě</h2>
+        <p><strong>Telefon:</strong> +420 608 122 052</p>
+        <p><strong>Email:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
+<br>
+        <div class="social-icons">
+            <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank"><img src="style/linkedin.png" alt="LinkedIn"></a>
+	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
+	    <a href="https://wa.me/420608122052" target="_blank"><img src="style/whatsapp.png" alt="Whatsapp"></a>
+        </div>
+   <div class="button-container">
+       <button class="gallery-button" onclick="window.location.href='#center-section'" >▲</button>
+   </div>
+
+ </div> 
+
+ <div id="konec">
+        <h2>Konec stránky</h2>
+        <p>Dostali jste se na konec stránky!</p>
+    </div> 
+</div>  
+<script>
+
+//zobrazí, schová kontakt
+        const footer = document.querySelector('.footer');
+
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+
+            if (Math.ceil(scrollPosition) >= documentHeight) {
+                footer.classList.add('visible');
+            } else {
+                footer.classList.remove('visible');
+            }
+        });
+
+
+
+
+
+    </script>
+
+
+
+    <script>
+
+        // Ovládání rozbalovacího menu
+        const dropdownButton = document.getElementById('dropdown-button');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        dropdownButton.addEventListener('click', () => {
+            const isVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // Zavřít menu při kliknutí mimo něj
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('#dropdown-container')) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+
+
+
+        // Funkce pro náhodný výběr videa
+        function getRandomVideo() {
+            const isMobile = window.innerWidth <= 768;
+            const isLandscape = window.innerWidth > window.innerHeight;
+
+            if (isMobile && isLandscape) {
+                const desktopVideos = [];
+                for (let i = 1; i <= 1; i++) {
+                    desktopVideos.push(`pozadi/${i}.mp4`);
+                }
+                const randomIndex = Math.floor(Math.random() * desktopVideos.length);
+                return desktopVideos[randomIndex];
+            }
+
+            if (isMobile) {
+                const mobileVideos = [];
+                for (let i = 1; i <= 1; i++) {
+                    mobileVideos.push(`pozadi2/${i}.mp4`);
+                }
+                const randomIndex = Math.floor(Math.random() * mobileVideos.length);
+                return mobileVideos[randomIndex];
+            }
+
+            const desktopVideos = [];
+            for (let i = 1; i <= 1; i++) {
+                desktopVideos.push(`pozadi/${i}.mp4`);
+            }
+
+            const randomIndex = Math.floor(Math.random() * desktopVideos.length);
+            return desktopVideos[randomIndex];
+        }
+
+        // Nastavení video pozadí
+        function setBackgroundVideo() {
+            const videoElement = document.getElementById('background-video');
+            const videoSource = getRandomVideo();
+            const sourceElement = document.getElementById('video-source');
+            sourceElement.src = videoSource;
+            videoElement.load();
+            videoElement.play().catch(error => {
+                console.error("Chyba při přehrávání videa:", error);
+            });
+        }
+
+        window.onload = () => {
+            setBackgroundVideo();
+        };
+
+
+
+let previousWidth = window.innerWidth;
+
+window.onresize = () => {
+    const currentWidth = window.innerWidth;
+    
+    // Pokud se šířka okna změnila
+    if (currentWidth !== previousWidth) {
+        setBackgroundVideo();
+        previousWidth = currentWidth; // Uložení nové šířky okna
+    }
+};
+
+
+    </script>
+
+</body>
+</html>
