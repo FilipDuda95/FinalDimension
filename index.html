@@ -688,12 +688,12 @@ font-size:0.1em;
         <div class="logo-section"></div>
         <div class="inner-text">
             <h2>Vítejte</h2>
-            Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!
+            <p>Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!</p>
         </div>
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      Jmenuji se Filip Duda a jsem grafik, designér, prodejce, programátor a tester (Vývojář). Mým zaměřením je tvorba PC grafiky, 3D tisku, 2D grafiky pro tisk a jednoduchá tvorba webových stránek.
+      <p>Jmenuji se Filip Duda a jsem grafik, designér, prodejce, programátor a tester (Vývojář). Mým zaměřením je tvorba PC grafiky, 3D tisku, 2D grafiky pro tisk a jednoduchá tvorba webových stránek.</p>
 
         </div>
 
@@ -722,12 +722,12 @@ font-size:0.1em;
 
     <div class="inner-text" id="padding">
         <h2>Filip Duda</h2>
-       Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.
+       <p>Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.</p>
 
 <br>
 <br>
 
-<h1 id="galerie">Galerie</h1>
+<h2 id="galerie">Galerie</h2>
 <div class="controls">
   <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;">← Zpět</button>
 </div>
@@ -955,16 +955,25 @@ function adjustFontSizes() {
   const MAX_SIZE = 30;
   const SCALE_FACTOR = 0.012; // 1.2% z šířky viewportu
 
-  const elements = document.querySelectorAll("*");
-
-  const computedSize = Math.min(
+  const BASE_SIZE = Math.min(
     MAX_SIZE,
     Math.max(MIN_SIZE, window.innerWidth * SCALE_FACTOR)
   );
 
+  const elements = document.querySelectorAll("*");
+
   elements.forEach(el => {
     if (el.textContent.trim()) {
-      el.style.fontSize = `${computedSize}px`;
+      let fontSize = BASE_SIZE;
+
+      // Pokud je to nadpis, zvětši písmo o 20 % až 60 % podle typu nadpisu
+      if (/^H[1-6]$/.test(el.tagName)) {
+        const level = parseInt(el.tagName.charAt(1));
+        const increaseFactor = 1 + (7 - level) * 0.1; // H1 +60 %, H6 +10 %
+        fontSize *= increaseFactor;
+      }
+
+      el.style.fontSize = `${fontSize}px`;
     }
   });
 }
