@@ -110,8 +110,8 @@ html, body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    overflow-x: hidden;  /* Zabrání horizontálnímu posouvání */
-                font-family: Arial, sans-serif;
+    overflow-x: hidden;  
+  font-family: Arial, sans-serif;
 }
 
 
@@ -138,15 +138,15 @@ body {
 //obrazek
 .image-container {
   width: 100%;       
-  height: 300px;     /* Nastavte pevnou výšku kontejneru */
-  overflow: hidden;  /* Skryje přetékající části obrázku */
+  height: 300px;    
+  overflow: hidden; 
 }
 
 .image-container img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Obrázek vyplní prostor, ořízne se podle potřeby */
-  display: block;    /* Odstraní mezery způsobené inline prvkem */
+  object-fit: cover; 
+  display: block; 
 }
 
 
@@ -286,7 +286,7 @@ color:white;
             height: 10%;
             background-color: rgba(0, 0, 0, 0.9);
             color: white;
-            z-index: 100; /* Nad všemi prvky */
+            z-index: 100; 
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -301,8 +301,8 @@ color: white;
 
         #icon, #dropdown-button {
             cursor: pointer;
-            font-size: calc(0.6 * var(--top-bar-height)); /* Velikost ikon relativní k výšce */
-            height: 100%; /* Ikona se přizpůsobí výšce topbaru */
+            font-size: calc(0.6 * var(--top-bar-height)); 
+            height: 100%; 
             display: flex;
             align-items: center;
             justify-content: center;
@@ -335,11 +335,11 @@ color: white;
 
 
 	.menu-icon {
-    	height: 100%; /* Ikona bude 80 % výšky topbaru */
-   	 width: auto; /* Automaticky přizpůsobí šířku poměru stran */
-  	  object-fit: contain; /* Zachová proporce obrázku */
-   	 display: block; /* Ujistí se, že neovlivňuje layout */
-   	 margin: auto; /* Centrovaní vertikálně i horizontálně */
+    	height: 100%; 
+   	 width: auto;
+  	  object-fit: contain; 
+   	 display: block; 
+   	 margin: auto; 
 	}
 
 
@@ -362,7 +362,7 @@ color: white;
 
 #black-section {
     position: absolute;
-    top: 100%;  /* Umístíme oddíl za hlavní obrazovku */
+    top: 100%;  
     left: 0;
     width: 100%;
     background-color: black;
@@ -370,10 +370,9 @@ color: white;
     z-index:23;
     display: flex;
     padding-bottom:15%;
-    flex-direction: column;  /* Vertikální zobrazení jako výchozí pro menší obrazovky */
-    justify-content: center;  /* Vertikální centrování obsahu */
-    align-items: center;  /* Horizontální centrování obsahu */
-
+    flex-direction: column;  
+    justify-content: center;  
+    align-items: center;  
 }
 
 
@@ -447,11 +446,11 @@ color: white;
 @media (orientation: portrait) {
 
         #dropdown-menu {
-   position: fixed;  /* Zajistí, že video zůstane na pozadí */
+   position: fixed;  
             top: 8%;
             left: 50%;
             transform: translateX(-50%);
-            width: 100%;  /* Video bude pokrývat celou šířku okna */
+            width: 100%;  
             height: auto;
 
         }
@@ -477,19 +476,19 @@ color: white;
 
 
 
-        /* Úprava pro video na pozadí */
+        
         #background-video {
-            position: fixed;  /* Zajistí, že video zůstane na pozadí */
+            position: fixed;  
             top: 0;
             left: 0;
-            width: 100%;  /* Video bude pokrývat celou šířku okna */
-            height: 100%; /* Video pokryje celou výšku okna */
-            object-fit: cover;  /* Video vyplní celé okno a udrží si správný poměr stran */
-            z-index: 1; /* Video je pod vším ostatním */
+            width: 100%;  
+            height: 100%; 
+            object-fit: cover;  
+            z-index: 1;
             opacity: 1;
         }
 
-        /* Sekce s textem a logem */
+        
         #center-section {
             position: absolute;
             top: 60%;
@@ -509,7 +508,7 @@ color: white;
 	    position:relative;
 	    width:92%;
             color: white;
-            font-size: 2vw; /* velikost na mobilu */
+            font-size: 2vw; 
 	    margin:4%;
             text-align: center;
 	
@@ -541,8 +540,8 @@ color: white;
             }
 
     #black-section {
-        flex-direction: row;  /* Zobrazí texty vedle sebe */
-        justify-content: space-evenly;  /* Rovnoměrné rozestupy mezi texty */
+        flex-direction: row;  
+        justify-content: space-evenly; 
     }
 
             .inner-text {
@@ -597,7 +596,7 @@ color: white;
 
 
 
-        /* Úprava pro zobrazení na šířku (landscape) na mobilních zařízeních */
+       
 @media (max-width: 768px) and (orientation: landscape) {
 
         .gallery img {
@@ -617,9 +616,9 @@ color: white;
         }
 
             #center-section {
-                flex-direction: row;  /* Zobrazí položky vedle sebe */
-                justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
-                padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
+                flex-direction: row;  
+                justify-content: space-evenly;  
+                padding: 10px;  
             }
 
 
@@ -633,17 +632,17 @@ color: white;
 
 
         #black-section {
-                flex-direction: row;  /* Zobrazí položky vedle sebe */
-                justify-content: space-evenly;  /* Mezi položkami bude rovnoměrný prostor */
-                padding: 10px;  /* Snížíme padding pro lepší přizpůsobení */
+                flex-direction: row;  
+                justify-content: space-evenly; 
+                padding: 10px; 
         }
 
             .inner-text {
                 font-size: 1.6vw;
                 width:92%;
-		margin:2%;  /* Snížíme mezery mezi texty */
-                text-align: center;  /* Text bude zarovnán na levý okraj */
-                flex-grow: 1;  /* Texty se budou roztahovat, pokud bude místo */
+		margin:2%; 
+                text-align: center;  
+                flex-grow: 1;  
             }
         }
 
@@ -659,13 +658,13 @@ font-size:0.1em;
 
 <body>
 
-    <!-- Horní lišta -->
+    
     <div id="top-bar">
 
         <div id="icon"><img src="style/logo.png" alt="Logo" class="menu-icon"></div>
 
         <div id="dropdown-container">
-            <button id="dropdown-button"> <img src="style/menu2.png" alt="Menu Icon" class="menu-icon"></button> <!-- Ikona místo nápisu -->
+            <button id="dropdown-button"> <img src="style/menu2.png" alt="Menu Icon" class="menu-icon"></button> 
             <ul id="dropdown-menu">
                 <li><a href="index.html">Hlavní</a></li>
                 <li><a href="#scroll-button">Galerie</a></li>
@@ -677,7 +676,7 @@ font-size:0.1em;
 
 
 
-    <!-- Video na pozadí -->
+
     <video id="background-video" autoplay muted loop>
         <source id="video-source" type="video/mp4" src="video-source">
         Your browser does not support the video tag.
@@ -707,8 +706,8 @@ font-size:0.1em;
 <script>
         document.getElementById("scroll-button").addEventListener("click", function() {
             window.scrollBy({
-                top: window.innerHeight, // Posune o výšku aktuálního okna (100vh)
-                behavior: "smooth"       // Plynulý přechod
+                top: window.innerHeight, 
+                behavior: "smooth"       
             });
         });
 </script>
@@ -716,13 +715,13 @@ font-size:0.1em;
 
 
 
-    <!-- Nový oddíl s černým pozadím -->
+   
 <div id="black-section">
 
 
     <div class="inner-text" id="padding">
         <h2>Filip Duda</h2>
-       Moje portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.
+       Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.
 
 <br>
 <br>
@@ -934,10 +933,10 @@ let previousWidth = window.innerWidth;
 window.onresize = () => {
     const currentWidth = window.innerWidth;
     
-    // Pokud se šířka okna změnila
+   
     if (currentWidth !== previousWidth) {
         setBackgroundVideo();
-        previousWidth = currentWidth; // Uložení nové šířky okna
+        previousWidth = currentWidth; 
     }
 };
 
