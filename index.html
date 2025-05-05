@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -939,6 +940,39 @@ window.onresize = () => {
         previousWidth = currentWidth; 
     }
 };
+
+
+
+
+
+
+
+
+//velikost textu
+
+function adjustFontSizes() {
+  const MIN_SIZE = 16;
+  const MAX_SIZE = 30;
+  const SCALE_FACTOR = 0.012; // 1.2% z šířky viewportu
+
+  const elements = document.querySelectorAll("*");
+
+  const computedSize = Math.min(
+    MAX_SIZE,
+    Math.max(MIN_SIZE, window.innerWidth * SCALE_FACTOR)
+  );
+
+  elements.forEach(el => {
+    if (el.textContent.trim()) {
+      el.style.fontSize = `${computedSize}px`;
+    }
+  });
+}
+
+// Spusť při načtení a při změně velikosti okna
+adjustFontSizes();
+window.addEventListener("resize", adjustFontSizes);
+
 
 
     </script>
