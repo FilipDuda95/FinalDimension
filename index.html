@@ -11,7 +11,11 @@
 	
     <style>
 
-
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 1rem;
+    }
     h1 {
       text-align: center;
     }
@@ -31,41 +35,43 @@
     .back-button:hover {
       background-color: #0056b3;
     }
-    #galerie{
-	position:absolut;
-	left:50%;
-	}
+    #galerie {
+      position: relative;
+      margin: 0 auto;
+      max-width: 1400px;
+    }
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(calc(100%/6), 2fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 1rem;
-      
     }
     .gallery a {
       text-decoration: none;
       color: silver;
-	
     }
 
     .square {
       position: relative;
-      width: 100%; 
+      width: 100%;
       padding-bottom: 100%;
       background: white;
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
-       .square img{
-   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  transform: translate(-50%, -50%);
-  object-fit:  cover;
+
+    .square img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      border-radius: 10px;
     }
- .folder {
+
+    .folder {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -73,18 +79,28 @@
       gap: 0.5rem;
       background: white;
       border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       font-weight: bold;
       transition: background 0.2s;
       padding: 1rem;
       text-align: center;
+      height: 100%;
+      width: 100%;
     }
+
     .folder:hover {
       background: #e0e0e0;
     }
+
     .folder .name {
       text-align: center;
       flex: 1;
+    }
+
+    @media (max-width: 600px) {
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
     }
 
 
@@ -484,12 +500,12 @@ body {
 <br>
 <br>
 
-<h2>Galerie</h2>
+<h2>Galerie ze složky Google Disku</h2>
 <div class="controls">
   <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;">← Zpět</button>
 </div>
-<div id="galerie">
-<div class="gallery" id="gallery"></div></div>
+<div id="galerie"><div class="gallery" id="gallery"></div></div>
+
 <script>
   const API_KEY = 'AIzaSyD0ab0gUeKPMTtNUMhzjKPh4PPgEmOljsI';
   const ROOT_FOLDER_ID = '1jdBs8c75Dh3EbzNdF8-jXkhtkZTBclhY';
@@ -576,6 +592,7 @@ body {
 
   loadFolder(ROOT_FOLDER_ID);
 </script>
+
 
 
     </div>
