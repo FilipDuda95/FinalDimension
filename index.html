@@ -11,60 +11,84 @@
 	
     <style>
 
-.back-button {
-  background-color: #007bff;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.back-button:hover {
-  background-color: #0056b3;
-}
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
-}
-.gallery a {
-  text-decoration: none;
-  color: silver;
-}
-.square {
-  position: relative;
-  width: 100px;
-  padding-bottom: 100px;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-.square img {
-  position: absolute;
+
+    h1 {
+      text-align: center;
+    }
+    .controls {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .back-button {
+      background-color: #007bff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+    #galerie{
+	position:absolut;
+	left:50px;
+	}
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      
+    }
+    .gallery a {
+      text-decoration: none;
+      color: silver;
+	
+    }
+
+    .square {
+      position: relative;
+      width: 100%; 
+      padding-bottom: 100%;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+       .square img{
+   position: absolute;
   top: 50%;
   left: 50%;
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
-  object-fit: contain;
-}
-.folder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  padding: 1rem;
-  text-align: center;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  font-weight: bold;
-  height: 100%;
-  transition: background 0.2s;
-}
-.folder:hover {
-  background: #e0e0e0;
-}
+  object-fit:  cover;
+    }
+ .folder {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-weight: bold;
+      transition: background 0.2s;
+      padding: 1rem;
+      text-align: center;
+    }
+    .folder:hover {
+      background: #e0e0e0;
+    }
+    .folder .name {
+      text-align: center;
+      flex: 1;
+    }
+
+
+
 html, body {
   height: 100%;
   margin: 0;
@@ -88,17 +112,6 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
-}
-.image-container {
-  width: 100%;
-  height: 300px;
-  overflow: hidden;
-}
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
 }
 .button-container {
   margin-left:50%;
@@ -135,74 +148,6 @@ body {
 .gallery-button:active {
   transform: scale(0.98);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
-}
-.gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 2%;
-  justify-content: center;
-}
-.gallery img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  cursor: pointer;
-  border: 0px solid #ddd;
-  border-radius: 5px;
-  transition: transform 0.2s, border-color 0.2s;
-}
-.gallery img:hover {
-  transform: scale(1.05);
-  border-color: #444;
-}
-#lightbox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  display: none;
-}
-#lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-}
-.lightbox-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  color: white;
-  border: none;
-  cursor: pointer;
-  z-index: 1001;
-}
-#prev {
-  left: 20px;
-}
-#next {
-  right: 20px;
-}
-#close-lightbox {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.7);
-  color: black;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 #top-bar {
   position: fixed;
@@ -427,19 +372,11 @@ body {
     width: auto;
     border: 2px solid #ddd;
   }
-  .gallery img {
-    width: 140px;
-    height: 140px;
-  }
   .modal-arrow {
     display: none;
   }
 }
 @media (max-width: 768px) and (orientation: landscape) {
-  .gallery img {
-    width: 50px;
-    height: 50px;
-  }
   #top-bar {
     height:15%;
   }
@@ -549,12 +486,12 @@ body {
 <br>
 <br>
 
-<h2 id="galerie">Galerie</h2>
+<h1>Galerie ze složky Google Disku</h1>
 <div class="controls">
   <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;">← Zpět</button>
 </div>
 <div class="gallery" id="gallery"></div>
-
+</div>
 <script>
   const API_KEY = 'AIzaSyD0ab0gUeKPMTtNUMhzjKPh4PPgEmOljsI';
   const ROOT_FOLDER_ID = '1jdBs8c75Dh3EbzNdF8-jXkhtkZTBclhY';
@@ -581,18 +518,30 @@ body {
       container.className = 'square';
 
       if (file.mimeType === 'application/vnd.google-apps.folder') {
-        const folderLink = document.createElement('a');
-        folderLink.href = '#';
-        folderLink.onclick = () => {
+        const link = document.createElement('a');
+        link.href = '#';
+        link.onclick = () => {
           folderStack.push(file.id);
           loadFolder(file.id);
           return false;
         };
+
         const folderDiv = document.createElement('div');
         folderDiv.className = 'folder';
-        folderDiv.textContent = `📁 ${file.name}`;
-        folderLink.appendChild(folderDiv);
-        container.appendChild(folderLink);
+
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'icon';
+        iconSpan.textContent = '📁';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'name';
+        nameSpan.textContent = file.name;
+
+        folderDiv.appendChild(iconSpan);
+        folderDiv.appendChild(nameSpan);
+
+        link.appendChild(folderDiv);
+        container.appendChild(link);
       } else {
         const link = document.createElement('a');
         link.href = file.webViewLink;
@@ -620,7 +569,6 @@ body {
     }
   }
 
-  // Zpětné tlačítko pro prohlížeč a mobil
   window.onpopstate = function(event) {
     if (event.state && event.state.folderId) {
       if (folderStack.length > 1) folderStack.pop();
