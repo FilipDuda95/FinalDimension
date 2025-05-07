@@ -37,14 +37,18 @@
       background-color: #0056b3;
     }
     #galerie {
-      position: relative;
-      margin: 0 auto;
-      max-width: 1400px;
-    }
+	width:100%;
+        }
+	#gallery{ 
+	position:relative;
+	left:50%;
+	 transform: translateX(-50%);
+	}
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 1rem;
+      gap: 1rem;  
+max-width: 1000px;
     }
     .gallery a {
       text-decoration: none;
