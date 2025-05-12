@@ -10,8 +10,6 @@
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon"> 
 	
     <style>
-
-
     body {
       font-family: sans-serif;
       background: #f0f0f0;
@@ -36,16 +34,16 @@
     .back-button:hover {
       background-color: #0056b3;
     }
-	#gallery{ 
-	position:relative;
-	left:50%;
-	 transform: translateX(-50%);
-	}
+    #gallery { 
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 1rem;  
-max-width: 1100px;
+      gap: 1rem;
+      max-width: 1100px;
     }
     .gallery a {
       text-decoration: none;
@@ -60,6 +58,9 @@ max-width: 1100px;
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      background-image: url('Folder.png');
+      background-size: cover;
+      background-position: bottom center;
     }
 
     .square img {
@@ -71,15 +72,16 @@ max-width: 1100px;
       transform: translate(-50%, -50%);
       object-fit: cover;
       border-radius: 10px;
+
     }
 
     .folder {
       display: flex;
+      background-color: white;
       flex-direction: row;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      background: white;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       font-weight: bold;
@@ -91,7 +93,7 @@ max-width: 1100px;
     }
 
     .folder:hover {
-      background: #e0e0e0;
+      background-color: #e0e0e0;
     }
 
     .folder .name {
@@ -103,7 +105,6 @@ max-width: 1100px;
       .gallery {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
-
     }
 
 
