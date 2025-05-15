@@ -295,6 +295,26 @@ body {
   width: 30px;
   height: 30px;
 }
+
+#Patička{
+ position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: black;
+  color: white;
+  z-index:23;
+  display: flex;
+  padding-bottom:35%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align:center;
+  background-image: url('pozadi/Patička.jpg');
+  background-size:100%;
+}
+
+
 @media (orientation: portrait) {
   #dropdown-menu {
     position: fixed;
@@ -502,10 +522,11 @@ body {
 <br>
 <br>
 
-<h2>Galerie</h2>
 <div class="controls">
   <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;">← Zpět</button>
 </div>
+
+
 <div id="galerie">
   <div class="gallery" id="gallery"></div>
 </div>
@@ -598,50 +619,6 @@ else {
 
 
     </div>
-<div class="footer">
-
-        <img src="style/profilovka.png" alt="Team Photo or Logo">
-        <h2>Kontaktujte mě</h2>
-        <p><strong>Telefon:</strong> +420 608 122 052</p>
-        <p><strong>Email:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
-<br>
-        <div class="social-icons">
-            <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank"><img src="style/linkedin.png" alt="LinkedIn"></a>
-	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
-	    <a href="https://wa.me/420608122052" target="_blank"><img src="style/whatsapp.png" alt="Whatsapp"></a>
-        </div>
-   <div class="button-container">
-       <button class="gallery-button" onclick="window.location.href='#center-section'" >▲</button>
-   </div>
-
- </div> 
-
- <div id="konec">
-        <br>
-    </div> 
-</div>  
-<script>
-
-//zobrazí, schová kontakt
-        const footer = document.querySelector('.footer');
-
-        window.addEventListener('scroll', () => {
-            const scrollPosition = window.scrollY + window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-
-            if (Math.ceil(scrollPosition) >= documentHeight) {
-                footer.classList.add('visible');
-            } else {
-                footer.classList.remove('visible');
-            }
-        });
-
-
-
-
-
-    </script>
-
 
 
     <script>
@@ -771,6 +748,56 @@ window.addEventListener("resize", adjustFontSizes);
 
 
     </script>
+<div id="Patička"> 
 
+<div class="footer">
+
+        <img src="style/profilovka.png" alt="Team Photo or Logo">
+        <h2>Kontaktujte mě</h2>
+        <p><strong>Telefon:</strong> +420 608 122 052</p>
+        <p><strong>Email:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
+<br>
+        <div class="social-icons">
+            <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank"><img src="style/linkedin.png" alt="LinkedIn"></a>
+	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
+	    <a href="https://wa.me/420608122052" target="_blank"><img src="style/whatsapp.png" alt="Whatsapp"></a>
+        </div>
+   <div class="button-container">
+       <button class="gallery-button" onclick="window.location.href='#center-section'" >▲</button>
+   </div>
+
+ </div> 
+
+ <div id="konec">
+        <br>
+    </div> 
+</div>  
+<script>
+
+//zobrazí, schová kontakt
+        const footer = document.querySelector('.footer');
+
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+
+            if (Math.ceil(scrollPosition) >= documentHeight) {
+                footer.classList.add('visible');
+            } else {
+                footer.classList.remove('visible');
+            }
+        });
+
+
+
+
+
+    </script>
+
+
+
+
+
+ </div>
 </body>
 </html>
