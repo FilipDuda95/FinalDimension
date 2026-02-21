@@ -674,7 +674,7 @@ else if (file.mimeType.startsWith('video/')) {
   const iframe = document.createElement('iframe');
   iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
   iframe.style.width = "90vw";
-  iframe.style.height = "auto";
+  iframe.style.height = "100%";
   iframe.allow = "autoplay";
   iframe.style.border = "none";
   iframe.style.borderRadius = "10px";
@@ -894,6 +894,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
