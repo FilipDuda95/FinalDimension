@@ -649,14 +649,18 @@ function openPreview(file) {
     };
     content.appendChild(img);
   } 
-  else if (file.mimeType.startsWith('video/')) {
-    const video = document.createElement('video');
-    video.src = fileUrl;
-    video.controls = true;
-    video.autoplay = true;
-    video.style.background = "black";
-    content.appendChild(video);
-  }
+else if (file.mimeType.startsWith('video/')) {
+
+  const iframe = document.createElement('iframe');
+  iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+  iframe.width = "90%";
+  iframe.height = "90%";
+  iframe.allow = "autoplay";
+  iframe.style.border = "none";
+  iframe.style.borderRadius = "10px";
+
+  content.appendChild(iframe);
+}
 
   modal.style.display = 'flex';
 }
@@ -870,4 +874,5 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
