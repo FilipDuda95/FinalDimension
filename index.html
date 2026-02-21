@@ -676,6 +676,7 @@ else if (file.mimeType.startsWith('video/')) {
   iframe.allow = "autoplay";
   iframe.style.border = "none";
   iframe.style.borderRadius = "10px";
+  img.style.objectFit = 'contain'; // zachování poměru stran
 
   content.appendChild(iframe);
 }
@@ -894,6 +895,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
