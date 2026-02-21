@@ -638,17 +638,23 @@ function openPreview(file) {
   const content = document.getElementById('previewContent');
   content.innerHTML = '';
 
-  const fileUrl = `https://drive.google.com/uc?export=view&id=${file.id}`;
+  // Spolehlivější URL
+  const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
 
   if (file.mimeType.startsWith('image/')) {
     const img = document.createElement('img');
     img.src = fileUrl;
+    img.onerror = () => {
+      img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
+    };
     content.appendChild(img);
-  } else if (file.mimeType.startsWith('video/')) {
+  } 
+  else if (file.mimeType.startsWith('video/')) {
     const video = document.createElement('video');
     video.src = fileUrl;
     video.controls = true;
     video.autoplay = true;
+    video.style.background = "black";
     content.appendChild(video);
   }
 
@@ -864,3 +870,4 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
