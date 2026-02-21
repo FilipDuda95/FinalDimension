@@ -64,11 +64,9 @@
       background-size: cover;
       background-position: bottom center;
 	  border: 0.5px solid;       /* šířka a typ čáry */
-      border-color: white;
+      border-color: black;
     }
 	.square:hover{
-		 border: 3px solid;       /* šířka a typ čáry */
-         border-color: #e0e0e0;   /* barva hranice */
 		 cursor: pointer; /* ruka při najetí */
 	}
 
@@ -118,6 +116,7 @@
 
 
 html, body {
+  scroll-behavior: smooth;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -525,17 +524,17 @@ body {
 
 </head>
 
-<body>
+<body id="top">
 
     
     <div id="top-bar">
 
-        <div id="icon"><img src="style/logo.png" alt="Logo" class="menu-icon"></div>
+        <div id="icon"><img src="style/logo.png" alt="Logo" class="menu-icon" href="#top"></div>
 
         <div id="dropdown-container">
             <button id="dropdown-button"> <img src="style/menu2.png" alt="Menu Icon" class="menu-icon"></button> 
             <ul id="dropdown-menu">
-                <li><a href="index.html">Hlavní</a></li>
+                <li><a href="#top">Hlavní</a></li>
                 <li><a href="#scroll-button">Galerie</a></li>
                 <li><a href="#konec">Kontakt</a></li>
             </ul>
@@ -562,7 +561,7 @@ body {
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...</p>
+      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování.</p>
 
         </div>
 
@@ -913,6 +912,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
