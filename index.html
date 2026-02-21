@@ -200,21 +200,23 @@ body {
     }
 
     /* ===== NOVÝ MODAL ===== */
-    .preview-modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      justify-content: center;
-      align-items: center;
-    }
-    .preview-modal img,
-    .preview-modal video {
-      max-width: 95%;
-      max-height: 95%;
-      border-radius: 10px;
-    }
+   .preview-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-modal #previewContent {
+  position: relative;
+  max-width: 95vw;
+  max-height: 90vh;
+}
+
 .preview-modal .close {
   position: fixed;
   top: 20px;
@@ -222,11 +224,11 @@ body {
   font-size: 45px;
   color: white;
   cursor: pointer;
-  z-index: 10001; /* musí být vyšší než top-bar */
+  z-index: 10002;  /* nad modalem a iframe */
   background: rgba(0,0,0,0.6);
   padding: 5px 15px;
   border-radius: 10px;
-  transition: 0.2s;
+  pointer-events: auto; /* důležité */
 }
 
 .preview-modal .close:hover {
@@ -670,16 +672,18 @@ function openPreview(file) {
     content.appendChild(img);
   } 
 else if (file.mimeType.startsWith('video/')) {
-
   const iframe = document.createElement('iframe');
   iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-  iframe.style.width = "100vw";
-  iframe.style.height = "100vh";
-  iframe.allow = "autoplay";
+  iframe.width = "95%";
+  iframe.height = "90%";
   iframe.style.border = "none";
   iframe.style.borderRadius = "10px";
+  iframe.style.zIndex = "10001";       // pod křížkem
+  iframe.allow = "autoplay; fullscreen";
 
-  content.appendChild(iframe);
+  const previewContent = document.getElementById('previewContent');
+  previewContent.innerHTML = '';
+  previewContent.appendChild(iframe);
 }
 
   modal.style.display = 'flex';
@@ -894,6 +898,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
