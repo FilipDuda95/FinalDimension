@@ -211,10 +211,16 @@ body {
   align-items: center;
 }
 
-.preview-modal #previewContent {
-  position: relative;
-  max-width: 95vw;
-  max-height: 90vh;
+.preview-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .preview-modal .close {
@@ -224,17 +230,19 @@ body {
   font-size: 45px;
   color: white;
   cursor: pointer;
-  z-index: 10002;  /* nad modalem a iframe */
+  z-index: 10002; 
   background: rgba(0,0,0,0.6);
   padding: 5px 15px;
   border-radius: 10px;
-  pointer-events: auto; /* důležité */
 }
 
-.preview-modal .close:hover {
-  background: rgba(255,255,255,0.2);
+.preview-modal iframe, 
+.preview-modal img {
+  max-width: 95vw;
+  max-height: 95vh;
+  border-radius: 12px;
+  z-index: 10001;
 }
-
 		
 
 
@@ -657,38 +665,31 @@ async function loadFolder(folderId, addToHistory = true) {
 
 function openPreview(file) {
   const modal = document.getElementById('previewModal');
-  const content = document.getElementById('previewContent');
-  content.innerHTML = '';
-
-  // Spolehlivější URL
-  const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
+  modal.innerHTML = '<span class="close" onclick="closePreview()">×</span>';
 
   if (file.mimeType.startsWith('image/')) {
     const img = document.createElement('img');
-    img.src = fileUrl;
-    img.onerror = () => {
-      img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
-    };
-    content.appendChild(img);
-  } 
-else if (file.mimeType.startsWith('video/')) {
-  const iframe = document.createElement('iframe');
-  iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-  iframe.width = "95%";
-  iframe.height = "90%";
-  iframe.style.border = "none";
-  iframe.style.borderRadius = "10px";
-  iframe.style.zIndex = "10001";       // pod křížkem
-  iframe.allow = "autoplay; fullscreen";
-
-  const previewContent = document.getElementById('previewContent');
-  previewContent.innerHTML = '';
-  previewContent.appendChild(iframe);
-}
+    img.src = `https://drive.google.com/uc?export=view&id=${file.id}`;
+    modal.appendChild(img);
+  } else if (file.mimeType.startsWith('video/')) {
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+    iframe.width = "95vw";
+    iframe.height = "95vh";
+    iframe.style.border = "none";
+    iframe.style.borderRadius = "12px";
+    iframe.allow = "autoplay; fullscreen";
+    modal.appendChild(iframe);
+  }
 
   modal.style.display = 'flex';
 }
 
+function closePreview() {
+  const modal = document.getElementById('previewModal');
+  modal.style.display = 'none';
+  modal.innerHTML = '<span class="close" onclick="closePreview()">×</span>';
+}
 function closePreview(event) {
   if (event.target.id === 'previewModal' || event.target.className === 'close') {
     document.getElementById('previewModal').style.display = 'none';
@@ -898,6 +899,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
