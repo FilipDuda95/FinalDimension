@@ -212,11 +212,12 @@ body {
     }
     .preview-modal img,
     .preview-modal video, 
-	.preview-modal iframe,{
+	.preview-modal iframe{
   width: auto;        /* šířka se přizpůsobí */
   height: 80vh;       /* maximální výška obrazovky */
   max-width: 95vw;    /* nepřekročí šířku obrazovky */
   border-radius: 12px;
+  object-fit: contain;
 }
 .preview-modal .close {
   position: fixed;
@@ -905,6 +906,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
