@@ -215,14 +215,14 @@ body {
       max-height: 95%;
       border-radius: 10px;
     }
-  .preview-modal .close {
+.preview-modal .close {
   position: fixed;
   top: 20px;
   right: 30px;
   font-size: 45px;
   color: white;
   cursor: pointer;
-  z-index: 10001;
+  z-index: 10001; /* musí být vyšší než top-bar */
   background: rgba(0,0,0,0.6);
   padding: 5px 15px;
   border-radius: 10px;
@@ -894,6 +894,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
