@@ -658,31 +658,33 @@ async function loadFolder(folderId, addToHistory = true) {
 function openPreview(file) {
   const modal = document.getElementById('previewModal');
   const content = document.getElementById('previewContent');
-  content.innerHTML = '';
+  content.innerHTML = ''; // vyčistit předchozí obsah
 
-  // Spolehlivější URL
+  // Spolehlivější URL pro obrázky
   const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
 
   if (file.mimeType.startsWith('image/')) {
     const img = document.createElement('img');
     img.src = fileUrl;
+    img.style.maxWidth = '80vw';
+    img.style.maxHeight = '80vh';
+    img.style.borderRadius = '12px';
+    img.style.objectFit = 'contain';
     img.onerror = () => {
       img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
     };
     content.appendChild(img);
-  } 
-else if (file.mimeType.startsWith('video/')) {
 
-  const iframe = document.createElement('iframe');
-  iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-  iframe.style.width = "90vw";
-  iframe.style.height = "90vh";
-  iframe.allow = "autoplay";
-  iframe.style.border = "none";
-  iframe.style.borderRadius = "10px";
-
-  content.appendChild(iframe);
-}
+  } else if (file.mimeType.startsWith('video/')) {
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+    iframe.allow = "autoplay; fullscreen";
+    iframe.width = "95vw";      // pevná šířka
+    iframe.height = "80vh";     // pevná výška
+    iframe.style.border = "none";
+    iframe.style.borderRadius = "12px";
+    content.appendChild(iframe);
+  }
 
   modal.style.display = 'flex';
 }
@@ -896,6 +898,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
