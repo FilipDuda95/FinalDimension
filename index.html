@@ -210,11 +210,13 @@ body {
       align-items: center;
     }
     .preview-modal img,
-    .preview-modal video {
-      max-width: 95%;
-      max-height: 95%;
-      border-radius: 10px;
-    }
+    .preview-modal video, 
+	.preview-modal iframe,{
+  width: auto;        /* šířka se přizpůsobí */
+  height: 80vh;       /* maximální výška obrazovky */
+  max-width: 95vw;    /* nepřekročí šířku obrazovky */
+  border-radius: 12px;
+}
 .preview-modal .close {
   position: fixed;
   top: 20px;
@@ -894,6 +896,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
