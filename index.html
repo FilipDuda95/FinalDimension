@@ -11,11 +11,33 @@
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon"> 
 	
     <style>
-    body {
-      font-family: sans-serif;
-      background: #f0f0f0;
-      padding: 1rem;
-    }
+		
+html, body {
+  scroll-behavior: smooth;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-image:url("style/1.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+}
+body {
+  font-family: 'Arial', sans-serif;
+  background:black;
+  background-image:url("style/1.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
     h1 {
       text-align: center;
     }
@@ -62,9 +84,10 @@
       background-image: url('Folder.png');
       background-size: cover;
       background-position: bottom center;  
+	  box-shadow: inset 2px black;	
     }
 	.square:hover{
-		 cursor: pointer; /* ruka při najetí */
+	cursor: pointer; /* ruka při najetí */
 	}
 
     .square img {
@@ -77,10 +100,9 @@
       object-fit: cover;
       border-radius: 10px;
     }
-
-    .folder {
+	 .folder {
       display: flex;
-      background-color: black;
+      background-color: white;
       flex-direction: row;
       align-items: center;
       justify-content: center;
@@ -88,21 +110,13 @@
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
       font-weight: bold;
-      transition: background 0.2s;
       padding: 1rem;
       text-align: center;
-      height: 25%;;
+      height: 25%;
       width: auto;
     }
 
-    .folder:hover {
-      background-color: #e0e0e0;
-    }
 
-    .folder .name {
-      text-align: right;
-      flex: 1;
-    }
 
     @media (max-width: 600px) {
       .gallery {
@@ -111,31 +125,6 @@
     }
 
 
-html, body {
-  scroll-behavior: smooth;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-image:url("style/1.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  overflow-x: hidden;
-  font-family: Arial, sans-serif;
-}
-body {
-  font-family: 'Arial', sans-serif;
-  background:black;
-  background-image:url("style/1.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
 .button-container {
   margin-left:50%;
   z-index: 30;
@@ -163,44 +152,8 @@ body {
       max-width: 1100px;
     }
     .gallery a { text-decoration: none; color: silver; }
-    .square {
-      color: silver;
-      position: relative;
-      width: 100%;
-      padding-bottom: 100%;
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      background-image: url('Folder.png');
-      background-size: cover;
-      background-position: bottom center;
-    }
-    .square img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 100%;
-      height: 100%;
-      transform: translate(-50%, -50%);
-      object-fit: cover;
-      border-radius: 10px;
-    }
-    .folder {
-      display: flex;
-      background-color: white;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      font-weight: bold;
-      padding: 1rem;
-      text-align: center;
-      height: 25%;
-      width: auto;
-    }
+  
+
 
     /* ===== NOVÝ MODAL ===== */
     .preview-modal {
@@ -557,7 +510,7 @@ body {
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování.</p>
+      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...</p>
 
         </div>
 
@@ -908,6 +861,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
