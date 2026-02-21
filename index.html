@@ -663,6 +663,9 @@ function openPreview(file) {
     img.src = fileUrl;
     img.onerror = () => {
       img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
+		img.style.width = '80vw';      // škáluje podle okna
+img.style.maxHeight = '90vh';  // maximálně 90% výšky viewportu
+img.style.objectFit = 'contain'; // zachování poměru stran
     };
     content.appendChild(img);
   } 
@@ -670,7 +673,7 @@ else if (file.mimeType.startsWith('video/')) {
 
   const iframe = document.createElement('iframe');
   iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-  iframe.style.width = "90vw";
+  iframe.style.width = "80vw";
   iframe.style.height = "90vh";
   iframe.allow = "autoplay";
   iframe.style.border = "none";
@@ -891,4 +894,5 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
