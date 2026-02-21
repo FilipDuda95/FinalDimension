@@ -676,9 +676,9 @@ else if (file.mimeType.startsWith('video/')) {
   wrapper.style.paddingTop = '56.25%'; // 9/16 * 100%
   wrapper.style.margin = 'auto';
 
-  // samotné iframe
+  // samotné iframe s autoplay
   const iframe = document.createElement('iframe');
-  iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+  iframe.src = `https://drive.google.com/file/d/${file.id}/preview?autoplay=1`;
   iframe.allow = "autoplay; fullscreen";
   iframe.style.position = 'absolute';
   iframe.style.top = '0';
@@ -691,9 +691,8 @@ else if (file.mimeType.startsWith('video/')) {
   wrapper.appendChild(iframe);
   content.appendChild(wrapper);
 }
-  modal.style.display = 'flex';
-}
 
+modal.style.display = 'flex';
 function closePreview(event) {
   if (event.target.id === 'previewModal' || event.target.className === 'close') {
     document.getElementById('previewModal').style.display = 'none';
@@ -905,6 +904,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
