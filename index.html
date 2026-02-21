@@ -554,7 +554,7 @@ body {
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování....</p>
+      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování.</p>
 
         </div>
 
@@ -668,16 +668,28 @@ img.style.objectFit = 'contain'; // zachování poměru stran
     content.appendChild(img);
   } 
 else if (file.mimeType.startsWith('video/')) {
+  // wrapper pro správný poměr stran
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'relative';
+  wrapper.style.width = '80vw';       // šířka wrapperu
+  wrapper.style.maxWidth = '1400px';  // maximální šířka
+  wrapper.style.paddingTop = '56.25%'; // 16:9 poměr (9/16*100)
+  wrapper.style.margin = 'auto';
 
+  // samotné iframe
   const iframe = document.createElement('iframe');
   iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-  iframe.style.width = "80vw";
-  iframe.style.height = "90vh";
-  iframe.allow = "autoplay";
-  iframe.style.border = "none";
-  iframe.style.borderRadius = "10px";
+  iframe.allow = "autoplay; fullscreen";
+  iframe.style.position = 'absolute';
+  iframe.style.top = '0';
+  iframe.style.left = '0';
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.border = 'none';
+  iframe.style.borderRadius = '10px';
 
-  content.appendChild(iframe);
+  wrapper.appendChild(iframe);
+  content.appendChild(wrapper);
 }
 
   modal.style.display = 'flex';
@@ -894,6 +906,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
