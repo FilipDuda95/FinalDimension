@@ -147,6 +147,10 @@ body {
   z-index: 20;
   transform: translateX(-50%);
 }
+
+
+
+		
     .back-button:hover { background-color: #0056b3; }
     #gallery { position: relative; left: 50%; transform: translateX(-50%); }
     .gallery {
@@ -211,14 +215,30 @@ body {
       max-height: 95%;
       border-radius: 10px;
     }
-    .preview-modal .close {
-      position: absolute;
-      top: 20px;
-      right: 40px;
-      font-size: 40px;
-      color: white;
-      cursor: pointer;
-    }
+  .preview-modal .close {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  font-size: 45px;
+  color: white;
+  cursor: pointer;
+  z-index: 10001;
+  background: rgba(0,0,0,0.6);
+  padding: 5px 15px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.preview-modal .close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+		
+
+
+
+
+		
 #top-bar {
   position: fixed;
   top: 0;
@@ -874,6 +894,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
