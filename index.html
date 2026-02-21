@@ -668,29 +668,47 @@ img.style.objectFit = 'contain'; // zachování poměru stran
     content.appendChild(img);
   } 
 else if (file.mimeType.startsWith('video/')) {
-  // wrapper pro správný poměr stran
   const wrapper = document.createElement('div');
-  wrapper.style.position = 'relative';
-  wrapper.style.width = '80vw';       // šířka wrapperu
-  wrapper.style.maxWidth = '1400px';  // maximální šířka
-  wrapper.style.paddingTop = '56.25%'; // 9/16 * 100%
+  wrapper.style.width = '80vw';
+  wrapper.style.maxWidth = '1400px';
+  wrapper.style.height = '80vh';  // fixní výška
   wrapper.style.margin = 'auto';
+  wrapper.style.display = 'flex';
+  wrapper.style.alignItems = 'center';
+  wrapper.style.justifyContent = 'center';
+  wrapper.style.position = 'relative';
 
-  // samotné iframe
   const iframe = document.createElement('iframe');
-  iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+  iframe.src = `https://drive.google.com/file/d/${file.id}/preview?autoplay=1`;
   iframe.allow = "autoplay; fullscreen";
-  iframe.style.position = 'absolute';
-  iframe.style.top = '0';
-  iframe.style.left = '0';
   iframe.style.width = '100%';
   iframe.style.height = '100%';
   iframe.style.border = 'none';
   iframe.style.borderRadius = '10px';
 
   wrapper.appendChild(iframe);
+  content.innerHTML = '';
   content.appendChild(wrapper);
-}
+
+  // zavírací tlačítko
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✖';
+  closeBtn.style.position = 'fixed';
+  closeBtn.style.top = '20px';
+  closeBtn.style.right = '20px';
+  closeBtn.style.fontSize = '2rem';
+  closeBtn.style.color = 'white';
+  closeBtn.style.background = 'rgba(0,0,0,0.5)';
+  closeBtn.style.border = 'none';
+  closeBtn.style.cursor = 'pointer';
+  closeBtn.style.zIndex = '9999';
+  closeBtn.onclick = () => {
+    modal.style.display = 'none';
+    content.innerHTML = '';
+    closeBtn.remove();
+  };
+  modal.appendChild(closeBtn);
+
   modal.style.display = 'flex';
 }
 
@@ -905,6 +923,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
