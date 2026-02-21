@@ -554,7 +554,7 @@ body {
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování.</p>
+      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...</p>
 
         </div>
 
@@ -671,11 +671,13 @@ else if (file.mimeType.startsWith('video/')) {
   // wrapper pro správný poměr stran
   const wrapper = document.createElement('div');
   wrapper.style.position = 'relative';
-  wrapper.style.width = '80vw';       // šířka wrapperu
-  wrapper.style.maxWidth = '1400px';  // maximální šířka
-  wrapper.style.paddingTop = '56.25%'; // 9/16 * 100%
+  wrapper.style.width = '80vw';        // šířka wrapperu
+  wrapper.style.maxWidth = '1400px';   // maximální šířka
+  wrapper.style.paddingTop = '56.25%'; // 16:9 poměr
   wrapper.style.margin = 'auto';
-
+  wrapper.style.overflow = 'hidden';
+  wrapper.style.borderRadius = '10px';
+  
   // samotné iframe
   const iframe = document.createElement('iframe');
   iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
@@ -686,14 +688,30 @@ else if (file.mimeType.startsWith('video/')) {
   iframe.style.width = '100%';
   iframe.style.height = '100%';
   iframe.style.border = 'none';
-  iframe.style.borderRadius = '10px';
 
   wrapper.appendChild(iframe);
   content.appendChild(wrapper);
-}
-  modal.style.display = 'flex';
+
+  // zavírací tlačítko
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✖';
+  closeBtn.style.position = 'absolute';
+  closeBtn.style.top = '20px';
+  closeBtn.style.right = '20px';
+  closeBtn.style.fontSize = '2rem';
+  closeBtn.style.color = 'white';
+  closeBtn.style.background = 'transparent';
+  closeBtn.style.border = 'none';
+  closeBtn.style.cursor = 'pointer';
+  closeBtn.style.zIndex = '10';
+  closeBtn.onclick = () => {
+    modal.style.display = 'none';
+    content.innerHTML = '';
+  };
+  modal.appendChild(closeBtn);
 }
 
+modal.style.display = 'flex';
 function closePreview(event) {
   if (event.target.id === 'previewModal' || event.target.className === 'close') {
     document.getElementById('previewModal').style.display = 'none';
@@ -905,6 +923,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
