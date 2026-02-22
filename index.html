@@ -78,10 +78,10 @@ body {
       position: relative;
       width: 100%;
       padding-bottom: 100%;
-      background-color: white;
+      background-color: black;
       border-radius: 10px;
       overflow: hidden;
-      background-image: url('Folder.png');
+      background-image: url('Folder.jpg');
       background-size: cover;
       background-position: bottom center;  
 	
@@ -510,7 +510,7 @@ body {
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...</p>
+      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování.</p>
 
         </div>
 
@@ -588,7 +588,11 @@ async function loadFolder(folderId, addToHistory = true) {
     const container = document.createElement('div');
     container.className = 'square';
 
+    // 🔹 Pokud je to složka
     if (file.mimeType === 'application/vnd.google-apps.folder') {
+
+      // necháme background z CSS (Folder.png)
+
       container.onclick = () => {
         folderStack.push(file.id);
         loadFolder(file.id);
@@ -599,11 +603,17 @@ async function loadFolder(folderId, addToHistory = true) {
       folderDiv.innerHTML = "📁 " + file.name;
       container.appendChild(folderDiv);
     }
+    // 🔹 Pokud je to obrázek nebo video
     else {
+
+      // odstraní background obrázek složky
+      container.style.backgroundImage = 'none';
+
       const img = document.createElement('img');
       img.src = file.thumbnailLink || 'https://via.placeholder.com/250?text=Soubor';
       img.loading = 'lazy';
       container.appendChild(img);
+
       container.onclick = () => openPreview(file);
     }
 
@@ -616,44 +626,48 @@ function openPreview(file) {
   const content = document.getElementById('previewContent');
   content.innerHTML = '';
 
-  // Spolehlivější URL
   const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
 
+  // 🔹 Obrázek
   if (file.mimeType.startsWith('image/')) {
     const img = document.createElement('img');
     img.src = fileUrl;
     img.onerror = () => {
       img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
-		img.style.width = '80vw';      // škáluje podle okna
-img.style.maxHeight = '90vh';  // maximálně 90% výšky viewportu
-img.style.objectFit = 'contain'; // zachování poměru stran
     };
+
+    img.style.width = '80vw';
+    img.style.maxHeight = '90vh';
+    img.style.objectFit = 'contain';
+
     content.appendChild(img);
   } 
-else if (file.mimeType.startsWith('video/')) {
-  // wrapper pro správný poměr stran
-  const wrapper = document.createElement('div');
-  wrapper.style.position = 'relative';
-  wrapper.style.width = '80vw';      // šířka wrapperu
-  wrapper.style.maxWidth = '1400px';  // maximální šířka
-  wrapper.style.paddingTop = '56.25%'; // 9/16 * 100%
-  wrapper.style.margin = 'auto';
 
-  // samotné iframe
-  const iframe = document.createElement('iframe');
-  iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-  iframe.allow = "autoplay; fullscreen";
-  iframe.style.position = 'absolute';
-  iframe.style.top = '0';
-  iframe.style.left = '0';
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
-  iframe.style.border = 'none';
-  iframe.style.borderRadius = '10px';
+  // 🔹 Video
+  else if (file.mimeType.startsWith('video/')) {
 
-  wrapper.appendChild(iframe);
-  content.appendChild(wrapper);
-}
+    const wrapper = document.createElement('div');
+    wrapper.style.position = 'relative';
+    wrapper.style.width = '80vw';
+    wrapper.style.maxWidth = '1400px';
+    wrapper.style.paddingTop = '56.25%'; // 16:9
+    wrapper.style.margin = 'auto';
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+    iframe.allow = "autoplay; fullscreen";
+    iframe.style.position = 'absolute';
+    iframe.style.top = '0';
+    iframe.style.left = '0';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    iframe.style.borderRadius = '10px';
+
+    wrapper.appendChild(iframe);
+    content.appendChild(wrapper);
+  }
+
   modal.style.display = 'flex';
 }
 
@@ -875,6 +889,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
