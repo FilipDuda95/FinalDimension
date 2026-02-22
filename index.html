@@ -290,7 +290,6 @@ body {
   opacity: 1;
   z-index:40;
   width:100%;
-  display: block;
 }
 .footer {
   display: none;
@@ -417,22 +416,6 @@ body {
   }
 }
 
-@media (max-width: 768px){
-  .footer.visible {
-    z-index: 40;
-    opacity: 1;
-    display: block;
-  }
-  .footer {
-    display: none;
-    opacity: 0;
-    z-index: 1;
-    width: auto;
-  }
-  .modal-arrow {
-    display: none;
-  }
-}
 @media (max-width: 768px) and (orientation: landscape) {
   #top-bar {
     height:15%;
@@ -510,7 +493,7 @@ body {
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování.</p>
+      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...</p>
 
         </div>
 
@@ -830,10 +813,11 @@ function adjustFontSizes() {
 // Spusť při načtení a při změně velikosti okna
 adjustFontSizes();
 window.addEventListener("resize", adjustFontSizes);
-
-
-
     </script>
+
+
+
+	
 <div id="Patička"> 
 
 <div class="footer">
@@ -858,7 +842,8 @@ window.addEventListener("resize", adjustFontSizes);
 	
  <div id="konec">
         <br>
-    </div> 
+	    <br>
+ </div> 
 
 <script>
 
@@ -889,6 +874,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
