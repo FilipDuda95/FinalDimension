@@ -72,9 +72,7 @@ body {
       text-decoration: none;
       color: silver;
     }
-	#previewModal img{
-	background-color: #F0F0F0;	
-	}
+
     .square {
       color: silver;
       position: relative;
@@ -636,7 +634,7 @@ else if (file.mimeType.startsWith('video/')) {
   // wrapper pro správný poměr stran
   const wrapper = document.createElement('div');
   wrapper.style.position = 'relative';
-  wrapper.style.width = 'auto';       // šířka wrapperu
+  wrapper.style.width = '80vw';      // šířka wrapperu
   wrapper.style.maxWidth = '1400px';  // maximální šířka
   wrapper.style.paddingTop = '56.25%'; // 9/16 * 100%
   wrapper.style.margin = 'auto';
@@ -877,6 +875,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
