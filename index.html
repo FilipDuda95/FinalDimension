@@ -72,16 +72,18 @@ body {
       text-decoration: none;
       color: silver;
     }
-
+	#previewModal{
+	background-color: white;	
+	}
     .square {
       color: silver;
       position: relative;
       width: 100%;
       padding-bottom: 100%;
-      background-color: black;
+      background-color: white;
       border-radius: 10px;
       overflow: hidden;
-      background-image: url('Folder.jpg');
+      background-image: url('Folder.png');
       background-size: cover;
       background-position: bottom center;  
 	
@@ -510,7 +512,7 @@ body {
 
         <div class="inner-text">
             <h2>Portfolio</h2>
-      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...</p>
+      <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování.</p>
 
         </div>
 
@@ -533,6 +535,10 @@ body {
 
 
 
+
+
+
+	
    
 <div id="black-section">
 
@@ -544,6 +550,9 @@ body {
 <br>
 <br>
 
+
+
+		
 <div class="controls">
   <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;">Zpět</button>
 </div>
@@ -679,6 +688,13 @@ loadFolder(ROOT_FOLDER_ID);
     </div>
 
 
+
+
+
+
+
+
+	
     <script>
 
         // Ovládání rozbalovacího menu
@@ -861,6 +877,7 @@ window.addEventListener("resize", adjustFontSizes);
  </div>
 </body>
 </html>
+
 
 
 
