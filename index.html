@@ -720,7 +720,7 @@ loadFolder(ROOT_FOLDER_ID);
 
             if (isMobile && isLandscape) {
                 const desktopVideos = [];
-                for (let i = 1; i <= 1; i++) {
+                for (let i = 1; i <= 2; i++) {
                     desktopVideos.push(`pozadi/${i}.mp4`);
                 }
                 const randomIndex = Math.floor(Math.random() * desktopVideos.length);
@@ -729,15 +729,15 @@ loadFolder(ROOT_FOLDER_ID);
 
             if (isMobile) {
                 const mobileVideos = [];
-                for (let i = 1; i <= 1; i++) {
-                    mobileVideos.push(`pozadi2/${i}.mp4`);
+                for (let i = 1; i <= 2; i++) {
+                    mobileVideos.push(`pozadi/${i}.mp4`);
                 }
                 const randomIndex = Math.floor(Math.random() * mobileVideos.length);
                 return mobileVideos[randomIndex];
             }
 
             const desktopVideos = [];
-            for (let i = 1; i <= 1; i++) {
+            for (let i = 1; i <= 2; i++) {
                 desktopVideos.push(`pozadi/${i}.mp4`);
             }
 
