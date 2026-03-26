@@ -1016,67 +1016,72 @@ window.addEventListener("resize", adjustFontSizes);
         <button id="back-btn" class="back-btn" onclick="zavritHru()" title="Návrat do menu" style="display: none;">✕</button>
     </div>
 
-    <script>
-        const seznamHer = [
-            { id: 'INDEX1', nazev: 'Projekt 1' },
-            { id: 'INDEX2', nazev: 'Vesmírná mise' },
-        ];
+ <script>
+    // 1. Změna: ID musí být malými písmeny, aby odpovídala souboru index1.html
+    const seznamHer = [
+        { id: 'index1', nazev: 'Projekt 1' }, 
+        { id: 'index2', nazev: 'Vesmírná mise' },
+    ];
 
-        const hlavniDiv = document.getElementById('výška_herního_okna');
-        const menuContainer = document.getElementById('game-menu');
-        const overlay = document.getElementById('overlay');
-        const iframe = document.getElementById('game-frame');
-        const backBtn = document.getElementById('back-btn');
+    const hlavniDiv = document.getElementById('výška_herního_okna');
+    const menuContainer = document.getElementById('game-menu');
+    const overlay = document.getElementById('overlay');
+    const iframe = document.getElementById('game-frame');
+    const backBtn = document.getElementById('back-btn');
 
-        function prizpusobVysku() {
-            const vyskaRodice = hlavniDiv.offsetHeight;
-            const paddingTop = parseInt(window.getComputedStyle(overlay).paddingTop);
-            if (overlay.style.display === 'block') {
-                iframe.style.height = (vyskaRodice - paddingTop) + "px";
-            }
+    function prizpusobVysku() {
+        const vyskaRodice = hlavniDiv.offsetHeight;
+        const paddingTop = parseInt(window.getComputedStyle(overlay).paddingTop);
+        if (overlay.style.display === 'block') {
+            iframe.style.height = (vyskaRodice - paddingTop) + "px";
         }
+    }
 
-        seznamHer.forEach(hra => {
-            const karta = document.createElement('div');
-            karta.className = 'game-card';
-            karta.innerHTML = `<h3>${hra.nazev}</h3><p>Spustit</p>`;
-            karta.onclick = () => spustitHru(hra.id);
-            menuContainer.appendChild(karta);
-        });
+    seznamHer.forEach(hra => {
+        const karta = document.createElement('div');
+        karta.className = 'game-card';
+        karta.innerHTML = `<h3>${hra.nazev}</h3><p>Spustit</p>`;
+        karta.onclick = () => spustitHru(hra.id);
+        menuContainer.appendChild(karta);
+    });
 
-        function spustitHru(id, autoScroll = true) {
-            iframe.src = `hry/${id}.html`;
-            overlay.style.display = 'block';
-            backBtn.style.display = 'flex';
+    function spustitHru(id, autoScroll = true) {
+        // Tady se sestavuje cesta. 
+        // Pokud id je 'index1', vytvoří to 'hry/index1.html'
+        iframe.src = `hry/${id}.html`; 
+        
+        overlay.style.display = 'block';
+        backBtn.style.display = 'flex';
 
-            document.getElementById('game-menu').style.visibility = 'hidden';
-            document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
+        document.getElementById('game-menu').style.visibility = 'hidden';
+        document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
 
-            prizpusobVysku();
+        prizpusobVysku();
 
-            if (autoScroll) {
-                const yOffset = -50; 
-                const y = hlavniDiv.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                window.scrollTo({top: y, behavior: 'smooth'});
-            }
+        if (autoScroll) {
+            const yOffset = -50; 
+            const y = hlavniDiv.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
         }
+    }
 
-        function zavritHru() {
-            overlay.style.display = 'none';
-            backBtn.style.display = 'none';
-            iframe.src = '';
-            document.getElementById('game-menu').style.visibility = 'visible';
-            document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
-            hlavniDiv.scrollIntoView({ behavior: 'smooth' });
-        }
+    function zavritHru() {
+        overlay.style.display = 'none';
+        backBtn.style.display = 'none';
+        iframe.src = '';
+        document.getElementById('game-menu').style.visibility = 'visible';
+        document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
+        hlavniDiv.scrollIntoView({ behavior: 'smooth' });
+    }
 
-        // --- KLÍČOVÁ ZMĚNA: AUTOMATICKÉ SPUŠTĚNÍ ---
-        window.addEventListener('load', () => {
-                        spustitHru('INDEX1', false);
-        });
+    // --- OPRAVA AUTOMATICKÉHO SPUŠTĚNÍ ---
+    window.addEventListener('load', () => {
+        // Posíláme jen 'index1', funkce si k tomu sama přidá 'hry/' a '.html'
+        spustitHru('index1', false); 
+    });
 
-        window.addEventListener('resize', prizpusobVysku);
-    </script>
+    window.addEventListener('resize', prizpusobVysku);
+</script>
 
 
 
