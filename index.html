@@ -1018,9 +1018,8 @@ window.addEventListener("resize", adjustFontSizes);
 
     <script>
         const seznamHer = [
-            { id: 'PROJEKT1', nazev: 'Projekt 1' },
-            { id: 'PROJEKT2', nazev: 'Vesmírná mise' },
-            { id: 'PROJEKT3', nazev: 'Bludiště' }
+            { id: 'INDEX1', nazev: 'Projekt 1' },
+            { id: 'INDEX2', nazev: 'Vesmírná mise' },
         ];
 
         const hlavniDiv = document.getElementById('výška_herního_okna');
@@ -1073,7 +1072,7 @@ window.addEventListener("resize", adjustFontSizes);
 
         // --- KLÍČOVÁ ZMĚNA: AUTOMATICKÉ SPUŠTĚNÍ ---
         window.addEventListener('load', () => {
-                        spustitHru('PROJEKT1', false);
+                        spustitHru('INDEX1', false);
         });
 
         window.addEventListener('resize', prizpusobVysku);
