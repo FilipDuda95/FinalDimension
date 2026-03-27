@@ -292,6 +292,11 @@ html, body {
     <div class="pslot" id="ps0" title="Shield">🛡</div>
     <div class="pslot" id="ps1" title="Rapid Fire">⚡</div>
     <div class="pslot" id="ps2" title="Time Slow">⏱</div>
+    <div class="pslot" id="ps3" title="Nuke">💥</div>
+    <div class="pslot" id="ps4" title="Health">❤</div>
+    <div class="pslot" id="ps5" title="Dual Cannon">🔫</div>
+    <div class="pslot" id="ps6" title="Magnet">🧲</div>
+    <div class="pslot" id="ps7" title="Ghost">👻</div>
   </div>
   <div id="combo"></div>
   <div id="wavealert"></div>
@@ -332,7 +337,7 @@ const C = {
   FIRE_BASE:  175,    // ms base cooldown
   SHAKE_DEC:  0.87,
   WAVE_MS:    16000,
-  PU_MS:      8500,
+  PU_MS:      1800,
   COLORS: {
     LASER_NORM: '#00f5ff',
     LASER_BOOST:'#ff00ee',
@@ -360,6 +365,9 @@ let camX=0, camY=0, tCamX=0, tCamY=0;
 let timeSlow=false, tsT=0;
 let fireBoost=false, fbT=0;
 let shieldOn=false, sdT=0;
+let dualCannon=false, dcT=0;
+let magnetOn=false, mgT=0;
+let ghostOn=false, ghT=0;
 let lastFire=0, invincT=0;
 let waveAlertT=0;
 let totalT=0;
@@ -470,15 +478,18 @@ function engineParticles(){
 }
 
 // ── POWER-UP ─────────────────────────────────────────
-const PU_TYPES=['shield','fire','slow'];
+const PU_TYPES=['shield','fire','slow','nuke','health','dual','magnet','ghost'];
 function mkPU(){
   return {
     x:(Math.random()-.5)*1500,
     y:(Math.random()-.5)*650,
     z: Math.random()*700+400,
     vz:-(1.2+wave*.09),
-    type:PU_TYPES[Math.floor(Math.random()*3)],
-    rot:0, rs:.045+Math.random()*.04,
+    type:PU_TYPES[Math.floor(Math.random()*PU_TYPES.length)],
+    rot:0,  rs:.045+Math.random()*.04,
+    rx:0,   rxs:(Math.random()-.5)*.055,
+    ry:0,   rys:(Math.random()-.5)*.065,
+    rz:0,   rzs:(Math.random()-.5)*.04,
     pulse:0, rad:15, life:1,
   };
 }
@@ -521,6 +532,9 @@ function initGame(){
   timeSlow=false;tsT=0;
   fireBoost=false;fbT=0;
   shieldOn=false;sdT=0;
+  dualCannon=false;dcT=0;
+  magnetOn=false;mgT=0;
+  ghostOn=false;ghT=0;
   lastFire=0;invincT=0;
   waveAlertT=0;totalT=0;
   frameN=0;fpsT=0;fpsVal=60;
@@ -544,6 +558,7 @@ const INP={
   gyB:0, gyG:0,
   tActive:false, tx:0, ty:0,
   inCanvas:false,
+  gyroActive:false,
 };
 
 document.addEventListener('mousemove',e=>{
@@ -583,8 +598,13 @@ document.addEventListener('touchend',e=>{
   if(e.touches.length===0) INP.tActive=false;
 },{passive:false});
 
+let _gyroTimeout=null;
 window.addEventListener('deviceorientation',e=>{
   INP.gyB=e.beta||0; INP.gyG=e.gamma||0;
+  // Mark gyro as active; clear after 400ms of no new events (screen flat/idle)
+  INP.gyroActive=true;
+  clearTimeout(_gyroTimeout);
+  _gyroTimeout=setTimeout(()=>{ INP.gyroActive=false; },400);
 });
 
 // Hold-fire interval
@@ -611,6 +631,13 @@ function fireLaser(){
     _addLaser(ship.x-16,ship.y-2,ship.z, -.4,vz*.96,col);
     _addLaser(ship.x+16,ship.y-2,ship.z,  .4,vz*.96,col);
   }
+  if(dualCannon){
+    const dc='#ffe600';
+    _addLaser(ship.x-28,ship.y,ship.z, 0,vz*.9,dc);
+    _addLaser(ship.x+28,ship.y,ship.z, 0,vz*.9,dc);
+    _addLaser(ship.x,ship.y-4,ship.z, -1.2,vz*.8,dc);
+    _addLaser(ship.x,ship.y-4,ship.z,  1.2,vz*.8,dc);
+  }
 }
 function _addLaser(x,y,z,vx,vz,col){
   if(lasers.length>=C.MAX_LASER) lasers.shift();
@@ -619,14 +646,34 @@ function _addLaser(x,y,z,vx,vz,col){
 
 // ── APPLY POWER-UP ───────────────────────────────────
 function applyPU(type){
-  if(type==='shield'){ shieldOn=true;sdT=9000;shield=100; spawnFloat(ship.x,ship.y-42,ship.z,'SHIELD UP!','#00f5ff'); }
-  if(type==='fire'){   fireBoost=true;fbT=9000;            spawnFloat(ship.x,ship.y-42,ship.z,'RAPID FIRE!','#ff00ee'); }
-  if(type==='slow'){   timeSlow=true;tsT=7000;             spawnFloat(ship.x,ship.y-42,ship.z,'TIME SLOW!','#8877ff'); }
+  if(type==='shield'){ shieldOn=true;sdT=9000;shield=100;   spawnFloat(ship.x,ship.y-42,ship.z,'SHIELD UP!','#00f5ff'); }
+  if(type==='fire'){   fireBoost=true;fbT=9000;              spawnFloat(ship.x,ship.y-42,ship.z,'RAPID FIRE!','#ff00ee'); }
+  if(type==='slow'){   timeSlow=true;tsT=7000;               spawnFloat(ship.x,ship.y-42,ship.z,'TIME SLOW!','#8877ff'); }
+  if(type==='nuke'){
+    // destroy all on-screen asteroids
+    const count=asteroids.length;
+    asteroids.forEach(a=>{ spawnParticles(a.x,a.y,a.z,18,C.COLORS.EXPL,2); score+=40; });
+    asteroids=[];
+    for(let i=0;i<5+wave;i++) asteroids.push(mkAsteroid());
+    shake(28); spawnFloat(ship.x,ship.y-42,ship.z,'NUKE! x'+count,'#ff6600');
+  }
+  if(type==='health'){ health=Math.min(100,health+50);       spawnFloat(ship.x,ship.y-42,ship.z,'+50 HULL','#39ff14'); }
+  if(type==='dual'){   dualCannon=true;dcT=9000;             spawnFloat(ship.x,ship.y-42,ship.z,'DUAL CANNON!','#ffe600'); }
+  if(type==='magnet'){ magnetOn=true;mgT=7000;               spawnFloat(ship.x,ship.y-42,ship.z,'MAGNET!','#ff9900'); }
+  if(type==='ghost'){  ghostOn=true;ghT=6000;                spawnFloat(ship.x,ship.y-42,ship.z,'GHOST MODE!','#ccaaff'); }
 }
 function puColor(t){
-  return t==='shield'?C.COLORS.PU_SH:t==='fire'?C.COLORS.PU_FR:C.COLORS.PU_TS;
+  if(t==='shield')  return C.COLORS.PU_SH;
+  if(t==='fire')    return C.COLORS.PU_FR;
+  if(t==='slow')    return C.COLORS.PU_TS;
+  if(t==='nuke')    return ['#ff6600','#ff9900','#ffcc00'];
+  if(t==='health')  return ['#39ff14','#00ff88','#aaffaa'];
+  if(t==='dual')    return ['#ffe600','#ffff88','#fff'];
+  if(t==='magnet')  return ['#ff9900','#ffbb44','#ffddaa'];
+  if(t==='ghost')   return ['#ccaaff','#9966ff','#eeddff'];
+  return ['#fff','#aaa','#888'];
 }
-function puGlyph(t){ return t==='shield'?'🛡':t==='fire'?'⚡':'⏱'; }
+function puGlyph(t){ const g={shield:'🛡',fire:'⚡',slow:'⏱',nuke:'💥',health:'❤',dual:'🔫',magnet:'🧲',ghost:'👻'}; return g[t]||'?'; }
 
 // ── WAVE ALERT ───────────────────────────────────────
 function waveAlert(txt){
@@ -672,8 +719,8 @@ function updateHUD(){
   document.getElementById('hp-fill').style.width=Math.max(0,health)+'%';
   document.getElementById('sh-fill').style.width=Math.max(0,shield)+'%';
   // pslots
-  const timers=[sdT,fbT,tsT], maxes=[9000,9000,7000];
-  for(let i=0;i<3;i++){
+  const timers=[sdT,fbT,tsT,0,0,dcT,mgT,ghT], maxes=[9000,9000,7000,1,1,9000,7000,6000];
+  for(let i=0;i<8;i++){
     const el=document.getElementById('ps'+i);
     if(timers[i]>0){
       el.classList.add('on');
@@ -716,6 +763,9 @@ function update(ts){
   if(tsT>0){ tsT-=dt*16.667; if(tsT<=0){timeSlow=false;tsT=0;} }
   if(fbT>0){ fbT-=dt*16.667; if(fbT<=0){fireBoost=false;fbT=0;} }
   if(sdT>0){ sdT-=dt*16.667; if(sdT<=0){shieldOn=false;sdT=0;shield=0;} }
+  if(dcT>0){ dcT-=dt*16.667; if(dcT<=0){dualCannon=false;dcT=0;} }
+  if(mgT>0){ mgT-=dt*16.667; if(mgT<=0){magnetOn=false;mgT=0;} }
+  if(ghT>0){ ghT-=dt*16.667; if(ghT<=0){ghostOn=false;ghT=0;} }
   if(invincT>0) invincT-=dt*16.667;
   if(comboT>0){ comboT-=dt*16.667; if(comboT<=0){combo=0;comboT=0;} }
   if(comboShowT>0) comboShowT-=dt*16.667;
@@ -736,7 +786,7 @@ function update(ts){
 
   // Power-up spawn
   puT+=dt*16.667;
-  if(puT>=C.PU_MS){ puT=0; if(powerups.length<4) powerups.push(mkPU()); }
+  if(puT>=C.PU_MS){ puT=0; if(powerups.length<10) powerups.push(mkPU()); }
 
   // ── CAMERA ───────────────────────────────────────
   if(!INP.isMob){
@@ -759,7 +809,7 @@ function update(ts){
   // ── SHIP ─────────────────────────────────────────
   // Cursor outside window → drift to XY center, retreat Z by 200 (≈50% depth back)
   if(!ship.dead){
-    const cursorActive = INP.isMob ? INP.tActive : INP.inCanvas;
+    const cursorActive = INP.isMob ? (INP.tActive || INP.gyroActive) : INP.inCanvas;
     let tgX=0, tgY=0;
     if(cursorActive){
       let tx,ty;
@@ -824,7 +874,7 @@ function update(ts){
     a.rot+=a.rs*dt;
     if(a.z<-250||a.z>2600){ asteroids.splice(i,1); asteroids.push(mkAsteroid()); continue; }
     // collision with ship
-    if(!ship.dead&&invincT<=0){
+    if(!ship.dead&&invincT<=0&&!ghostOn){
       const dx=ship.x-a.x,dy=ship.y-a.y,dz=ship.z-a.z;
       if(Math.abs(dz)<90&&dx*dx+dy*dy<(a.rad+20)*(a.rad+20)){
         if(shieldOn){
@@ -851,11 +901,24 @@ function update(ts){
     }
   }
 
+  // ── MAGNET — pull powerups toward ship ──────────────
+  if(magnetOn){
+    for(const pu of powerups){
+      const dx=ship.x-pu.x, dy=ship.y-pu.y, dz=ship.z-pu.z;
+      const dist=Math.sqrt(dx*dx+dy*dy+dz*dz)+1;
+      const force=6/dist*dt;
+      pu.x+=dx*force; pu.y+=dy*force; pu.z+=dz*force;
+    }
+  }
+
   // ── POWER-UPS ────────────────────────────────────
   for(let i=powerups.length-1;i>=0;i--){
     const p=powerups[i];
     p.z+=p.vz*SM*dt;
     p.rot+=p.rs*dt;
+    p.rx+=p.rxs*dt;
+    p.ry+=p.rys*dt;
+    p.rz+=p.rzs*dt;
     p.pulse+=.07*dt;
     p.life-=.0005*dt;
     if(p.z<-250||p.life<=0){ powerups.splice(i,1); continue; }
@@ -986,28 +1049,112 @@ function render(){
   for(const pu of powerups){
     const p=proj(pu.x,pu.y,pu.z);
     if(!p||p.sx<-60||p.sx>W+60||p.sy<-60||p.sy>H+60) continue;
-    const r=pu.rad*p.sc*(1+Math.sin(pu.pulse)*.2);
+    const r=pu.rad*p.sc*(1+Math.sin(pu.pulse)*.18);
     const col=puColor(pu.type)[0];
+    const col2=puColor(pu.type)[1]||col;
     X.save();
-    X.translate(p.sx,p.sy);X.rotate(pu.rot);
+    X.translate(p.sx,p.sy); X.rotate(pu.rot);
     X.globalAlpha=pu.life*.92;
-    X.shadowBlur=22+Math.sin(pu.pulse)*8; X.shadowColor=col;
-    X.strokeStyle=col; X.lineWidth=2*p.sc;
-    // hexagon
-    X.beginPath();
-    for(let k=0;k<6;k++){
-      const a=k/6*Math.PI*2-Math.PI/6;
-      k?X.lineTo(Math.cos(a)*r,Math.sin(a)*r):X.moveTo(Math.cos(a)*r,Math.sin(a)*r);
+    X.shadowBlur=20+Math.sin(pu.pulse)*7; X.shadowColor=col;
+    X.strokeStyle=col; X.lineWidth=Math.max(1,1.8*p.sc);
+
+    const t=pu.type;
+    if(t==='shield'){
+      // Hexagon
+      _drawPoly(6,r,Math.PI/6); X.stroke();
+      X.globalAlpha*=.25; X.fillStyle=col; X.fill();
+    } else if(t==='fire'){
+      // Diamond / rhombus
+      _drawPoly(4,r,0); X.stroke();
+      X.globalAlpha*=.25; X.fillStyle=col; X.fill();
+    } else if(t==='slow'){
+      // Circle with tick marks
+      X.beginPath(); X.arc(0,0,r,0,Math.PI*2); X.stroke();
+      for(let k=0;k<12;k++){
+        const a=k/12*Math.PI*2, inner=k%3===0?r*.55:r*.72;
+        X.beginPath();
+        X.moveTo(Math.cos(a)*inner,Math.sin(a)*inner);
+        X.lineTo(Math.cos(a)*r*.95,Math.sin(a)*r*.95);
+        X.stroke();
+      }
+    } else if(t==='nuke'){
+      // Starburst — 8-point star
+      X.beginPath();
+      for(let k=0;k<16;k++){
+        const a=k/16*Math.PI*2, rr=k%2===0?r:r*.45;
+        k?X.lineTo(Math.cos(a)*rr,Math.sin(a)*rr):X.moveTo(Math.cos(a)*rr,Math.sin(a)*rr);
+      }
+      X.closePath(); X.stroke();
+      X.globalAlpha*=.22; X.fillStyle=col; X.fill();
+      // inner glow ring
+      X.globalAlpha=pu.life*.6;
+      X.beginPath(); X.arc(0,0,r*.35,0,Math.PI*2);
+      X.fillStyle=col2; X.fill();
+    } else if(t==='health'){
+      // Cross / plus sign
+      const arm=r, thick=r*.38;
+      X.beginPath();
+      X.rect(-thick,-arm,thick*2,arm*2);
+      X.rect(-arm,-thick,arm*2,thick*2);
+      X.stroke();
+      X.globalAlpha*=.28; X.fillStyle=col; X.fill();
+    } else if(t==='dual'){
+      // Two barrel shapes side by side
+      const bw=r*.35, bh=r*.85, gap=r*.5;
+      [[-gap,0],[gap,0]].forEach(([ox])=>{
+        X.strokeRect(ox-bw,-bh,bw*2,bh*2);
+        X.beginPath(); X.arc(ox,0,bw*.7,0,Math.PI*2); X.stroke();
+      });
+    } else if(t==='magnet'){
+      // U-shape (horseshoe magnet)
+      X.beginPath();
+      X.arc(0,0,r*.8,Math.PI,0,false);
+      X.lineTo(r*.8,r*.7); X.moveTo(-r*.8,r*.7);
+      X.lineTo(-r*.8,0); X.stroke();
+      // pole tips
+      X.strokeStyle=col2;
+      X.lineWidth*=2.5;
+      X.beginPath(); X.moveTo(-r*.8,0); X.lineTo(-r*.8,r*.72); X.stroke();
+      X.strokeStyle='#ff3333'; X.lineWidth/=2.5;
+      X.beginPath(); X.moveTo(r*.8,0); X.lineTo(r*.8,r*.72); X.stroke();
+    } else if(t==='ghost'){
+      // Ghost silhouette
+      X.beginPath();
+      X.arc(0,-r*.1,r*.7,Math.PI,0,false);
+      X.lineTo(r*.7,r*.8);
+      for(let k=0;k<3;k++){
+        const bx=r*.7-k*(r*.47);
+        X.quadraticCurveTo(bx-r*.12,r*.55+r*.3*(k%2),bx-r*.23,r*.8);
+      }
+      X.lineTo(-r*.7,r*.8); X.closePath();
+      X.stroke(); X.globalAlpha*=.18; X.fillStyle=col; X.fill();
+      // eyes
+      X.globalAlpha=pu.life*.9; X.fillStyle=col;
+      X.beginPath(); X.arc(-r*.22,-r*.1,r*.14,0,Math.PI*2); X.fill();
+      X.beginPath(); X.arc( r*.22,-r*.1,r*.14,0,Math.PI*2); X.fill();
+    } else {
+      // Fallback: hexagon
+      _drawPoly(6,r,Math.PI/6); X.stroke();
     }
-    X.closePath(); X.stroke();
-    X.globalAlpha*=.28; X.fillStyle=col; X.fill();
-    X.globalAlpha=pu.life*.95; X.shadowBlur=0;
-    X.font=`bold ${Math.max(8,r*1.05)}px serif`;
-    X.textAlign='center';X.textBaseline='middle';
-    X.fillStyle=col; X.fillText(puGlyph(pu.type),0,0);
+
+    X.shadowBlur=0; X.globalAlpha=pu.life*.95;
+    // Glyph label
+    X.font=`bold ${Math.max(7,r*.8)}px serif`;
+    X.textAlign='center'; X.textBaseline='middle';
+    X.fillStyle='rgba(255,255,255,.7)';
+    X.fillText(puGlyph(t),0,t==='health'||t==='dual'?r*1.35:0);
     X.restore();
   }
   X.globalAlpha=1;
+
+  function _drawPoly(sides,r,offset){
+    X.beginPath();
+    for(let k=0;k<sides;k++){
+      const a=k/sides*Math.PI*2+(offset||0);
+      k?X.lineTo(Math.cos(a)*r,Math.sin(a)*r):X.moveTo(Math.cos(a)*r,Math.sin(a)*r);
+    }
+    X.closePath();
+  }
 
   // ── ASTEROIDS ─────────────────────────────────
   for(const a of asteroids){
@@ -1071,6 +1218,7 @@ function render(){
     const sp=proj(ship.x,ship.y,ship.z);
     if(sp){
       const sc=sp.sc*0.375;
+      if(ghostOn){ X.globalAlpha=.45; }
       X.save();
       X.translate(sp.sx+shakeX*.4,sp.sy+shakeY*.4);
       X.rotate(ship.roll);
@@ -1128,7 +1276,9 @@ function render(){
         X.fillStyle=sg;X.fill();
         X.globalAlpha=1;
       }
-      X.shadowBlur=0; X.restore();
+      X.shadowBlur=0;
+      if(ghostOn) X.globalAlpha=1;
+      X.restore();
     }
   }
 
