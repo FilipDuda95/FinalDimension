@@ -543,13 +543,18 @@ const INP={
   isMob:/Mobi|Android/i.test(navigator.userAgent),
   gyB:0, gyG:0,
   tActive:false, tx:0, ty:0,
+  inCanvas:false,
 };
 
 document.addEventListener('mousemove',e=>{
   INP.mx=e.clientX; INP.my=e.clientY;
+  INP.inCanvas=true;
   const cur=document.getElementById('cursor');
   cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
+  cur.style.opacity='1';
 });
+document.addEventListener('mouseleave',()=>{ INP.inCanvas=false; INP.mdown=false; document.getElementById('cursor').style.opacity='0'; });
+document.addEventListener('mouseenter',()=>{ INP.inCanvas=true; document.getElementById('cursor').style.opacity='1'; });
 document.addEventListener('mousedown',e=>{ if(e.button===0){ INP.mdown=true; fireLaser(); }});
 document.addEventListener('mouseup',  e=>{ if(e.button===0) INP.mdown=false; });
 
@@ -752,16 +757,21 @@ function update(ts){
   } else { shakeX=0;shakeY=0;shakeMag=0; }
 
   // ── SHIP ─────────────────────────────────────────
+  // Cursor outside window → drift to XY center, retreat Z by 200 (≈50% depth back)
   if(!ship.dead){
-    let tx,ty;
-    if(!INP.isMob){
-      tx=(INP.mx/W-.5)*2;
-      ty=(INP.my/H-.5)*2;
-    } else {
-      tx=INP.tActive?(INP.tx/W-.5)*2:INP.gyG*.045;
-      ty=INP.tActive?(INP.ty/H-.5)*2:(INP.gyB-10)*.035;
+    const cursorActive = INP.isMob ? INP.tActive : INP.inCanvas;
+    let tgX=0, tgY=0;
+    if(cursorActive){
+      let tx,ty;
+      if(!INP.isMob){
+        tx=(INP.mx/W-.5)*2;
+        ty=(INP.my/H-.5)*2;
+      } else {
+        tx=INP.tActive?(INP.tx/W-.5)*2:INP.gyG*.045;
+        ty=INP.tActive?(INP.ty/H-.5)*2:(INP.gyB-10)*.035;
+      }
+      tgX=tx*460; tgY=ty*255;
     }
-    const tgX=tx*460, tgY=ty*255;
     ship.vx+=(tgX-ship.x)*.019*dt;
     ship.vy+=(tgY-ship.y)*.017*dt;
     ship.vx*=Math.pow(.83,dt);
@@ -770,7 +780,10 @@ function update(ts){
     ship.y+=ship.vy*dt;
     ship.x=Math.max(-500,Math.min(500,ship.x));
     ship.y=Math.max(-270,Math.min(270,ship.y));
-    ship.roll=-ship.vx*.013;
+    // Z: smoothly retreat to -200 when idle (appears ~50% smaller due to perspective)
+    const tgZ = cursorActive ? 0 : -200;
+    ship.z += (tgZ - ship.z) * .04 * dt;
+    ship.roll = cursorActive ? -ship.vx*.013 : ship.roll*Math.pow(.92,dt);
     engineParticles();
   }
 
@@ -1057,7 +1070,7 @@ function render(){
   if(!ship.dead&&(invincT<=0||Math.floor(totalT/110)%2===0)){
     const sp=proj(ship.x,ship.y,ship.z);
     if(sp){
-      const sc=sp.sc*1.5;
+      const sc=sp.sc*0.375;
       X.save();
       X.translate(sp.sx+shakeX*.4,sp.sy+shakeY*.4);
       X.rotate(ship.roll);
