@@ -819,7 +819,7 @@ async function loadFolder(folderId, addToHistory = true) {
 
       const folderDiv = document.createElement('div');
       folderDiv.className = 'folder';
-      folderDiv.innerHTML = + file.name;
+      folderDiv.innerHTML = file.name;
       container.appendChild(folderDiv);
     }
     // 🔹 Pokud je to obrázek nebo video
