@@ -31,6 +31,7 @@ canvas { display:block; }
   transition:opacity .4s; text-shadow:0 0 8px #ff0;
 }
 
+/* NITRO BAR */
 #nitro-wrap {
   position:absolute; bottom:54px; right:28px;
   display:flex; flex-direction:column; align-items:flex-end; gap:3px;
@@ -39,6 +40,7 @@ canvas { display:block; }
 #nitro-bg { width:110px; height:6px; background:#f0f2; border:1px solid #f0f4; }
 #nitro-bar { height:100%; width:100%; background:linear-gradient(90deg,#f0f,#ff0); transition:width .05s; }
 
+/* SPEED BAR */
 #speed-bar-wrap {
   position:absolute; bottom:28px; right:28px;
   display:flex; flex-direction:column; align-items:flex-end; gap:3px;
@@ -47,32 +49,51 @@ canvas { display:block; }
 #speed-bar-bg { width:110px; height:6px; background:#0ff2; border:1px solid #0ff4; }
 #speed-bar { height:100%; width:0%; background:linear-gradient(90deg,#0ff,#f0f); transition:width .06s; }
 
+/* TIME */
 #time-box {
   position:absolute; top:16px; left:16px;
   color:#aaa; font-size:9px; letter-spacing:3px; opacity:.7;
 }
 #time-val { font-size:20px; color:#fff; display:block; letter-spacing:4px; }
 
-/* MINIMAP — bottom left */
+/* ══ MINIMAP — bottom-left ══ */
 #minimap-wrap {
-  position:absolute; bottom:16px; left:16px; width:160px;
+  position:absolute; bottom:16px; left:16px;
+  display:flex; flex-direction:column; align-items:center; gap:0;
 }
 #minimap {
-  display:block; width:160px; height:160px;
-  border:1px solid #0ff4; box-shadow:0 0 14px #0ff3;
+  display:block;
+  border:1px solid rgba(0,255,255,0.35);
+  box-shadow: 0 0 18px rgba(0,255,255,0.2), inset 0 0 30px rgba(0,0,20,0.8);
+  border-radius:4px;
 }
-#minimap-label { text-align:center; color:#0ff7; font-size:9px; letter-spacing:3px; margin-top:2px; }
+#minimap-label {
+  text-align:center; color:rgba(0,255,255,0.6);
+  font-size:8px; letter-spacing:4px; margin-top:3px;
+  text-transform:uppercase;
+}
+/* Legend row under minimap */
+#mm-legend {
+  display:flex; gap:10px; margin-top:4px; font-size:7px; letter-spacing:1px;
+  opacity:.7;
+}
+.mm-leg { display:flex; align-items:center; gap:3px; color:#aaa; }
+.mm-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 
+/* POLICE ALERT */
 #police-alert {
   position:absolute; top:120px; left:50%; transform:translateX(-50%);
   color:#f00; font-size:11px; letter-spacing:5px; opacity:0;
   text-shadow:0 0 12px #f00; transition:opacity .3s;
 }
+
+/* HINTS */
 #hint {
-  position:absolute; bottom:28px; left:188px;
+  position:absolute; bottom:28px; left:220px;
   color:#fff3; font-size:9px; letter-spacing:2px; line-height:2;
 }
 
+/* Overlays */
 .overlay {
   position:fixed; inset:0; display:flex; flex-direction:column;
   align-items:center; justify-content:center; z-index:20; background:rgba(0,0,8,0.86);
@@ -95,10 +116,10 @@ canvas { display:block; }
 #gameover-screen h1 { color:#f05; text-shadow:0 0 30px #f05,0 0 80px #f058; }
 #gameover-screen .sub { color:#fa0; text-shadow:0 0 10px #fa0; }
 
-/* CRT */
+/* CRT scanlines */
 #crt {
   position:fixed; inset:0; pointer-events:none; z-index:35;
-  background:repeating-linear-gradient(0deg,rgba(0,0,0,0.09) 0px,rgba(0,0,0,0.09) 1px,transparent 1px,transparent 3px);
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0.08) 0px,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 3px);
 }
 #crt::after {
   content:''; position:absolute; inset:0;
@@ -119,10 +140,20 @@ canvas { display:block; }
   <div id="car-badge"></div>
   <div id="police-alert">⚠ POLICE CHASING ⚠</div>
   <div id="time-box">TIME<span id="time-val">20:00</span></div>
+
+  <!-- ══ MINIMAP ══ -->
   <div id="minimap-wrap">
-    <canvas id="minimap" width="160" height="160"></canvas>
-    <div id="minimap-label">MINIMAP</div>
+    <canvas id="minimap" width="200" height="200"></canvas>
+    <div id="minimap-label">CITY MAP</div>
+    <div id="mm-legend">
+      <div class="mm-leg"><div class="mm-dot" style="background:#ffff00;box-shadow:0 0 4px #ff0"></div>YOU</div>
+      <div class="mm-leg"><div class="mm-dot" style="background:#00ff88;box-shadow:0 0 4px #0f8"></div>GARAGE</div>
+      <div class="mm-leg"><div class="mm-dot" style="background:#00ffff;box-shadow:0 0 4px #0ff"></div>CARS</div>
+      <div class="mm-leg"><div class="mm-dot" style="background:#ff4400;box-shadow:0 0 4px #f40"></div>NPC</div>
+      <div class="mm-leg"><div class="mm-dot" style="background:#4466ff;box-shadow:0 0 4px #44f"></div>POLICE</div>
+    </div>
   </div>
+
   <div id="nitro-wrap">
     <div id="nitro-label">NITRO</div>
     <div id="nitro-bg"><div id="nitro-bar"></div></div>
@@ -138,6 +169,7 @@ canvas { display:block; }
   </div>
 </div>
 
+<!-- Title -->
 <div class="overlay" id="title-screen">
   <h1>GET THE CAR</h1>
   <div class="sub">// NEON CITY HEIST //</div>
@@ -145,6 +177,7 @@ canvas { display:block; }
   <div style="color:#fff3;font-size:9px;letter-spacing:3px;margin-top:18px;">DOUBLE-TAP = NITRO BOOST</div>
 </div>
 
+<!-- Game Over -->
 <div class="overlay" id="gameover-screen">
   <h1>WRECKED</h1>
   <div class="sub">// YOU DIDN'T MAKE IT //</div>
@@ -158,415 +191,328 @@ canvas { display:block; }
 <script>
 'use strict';
 // ══════════════════════════════════════════════════════════════
-//  GET THE CAR v4  —  Road Grid, Police Lights, Smart AI
+//  GET THE CAR v5  —  Enhanced Minimap, No Music
 // ══════════════════════════════════════════════════════════════
 
 // ── Renderer ──
 const renderer = new THREE.WebGLRenderer({ antialias:true });
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x050510);
-scene.fog = new THREE.Fog(0x050510,70,230);
+scene.fog = new THREE.Fog(0x050510, 70, 230);
 
-const camera = new THREE.PerspectiveCamera(65,innerWidth/innerHeight,0.1,600);
-
-window.addEventListener('resize',()=>{
-  renderer.setSize(innerWidth,innerHeight);
-  camera.aspect=innerWidth/innerHeight;
+const camera = new THREE.PerspectiveCamera(65, innerWidth/innerHeight, 0.1, 600);
+window.addEventListener('resize', () => {
+  renderer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth/innerHeight;
   camera.updateProjectionMatrix();
 });
 
 // ── Lighting ──
-const ambientLight = new THREE.AmbientLight(0x111133,2);
+const ambientLight = new THREE.AmbientLight(0x111133, 2);
 scene.add(ambientLight);
-const sunLight = new THREE.DirectionalLight(0x4488ff,0.7);
-sunLight.position.set(30,60,30);
+const sunLight = new THREE.DirectionalLight(0x4488ff, 0.7);
+sunLight.position.set(30, 60, 30);
 scene.add(sunLight);
 
 // ══════════════════════════════════════════════════════════════
-//  WORLD LAYOUT
-//  Blocks sit between road intersections.
-//  Road centre lines are at multiples of STEP.
-//  Each block occupies [roadCentre + ROAD/2 .. roadCentre + ROAD/2 + BLOCK].
-//  Buildings are only placed inside block interiors, never on roads.
+//  WORLD CONSTANTS
 // ══════════════════════════════════════════════════════════════
-const GRID = 20;        // number of blocks each axis
-const ROAD = 10;        // road width (full, 2 lanes)
-const BLOCK = 14;       // city block width
-const STEP = ROAD+BLOCK;// grid repeat
-const CITY_HALF = (GRID/2)*STEP;
-
-// Half-widths for road zone check (anything within ROAD/2 of a grid line is road)
-const ROAD_HALF = ROAD/2;
-
-// Returns true if world (x,z) is on a road (within ROAD_HALF of any grid line)
-function onRoad(x,z){
-  const rx = ((x%STEP)+STEP)%STEP; // position inside one cell [0,STEP)
-  const rz = ((z%STEP)+STEP)%STEP;
-  return rx<ROAD_HALF||rx>(STEP-ROAD_HALF)||rz<ROAD_HALF||rz>(STEP-ROAD_HALF);
-}
-
-// Snap a point to the nearest road centre (intersection or mid-road)
-function nearestRoadCentreX(x){ return Math.round(x/STEP)*STEP; }
-function nearestRoadCentreZ(z){ return Math.round(z/STEP)*STEP; }
+const GRID = 20;
+const ROAD = 10;
+const BLOCK = 14;
+const STEP = ROAD + BLOCK;
+const CITY_HALF = (GRID / 2) * STEP;
 
 // ── Material helpers ──
-const mat  = (c,e,i=0.4)=> new THREE.MeshLambertMaterial({color:c,emissive:e||c,emissiveIntensity:i});
-const bMat = c=> new THREE.MeshBasicMaterial({color:c});
-const wMat = c=> new THREE.MeshBasicMaterial({color:c,wireframe:true});
+const mat  = (c,e,i=0.4) => new THREE.MeshLambertMaterial({color:c, emissive:e||c, emissiveIntensity:i});
+const bMat = c => new THREE.MeshBasicMaterial({color:c});
+const wMat = c => new THREE.MeshBasicMaterial({color:c, wireframe:true});
 
-// ── Data ──
+// ── Data arrays ──
 const buildingBoxes  = []; // {x,z,hw,hd}
 const buildingMeshes = [];
 const parkedCars     = []; // {mesh,x,z,stolen,color,neon,type}
-const trafficList    = []; // {mesh,x,z,roadDirX,roadDirZ,speed,isPolice,stuckTimer,lightBlue,lightRed}
+const trafficList    = []; // {mesh,x,z,dir,speed,isPolice,stuckTimer,laneOff}
 
 // ══════════════════════════════════════════════════════════════
 //  CAR TYPES
 // ══════════════════════════════════════════════════════════════
-const CAR_TYPES=[
+const CAR_TYPES = [
   {name:'SEDAN', maxSpd:.62,accel:.007,brake:.018,steer:.042,drift:.80,nitroMult:1.5,bW:2.0,bH:.8, bL:4.2},
   {name:'SPORT', maxSpd:.90,accel:.012,brake:.014,steer:.050,drift:.72,nitroMult:1.8,bW:1.8,bH:.65,bL:4.6},
   {name:'TRUCK', maxSpd:.44,accel:.005,brake:.025,steer:.030,drift:.90,nitroMult:1.3,bW:2.4,bH:1.1,bL:5.0},
   {name:'MUSCLE',maxSpd:.75,accel:.010,brake:.016,steer:.038,drift:.75,nitroMult:1.6,bW:2.1,bH:.85,bL:4.4},
   {name:'MINI',  maxSpd:.55,accel:.009,brake:.022,steer:.058,drift:.82,nitroMult:1.4,bW:1.6,bH:.72,bL:3.2},
 ];
-
-const FOOT_WALK=0.025, FOOT_RUN=0.060;
+const FOOT_WALK = 0.025, FOOT_RUN = 0.060;
 
 // ══════════════════════════════════════════════════════════════
 //  GROUND
 // ══════════════════════════════════════════════════════════════
-const ground=new THREE.Mesh(
-  new THREE.PlaneGeometry(GRID*STEP*3,GRID*STEP*3),
-  mat(0x080818,0x080818,0)
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(GRID*STEP*3, GRID*STEP*3),
+  mat(0x080818, 0x080818, 0)
 );
-ground.rotation.x=-Math.PI/2; scene.add(ground);
+ground.rotation.x = -Math.PI/2;
+scene.add(ground);
 
 // ══════════════════════════════════════════════════════════════
-//  ROAD SURFACE — darker asphalt strips along every road
+//  ROAD SURFACE + MARKINGS
 // ══════════════════════════════════════════════════════════════
-(function buildRoads(){
-  const roadMat=new THREE.MeshLambertMaterial({color:0x0a0a14,emissive:0x0a0a14,emissiveIntensity:0});
-  for(let g=-GRID/2;g<=GRID/2;g++){
-    // E-W strip
-    const stripH=new THREE.Mesh(new THREE.PlaneGeometry(GRID*STEP*2,ROAD),roadMat);
-    stripH.rotation.x=-Math.PI/2; stripH.position.set(0,0.01,g*STEP); scene.add(stripH);
-    // N-S strip
-    const stripV=new THREE.Mesh(new THREE.PlaneGeometry(ROAD,GRID*STEP*2),roadMat);
-    stripV.rotation.x=-Math.PI/2; stripV.position.set(g*STEP,0.01,0); scene.add(stripV);
+(function buildRoads() {
+  const roadMat = new THREE.MeshLambertMaterial({color:0x0a0a14, emissive:0x0a0a14, emissiveIntensity:0});
+  for (let g = -GRID/2; g <= GRID/2; g++) {
+    // Horizontal asphalt strip
+    const sh = new THREE.Mesh(new THREE.PlaneGeometry(GRID*STEP*2, ROAD), roadMat);
+    sh.rotation.x = -Math.PI/2; sh.position.set(0, 0.01, g*STEP); scene.add(sh);
+    // Vertical asphalt strip
+    const sv = new THREE.Mesh(new THREE.PlaneGeometry(ROAD, GRID*STEP*2), roadMat);
+    sv.rotation.x = -Math.PI/2; sv.position.set(g*STEP, 0.01, 0); scene.add(sv);
   }
-
-  // ── Centre dividing line (yellow dashed) ──
-  const divMat=new THREE.MeshBasicMaterial({color:0xffcc00});
-  for(let g=-GRID/2;g<=GRID/2;g++){
-    for(let i=-GRID/2;i<GRID/2;i++){
-      const s=i*STEP+STEP/2;
-      // Horizontal road centre dash
-      const dh=new THREE.Mesh(new THREE.PlaneGeometry(3,.12),divMat);
-      dh.rotation.x=-Math.PI/2; dh.position.set(s,.03,g*STEP); scene.add(dh);
-      // Vertical road centre dash
-      const dv=new THREE.Mesh(new THREE.PlaneGeometry(.12,3),divMat);
-      dv.rotation.x=-Math.PI/2; dv.position.set(g*STEP,.03,s); scene.add(dv);
+  // Yellow centre dividing dashes
+  const divMat = new THREE.MeshBasicMaterial({color:0xffcc00});
+  for (let g = -GRID/2; g <= GRID/2; g++) {
+    for (let i = -GRID/2; i < GRID/2; i++) {
+      const s = i*STEP + STEP/2;
+      const dh = new THREE.Mesh(new THREE.PlaneGeometry(3, .12), divMat);
+      dh.rotation.x = -Math.PI/2; dh.position.set(s, .03, g*STEP); scene.add(dh);
+      const dv = new THREE.Mesh(new THREE.PlaneGeometry(.12, 3), divMat);
+      dv.rotation.x = -Math.PI/2; dv.position.set(g*STEP, .03, s); scene.add(dv);
     }
   }
-
-  // ── Lane edge lines (white) ──
-  const laneMat=new THREE.MeshBasicMaterial({color:0x334466});
-  for(let g=-GRID/2;g<=GRID/2;g++){
-    [-ROAD/2+.6,ROAD/2-.6].forEach(off=>{
-      for(let i=-GRID/2;i<GRID/2;i++){
-        const s=i*STEP+STEP/2;
-        const lh=new THREE.Mesh(new THREE.PlaneGeometry(2.5,.08),laneMat);
-        lh.rotation.x=-Math.PI/2; lh.position.set(s,.025,g*STEP+off); scene.add(lh);
-        const lv=new THREE.Mesh(new THREE.PlaneGeometry(.08,2.5),laneMat);
-        lv.rotation.x=-Math.PI/2; lv.position.set(g*STEP+off,.025,s); scene.add(lv);
+  // Blue lane-edge lines
+  const laneMat = new THREE.MeshBasicMaterial({color:0x334466});
+  for (let g = -GRID/2; g <= GRID/2; g++) {
+    [-ROAD/2+.6, ROAD/2-.6].forEach(off => {
+      for (let i = -GRID/2; i < GRID/2; i++) {
+        const s = i*STEP + STEP/2;
+        const lh = new THREE.Mesh(new THREE.PlaneGeometry(2.5, .08), laneMat);
+        lh.rotation.x = -Math.PI/2; lh.position.set(s, .025, g*STEP+off); scene.add(lh);
+        const lv = new THREE.Mesh(new THREE.PlaneGeometry(.08, 2.5), laneMat);
+        lv.rotation.x = -Math.PI/2; lv.position.set(g*STEP+off, .025, s); scene.add(lv);
       }
     });
   }
 })();
 
 // ══════════════════════════════════════════════════════════════
-//  CITY BUILDINGS  — only inside block interiors, never on roads
-//  Garage area cleared: blocks around garagePos are skipped
+//  GARAGE
 // ══════════════════════════════════════════════════════════════
-const garagePos=new THREE.Vector3(STEP*3,0,STEP*3);
-const GARAGE_CLEAR=STEP*1.5; // radius around garage kept free of buildings
+const garagePos = new THREE.Vector3(STEP*3, 0, STEP*3);
+const GARAGE_CLEAR = STEP * 1.5;
+const garageLight = new THREE.PointLight(0x00ff88, 3, 45);
 
-(function buildCity(){
-  const cols =[0x001133,0x110022,0x002211,0x110011,0x221100,0x002233,0x330011];
-  const neons=[0x00ffff, 0xff00ff,0x00ff88,0xff4400,0xffaa00,0x0088ff,0xff0088];
+(function makeGarage() {
+  const base = new THREE.Mesh(new THREE.BoxGeometry(10, .4, 12), bMat(0x00ff88));
+  base.position.set(garagePos.x, .2, garagePos.z); scene.add(base);
 
-  for(let gx=-GRID/2;gx<GRID/2;gx++){
-    for(let gz=-GRID/2;gz<GRID/2;gz++){
-      // Block centre (between two road lines)
-      // Road lines at gx*STEP and (gx+1)*STEP; block centre is at (gx+0.5)*STEP
-      const blockCX=(gx+0.5)*STEP;
-      const blockCZ=(gz+0.5)*STEP;
+  const fh = new THREE.Mesh(new THREE.PlaneGeometry(10, .3), bMat(0x00ffcc));
+  fh.rotation.x = -Math.PI/2; fh.position.set(garagePos.x, .42, garagePos.z); scene.add(fh);
+  const fv = new THREE.Mesh(new THREE.PlaneGeometry(.3, 12), bMat(0x00ffcc));
+  fv.rotation.x = -Math.PI/2; fv.position.set(garagePos.x, .42, garagePos.z); scene.add(fv);
 
-      // Skip if too close to garage
-      if(Math.hypot(blockCX-garagePos.x,blockCZ-garagePos.z)<GARAGE_CLEAR) continue;
-      // Skip centre start area
-      if(Math.abs(gx)<1&&Math.abs(gz)<1) continue;
+  [[-4,5],[4,5],[-4,-5],[4,-5]].forEach(([ox,oz]) => {
+    const p = new THREE.Mesh(new THREE.BoxGeometry(.5, 6, .5), bMat(0x00ffcc));
+    p.position.set(garagePos.x+ox, 3, garagePos.z+oz); scene.add(p);
+  });
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(9, .3, 1), bMat(0x00ff88));
+  roof.position.set(garagePos.x, 6.1, garagePos.z-5); scene.add(roof);
 
-      // Place 1-3 buildings per block, strictly inside the block
-      // Block interior: blockCentre ± (BLOCK/2 - margin)
-      const innerHalf=(BLOCK/2)-1.5; // safe margin from road edge
-      const cnt=1+Math.floor(Math.random()*3);
-      for(let k=0;k<cnt;k++){
-        const w=3+Math.random()*4.5, d=3+Math.random()*4.5;
-        const h=5+Math.random()*24;
-        // Random position inside block (clamped so building stays inside)
-        const maxOff=innerHalf-Math.max(w,d)/2;
-        if(maxOff<0) continue;
-        const ox=(Math.random()-.5)*2*maxOff;
-        const oz=(Math.random()-.5)*2*maxOff;
-        const bx=blockCX+ox, bz=blockCZ+oz;
+  // 3D GARAGE sign
+  const lMat = new THREE.MeshBasicMaterial({color:0x00ff88});
+  const signGroup = new THREE.Group();
+  const letters = [{w:1.0},{w:.8},{w:.9},{w:.8},{w:1.0},{w:.9}];
+  let lx = -2.5;
+  letters.forEach(l => {
+    const lb = new THREE.Mesh(new THREE.BoxGeometry(l.w, 1.2, .15), lMat);
+    lb.position.set(lx, 0, 0); signGroup.add(lb);
+    const lbw = new THREE.Mesh(new THREE.BoxGeometry(l.w+.05, 1.25, .2), wMat(0x00ffff));
+    lbw.position.copy(lb.position); signGroup.add(lbw);
+    lx += l.w + .15;
+  });
+  signGroup.position.set(garagePos.x, 7, garagePos.z - 5.5);
+  scene.add(signGroup);
 
-        const idx=Math.floor(Math.random()*7);
-        const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(cols[idx],neons[idx],.15));
-        m.position.set(bx,h/2,bz); scene.add(m);
-        const wm=new THREE.Mesh(new THREE.BoxGeometry(w+.1,h+.1,d+.1),wMat(neons[idx]));
+  garageLight.position.set(garagePos.x, 4, garagePos.z);
+  scene.add(garageLight);
+})();
+
+// ══════════════════════════════════════════════════════════════
+//  CITY BUILDINGS — strictly inside blocks, never on roads
+// ══════════════════════════════════════════════════════════════
+(function buildCity() {
+  const cols  = [0x001133,0x110022,0x002211,0x110011,0x221100,0x002233,0x330011];
+  const neons = [0x00ffff, 0xff00ff,0x00ff88,0xff4400,0xffaa00,0x0088ff,0xff0088];
+  for (let gx = -GRID/2; gx < GRID/2; gx++) {
+    for (let gz = -GRID/2; gz < GRID/2; gz++) {
+      const blockCX = (gx + 0.5)*STEP;
+      const blockCZ = (gz + 0.5)*STEP;
+      if (Math.hypot(blockCX-garagePos.x, blockCZ-garagePos.z) < GARAGE_CLEAR) continue;
+      if (Math.abs(gx) < 1 && Math.abs(gz) < 1) continue;
+      const innerHalf = (BLOCK/2) - 1.5;
+      const cnt = 1 + Math.floor(Math.random()*3);
+      for (let k = 0; k < cnt; k++) {
+        const w = 3+Math.random()*4.5, d = 3+Math.random()*4.5, h = 5+Math.random()*24;
+        const maxOff = innerHalf - Math.max(w,d)/2;
+        if (maxOff < 0) continue;
+        const bx = blockCX + (Math.random()-.5)*2*maxOff;
+        const bz = blockCZ + (Math.random()-.5)*2*maxOff;
+        const idx = Math.floor(Math.random()*7);
+        const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat(cols[idx],neons[idx],.15));
+        m.position.set(bx, h/2, bz); scene.add(m);
+        const wm = new THREE.Mesh(new THREE.BoxGeometry(w+.1,h+.1,d+.1), wMat(neons[idx]));
         wm.position.copy(m.position); scene.add(wm);
-        buildingBoxes.push({x:bx,z:bz,hw:w/2+.1,hd:d/2+.1});
-        buildingMeshes.push({mesh:m,wire:wm,neon:neons[idx]});
+        buildingBoxes.push({x:bx, z:bz, hw:w/2+.1, hd:d/2+.1});
+        buildingMeshes.push({mesh:m, wire:wm, neon:neons[idx]});
       }
     }
   }
 })();
 
-// ── Street lights at intersections ──
-const streetLights=[];
-(function(){
-  for(let i=-8;i<=8;i+=2) for(let j=-8;j<=8;j+=2){
-    if(Math.random()>.5) continue;
-    const x=i*STEP+(ROAD/2+.5), z=j*STEP+(ROAD/2+.5);
-    const pole=new THREE.Mesh(new THREE.BoxGeometry(.15,5,.15),mat(0x222222,0x333333,.1));
+// ── Street lights ──
+const streetLights = [];
+(function() {
+  for (let i = -8; i <= 8; i+=2) for (let j = -8; j <= 8; j+=2) {
+    if (Math.random() > .5) continue;
+    const x = i*STEP+(ROAD/2+.5), z = j*STEP+(ROAD/2+.5);
+    const pole = new THREE.Mesh(new THREE.BoxGeometry(.15,5,.15), mat(0x222222,0x333333,.1));
     pole.position.set(x,2.5,z); scene.add(pole);
-    const col=Math.random()>.5?0x00ffff:0xff00ff;
-    const hd=new THREE.Mesh(new THREE.BoxGeometry(.6,.2,.6),bMat(col));
+    const col = Math.random()>.5?0x00ffff:0xff00ff;
+    const hd = new THREE.Mesh(new THREE.BoxGeometry(.6,.2,.6), bMat(col));
     hd.position.set(x,5.2,z); scene.add(hd);
-    const pl=new THREE.PointLight(col,.9,16);
+    const pl = new THREE.PointLight(col,.9,16);
     pl.position.set(x,5,z); scene.add(pl);
-    streetLights.push({light:pl,color:col});
+    streetLights.push({light:pl, color:col});
   }
-})();
-
-// ══════════════════════════════════════════════════════════════
-//  GARAGE  — on road intersection, clearly marked
-// ══════════════════════════════════════════════════════════════
-const garageLight=new THREE.PointLight(0x00ff88,3,40);
-(function makeGarage(){
-  // Base platform
-  const base=new THREE.Mesh(new THREE.BoxGeometry(10,.4,12),bMat(0x00ff88));
-  base.position.set(garagePos.x,.2,garagePos.z); scene.add(base);
-  // Floor neon cross
-  const fh=new THREE.Mesh(new THREE.PlaneGeometry(10,.3),bMat(0x00ffcc));
-  fh.rotation.x=-Math.PI/2; fh.position.set(garagePos.x,.41,garagePos.z); scene.add(fh);
-  const fv=new THREE.Mesh(new THREE.PlaneGeometry(.3,12),bMat(0x00ffcc));
-  fv.rotation.x=-Math.PI/2; fv.position.set(garagePos.x,.41,garagePos.z); scene.add(fv);
-  // Pillars
-  [[-4,5],[4,5],[-4,-5],[4,-5]].forEach(([ox,oz])=>{
-    const p=new THREE.Mesh(new THREE.BoxGeometry(.5,6,.5),bMat(0x00ffcc));
-    p.position.set(garagePos.x+ox,3,garagePos.z+oz); scene.add(p);
-  });
-  // Roof beam
-  const roof=new THREE.Mesh(new THREE.BoxGeometry(9,.3,1),bMat(0x00ff88));
-  roof.position.set(garagePos.x,6.1,garagePos.z-5); scene.add(roof);
-
-  // ── 3D "GARAGE" sign letters (boxes spelling it out) ──
-  // Using slim boxes for each letter block
-  const signGroup=new THREE.Group();
-  const lMat=new THREE.MeshBasicMaterial({color:0x00ff88});
-  const lW=.5,lH=1.2,lD=.15;
-  // We'll draw G-A-R-A-G-E as 6 rectangular blocks with different widths
-  const letters=[
-    {w:1.0,h:lH},{w:.8,h:lH},{w:.9,h:lH},{w:.8,h:lH},{w:1.0,h:lH},{w:.9,h:lH}
-  ];
-  let lx=-2.5;
-  letters.forEach(l=>{
-    const lb=new THREE.Mesh(new THREE.BoxGeometry(l.w,l.h,lD),lMat);
-    lb.position.set(lx,0,0); signGroup.add(lb);
-    // Neon glow wireframe
-    const lbw=new THREE.Mesh(new THREE.BoxGeometry(l.w+.05,l.h+.05,lD+.05),wMat(0x00ffff));
-    lbw.position.copy(lb.position); signGroup.add(lbw);
-    lx+=l.w+.15;
-  });
-  signGroup.position.set(garagePos.x,7,garagePos.z-5.5);
-  scene.add(signGroup);
-
-  garageLight.position.set(garagePos.x,4,garagePos.z);
-  scene.add(garageLight);
 })();
 
 // ══════════════════════════════════════════════════════════════
 //  CAR FACTORY
 // ══════════════════════════════════════════════════════════════
-const CAR_COLORS=[
+const CAR_COLORS = [
   [0x110022,0xff00ff],[0x001122,0x00ffff],[0x112200,0x00ff44],
   [0x220011,0xff2200],[0x221100,0xffaa00],[0x001133,0x0088ff],[0x221122,0xff88ff]
 ];
 
-// makePolice=true adds light bar + POLICE text boxes on roof
-function makeCar(x,z,color,neon,rot=0,type=CAR_TYPES[0],makePolice=false){
-  const g=new THREE.Group();
-  const {bW,bH,bL}=type;
+function makeCar(x, z, color, neon, rot=0, type=CAR_TYPES[0], isPolice=false) {
+  const g = new THREE.Group();
+  const {bW,bH,bL} = type;
   // Body
-  const body=new THREE.Mesh(new THREE.BoxGeometry(bW,bH,bL),mat(color,neon,.3));
-  body.position.y=bH/2+.2; g.add(body);
+  const body = new THREE.Mesh(new THREE.BoxGeometry(bW,bH,bL), mat(color,neon,.3));
+  body.position.y = bH/2+.2; g.add(body);
   // Cabin
-  const cabH=bH*.85,cabL=bL*.5;
-  const cab=new THREE.Mesh(new THREE.BoxGeometry(bW*.75,cabH,cabL),mat(color,neon,.55));
-  cab.position.set(0,bH/2+.2+cabH/2,-.2); g.add(cab);
+  const cabH=bH*.85, cabL=bL*.5;
+  const cab = new THREE.Mesh(new THREE.BoxGeometry(bW*.75,cabH,cabL), mat(color,neon,.55));
+  cab.position.set(0, bH/2+.2+cabH/2, -.2); g.add(cab);
   // Wheels
-  const wxOff=bW/2+.06;
-  [[-wxOff,-bL*.35],[wxOff,-bL*.35],[-wxOff,bL*.35],[wxOff,bL*.35]].forEach(([wx,wz])=>{
-    const w=new THREE.Mesh(new THREE.CylinderGeometry(.36,.36,.32,8),mat(0x111111,0x333333,.1));
-    w.rotation.z=Math.PI/2; w.position.set(wx,.35,wz); g.add(w);
+  const wxO = bW/2+.06;
+  [[-wxO,-bL*.35],[wxO,-bL*.35],[-wxO,bL*.35],[wxO,bL*.35]].forEach(([wx,wz]) => {
+    const w = new THREE.Mesh(new THREE.CylinderGeometry(.36,.36,.32,8), mat(0x111111,0x333333,.1));
+    w.rotation.z = Math.PI/2; w.position.set(wx,.35,wz); g.add(w);
   });
   // Headlights
-  [-bW*.3,bW*.3].forEach(ox=>{
-    const hl=new THREE.Mesh(new THREE.BoxGeometry(.28,.18,.1),bMat(neon));
+  [-bW*.3,bW*.3].forEach(ox => {
+    const hl = new THREE.Mesh(new THREE.BoxGeometry(.28,.18,.1), bMat(neon));
     hl.position.set(ox,bH/2+.2,bL/2+.05); g.add(hl);
   });
   // Taillights
-  [-bW*.3,bW*.3].forEach(ox=>{
-    const tl=new THREE.Mesh(new THREE.BoxGeometry(.25,.14,.1),bMat(0xff2200));
+  [-bW*.3,bW*.3].forEach(ox => {
+    const tl = new THREE.Mesh(new THREE.BoxGeometry(.25,.14,.1), bMat(0xff2200));
     tl.position.set(ox,bH/2+.2,-bL/2-.05); g.add(tl);
   });
   // Neon outline
-  const ol=new THREE.Mesh(new THREE.BoxGeometry(bW+.1,bH+.1,bL+.1),wMat(neon));
-  ol.position.y=bH/2+.2; g.add(ol);
+  const ol = new THREE.Mesh(new THREE.BoxGeometry(bW+.1,bH+.1,bL+.1), wMat(neon));
+  ol.position.y = bH/2+.2; g.add(ol);
 
-  if(makePolice){
-    // ── Light bar base ──
-    const roofY=bH+.2+cabH+.1;
-    const barBase=new THREE.Mesh(new THREE.BoxGeometry(bW*.6,.15,cabL*.5),bMat(0x111111));
+  if (isPolice) {
+    const roofY = bH+.2+cabH+.08;
+    // Light bar base
+    const barBase = new THREE.Mesh(new THREE.BoxGeometry(bW*.6,.15,cabL*.5), bMat(0x111111));
     barBase.position.set(0,roofY,-.2); g.add(barBase);
-    // Blue light cube (left)
-    const lb=new THREE.Mesh(new THREE.BoxGeometry(.35,.3,.25),bMat(0x0044ff));
+    // Blue light cube
+    const lb = new THREE.Mesh(new THREE.BoxGeometry(.35,.3,.25), bMat(0x0044ff));
     lb.position.set(-bW*.2,roofY+.22,-.2); g.add(lb);
-    // Red light cube (right)
-    const lr=new THREE.Mesh(new THREE.BoxGeometry(.35,.3,.25),bMat(0xff2200));
-    lr.position.set( bW*.2,roofY+.22,-.2); g.add(lr);
-    // Store references for blinking (children indices 9,10)
-    g.userData.lightBlue=lb;
-    g.userData.lightRed =lr;
-
-    // ── "POLICE" text — slim boxes on front & back of body ──
-    const pMat=new THREE.MeshBasicMaterial({color:0xffffff});
-    // Front text: 6 letter-boxes in a row
-    const txtW=bW*.7,txtH=.18,txtD=.06;
-    const frontTxt=new THREE.Mesh(new THREE.BoxGeometry(txtW,txtH,txtD),pMat);
-    frontTxt.position.set(0,bH/2+.2,bL/2+.08); g.add(frontTxt);
-    const backTxt=new THREE.Mesh(new THREE.BoxGeometry(txtW,txtH,txtD),pMat);
-    backTxt.position.set(0,bH/2+.2,-bL/2-.08); g.add(backTxt);
-    // Side stripes (blue/red)
-    [-bL*.3,bL*.3].forEach(oz=>{
-      const sB=new THREE.Mesh(new THREE.BoxGeometry(.07,.18,bL*.4),bMat(0x0044ff));
-      sB.position.set( bW/2+.04,bH/2+.2,oz); g.add(sB);
-      const sR=new THREE.Mesh(new THREE.BoxGeometry(.07,.18,bL*.4),bMat(0xff2200));
+    // Red light cube
+    const lr = new THREE.Mesh(new THREE.BoxGeometry(.35,.3,.25), bMat(0xff2200));
+    lr.position.set(bW*.2,roofY+.22,-.2); g.add(lr);
+    g.userData.lightBlue = lb;
+    g.userData.lightRed  = lr;
+    // POLICE text stripe on front & back
+    const pMat = new THREE.MeshBasicMaterial({color:0xffffff});
+    const ftxt = new THREE.Mesh(new THREE.BoxGeometry(bW*.7,.18,.06), pMat);
+    ftxt.position.set(0,bH/2+.2,bL/2+.08); g.add(ftxt);
+    const btxt = new THREE.Mesh(new THREE.BoxGeometry(bW*.7,.18,.06), pMat);
+    btxt.position.set(0,bH/2+.2,-bL/2-.08); g.add(btxt);
+    // Blue/red side stripes
+    [bL*.3,-bL*.3].forEach(oz => {
+      const sB = new THREE.Mesh(new THREE.BoxGeometry(.07,.18,bL*.4), bMat(0x0044ff));
+      sB.position.set(bW/2+.04,bH/2+.2,oz); g.add(sB);
+      const sR = new THREE.Mesh(new THREE.BoxGeometry(.07,.18,bL*.4), bMat(0xff2200));
       sR.position.set(-bW/2-.04,bH/2+.2,oz); g.add(sR);
     });
   }
-
-  g.position.set(x,0,z); g.rotation.y=rot;
+  g.position.set(x,0,z); g.rotation.y = rot;
   scene.add(g);
   return g;
 }
 
 // ══════════════════════════════════════════════════════════════
-//  ROAD WAYPOINT SYSTEM
-//  NPC cars follow road centre lines.
-//  Waypoints = road intersections (multiples of STEP).
-//  Each NPC picks a random direction at each intersection.
+//  ROAD WAYPOINT DIRECTIONS
 // ══════════════════════════════════════════════════════════════
-// All 4 cardinal directions
-const DIRS=[
-  {dx:1,dz:0, angle:Math.PI/2},
-  {dx:-1,dz:0,angle:-Math.PI/2},
-  {dx:0,dz:1, angle:0},
-  {dx:0,dz:-1,angle:Math.PI},
+const DIRS = [
+  {dx:1, dz:0,  angle: Math.PI/2},
+  {dx:-1,dz:0,  angle:-Math.PI/2},
+  {dx:0, dz:1,  angle:0},
+  {dx:0, dz:-1, angle:Math.PI},
 ];
-
-function pickDir(exclude){
-  // Pick a random direction, optionally avoiding the reverse
-  const opts=exclude?DIRS.filter(d=>!(d.dx===-exclude.dx&&d.dz===-exclude.dz)):DIRS;
+function pickDir(exclude) {
+  const opts = exclude ? DIRS.filter(d=>!(d.dx===-exclude.dx&&d.dz===-exclude.dz)) : DIRS;
   return opts[Math.floor(Math.random()*opts.length)];
 }
 
-// Snap NPC to nearest road centre after spawning
-function snapToRoad(t){
-  // Round position to nearest intersection, then offset into lane
-  const ix=Math.round(t.x/STEP)*STEP;
-  const iz=Math.round(t.z/STEP)*STEP;
-  // Place in right lane relative to direction
-  // For dir X: stay on z = iz ± ROAD/4, For dir Z: stay on x = ix ± ROAD/4
-  if(Math.abs(t.dir.x)>Math.abs(t.dir.z)){
-    t.x=ix; t.z=iz-ROAD/4*(t.dir.x>0?1:-1);
-  } else {
-    t.z=iz; t.x=ix+ROAD/4*(t.dir.z>0?-1:1);
-  }
-  t.nextIX=ix; t.nextIZ=iz;
-}
-
 // ══════════════════════════════════════════════════════════════
-//  SPAWN PARKED CARS  (on road edges, right-side lane)
+//  SPAWN PARKED CARS
 // ══════════════════════════════════════════════════════════════
-function spawnParkedCars(){
-  parkedCars.forEach(p=>scene.remove(p.mesh));
-  parkedCars.length=0;
-  for(let i=0;i<30;i++){
-    // Pick a random road segment (between two intersections)
-    const gi=(Math.floor(Math.random()*GRID)-GRID/2);
-    const gj=(Math.floor(Math.random()*GRID)-GRID/2);
-    const horizontal=Math.random()<.5;
-    // Park on right kerb
-    let cx,cz,rot;
-    if(horizontal){
-      cx=gi*STEP+STEP/2;
-      cz=gj*STEP+ROAD/2-1.2;
-      rot=Math.PI/2;
-    } else {
-      cx=gi*STEP+ROAD/2-1.2;
-      cz=gj*STEP+STEP/2;
-      rot=0;
-    }
-    const [col,neo]=CAR_COLORS[Math.floor(Math.random()*CAR_COLORS.length)];
-    const type=CAR_TYPES[Math.floor(Math.random()*CAR_TYPES.length)];
-    const mesh=makeCar(cx,cz,col,neo,rot,type,false);
+function spawnParkedCars() {
+  parkedCars.forEach(p => scene.remove(p.mesh));
+  parkedCars.length = 0;
+  for (let i = 0; i < 30; i++) {
+    const gi = Math.floor(Math.random()*GRID) - GRID/2;
+    const gj = Math.floor(Math.random()*GRID) - GRID/2;
+    const horizontal = Math.random() < .5;
+    let cx, cz, rot;
+    if (horizontal) { cx=gi*STEP+STEP/2; cz=gj*STEP+ROAD/2-1.2; rot=Math.PI/2; }
+    else            { cx=gi*STEP+ROAD/2-1.2; cz=gj*STEP+STEP/2; rot=0; }
+    const [col,neo] = CAR_COLORS[Math.floor(Math.random()*CAR_COLORS.length)];
+    const type = CAR_TYPES[Math.floor(Math.random()*CAR_TYPES.length)];
+    const mesh = makeCar(cx, cz, col, neo, rot, type, false);
     parkedCars.push({mesh,x:cx,z:cz,stolen:false,color:col,neon:neo,type});
   }
 }
 spawnParkedCars();
 
 // ══════════════════════════════════════════════════════════════
-//  SPAWN TRAFFIC  (road-following NPC + police)
+//  SPAWN TRAFFIC
 // ══════════════════════════════════════════════════════════════
-function spawnTraffic(){
-  trafficList.forEach(t=>scene.remove(t.mesh));
-  trafficList.length=0;
-  for(let i=0;i<28;i++){
-    const isPolice=i<3;
-    // Start at random intersection
-    const gx=(Math.floor(Math.random()*GRID)-GRID/2)*STEP;
-    const gz=(Math.floor(Math.random()*GRID)-GRID/2)*STEP;
-    const dir=pickDir(null);
-    const col=isPolice?0x001144:0x111133;
-    const neo=isPolice?0x4444ff:0xff4400;
-    const spd=isPolice?.06:(.025+Math.random()*.03);
-    const type=isPolice?CAR_TYPES[0]:CAR_TYPES[Math.floor(Math.random()*CAR_TYPES.length)];
-    const mesh=makeCar(gx,gz,col,neo,dir.angle,type,isPolice);
-    const t={mesh,x:gx,z:gz,isPolice,dir,speed:spd,
-             stuckTimer:0,
-             nextIX:gx,nextIZ:gz,
-             laneOff:ROAD/4*(Math.random()<.5?1:-1)};
-    snapToRoad(t);
-    mesh.position.set(t.x,0,t.z);
-    mesh.rotation.y=dir.angle;
+function spawnTraffic() {
+  trafficList.forEach(t => scene.remove(t.mesh));
+  trafficList.length = 0;
+  for (let i = 0; i < 28; i++) {
+    const isPol = i < 3;
+    const gx = (Math.floor(Math.random()*GRID)-GRID/2)*STEP;
+    const gz = (Math.floor(Math.random()*GRID)-GRID/2)*STEP;
+    const dir = pickDir(null);
+    const col = isPol?0x001144:0x111133;
+    const neo = isPol?0x4444ff:0xff4400;
+    const spd = isPol?.06:(.025+Math.random()*.03);
+    const type = isPol?CAR_TYPES[0]:CAR_TYPES[Math.floor(Math.random()*CAR_TYPES.length)];
+    const mesh = makeCar(gx, gz, col, neo, dir.angle, type, isPol);
+    const t = {mesh,x:gx,z:gz,isPolice:isPol,dir,speed:spd,stuckTimer:0,laneOff:ROAD/4*(Math.random()<.5?1:-1)};
+    mesh.position.set(t.x,0,t.z); mesh.rotation.y=dir.angle;
     trafficList.push(t);
   }
 }
@@ -575,57 +521,91 @@ spawnTraffic();
 // ══════════════════════════════════════════════════════════════
 //  AVATAR
 // ══════════════════════════════════════════════════════════════
-const avatarGroup=new THREE.Group();
-const avBody=new THREE.Mesh(new THREE.BoxGeometry(.5,.8,.3),mat(0x002244,0x00ffff,.6));
-avBody.position.y=.75; avatarGroup.add(avBody);
-const avHead=new THREE.Mesh(new THREE.BoxGeometry(.35,.35,.35),mat(0x001133,0x00ffff,.8));
-avHead.position.y=1.35; avatarGroup.add(avHead);
-[-0.13,.13].forEach(ox=>{
-  const leg=new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.18),mat(0x001122,0x0088ff,.4));
+const avatarGroup = new THREE.Group();
+const avBody = new THREE.Mesh(new THREE.BoxGeometry(.5,.8,.3), mat(0x002244,0x00ffff,.6));
+avBody.position.y = .75; avatarGroup.add(avBody);
+const avHead = new THREE.Mesh(new THREE.BoxGeometry(.35,.35,.35), mat(0x001133,0x00ffff,.8));
+avHead.position.y = 1.35; avatarGroup.add(avHead);
+[-0.13,.13].forEach(ox => {
+  const leg = new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.18), mat(0x001122,0x0088ff,.4));
   leg.position.set(ox,.25,0); avatarGroup.add(leg);
 });
 scene.add(avatarGroup);
 
 // ══════════════════════════════════════════════════════════════
-//  SYNTHWAVE MUSIC
+//  GAME STATE
 // ══════════════════════════════════════════════════════════════
-let audioCtx=null;
-function initAudio(){
-  if(audioCtx) return;
-  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  if(audioCtx.state==='suspended') audioCtx.resume();
-  startSynthwave();
+let state='title', score=0;
+let playerCar=null, playerType=CAR_TYPES[0];
+let carSpeed=0, carAngle=0, lateralVel=0;
+let enterTimer=0;
+let footPos=new THREE.Vector3(), footAngle=0, footSpeed=0;
+let knockVX=0, knockVZ=0, knockTimer=0;
+let nitro=1, nitroCooldown=0, nitroActive=false;
+let lastTap=0;
+
+// Input
+let pointerDown=false, pointerStartX=0, dragDelta=0;
+
+function onPD(e) {
+  pointerDown=true;
+  pointerStartX=e.touches?e.touches[0].clientX:e.clientX;
+  dragDelta=0;
+  // Double-tap nitro
+  const now=Date.now();
+  if(now-lastTap<280&&nitro>.1&&nitroCooldown<=0) nitroActive=true;
+  lastTap=now;
 }
-function startSynthwave(){
-  const master=audioCtx.createGain(); master.gain.value=.28;
-  const comp=audioCtx.createDynamicsCompressor();
-  master.connect(comp); comp.connect(audioCtx.destination);
-  const BPM=120,BAR=60/BPM*4;
-  const CHORDS=[[220,277.2,330],[174.6,220,261.6],[261.6,329.6,392],[196,246.9,293.7]];
-  const ARP=[220,261.6,330,392,440,392,330,261.6];
-  function bass(f,w,d){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(f/2,w);g.gain.setValueAtTime(0,w);g.gain.linearRampToValueAtTime(.5,w+.02);g.gain.exponentialRampToValueAtTime(.001,w+d*.8);o.connect(g);g.connect(master);o.start(w);o.stop(w+d);}
-  function pad(fs,w,d){fs.forEach(f=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.value=f;o.detune.value=(Math.random()-.5)*12;g.gain.setValueAtTime(0,w);g.gain.linearRampToValueAtTime(.07,w+.3);g.gain.linearRampToValueAtTime(0,w+d);o.connect(g);g.connect(master);o.start(w);o.stop(w+d+.1);});}
-  function arp(w,bd){const s=bd/ARP.length;ARP.forEach((f,i)=>{const t=w+i*s,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='square';o.frequency.value=f*2;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.05,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+s*.8);o.connect(g);g.connect(master);o.start(t);o.stop(t+s);});}
-  function kick(w){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.setValueAtTime(150,w);o.frequency.exponentialRampToValueAtTime(40,w+.12);g.gain.setValueAtTime(.8,w);g.gain.exponentialRampToValueAtTime(.001,w+.18);o.connect(g);g.connect(master);o.start(w);o.stop(w+.2);}
-  function hat(w){const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*.04,audioCtx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;const s=audioCtx.createBufferSource(),f=audioCtx.createBiquadFilter(),g=audioCtx.createGain();s.buffer=buf;f.type='highpass';f.frequency.value=9000;g.gain.setValueAtTime(.2,w);g.gain.exponentialRampToValueAtTime(.001,w+.04);s.connect(f);f.connect(g);g.connect(master);s.start(w);}
-  let bar=0;
-  function sched(){const now=audioCtx.currentTime+.1,ch=CHORDS[bar%4],bt=BAR/4;pad(ch,now,BAR);bass(ch[0],now,bt*1.5);bass(ch[0],now+bt*2,bt*1.5);if(bar%2===1)arp(now,BAR);[0,1,2,3].forEach(b=>{kick(now+b*bt);hat(now+b*bt+bt/2);});bar++;}
-  sched(); setInterval(sched,BAR*1000-30);
+function onPM(e) {
+  if(!pointerDown) return;
+  const x=e.touches?e.touches[0].clientX:e.clientX;
+  dragDelta=Math.max(-1,Math.min(1,(x-pointerStartX)/(innerWidth*.28)));
+}
+function onPU() { pointerDown=false; dragDelta=0; }
+
+renderer.domElement.addEventListener('mousedown',  onPD);
+renderer.domElement.addEventListener('mousemove',  onPM);
+renderer.domElement.addEventListener('mouseup',    onPU);
+renderer.domElement.addEventListener('touchstart', onPD,{passive:true});
+renderer.domElement.addEventListener('touchmove',  onPM,{passive:true});
+renderer.domElement.addEventListener('touchend',   onPU);
+
+// ── UI refs ──
+const scoreValEl    = document.getElementById('score-val');
+const stateLabelEl  = document.getElementById('state-label');
+const speedBarEl    = document.getElementById('speed-bar');
+const finalScoreEl  = document.getElementById('final-score');
+const flashEl       = document.getElementById('flash');
+const carBadgeEl    = document.getElementById('car-badge');
+const policeAlertEl = document.getElementById('police-alert');
+const mmCanvas      = document.getElementById('minimap');
+const mmCtx         = mmCanvas.getContext('2d');
+const MM            = 200; // minimap size px
+
+function doFlash(col='#0ff') {
+  flashEl.style.background=col; flashEl.style.opacity='.8';
+  setTimeout(()=>{ if(!nitroActive) flashEl.style.opacity='0'; },200);
 }
 
+document.getElementById('start-btn').onclick = () => {
+  document.getElementById('title-screen').style.display='none'; startGame();
+};
+document.getElementById('restart-btn').onclick = () => {
+  document.getElementById('gameover-screen').style.display='none'; startGame();
+};
+
 // ══════════════════════════════════════════════════════════════
-//  DAY / NIGHT CYCLE
+//  DAY / NIGHT
 // ══════════════════════════════════════════════════════════════
-let dayPhase=.8;
-function updateDayNight(dt){
-  dayPhase=(dayPhase+dt/120)%1;
-  const sinP=Math.sin(dayPhase*Math.PI*2), t=(sinP+1)/2;
-  const isNight=t<.35;
+let dayPhase = 0.8;
+function updateDayNight(dt) {
+  dayPhase = (dayPhase + dt/120) % 1;
+  const sinP = Math.sin(dayPhase*Math.PI*2), t=(sinP+1)/2;
+  const isNight = t<.35;
   scene.background.setHex(isNight?0x000008:0x050510);
   scene.fog.color.setHex(isNight?0x000008:0x050510);
   scene.fog.near=isNight?50:80; scene.fog.far=isNight?160:240;
-  sunLight.intensity=.2+t*.8;
-  ambientLight.intensity=.8+t*1.5;
+  sunLight.intensity=.2+t*.8; ambientLight.intensity=.8+t*1.5;
   streetLights.forEach(sl=>{ sl.light.intensity=isNight?.8:0; });
   garageLight.intensity=2.5+Math.sin(Date.now()*.003)*.5;
   buildingMeshes.forEach(b=>{ b.mesh.material.emissiveIntensity=isNight?.28:.08; });
@@ -637,87 +617,21 @@ function updateDayNight(dt){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  NITRO
+//  NITRO UPDATE
 // ══════════════════════════════════════════════════════════════
-let nitro=1,nitroCooldown=0,nitroActive=false;
-let lastTap=0;
-function checkDoubleTap(){
-  const now=Date.now();
-  if(now-lastTap<280&&nitro>.1&&nitroCooldown<=0) nitroActive=true;
-  lastTap=now;
-}
-renderer.domElement.addEventListener('mousedown',checkDoubleTap);
-renderer.domElement.addEventListener('touchstart',checkDoubleTap,{passive:true});
-
-function updateNitro(dt){
+function updateNitro(dt) {
   if(nitroActive){ nitro-=.025; if(nitro<=0){nitro=0;nitroActive=false;nitroCooldown=3;} }
   else { if(nitroCooldown>0) nitroCooldown-=dt; else nitro=Math.min(1,nitro+.004); }
   if(nitroActive&&state==='driving'){
     flashEl.style.background='rgba(255,0,255,0.10)'; flashEl.style.opacity='1';
-  } else if(!nitroActive){ flashEl.style.opacity='0'; }
+  } else if(!nitroActive&&flashEl.style.opacity==='1'){ flashEl.style.opacity='0'; }
   document.getElementById('nitro-bar').style.width=(nitro*100)+'%';
 }
 
 // ══════════════════════════════════════════════════════════════
-//  GAME STATE
+//  START / RESTART
 // ══════════════════════════════════════════════════════════════
-let state='title',score=0;
-let playerCar=null,playerType=CAR_TYPES[0];
-let carSpeed=0,carAngle=0,lateralVel=0;
-let enterTimer=0;
-let footPos=new THREE.Vector3(),footAngle=0,footSpeed=0;
-// Knockback when police rams player
-let knockVX=0,knockVZ=0,knockTimer=0;
-
-// Input
-let pointerDown=false,pointerStartX=0,dragDelta=0;
-
-function onPD(e){
-  pointerDown=true;
-  pointerStartX=e.touches?e.touches[0].clientX:e.clientX;
-  dragDelta=0; initAudio();
-}
-function onPM(e){
-  if(!pointerDown) return;
-  const x=e.touches?e.touches[0].clientX:e.clientX;
-  dragDelta=Math.max(-1,Math.min(1,(x-pointerStartX)/(innerWidth*.28)));
-}
-function onPU(){ pointerDown=false; dragDelta=0; }
-renderer.domElement.addEventListener('mousedown', onPD);
-renderer.domElement.addEventListener('mousemove', onPM);
-renderer.domElement.addEventListener('mouseup',   onPU);
-renderer.domElement.addEventListener('touchstart',onPD,{passive:true});
-renderer.domElement.addEventListener('touchmove', onPM,{passive:true});
-renderer.domElement.addEventListener('touchend',  onPU);
-
-// ── UI refs ──
-const scoreValEl   =document.getElementById('score-val');
-const stateLabelEl =document.getElementById('state-label');
-const speedBarEl   =document.getElementById('speed-bar');
-const finalScoreEl =document.getElementById('final-score');
-const flashEl      =document.getElementById('flash');
-const carBadgeEl   =document.getElementById('car-badge');
-const policeAlertEl=document.getElementById('police-alert');
-const mmCanvas     =document.getElementById('minimap');
-const mmCtx        =mmCanvas.getContext('2d');
-const MM           =160;
-
-function doFlash(col='#0ff'){
-  flashEl.style.background=col; flashEl.style.opacity='.8';
-  setTimeout(()=>{ if(!nitroActive) flashEl.style.opacity='0'; },200);
-}
-
-document.getElementById('start-btn').onclick=()=>{
-  document.getElementById('title-screen').style.display='none'; startGame();
-};
-document.getElementById('restart-btn').onclick=()=>{
-  document.getElementById('gameover-screen').style.display='none'; startGame();
-};
-
-// ══════════════════════════════════════════════════════════════
-//  START
-// ══════════════════════════════════════════════════════════════
-function startGame(){
+function startGame() {
   score=0; scoreValEl.textContent='0';
   state='foot'; footPos.set(0,0,0); footAngle=0;
   carSpeed=0; lateralVel=0; dragDelta=0; knockVX=0; knockVZ=0; knockTimer=0;
@@ -726,33 +640,28 @@ function startGame(){
   stateLabelEl.textContent='ON FOOT // FIND A CAR';
   carBadgeEl.style.opacity='0';
   avatarGroup.visible=true;
-  initAudio();
 }
 
 // ══════════════════════════════════════════════════════════════
-//  COLLISION RESOLUTION (AABB push-out)
+//  COLLISION HELPERS
 // ══════════════════════════════════════════════════════════════
-function resolveBox(px,pz,phw,phd,bx,bz,bhw,bhd){
-  const dx=px-bx,dz=pz-bz;
+function resolveBox(px,pz,phw,phd,bx,bz,bhw,bhd) {
+  const dx=px-bx, dz=pz-bz;
   const ox=phw+bhw-Math.abs(dx), oz=phd+bhd-Math.abs(dz);
   if(ox<=0||oz<=0) return null;
   return ox<oz?{nx:Math.sign(dx)*ox,nz:0}:{nx:0,nz:Math.sign(dz)*oz};
 }
-
-// Move foot, pushing out of buildings
-function moveFoot(dx,dz){
+function moveFoot(dx,dz) {
   footPos.x+=dx; footPos.z+=dz;
   for(const b of buildingBoxes){
     const r=resolveBox(footPos.x,footPos.z,.35,.35,b.x,b.z,b.hw,b.hd);
     if(r){footPos.x+=r.nx;footPos.z+=r.nz;}
   }
 }
-
-// Move player car, push out of buildings and parked/traffic cars. Return true=fatal crash
-function moveCar(dx,dz){
+function moveCar(dx,dz) {
   if(!playerCar) return false;
   playerCar.position.x+=dx; playerCar.position.z+=dz;
-  const CHW=1.15,CHD=2.3; let fatal=false;
+  const CHW=1.15, CHD=2.3; let fatal=false;
   for(const b of buildingBoxes){
     const r=resolveBox(playerCar.position.x,playerCar.position.z,CHW,CHD,b.x,b.z,b.hw,b.hd);
     if(r){ playerCar.position.x+=r.nx; playerCar.position.z+=r.nz;
@@ -766,9 +675,7 @@ function moveCar(dx,dz){
   }
   return fatal;
 }
-
-// Move NPC car, push out of buildings (no fatal)
-function moveNPC(t,dx,dz){
+function moveNPC(t,dx,dz) {
   t.x+=dx; t.z+=dz;
   for(const b of buildingBoxes){
     const r=resolveBox(t.x,t.z,1.15,2.35,b.x,b.z,b.hw,b.hd);
@@ -777,63 +684,39 @@ function moveNPC(t,dx,dz){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  TRAFFIC AI  — road-following with waypoint turns
+//  TRAFFIC AI
 // ══════════════════════════════════════════════════════════════
-let policeChasing=false;
-
-function updateTraffic(dt){
-  policeChasing=false;
-  const blinkBlue=Math.sin(Date.now()*.025)>0;
-  const blinkRed =!blinkBlue;
+let policeChasing = false;
+function updateTraffic(dt) {
+  policeChasing = false;
+  const blinkBlue = Math.sin(Date.now()*.025)>0;
 
   for(const t of trafficList){
-    const chasing=t.isPolice&&playerCar&&state==='driving';
+    const chasing = t.isPolice&&playerCar&&state==='driving';
     if(chasing) policeChasing=true;
 
-    // Police chases player directly when close, otherwise uses road
-    if(chasing&&playerCar){
+    if(chasing){
       const pdx=playerCar.position.x-t.x, pdz=playerCar.position.z-t.z;
       const ang=Math.atan2(pdx,pdz);
       t.dir={dx:Math.sin(ang),dz:Math.cos(ang),angle:ang};
       t.mesh.rotation.y=ang;
-      const spd=t.speed*3.5;
-      moveNPC(t,t.dir.dx*spd,t.dir.dz*spd);
-
-      // Police knockback: if police hits player car
+      moveNPC(t,t.dir.dx*t.speed*3.5,t.dir.dz*t.speed*3.5);
+      // Knockback check
       if(playerCar){
         const pr=resolveBox(playerCar.position.x,playerCar.position.z,1.15,2.3,t.x,t.z,1.15,2.3);
-        if(pr&&carSpeed<.3){
-          // Knockback: push player in direction police was heading
-          knockVX=t.dir.dx*.35; knockVZ=t.dir.dz*.35;
-          knockTimer=.5; // seconds of knockback
-          t.stuckTimer=60; // police pauses after hit
-        }
+        if(pr&&carSpeed<.3){ knockVX=t.dir.dx*.35; knockVZ=t.dir.dz*.35; knockTimer=.5; t.stuckTimer=60; }
       }
     } else {
-      // Normal road-following: move toward next intersection
-      const targetX=Math.round(t.x/STEP)*STEP+(Math.abs(t.dir.dx)<.5?t.laneOff:0);
-      const targetZ=Math.round(t.z/STEP)*STEP+(Math.abs(t.dir.dz)<.5?t.laneOff:0);
-
-      if(t.stuckTimer>0){
-        t.stuckTimer--; // paused after hit or building avoidance
-      } else {
-        const spd=t.speed;
-        moveNPC(t,t.dir.dx*spd,t.dir.dz*spd);
-
-        // Check if reached waypoint (intersection), then turn
+      if(t.stuckTimer>0){ t.stuckTimer--; }
+      else {
+        moveNPC(t,t.dir.dx*t.speed,t.dir.dz*t.speed);
         const distToNext=Math.hypot(t.x-Math.round(t.x/STEP)*STEP, t.z-Math.round(t.z/STEP)*STEP);
         if(distToNext<ROAD*.35){
-          // At intersection — pick new direction (no u-turn)
-          const newDir=pickDir(t.dir);
-          t.dir=newDir;
-          t.mesh.rotation.y=newDir.angle;
-          // Update lane offset for new direction
+          const nd=pickDir(t.dir); t.dir=nd; t.mesh.rotation.y=nd.angle;
           t.laneOff=ROAD/4*(Math.random()<.5?1:-1);
         }
       }
     }
-
-    // Wrap city
     if(t.x> CITY_HALF) t.x=-CITY_HALF;
     if(t.x<-CITY_HALF) t.x= CITY_HALF;
     if(t.z> CITY_HALF) t.z=-CITY_HALF;
@@ -843,39 +726,33 @@ function updateTraffic(dt){
     // Police light blink
     if(t.isPolice&&t.mesh.userData.lightBlue){
       t.mesh.userData.lightBlue.material.color.setHex(blinkBlue?0x0066ff:0x001133);
-      t.mesh.userData.lightBlue.material.emissive?.setHex(blinkBlue?0x0044ff:0x000011);
-      t.mesh.userData.lightRed.material.color.setHex(blinkRed?0xff2200:0x330800);
+      t.mesh.userData.lightRed.material.color.setHex(!blinkBlue?0xff2200:0x330800);
     }
   }
-
   policeAlertEl.style.opacity=(policeChasing&&state==='driving')?'1':'0';
 }
 
 // ══════════════════════════════════════════════════════════════
 //  ON-FOOT UPDATE
 // ══════════════════════════════════════════════════════════════
-const camTarget=new THREE.Vector3();
+const camTarget = new THREE.Vector3();
 
-function updateFoot(dt){
+function updateFoot(dt) {
   footSpeed=pointerDown?FOOT_RUN:FOOT_WALK;
   footAngle-=dragDelta*.033;
-  moveFoot(Math.sin(footAngle)*footSpeed,Math.cos(footAngle)*footSpeed);
-
+  moveFoot(Math.sin(footAngle)*footSpeed, Math.cos(footAngle)*footSpeed);
   avatarGroup.position.copy(footPos);
   avatarGroup.rotation.y=footAngle;
   const t2=Date.now()*.007;
   avatarGroup.children[2].position.z= Math.sin(t2)*.12;
   avatarGroup.children[3].position.z=-Math.sin(t2)*.12;
-
-  // Enter nearest parked car within range
-  let nearest=null,nearDist=3.5;
+  let nearest=null, nearDist=3.5;
   for(const p of parkedCars){
     if(p.stolen) continue;
     const d=Math.hypot(footPos.x-p.x,footPos.z-p.z);
     if(d<nearDist){nearDist=d;nearest=p;}
   }
   if(nearest){ beginEntering(nearest); return; }
-
   camTarget.set(footPos.x-Math.sin(footAngle)*9,6.5,footPos.z-Math.cos(footAngle)*9);
   camera.position.lerp(camTarget,.08);
   camera.lookAt(footPos.x,1,footPos.z);
@@ -885,17 +762,15 @@ function updateFoot(dt){
 // ══════════════════════════════════════════════════════════════
 //  ENTERING ANIMATION
 // ══════════════════════════════════════════════════════════════
-function beginEntering(p){
+function beginEntering(p) {
   state='entering'; enterTimer=0;
   p.stolen=true; playerCar=p.mesh; playerType=p.type;
-  carAngle=p.mesh.rotation.y;
-  avatarGroup.visible=false;
+  carAngle=p.mesh.rotation.y; avatarGroup.visible=false;
   stateLabelEl.textContent=`// JACKING ${p.type.name}...`;
   carBadgeEl.textContent=`[ ${p.type.name} ]`; carBadgeEl.style.opacity='1';
   doFlash('#00ffff');
 }
-
-function updateEntering(){
+function updateEntering() {
   enterTimer+=.016;
   if(playerCar) playerCar.position.y=.1*Math.sin(enterTimer*38);
   if(enterTimer>1.0){
@@ -912,69 +787,47 @@ function updateEntering(){
 }
 
 // ══════════════════════════════════════════════════════════════
-//  DRIVING UPDATE  — smooth brake, per-type physics, knockback
+//  DRIVING UPDATE
 // ══════════════════════════════════════════════════════════════
-// Smooth brake: target speed lerped down on hold
-let brakeTarget=0;
-
-function updateDriving(dt){
+function updateDriving(dt) {
   if(!playerCar) return;
   const{maxSpd,accel,brake,steer,drift,nitroMult}=playerType;
   const effectiveMax=nitroActive?maxSpd*nitroMult:maxSpd;
 
-  // Knockback from police hit
-  if(knockTimer>0){
-    knockTimer-=dt;
-    playerCar.position.x+=knockVX;
-    playerCar.position.z+=knockVZ;
-    knockVX*=.88; knockVZ*=.88; // friction
-  }
+  // Police knockback
+  if(knockTimer>0){ knockTimer-=dt; playerCar.position.x+=knockVX; playerCar.position.z+=knockVZ; knockVX*=.88; knockVZ*=.88; }
 
-  // Smooth acceleration / brake
-  if(pointerDown){
-    // Smooth brake: interpolate carSpeed toward minimum (0.02)
-    // Speed of braking = brake constant per frame, feels progressive
-    brakeTarget=.02;
-    carSpeed+=(brakeTarget-carSpeed)*Math.min(1,brake*2.2*dt*60);
-  } else {
-    // Accelerate
-    carSpeed+=accel;
-  }
+  // Smooth brake / accelerate
+  if(pointerDown){ carSpeed+=(0.02-carSpeed)*Math.min(1,brake*2.2*dt*60); }
+  else { carSpeed+=accel; }
   const nitroBoost=nitroActive?.018:0;
-  carSpeed=Math.max(.02,Math.min(effectiveMax+nitroBoost,carSpeed));
-  carSpeed-=.001; // natural decel
+  carSpeed=Math.max(.02, Math.min(effectiveMax+nitroBoost, carSpeed));
+  carSpeed-=.001;
 
-  // Steering
   const ratio=carSpeed/effectiveMax;
   carAngle-=dragDelta*steer*(.3+.7*ratio);
-
-  const fwdX=Math.sin(carAngle),fwdZ=Math.cos(carAngle);
+  const fwdX=Math.sin(carAngle), fwdZ=Math.cos(carAngle);
   lateralVel=lateralVel*drift+(-dragDelta*carSpeed*.3)*(1-drift);
   const moveX=fwdX*(carSpeed+nitroBoost)+Math.cos(carAngle)*lateralVel;
   const moveZ=fwdZ*(carSpeed+nitroBoost)-Math.sin(carAngle)*lateralVel;
 
   const fatal=moveCar(moveX,moveZ);
   if(fatal){ triggerGameOver(); return; }
-
   playerCar.rotation.y=carAngle;
-  // Wheel spin
   playerCar.children.slice(2,6).forEach(w=>{ w.rotation.x+=carSpeed*10; });
 
-  // Garage delivery
   if(playerCar.position.distanceTo(garagePos)<8){ deliverCar(); return; }
 
-  // Camera
   camTarget.set(playerCar.position.x-fwdX*13,8,playerCar.position.z-fwdZ*13);
   camera.position.lerp(camTarget,.07);
   camera.lookAt(playerCar.position.x,1,playerCar.position.z);
-
   speedBarEl.style.width=(carSpeed/effectiveMax*100)+'%';
 }
 
 // ══════════════════════════════════════════════════════════════
 //  DELIVER / GAME OVER
 // ══════════════════════════════════════════════════════════════
-function deliverCar(){
+function deliverCar() {
   score++; scoreValEl.textContent=score; doFlash('#00ff88');
   if(playerCar){playerCar.visible=false;playerCar=null;}
   state='foot'; footPos.set(garagePos.x+12,0,garagePos.z);
@@ -984,126 +837,215 @@ function deliverCar(){
   nitro=1; nitroCooldown=0; knockTimer=0;
   spawnParkedCars();
 }
-
-function triggerGameOver(){
+function triggerGameOver() {
   state='gameover'; finalScoreEl.textContent=score;
   document.getElementById('gameover-screen').style.display='flex';
   doFlash('#ff0000'); avatarGroup.visible=false;
 }
 
 // ══════════════════════════════════════════════════════════════
-//  MINIMAP  — bottom-left, bigger player arrow with correct rotation
+//  MINIMAP — bottom-left, 200×200px
+//
+//  LAYOUT:
+//   • Dark background + road grid (exact roads shown)
+//   • Buildings as dark grey filled rectangles
+//   • Parked cars  — small cyan squares
+//   • NPC traffic  — small orange squares
+//   • Police       — pulsing blue circles
+//   • Player       — large yellow arrow, rotates to show actual heading
+//   • Garage       — bright pulsing green square with "G" label
+//   • Garage compass ring — outer circle with green tick pointing to garage
+//   • Garage direction arrow — at minimap edge when garage off-screen
 // ══════════════════════════════════════════════════════════════
-const MM_SCALE=MM/(GRID*STEP);
-function w2m(wx,wz){ return{mx:(wx+CITY_HALF)*MM_SCALE, my:(wz+CITY_HALF)*MM_SCALE}; }
+const MM_SCALE = MM / (GRID * STEP); // world units → pixels
+function w2m(wx, wz) {
+  return { mx:(wx+CITY_HALF)*MM_SCALE, my:(wz+CITY_HALF)*MM_SCALE };
+}
 
-function drawMinimap(){
+function drawMinimap() {
+  const pulse = .5 + .5*Math.sin(Date.now()*.014);
   mmCtx.clearRect(0,0,MM,MM);
-  mmCtx.fillStyle='rgba(2,2,18,0.95)'; mmCtx.fillRect(0,0,MM,MM);
 
-  // Road grid (draw road strips)
-  mmCtx.fillStyle='#0d1a30';
-  for(let g=-GRID/2;g<=GRID/2;g++){
+  // ── Background ──
+  mmCtx.fillStyle='rgba(3,4,22,0.97)'; mmCtx.fillRect(0,0,MM,MM);
+
+  // ── Road strips (darker asphalt lanes) ──
+  const rw = ROAD * MM_SCALE;
+  mmCtx.fillStyle='#0d1630';
+  for(let g=-GRID/2; g<=GRID/2; g++){
     const p=(g*STEP+CITY_HALF)*MM_SCALE;
-    const rw=ROAD*MM_SCALE;
-    mmCtx.fillRect(0,p-rw/2,MM,rw);
-    mmCtx.fillRect(p-rw/2,0,rw,MM);
-  }
-  // Road centre lines (yellow)
-  mmCtx.strokeStyle='#886600'; mmCtx.lineWidth=.6;
-  for(let g=-GRID/2;g<=GRID/2;g++){
-    const p=(g*STEP+CITY_HALF)*MM_SCALE;
-    mmCtx.beginPath();mmCtx.moveTo(0,p);mmCtx.lineTo(MM,p);mmCtx.stroke();
-    mmCtx.beginPath();mmCtx.moveTo(p,0);mmCtx.lineTo(p,MM);mmCtx.stroke();
+    mmCtx.fillRect(0, p-rw/2, MM, rw);   // horizontal road
+    mmCtx.fillRect(p-rw/2, 0, rw, MM);   // vertical road
   }
 
-  // Parked cars
-  mmCtx.fillStyle='#00ffff99';
-  parkedCars.forEach(p=>{ if(p.stolen)return; const{mx,my}=w2m(p.x,p.z); mmCtx.fillRect(mx-1.5,my-1.5,3,3); });
+  // ── Yellow centre dividing lines ──
+  mmCtx.strokeStyle='rgba(180,140,0,0.5)'; mmCtx.lineWidth=.5;
+  for(let g=-GRID/2; g<=GRID/2; g++){
+    const p=(g*STEP+CITY_HALF)*MM_SCALE;
+    mmCtx.beginPath(); mmCtx.moveTo(0,p); mmCtx.lineTo(MM,p); mmCtx.stroke();
+    mmCtx.beginPath(); mmCtx.moveTo(p,0); mmCtx.lineTo(p,MM); mmCtx.stroke();
+  }
 
-  // Traffic
-  mmCtx.fillStyle='#ff660077';
-  trafficList.forEach(t=>{ if(t.isPolice)return; const{mx,my}=w2m(t.x,t.z); mmCtx.fillRect(mx-1.5,my-1.5,3,3); });
+  // ── Buildings — grey filled squares ──
+  mmCtx.fillStyle='rgba(30,35,60,0.9)';
+  mmCtx.strokeStyle='rgba(0,80,150,0.4)'; mmCtx.lineWidth=.5;
+  for(const b of buildingBoxes){
+    const{mx,my}=w2m(b.x,b.z);
+    const bw=b.hw*2*MM_SCALE, bd=b.hd*2*MM_SCALE;
+    mmCtx.fillRect(mx-bw/2, my-bd/2, bw, bd);
+    mmCtx.strokeRect(mx-bw/2, my-bd/2, bw, bd);
+  }
 
-  // Police — pulsing blue
-  const pulse=.5+.5*Math.sin(Date.now()*.014);
-  mmCtx.fillStyle=`rgba(60,100,255,${.5+pulse*.5})`;
-  trafficList.forEach(t=>{ if(!t.isPolice)return; const{mx,my}=w2m(t.x,t.z); mmCtx.beginPath();mmCtx.arc(mx,my,3.5,0,Math.PI*2);mmCtx.fill(); });
-
-  // Garage pulsing
+  // ── Garage ──
   const{mx:gx,my:gy}=w2m(garagePos.x,garagePos.z);
-  mmCtx.fillStyle=`rgba(0,255,136,${.55+pulse*.45})`;
-  mmCtx.fillRect(gx-5,gy-5,10,10);
-  mmCtx.strokeStyle='#00ff88'; mmCtx.lineWidth=1.5; mmCtx.strokeRect(gx-5,gy-5,10,10);
+  const gBright=.55+pulse*.45;
+  mmCtx.fillStyle=`rgba(0,255,136,${gBright})`;
+  mmCtx.fillRect(gx-6, gy-7, 12, 14);
+  mmCtx.strokeStyle='#00ff88'; mmCtx.lineWidth=1.5;
+  mmCtx.strokeRect(gx-6, gy-7, 12, 14);
+  // "G" label on garage
+  mmCtx.fillStyle='#001a0a'; mmCtx.font='bold 8px monospace'; mmCtx.textAlign='center'; mmCtx.textBaseline='middle';
+  mmCtx.fillText('G', gx, gy);
 
-  // Player — big rotated arrow
-  const p3x=playerCar?playerCar.position.x:footPos.x;
-  const p3z=playerCar?playerCar.position.z:footPos.z;
-  // Rotation: Three.js Y rotation maps to minimap angle
-  // carAngle=0 means facing +Z (down on minimap), so minimap angle = carAngle
-  const pAng=state==='driving'?carAngle:footAngle;
+  // ── Parked cars — cyan squares ──
+  mmCtx.fillStyle='rgba(0,255,255,0.7)';
+  for(const p of parkedCars){
+    if(p.stolen) continue;
+    const{mx,my}=w2m(p.x,p.z);
+    mmCtx.fillRect(mx-2, my-2, 4, 4);
+  }
+
+  // ── NPC traffic — orange squares ──
+  mmCtx.fillStyle='rgba(255,100,0,0.6)';
+  for(const t of trafficList){
+    if(t.isPolice) continue;
+    const{mx,my}=w2m(t.x,t.z);
+    mmCtx.fillRect(mx-2, my-2, 4, 4);
+  }
+
+  // ── Police — blue pulsing circles ──
+  for(const t of trafficList){
+    if(!t.isPolice) continue;
+    const{mx,my}=w2m(t.x,t.z);
+    mmCtx.fillStyle=`rgba(60,100,255,${.5+pulse*.5})`;
+    mmCtx.beginPath(); mmCtx.arc(mx,my,4,0,Math.PI*2); mmCtx.fill();
+    // Police direction tick
+    mmCtx.strokeStyle='rgba(150,180,255,0.8)'; mmCtx.lineWidth=1;
+    mmCtx.beginPath(); mmCtx.moveTo(mx,my); mmCtx.lineTo(mx+t.dir.dx*6, my+t.dir.dz*6); mmCtx.stroke();
+  }
+
+  // ── Player position & heading ──
+  const p3x = playerCar?playerCar.position.x:footPos.x;
+  const p3z = playerCar?playerCar.position.z:footPos.z;
+  // Heading in world: carAngle/footAngle (Three.js Y rotation)
+  // carAngle=0 → facing +Z → on canvas that's downward (+y direction)
+  const heading = state==='driving'?carAngle:footAngle;
   const{mx:px,my:py}=w2m(p3x,p3z);
 
+  // ── Compass ring around player showing garage direction ──
+  const RING_R = 16; // radius of compass ring
+  // Angle from player to garage on minimap
+  const toGarageAngle = Math.atan2(gy-py, gx-px);
+
+  // Draw ring
+  mmCtx.strokeStyle='rgba(0,255,136,0.25)'; mmCtx.lineWidth=1;
+  mmCtx.beginPath(); mmCtx.arc(px,py,RING_R,0,Math.PI*2); mmCtx.stroke();
+
+  // Green tick on ring pointing to garage
+  const tickX = px + Math.cos(toGarageAngle)*RING_R;
+  const tickY = py + Math.sin(toGarageAngle)*RING_R;
+  mmCtx.fillStyle=`rgba(0,255,136,${.7+pulse*.3})`;
+  mmCtx.beginPath(); mmCtx.arc(tickX,tickY,2.5,0,Math.PI*2); mmCtx.fill();
+
+  // Thin line from player to ring tick (garage bearing line)
+  mmCtx.strokeStyle=`rgba(0,255,136,${.2+pulse*.15})`;
+  mmCtx.lineWidth=.7;
+  mmCtx.setLineDash([2,3]);
+  mmCtx.beginPath(); mmCtx.moveTo(px,py); mmCtx.lineTo(tickX,tickY); mmCtx.stroke();
+  mmCtx.setLineDash([]);
+
+  // Player arrow — large, with heading direction
   mmCtx.save();
-  mmCtx.translate(px,py);
-  mmCtx.rotate(pAng); // correct rotation matching world facing direction
-  // Bigger, cleaner arrow
-  const col=state==='driving'?'#ffff00':'#ffffff';
-  mmCtx.fillStyle=col;
-  mmCtx.strokeStyle='#00000088'; mmCtx.lineWidth=.8;
+  mmCtx.translate(px, py);
+  mmCtx.rotate(heading); // matches world rotation exactly
+  // Shadow/glow
+  mmCtx.shadowColor = state==='driving'?'#ffff00':'#ffffff';
+  mmCtx.shadowBlur = 6;
+  mmCtx.fillStyle = state==='driving'?'#ffff00':'#00ffff';
+  mmCtx.strokeStyle = 'rgba(0,0,0,0.5)'; mmCtx.lineWidth=1;
+  // Arrow shape: pointy front, wider back
   mmCtx.beginPath();
-  mmCtx.moveTo(0,-9);   // tip (forward)
-  mmCtx.lineTo(-5,5);   // back-left
-  mmCtx.lineTo(0,2);    // back indent
-  mmCtx.lineTo(5,5);    // back-right
+  mmCtx.moveTo( 0, -11);   // front tip
+  mmCtx.lineTo(-6,  6);    // back-left
+  mmCtx.lineTo( 0,  2);    // back notch
+  mmCtx.lineTo( 6,  6);    // back-right
   mmCtx.closePath();
   mmCtx.fill(); mmCtx.stroke();
-  // Centre dot
-  mmCtx.fillStyle='#fff';
-  mmCtx.beginPath(); mmCtx.arc(0,0,1.5,0,Math.PI*2); mmCtx.fill();
+  mmCtx.shadowBlur=0;
+  // Small centre dot
+  mmCtx.fillStyle='rgba(255,255,255,0.9)';
+  mmCtx.beginPath(); mmCtx.arc(0,0,1.8,0,Math.PI*2); mmCtx.fill();
   mmCtx.restore();
 
-  // Garage arrow at edge when off-screen
-  const dxG=gx-px,dyG=gy-py,distG=Math.hypot(dxG,dyG);
-  if(distG>22){
+  // ── Garage edge arrow when garage is off-screen / far away ──
+  const dxG=gx-px, dyG=gy-py, distG=Math.hypot(dxG,dyG);
+  if(distG > MM*0.35){ // only when garage is far from player dot
     const angG=Math.atan2(dyG,dxG);
-    const M=12,cosA=Math.cos(angG),sinA=Math.sin(angG);
+    const M=14, cosA=Math.cos(angG), sinA=Math.sin(angG);
     let tMin=Infinity;
-    if(cosA>.001) tMin=Math.min(tMin,(MM-M-px)/cosA);
+    if(cosA> .001) tMin=Math.min(tMin,(MM-M-px)/cosA);
     else if(cosA<-.001) tMin=Math.min(tMin,(M-px)/cosA);
-    if(sinA>.001) tMin=Math.min(tMin,(MM-M-py)/sinA);
+    if(sinA> .001) tMin=Math.min(tMin,(MM-M-py)/sinA);
     else if(sinA<-.001) tMin=Math.min(tMin,(M-py)/sinA);
     tMin=Math.max(0,tMin);
     const ax=Math.max(M,Math.min(MM-M,px+cosA*tMin));
     const ay=Math.max(M,Math.min(MM-M,py+sinA*tMin));
     mmCtx.save(); mmCtx.translate(ax,ay); mmCtx.rotate(angG);
-    mmCtx.fillStyle=`rgba(0,255,136,${.6+pulse*.4})`;
-    mmCtx.beginPath();mmCtx.moveTo(8,0);mmCtx.lineTo(-5,-5);mmCtx.lineTo(-3,0);mmCtx.lineTo(-5,5);mmCtx.closePath();mmCtx.fill();
+    mmCtx.shadowColor='#00ff88'; mmCtx.shadowBlur=8;
+    mmCtx.fillStyle=`rgba(0,255,136,${.65+pulse*.35})`;
+    mmCtx.beginPath();
+    mmCtx.moveTo(9,0); mmCtx.lineTo(-5,-5); mmCtx.lineTo(-3,0); mmCtx.lineTo(-5,5);
+    mmCtx.closePath(); mmCtx.fill();
+    mmCtx.shadowBlur=0;
     mmCtx.restore();
   }
 
-  // Border
-  mmCtx.strokeStyle='#00ffff33'; mmCtx.lineWidth=1; mmCtx.strokeRect(0,0,MM,MM);
+  // Distance to garage label
+  const worldDist = Math.hypot(p3x-garagePos.x, p3z-garagePos.z);
+  const distStr = Math.round(worldDist)+'m';
+  mmCtx.fillStyle='rgba(0,255,136,0.7)'; mmCtx.font='7px monospace';
+  mmCtx.textAlign='right'; mmCtx.textBaseline='bottom';
+  mmCtx.fillText('▶ GARAGE '+distStr, MM-4, MM-4);
+
+  // ── Outer border ──
+  mmCtx.strokeStyle='rgba(0,255,255,0.25)'; mmCtx.lineWidth=1;
+  mmCtx.strokeRect(0,0,MM,MM);
+  // Corner accents
+  const ca=8;
+  mmCtx.strokeStyle='rgba(0,255,255,0.6)'; mmCtx.lineWidth=1.5;
+  [[0,0],[MM,0],[0,MM],[MM,MM]].forEach(([cx2,cy2])=>{
+    const sx=cx2===0?1:-1, sy=cy2===0?1:-1;
+    mmCtx.beginPath(); mmCtx.moveTo(cx2+sx*ca,cy2); mmCtx.lineTo(cx2,cy2); mmCtx.lineTo(cx2,cy2+sy*ca); mmCtx.stroke();
+  });
 }
 
 // ══════════════════════════════════════════════════════════════
 //  TITLE ORBIT
 // ══════════════════════════════════════════════════════════════
 let titleT=0;
-function titleOrbit(){
+function titleOrbit() {
   titleT+=.0012;
-  camera.position.set(Math.sin(titleT)*45,20+Math.sin(titleT*.35)*6,Math.cos(titleT)*45);
+  camera.position.set(Math.sin(titleT)*45, 20+Math.sin(titleT*.35)*6, Math.cos(titleT)*45);
   camera.lookAt(0,0,0);
 }
 
 // ══════════════════════════════════════════════════════════════
 //  MAIN LOOP
 // ══════════════════════════════════════════════════════════════
-const clock=new THREE.Clock();
-
-function loop(){
+const clock = new THREE.Clock();
+function loop() {
   requestAnimationFrame(loop);
-  const dt=Math.min(clock.getDelta(),.05); // cap dt
+  const dt = Math.min(clock.getDelta(), .05);
 
   updateDayNight(dt);
 
