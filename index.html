@@ -363,18 +363,16 @@ body {
  position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
+  width: 100%;	 
   background-color: black;
   color: white;
   z-index:23;
   display: flex;
-  padding-bottom:45%; //odsazení patičky
+  padding-bottom:0%; //odsazení patičky
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align:center;
-  background-image: url('pozadi/Patička.jpg');
-  background-size:100%;
 }
 
 
@@ -673,82 +671,6 @@ body {
 
 
 
-
-<div class="hero-spacer">
-
-    <div id="výška_herního_okna">
-        <div class="top-vignette"></div>
-        <h3>Vyberte hru</h3>
-        <div id="game-menu"></div>
-
-        <div id="overlay">
-            <iframe id="game-frame" src=""></iframe>
-        </div>
-
-        <button id="back-btn" class="back-btn" onclick="zavritHru()" title="Návrat do menu" style="display: none;">✕</button>
-    </div>
-</div>
- <script>
-    const seznamHer = [
-        { id: 'index1', nazev: 'Vesmírná-mise' }, 
-        { id: 'index2', nazev: 'Vesmírná-mise2' },
-    ];
-
-    const hlavniDiv = document.getElementById('výška_herního_okna');
-    const menuContainer = document.getElementById('game-menu');
-    const overlay = document.getElementById('overlay');
-    const iframe = document.getElementById('game-frame');
-    const backBtn = document.getElementById('back-btn');
-
-    function prizpusobVysku() {
-        const vyskaRodice = hlavniDiv.offsetHeight;
-        const paddingTop = parseInt(window.getComputedStyle(overlay).paddingTop);
-        if (overlay.style.display === 'block') {
-            iframe.style.height = (vyskaRodice - paddingTop) + "px";
-        }
-    }
-
-    seznamHer.forEach(hra => {
-        const karta = document.createElement('div');
-        karta.className = 'game-card';
-        karta.innerHTML = `<h3>${hra.nazev}</h3><p>Spustit</p>`;
-        karta.onclick = () => spustitHru(hra.id);
-        menuContainer.appendChild(karta);
-    });
-
-    function spustitHru(id, autoScroll = true) {
-        iframe.src = `hry/${id}.html`; 
-        
-        overlay.style.display = 'block';
-        backBtn.style.display = 'flex';
-
-        document.getElementById('game-menu').style.visibility = 'hidden';
-        document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
-
-        prizpusobVysku();
-
-        if (autoScroll) {
-            const yOffset = -50; 
-            const y = hlavniDiv.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({top: y, behavior: 'smooth'});
-        }
-    }
-
-    function zavritHru() {
-        overlay.style.display = 'none';
-        backBtn.style.display = 'none';
-        iframe.src = '';
-        document.getElementById('game-menu').style.visibility = 'visible';
-        document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
-        hlavniDiv.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    window.addEventListener('load', () => {
-        spustitHru('index1', false); 
-    });
-
-    window.addEventListener('resize', prizpusobVysku);
-</script>
 
 
 
@@ -1050,6 +972,81 @@ window.addEventListener("resize", adjustFontSizes);
 
 
 
+<div class="hero-spacer">
+
+    <div id="výška_herního_okna">
+        <div class="top-vignette"></div>
+        <h3>Vyberte hru</h3>
+        <div id="game-menu"></div>
+
+        <div id="overlay">
+            <iframe id="game-frame" src=""></iframe>
+        </div>
+
+        <button id="back-btn" class="back-btn" onclick="zavritHru()" title="Návrat do menu" style="display: none;">✕</button>
+    </div>
+</div>
+ <script>
+    const seznamHer = [
+        { id: 'index1', nazev: 'Vesmírná-mise' }, 
+        { id: 'index2', nazev: 'Vesmírná-mise2' },
+    ];
+
+    const hlavniDiv = document.getElementById('výška_herního_okna');
+    const menuContainer = document.getElementById('game-menu');
+    const overlay = document.getElementById('overlay');
+    const iframe = document.getElementById('game-frame');
+    const backBtn = document.getElementById('back-btn');
+
+    function prizpusobVysku() {
+        const vyskaRodice = hlavniDiv.offsetHeight;
+        const paddingTop = parseInt(window.getComputedStyle(overlay).paddingTop);
+        if (overlay.style.display === 'block') {
+            iframe.style.height = (vyskaRodice - paddingTop) + "px";
+        }
+    }
+
+    seznamHer.forEach(hra => {
+        const karta = document.createElement('div');
+        karta.className = 'game-card';
+        karta.innerHTML = `<h3>${hra.nazev}</h3><p>Spustit</p>`;
+        karta.onclick = () => spustitHru(hra.id);
+        menuContainer.appendChild(karta);
+    });
+
+    function spustitHru(id, autoScroll = true) {
+        iframe.src = `hry/${id}.html`; 
+        
+        overlay.style.display = 'block';
+        backBtn.style.display = 'flex';
+
+        document.getElementById('game-menu').style.visibility = 'hidden';
+        document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
+
+        prizpusobVysku();
+
+        if (autoScroll) {
+            const yOffset = -50; 
+            const y = hlavniDiv.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+        }
+    }
+
+    function zavritHru() {
+        overlay.style.display = 'none';
+        backBtn.style.display = 'none';
+        iframe.src = '';
+        document.getElementById('game-menu').style.visibility = 'visible';
+        document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
+        hlavniDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.addEventListener('load', () => {
+        spustitHru('index1', false); 
+    });
+
+    window.addEventListener('resize', prizpusobVysku);
+</script>
 
 
 
