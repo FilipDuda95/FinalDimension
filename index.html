@@ -368,7 +368,7 @@ body {
   color: white;
   z-index:23;
   display: flex;
-  padding-bottom: 50%; //odsazení patičky
+  padding-bottom: 20%; //odsazení patičky
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -429,26 +429,6 @@ body {
   flex-grow: 1;
 }
 @media (min-width: 768px) {
-#Patička{
- position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;	 
-  background-color: black;
-  color: white;
-  z-index:23;
-  display: flex;
-  padding-bottom: 5%; //odsazení patičky
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align:center;
-  background-color:black;
-}
-
-
-
-
   .modal-arrow {
     display: block;
   }
@@ -927,11 +907,7 @@ let previousWidth = window.innerWidth;
 window.onresize = () => {
     const currentWidth = window.innerWidth;
     
-   
-    if (currentWidth !== previousWidth) {
-        setBackgroundVideo();
-        previousWidth = currentWidth; 
-    }
+  
 };
 
 
