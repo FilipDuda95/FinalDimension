@@ -361,156 +361,201 @@ const streetLights=[];
 // ══════════════════════════════════════════════════════════════
 const CAR_COLORS=[[0x110022,0xff00ff],[0x001122,0x00ffff],[0x112200,0x00ff44],[0x220011,0xff2200],[0x221100,0xffaa00],[0x001133,0x0088ff],[0x221122,0xff88ff]];
 
+
+// ══════════════════════════════════════════════════════════════
+//  CAR FACTORY — unified structure for ALL types
+//
+//  Every car has EXACTLY this children order:
+//    [0] body (main box)
+//    [1] cabin / top
+//    [2] wheel FL
+//    [3] wheel FR
+//    [4] wheel RL
+//    [5] wheel RR
+//    [6] neon outline
+//    [7] headlight L
+//    [8] headlight R
+//    [9] taillight L
+//    [10] taillight R
+//    [11+] extras (spoiler, scoop, trailer, police bar, etc.)
+//
+//  Driving code uses g.userData.wheels = [children[2..5]] for spin
+// ══════════════════════════════════════════════════════════════
 function makeCar(x,z,color,neon,rot=0,type=CAR_TYPES[0],isPolice=false){
-  const g=new THREE.Group();
-  const cat=type.cat||'sedan';
+  const g = new THREE.Group();
+  const cat = type.cat || 'sedan';
+
+  // ── Per-category dimensions ──
+  let bW, bH, bL,       // body width, height, length
+      cabW, cabH, cabL, // cabin
+      cabZ,             // cabin Z offset
+      wr, ww,           // wheel radius, width
+      wxOff, wFZ, wRZ;  // wheel x-offset, front Z, rear Z
 
   if(cat==='truck'){
-    // ── TRUCK: cab (cube) + trailer (long box) ──
-    const cabW=2.4, cabH=1.8, cabD=2.5;
-    const cab=new THREE.Mesh(new THREE.BoxGeometry(cabW,cabH,cabD),mat(color,neon,.35));
-    cab.position.set(0,cabH/2+.2,3.2); g.add(cab);
-    // Windscreen recess
-    const ws=new THREE.Mesh(new THREE.BoxGeometry(cabW*.7,.6,cabD*.05),bMat(0x003355));
-    ws.position.set(0,cabH/2+.2+.4,3.2+cabD/2+.02); g.add(ws);
-    // Trailer
-    const trW=2.2, trH=1.4, trD=5.5;
-    const trailer=new THREE.Mesh(new THREE.BoxGeometry(trW,trH,trD),mat(color,neon,.2));
-    trailer.position.set(0,trH/2+.2,-2.0); g.add(trailer);
-    // Trailer outline
-    const tol=new THREE.Mesh(new THREE.BoxGeometry(trW+.08,trH+.08,trD+.08),wMat(neon));
-    tol.position.set(0,trH/2+.2,-2.0); g.add(tol);
-    // Wheels: 6 (2 front cab, 4 rear trailer)
-    const wr=.42,ww=.36;
-    [[-1.3,3.2],[1.3,3.2],[-1.2,-1.0],[1.2,-1.0],[-1.2,-3.2],[1.2,-3.2]].forEach(([wx,wz])=>{
-      const w=new THREE.Mesh(new THREE.CylinderGeometry(wr,wr,ww,8),mat(0x111111,0x333333,.1));
-      w.rotation.z=Math.PI/2; w.position.set(wx,.42,wz); g.add(w);
+    bW=2.4; bH=1.5; bL=2.8;   // cab box (body = cab)
+    cabW=bW*.55; cabH=bH*.35; cabL=bL*.6; cabZ=bL*.18;
+    wr=.44; ww=.38;
+    wxOff=bW/2+.08; wFZ=bL*.35; wRZ=-bL*.25;
+  } else if(cat==='sport'){
+    bW=1.8; bH=.50; bL=4.8;
+    cabW=bW*.72; cabH=bH*.9; cabL=bL*.38; cabZ=-.3;
+    wr=.33; ww=.30;
+    wxOff=bW/2+.06; wFZ=bL*.36; wRZ=-bL*.36;
+  } else if(cat==='muscle'){
+    bW=2.2; bH=.85; bL=4.5;
+    cabW=bW*.74; cabH=bH*.85; cabL=bL*.44; cabZ=-.15;
+    wr=.40; ww=.36;
+    wxOff=bW/2+.07; wFZ=bL*.35; wRZ=-bL*.35;
+  } else if(cat==='mini'){
+    bW=1.6; bH=.80; bL=3.2;
+    cabW=bW*.82; cabH=bH*.95; cabL=bL*.62; cabZ=0;
+    wr=.30; ww=.28;
+    wxOff=bW/2+.05; wFZ=bL*.33; wRZ=-bL*.33;
+  } else { // sedan + police
+    bW=2.0; bH=.78; bL=4.2;
+    cabW=bW*.76; cabH=bH*.88; cabL=bL*.50; cabZ=-.2;
+    wr=.36; ww=.32;
+    wxOff=bW/2+.06; wFZ=bL*.35; wRZ=-bL*.35;
+  }
+
+  const groundY = .22; // how high body sits above ground
+
+  // [0] Body
+  const body = new THREE.Mesh(new THREE.BoxGeometry(bW,bH,bL), mat(color,neon,.3));
+  body.position.y = groundY + bH/2;
+  g.add(body);
+
+  // [1] Cabin / roof
+  const cabin = new THREE.Mesh(new THREE.BoxGeometry(cabW,cabH,cabL), mat(color,neon,.55));
+  cabin.position.set(0, groundY + bH + cabH/2, cabZ);
+  g.add(cabin);
+
+  // [2-5] Wheels — stored in userData.wheels for spin
+  const wheelMat = mat(0x111111, 0x333333, .1);
+  const wheelPositions = [
+    [-wxOff,  wFZ],  // FL [2]
+    [ wxOff,  wFZ],  // FR [3]
+    [-wxOff, -wRZ],  // RL [4]  note: wRZ is already negative
+    [ wxOff, -wRZ],  // RR [5]
+  ];
+  const wheels = [];
+  wheelPositions.forEach(([wx,wz]) => {
+    const w = new THREE.Mesh(new THREE.CylinderGeometry(wr,wr,ww,8), wheelMat);
+    w.rotation.z = Math.PI/2;
+    w.position.set(wx, wr, wz);
+    g.add(w);
+    wheels.push(w);
+  });
+  g.userData.wheels = wheels; // easy access for spin
+
+  // [6] Neon outline
+  const outline = new THREE.Mesh(
+    new THREE.BoxGeometry(bW+.1, bH+.1, bL+.1),
+    new THREE.MeshBasicMaterial({color:neon, wireframe:true})
+  );
+  outline.position.y = groundY + bH/2;
+  g.add(outline);
+
+  // [7-8] Headlights
+  [-bW*.28, bW*.28].forEach(ox => {
+    const hl = new THREE.Mesh(new THREE.BoxGeometry(.28,.18,.1), new THREE.MeshBasicMaterial({color:neon}));
+    hl.position.set(ox, groundY + bH*.55, bL/2+.06);
+    g.add(hl);
+  });
+
+  // [9-10] Taillights
+  [-bW*.28, bW*.28].forEach(ox => {
+    const tl = new THREE.Mesh(new THREE.BoxGeometry(.25,.14,.1), new THREE.MeshBasicMaterial({color:0xff2200}));
+    tl.position.set(ox, groundY + bH*.55, -bL/2-.06);
+    g.add(tl);
+  });
+
+  // ── Category-specific extras (index 11+) ──
+  if(cat==='truck'){
+    // Long trailer behind cab
+    const trW=2.2, trH=1.3, trD=5.8;
+    const trailer = new THREE.Mesh(new THREE.BoxGeometry(trW,trH,trD), mat(color,neon,.18));
+    trailer.position.set(0, groundY+trH/2, -(bL/2+trD/2+.3));
+    g.add(trailer);
+    const trOut = new THREE.Mesh(new THREE.BoxGeometry(trW+.08,trH+.08,trD+.08), new THREE.MeshBasicMaterial({color:neon,wireframe:true}));
+    trOut.position.copy(trailer.position);
+    g.add(trOut);
+    // Extra rear wheels for trailer
+    const rwr = .44, rww = .36;
+    [[-1.15, -(bL/2+trD*.25)],[1.15, -(bL/2+trD*.25)],[-1.15, -(bL/2+trD*.72)],[1.15, -(bL/2+trD*.72)]].forEach(([wx,wz]) => {
+      const w = new THREE.Mesh(new THREE.CylinderGeometry(rwr,rwr,rww,8), wheelMat);
+      w.rotation.z = Math.PI/2;
+      w.position.set(wx, rwr, wz);
+      g.add(w);
+      wheels.push(w); // also spin
     });
-    // Headlights
-    [-cabW*.3,cabW*.3].forEach(ox=>{
-      const hl=new THREE.Mesh(new THREE.BoxGeometry(.3,.22,.1),bMat(neon));
-      hl.position.set(ox,cabH/2+.2,3.2+cabD/2+.05); g.add(hl);
-    });
-    // Cab neon outline
-    const col2=new THREE.Mesh(new THREE.BoxGeometry(cabW+.08,cabH+.08,cabD+.08),wMat(neon));
-    col2.position.copy(cab.position); g.add(col2);
+    // Windscreen
+    const ws = new THREE.Mesh(new THREE.BoxGeometry(bW*.65,.55,.08), new THREE.MeshBasicMaterial({color:0x003355}));
+    ws.position.set(0, groundY+bH+cabH*.7, bL/2+.05);
+    g.add(ws);
 
   } else if(cat==='sport'){
-    // ── SPORT: low, long, spoiler ──
-    const bW=1.8,bH=.55,bL=4.8;
-    const body=new THREE.Mesh(new THREE.BoxGeometry(bW,bH,bL),mat(color,neon,.4));
-    body.position.y=bH/2+.18; g.add(body);
-    const cabH=bH*.7, cabL=bL*.38;
-    const cab=new THREE.Mesh(new THREE.BoxGeometry(bW*.7,cabH,cabL),mat(color,neon,.6));
-    cab.position.set(0,bH/2+.18+cabH/2,-.3); g.add(cab);
-    // Spoiler
-    const sp=new THREE.Mesh(new THREE.BoxGeometry(bW*.8,.12,.1),bMat(neon));
-    sp.position.set(0,bH/2+.18+.2,-bL/2+.1); g.add(sp);
-    const sp2=new THREE.Mesh(new THREE.BoxGeometry(.08,.3,.1),bMat(neon));
-    [-bW*.3,bW*.3].forEach(ox=>{const s2=sp2.clone();s2.position.set(ox,bH/2+.18+.05,-bL/2+.1);g.add(s2);});
-    // Wheels
-    const wxO=bW/2+.06;
-    [[-wxO,-bL*.36],[wxO,-bL*.36],[-wxO,bL*.36],[wxO,bL*.36]].forEach(([wx,wz])=>{
-      const w=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.28,8),mat(0x111111,0x333333,.1));
-      w.rotation.z=Math.PI/2; w.position.set(wx,.32,wz); g.add(w);
+    // Rear spoiler
+    const sp = new THREE.Mesh(new THREE.BoxGeometry(bW*.85,.1,.08), new THREE.MeshBasicMaterial({color:neon}));
+    sp.position.set(0, groundY+bH+.18, -bL/2+.06);
+    g.add(sp);
+    [-bW*.32, bW*.32].forEach(ox => {
+      const st = new THREE.Mesh(new THREE.BoxGeometry(.08,.28,.08), new THREE.MeshBasicMaterial({color:neon}));
+      st.position.set(ox, groundY+bH+.02, -bL/2+.06);
+      g.add(st);
     });
-    [-bW*.3,bW*.3].forEach(ox=>{
-      const hl=new THREE.Mesh(new THREE.BoxGeometry(.24,.14,.1),bMat(neon));
-      hl.position.set(ox,bH/2+.18,bL/2+.05); g.add(hl);
-      const tl=new THREE.Mesh(new THREE.BoxGeometry(.22,.12,.1),bMat(0xff2200));
-      tl.position.set(ox,bH/2+.18,-bL/2-.05); g.add(tl);
-    });
-    const ol=new THREE.Mesh(new THREE.BoxGeometry(bW+.08,bH+.08,bL+.08),wMat(neon));
-    ol.position.y=bH/2+.18; g.add(ol);
 
   } else if(cat==='muscle'){
-    // ── MUSCLE: wide body + hood scoop + chunky shape ──
-    const bW=2.2,bH=.9,bL=4.5;
-    const body=new THREE.Mesh(new THREE.BoxGeometry(bW,bH,bL),mat(color,neon,.35));
-    body.position.y=bH/2+.2; g.add(body);
     // Hood scoop
-    const scoop=new THREE.Mesh(new THREE.BoxGeometry(.5,.18,1.0),mat(color,neon,.6));
-    scoop.position.set(0,bH/2+.2+bH/2+.09,bL*.25); g.add(scoop);
-    const cabH=bH*.8, cabL=bL*.45;
-    const cab=new THREE.Mesh(new THREE.BoxGeometry(bW*.75,cabH,cabL),mat(color,neon,.5));
-    cab.position.set(0,bH/2+.2+cabH/2,-.15); g.add(cab);
-    const wxO=bW/2+.07;
-    [[-wxO,-bL*.36],[wxO,-bL*.36],[-wxO,bL*.36],[wxO,bL*.36]].forEach(([wx,wz])=>{
-      const w=new THREE.Mesh(new THREE.CylinderGeometry(.40,.40,.36,8),mat(0x111111,0x333333,.1));
-      w.rotation.z=Math.PI/2; w.position.set(wx,.40,wz); g.add(w);
-    });
-    [-bW*.3,bW*.3].forEach(ox=>{
-      const hl=new THREE.Mesh(new THREE.BoxGeometry(.3,.2,.1),bMat(neon)); hl.position.set(ox,bH/2+.2,bL/2+.05); g.add(hl);
-      const tl=new THREE.Mesh(new THREE.BoxGeometry(.28,.16,.1),bMat(0xff2200)); tl.position.set(ox,bH/2+.2,-bL/2-.05); g.add(tl);
-    });
-    const ol=new THREE.Mesh(new THREE.BoxGeometry(bW+.1,bH+.1,bL+.1),wMat(neon));
-    ol.position.y=bH/2+.2; g.add(ol);
-
-  } else if(cat==='mini'){
-    // ── MINI: tiny, tall proportions ──
-    const bW=1.6,bH=.85,bL=3.0;
-    const body=new THREE.Mesh(new THREE.BoxGeometry(bW,bH,bL),mat(color,neon,.35));
-    body.position.y=bH/2+.18; g.add(body);
-    const cabH=bH*.95, cabL=bL*.65;
-    const cab=new THREE.Mesh(new THREE.BoxGeometry(bW*.8,cabH,cabL),mat(color,neon,.6));
-    cab.position.set(0,bH/2+.18+cabH/2,0); g.add(cab);
-    const wxO=bW/2+.05;
-    [[-wxO,-bL*.32],[wxO,-bL*.32],[-wxO,bL*.32],[wxO,bL*.32]].forEach(([wx,wz])=>{
-      const w=new THREE.Mesh(new THREE.CylinderGeometry(.30,.30,.28,8),mat(0x111111,0x333333,.1));
-      w.rotation.z=Math.PI/2; w.position.set(wx,.30,wz); g.add(w);
-    });
-    [-bW*.28,bW*.28].forEach(ox=>{
-      const hl=new THREE.Mesh(new THREE.BoxGeometry(.26,.16,.1),bMat(neon)); hl.position.set(ox,bH/2+.18,bL/2+.05); g.add(hl);
-      const tl=new THREE.Mesh(new THREE.BoxGeometry(.22,.12,.1),bMat(0xff2200)); tl.position.set(ox,bH/2+.18,-bL/2-.05); g.add(tl);
-    });
-    const ol=new THREE.Mesh(new THREE.BoxGeometry(bW+.08,bH+.08,bL+.08),wMat(neon));
-    ol.position.y=bH/2+.18; g.add(ol);
-
-  } else {
-    // ── SEDAN (default) ──
-    const bW=type.bW||2.0, bH=type.bH||.8, bL=type.bL||4.2;
-    const body=new THREE.Mesh(new THREE.BoxGeometry(bW,bH,bL),mat(color,neon,.3));
-    body.position.y=bH/2+.2; g.add(body);
-    const cabH=bH*.85, cabL=bL*.5;
-    const cab=new THREE.Mesh(new THREE.BoxGeometry(bW*.75,cabH,cabL),mat(color,neon,.55));
-    cab.position.set(0,bH/2+.2+cabH/2,-.2); g.add(cab);
-    const wxO=bW/2+.06;
-    [[-wxO,-bL*.35],[wxO,-bL*.35],[-wxO,bL*.35],[wxO,bL*.35]].forEach(([wx,wz])=>{
-      const w=new THREE.Mesh(new THREE.CylinderGeometry(.36,.36,.32,8),mat(0x111111,0x333333,.1));
-      w.rotation.z=Math.PI/2; w.position.set(wx,.35,wz); g.add(w);
-    });
-    [-bW*.3,bW*.3].forEach(ox=>{
-      const hl=new THREE.Mesh(new THREE.BoxGeometry(.28,.18,.1),bMat(neon)); hl.position.set(ox,bH/2+.2,bL/2+.05); g.add(hl);
-      const tl=new THREE.Mesh(new THREE.BoxGeometry(.25,.14,.1),bMat(0xff2200)); tl.position.set(ox,bH/2+.2,-bL/2-.05); g.add(tl);
-    });
-    const ol=new THREE.Mesh(new THREE.BoxGeometry(bW+.1,bH+.1,bL+.1),wMat(neon));
-    ol.position.y=bH/2+.2; g.add(ol);
+    const sc = new THREE.Mesh(new THREE.BoxGeometry(.55,.16,.95), mat(color,neon,.65));
+    sc.position.set(0, groundY+bH+.08, bL*.22);
+    g.add(sc);
   }
 
-  // Police additions (lightbar + stripes)
+  // ── Police lightbar (always last extras) ──
   if(isPolice){
-    const bH=type.bH||.8, bL=type.bL||4.2, bW=type.bW||2.0;
-    const roofY=bH*2+.5;
-    const barBase=new THREE.Mesh(new THREE.BoxGeometry(bW*.6,.15,bL*.25),bMat(0x111111));
-    barBase.position.set(0,roofY,-.1); g.add(barBase);
-    const lb=new THREE.Mesh(new THREE.BoxGeometry(.38,.3,.28),bMat(0x0044ff));
-    lb.position.set(-bW*.2,roofY+.23,-.1); g.add(lb);
-    const lr=new THREE.Mesh(new THREE.BoxGeometry(.38,.3,.28),bMat(0xff2200));
-    lr.position.set(bW*.2,roofY+.23,-.1); g.add(lr);
-    g.userData.lightBlue=lb; g.userData.lightRed=lr;
-    const pMat=bMat(0xffffff);
-    const ft=new THREE.Mesh(new THREE.BoxGeometry(bW*.7,.18,.06),pMat); ft.position.set(0,bH/2+.2,bL/2+.08); g.add(ft);
-    const bt=new THREE.Mesh(new THREE.BoxGeometry(bW*.7,.18,.06),pMat); bt.position.set(0,bH/2+.2,-bL/2-.08); g.add(bt);
-    [bL*.3,-bL*.3].forEach(oz=>{
-      const sB=new THREE.Mesh(new THREE.BoxGeometry(.07,.18,bL*.4),bMat(0x0044ff)); sB.position.set(bW/2+.04,bH/2+.2,oz); g.add(sB);
-      const sR=new THREE.Mesh(new THREE.BoxGeometry(.07,.18,bL*.4),bMat(0xff2200)); sR.position.set(-bW/2-.04,bH/2+.2,oz); g.add(sR);
+    const roofY = groundY + bH + cabH + .12;
+    const barBase = new THREE.Mesh(new THREE.BoxGeometry(bW*.6,.14,cabL*.45), new THREE.MeshBasicMaterial({color:0x111111}));
+    barBase.position.set(0, roofY, cabZ);
+    g.add(barBase);
+    const lb = new THREE.Mesh(new THREE.BoxGeometry(.38,.3,.26), new THREE.MeshBasicMaterial({color:0x0044ff}));
+    lb.position.set(-bW*.2, roofY+.22, cabZ);
+    g.add(lb);
+    const lr = new THREE.Mesh(new THREE.BoxGeometry(.38,.3,.26), new THREE.MeshBasicMaterial({color:0xff2200}));
+    lr.position.set( bW*.2, roofY+.22, cabZ);
+    g.add(lr);
+    g.userData.lightBlue = lb;
+    g.userData.lightRed  = lr;
+    // POLICE text bars
+    const pMat = new THREE.MeshBasicMaterial({color:0xffffff});
+    const ft = new THREE.Mesh(new THREE.BoxGeometry(bW*.7,.16,.06), pMat);
+    ft.position.set(0, groundY+bH*.55, bL/2+.09);
+    g.add(ft);
+    const bt = new THREE.Mesh(new THREE.BoxGeometry(bW*.7,.16,.06), pMat);
+    bt.position.set(0, groundY+bH*.55, -bL/2-.09);
+    g.add(bt);
+    // Side stripes
+    [bL*.28,-bL*.28].forEach(oz => {
+      const sB = new THREE.Mesh(new THREE.BoxGeometry(.07,.16,bL*.38), new THREE.MeshBasicMaterial({color:0x0044ff}));
+      sB.position.set( bW/2+.04, groundY+bH*.55, oz);
+      g.add(sB);
+      const sR = new THREE.Mesh(new THREE.BoxGeometry(.07,.16,bL*.38), new THREE.MeshBasicMaterial({color:0xff2200}));
+      sR.position.set(-bW/2-.04, groundY+bH*.55, oz);
+      g.add(sR);
     });
   }
 
-  g.position.set(x,0,z); g.rotation.y=rot;
+  // Store dimensions for collision
+  g.userData.colW = type.colW || bW/2+.1;
+  g.userData.colD = type.colD || bL/2+.1;
+
+  g.position.set(x,0,z);
+  g.rotation.y = rot;
   scene.add(g);
   return g;
 }
+
 
 // ══════════════════════════════════════════════════════════════
 //  ROAD DIRECTIONS — 4 cardinals
@@ -763,7 +808,7 @@ function moveFoot(dx,dz){
 function moveCar(dx,dz){
   if(!playerCar) return 0;
   playerCar.position.x+=dx; playerCar.position.z+=dz;
-  const CHW=playerType?playerType.colW:1.15, CHD=playerType?playerType.colD:2.3; let dmg=0;
+  const CHW=playerCar.userData.colW||1.15, CHD=playerCar.userData.colD||2.3; let dmg=0;
   for(const b of buildingBoxes){
     const r=resolveBox(playerCar.position.x,playerCar.position.z,CHW,CHD,b.x,b.z,b.hw,b.hd);
     if(r){playerCar.position.x+=r.nx;playerCar.position.z+=r.nz;
@@ -777,8 +822,9 @@ function moveCar(dx,dz){
       if(carSpeed>.08){const d=carSpeed*60; dmg+=d; p.hp-=d; carSpeed*=.3;
         if(p.hp<=0){spawnExplosion(p.x,1,p.z);scene.remove(p.mesh);p.stolen=true;p.mesh.visible=false;}}}
   }
-  // Traffic cars
+  // Traffic cars (skip any that IS the player car — shouldn't happen after fix, but safety)
   for(const t of trafficList){
+    if(t.mesh===playerCar) continue;
     const r=resolveBox(playerCar.position.x,playerCar.position.z,CHW,CHD,t.x,t.z,1.2,2.5);
     if(r){playerCar.position.x+=r.nx;playerCar.position.z+=r.nz;
       if(carSpeed>.08){const d=carSpeed*70; dmg+=d; t.hp-=d; carSpeed*=.25;
@@ -827,12 +873,14 @@ function updateTraffic(dt){
       if(playerCar){
         const pr=resolveBox(playerCar.position.x,playerCar.position.z,1.15,2.3,t.x,t.z,1.2,2.5);
         if(pr){
-          // Push player AWAY from police (opposite of push direction from resolveBox)
+          // Push player AWAY from police; truck mass resists knockback
+          const mass = playerType.cat==='truck' ? 4.0 : (playerType.cat==='muscle'?1.8:1.0);
           const awayX=playerCar.position.x-t.x, awayZ=playerCar.position.z-t.z;
           const awayLen=Math.hypot(awayX,awayZ)||1;
-          knockVX=(awayX/awayLen)*0.30; knockVZ=(awayZ/awayLen)*0.30;
-          knockTimer=0.4; t.stuckTimer=45;
-          carSpeed*=0.4; // slow player car on police impact
+          const force = 0.28/mass;
+          knockVX=(awayX/awayLen)*force; knockVZ=(awayZ/awayLen)*force;
+          knockTimer=0.35/mass; t.stuckTimer=40;
+          carSpeed*=(0.5+(mass-1)*0.1); // heavy cars slow less
         }
       }
     } else {
@@ -871,7 +919,8 @@ function updateTraffic(dt){
     if(t.x<-CITY_HALF)t.x= CITY_HALF;
     if(t.z> CITY_HALF)t.z=-CITY_HALF;
     if(t.z<-CITY_HALF)t.z= CITY_HALF;
-    t.mesh.position.set(t.x,0,t.z);
+    // Only update mesh position when this NPC is NOT the player's current car
+    if(t.mesh !== playerCar) t.mesh.position.set(t.x,0,t.z);
 
     if(t.isPolice&&t.mesh.userData.lightBlue){
       t.mesh.userData.lightBlue.material.color.setHex(blinkBlue?0x0066ff:0x001133);
@@ -933,8 +982,12 @@ function beginEntering(carObj,isTraffic){
   carAngle=carObj.mesh.rotation.y; avatarGroup.visible=false;
   stateLabelEl.textContent=`// JACKING ${playerType.name}...`;
   carBadgeEl.textContent=`[ ${playerType.name} ]`; carBadgeEl.style.opacity='1';
-  // Stop the NPC if it was a traffic car
-  if(isTraffic) carObj.stuckTimer=999;
+  // Remove from trafficList so AI never touches this mesh again.
+  // The car is now fully under player control, identical to a parked car.
+  if(isTraffic){
+    const idx=trafficList.indexOf(carObj);
+    if(idx!==-1) trafficList.splice(idx,1);
+  }
   doFlash('#00ffff');
 }
 
@@ -994,11 +1047,9 @@ function updateDriving(dt){
   if(playerHPRegenTimer>1.0){playerHPRegenTimer=0;playerHP=Math.min(PLAYER_MAX_HP,playerHP+2);updateHPBars();}
 
   playerCar.rotation.y=carAngle;
-  // Spin wheels per car category
-  if(playerType.cat==='truck'){
-    playerCar.children.slice(4,10).forEach(w=>{w.rotation.x+=carSpeed*8;});
-  } else {
-    playerCar.children.slice(2,6).forEach(w=>{w.rotation.x+=carSpeed*10;});
+  // Spin all wheels via userData.wheels (set in makeCar for every type)
+  if(playerCar.userData.wheels){
+    playerCar.userData.wheels.forEach(w=>{ w.rotation.x += carSpeed*9; });
   }
 
   if(playerCar.position.distanceTo(garagePos)<8){deliverCar();return;}
@@ -1008,6 +1059,11 @@ function updateDriving(dt){
   camera.lookAt(playerCar.position.x,1,playerCar.position.z);
   speedBarEl.style.width=(carSpeed/effectiveMax*100)+'%';
   carHpBarEl.style.width=(playerCarHP/playerType.maxHP*100)+'%';
+  // Sync NPC object coords so police chasing uses real position
+  if(playerCarObj && playerCarObj.x !== undefined){
+    playerCarObj.x = playerCar.position.x;
+    playerCarObj.z = playerCar.position.z;
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
