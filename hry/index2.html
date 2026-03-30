@@ -98,6 +98,14 @@ canvas { display:block; }
 .mm-leg { display:flex; align-items:center; gap:3px; color:#aaa; }
 .mm-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 
+/* Mobilní zmenšení minimapy */
+@media (max-width: 600px) {
+  #minimap-wrap { bottom:8px; left:8px; }
+  #minimap { width:130px !important; height:130px !important; }
+  #minimap-label { font-size:7px; letter-spacing:2px; }
+  #mm-legend { display:none; }
+}
+
 /* POLICE ALERT */
 #police-alert {
   position:absolute; top:140px; left:50%; transform:translateX(-50%);
@@ -129,7 +137,24 @@ canvas { display:block; }
 .overlay .btn.red:hover { background:#f052; }
 #gameover-screen { display:none; }
 #gameover-screen h1 { color:#f05; text-shadow:0 0 30px #f05,0 0 80px #f058; }
+#gameover-screen h1.busted { color:#fff; text-shadow:0 0 30px #fff,0 0 60px #88f; }
 #gameover-screen .sub { color:#fa0; text-shadow:0 0 10px #fa0; }
+
+/* BUSTED blikající pozadí */
+@keyframes bustFlash {
+  0%   { background:rgba(180,0,0,0.72); }
+  49%  { background:rgba(180,0,0,0.72); }
+  50%  { background:rgba(0,30,200,0.72); }
+  99%  { background:rgba(0,30,200,0.72); }
+  100% { background:rgba(180,0,0,0.72); }
+}
+#gameover-screen.busted {
+  animation: bustFlash 0.7s steps(1) infinite;
+}
+#gameover-screen.busted h1 {
+  color:#fff; text-shadow:0 0 20px #fff,0 0 50px #aaf,0 0 100px #88f;
+  animation: none;
+}
 
 /* CRT */
 #crt {
@@ -199,8 +224,8 @@ canvas { display:block; }
 </div>
 
 <div class="overlay" id="gameover-screen">
-  <h1>WRECKED</h1>
-  <div class="sub">// YOU DIDN'T MAKE IT //</div>
+  <h1 id="gameover-title">WRECKED</h1>
+  <div class="sub" id="gameover-sub">// YOU DIDN'T MAKE IT //</div>
   <div style="color:#fff;font-size:13px;letter-spacing:3px;margin-bottom:28px;">CARS DELIVERED: <span id="final-score">0</span></div>
   <button class="btn red" id="restart-btn">↺ TRY AGAIN</button>
 </div>
@@ -873,14 +898,42 @@ function updateTraffic(dt){
       if(playerCar){
         const pr=resolveBox(playerCar.position.x,playerCar.position.z,1.15,2.3,t.x,t.z,1.2,2.5);
         if(pr){
-          // Push player AWAY from police; truck mass resists knockback
-          const mass = playerType.cat==='truck' ? 4.0 : (playerType.cat==='muscle'?1.8:1.0);
+          const mass = playerType.cat==='truck' ? 6.0 : (playerType.cat==='muscle'?1.8:1.0);
           const awayX=playerCar.position.x-t.x, awayZ=playerCar.position.z-t.z;
           const awayLen=Math.hypot(awayX,awayZ)||1;
-          const force = 0.28/mass;
-          knockVX=(awayX/awayLen)*force; knockVZ=(awayZ/awayLen)*force;
-          knockTimer=0.35/mass; t.stuckTimer=40;
-          carSpeed*=(0.5+(mass-1)*0.1); // heavy cars slow less
+
+          if(playerType.cat==='truck'){
+            // TRUCK: odsrčí policii garantovaně mimo kolizní oblast
+            // Minimální posun = přesah kolizních boxů + bonus
+            const minPush = 2.5 + 1.2; // CHW+colW minimum clearance
+            const bonus   = 4.0 + carSpeed*12; // extra vzdálenost dle rychlosti
+            const totalPush = minPush + bonus;
+            // Posuneme policejní auto OD hráče
+            t.x += (awayX/awayLen)*totalPush;
+            t.z += (awayZ/awayLen)*totalPush;
+            // Wrap na hranici mapy
+            if(t.x> CITY_HALF) t.x= CITY_HALF-2;
+            if(t.x<-CITY_HALF) t.x=-CITY_HALF+2;
+            if(t.z> CITY_HALF) t.z= CITY_HALF-2;
+            if(t.z<-CITY_HALF) t.z=-CITY_HALF+2;
+            t.mesh.position.set(t.x,0,t.z);
+            t.stuckTimer=120; // policie se otřásá (2 sekundy)
+            // Reset waypoint na nové místo — policie nezačne okamžitě zpět
+            t.wpX=Math.round(t.x/STEP)*STEP;
+            t.wpZ=Math.round(t.z/STEP)*STEP;
+            carSpeed=Math.max(carSpeed*0.90, 0.08); // truck skoro nezpomalí
+            spawnExplosion(t.x,0.5,t.z); // jiskra v místě dopadu policie
+          } else {
+            // Ostatní auta: normální knockback + HP ztráta
+            const force = 0.28/mass;
+            knockVX=(awayX/awayLen)*force; knockVZ=(awayZ/awayLen)*force;
+            knockTimer=0.35/mass; t.stuckTimer=40;
+            carSpeed*=(0.5+(mass-1)*0.1);
+            playerHP=Math.max(0, playerHP-3);
+            playerHPRegenTimer=0;
+            updateHPBars();
+            if(playerHP<=0){ triggerGameOver('BUSTED'); return; }
+          }
         }
       }
     } else {
@@ -945,9 +998,9 @@ function updateFoot(dt){
   avatarGroup.children[2].position.z=Math.sin(t2)*.12;
   avatarGroup.children[3].position.z=-Math.sin(t2)*.12;
 
-  // HP regen
+  // HP regenerace na nohou (rychlejší než v autě)
   playerHPRegenTimer+=dt;
-  if(playerHPRegenTimer>1.0){playerHPRegenTimer=0;playerHP=Math.min(PLAYER_MAX_HP,playerHP+3);}
+  if(playerHPRegenTimer>0.8){playerHPRegenTimer=0;playerHP=Math.min(PLAYER_MAX_HP,playerHP+2);}
   updateHPBars();
 
   // Enter nearest parked car OR nearest traffic car
@@ -965,6 +1018,13 @@ function updateFoot(dt){
   }
   if(nearest){beginEntering(nearest,nearIsTraffic);return;}
 
+  // Wrap hráče pěšky na konci mapy
+  const FWRAP=CITY_HALF-2;
+  if(footPos.x> FWRAP) footPos.x=-FWRAP;
+  if(footPos.x<-FWRAP) footPos.x= FWRAP;
+  if(footPos.z> FWRAP) footPos.z=-FWRAP;
+  if(footPos.z<-FWRAP) footPos.z= FWRAP;
+
   camTarget.set(footPos.x-Math.sin(footAngle)*9,6.5,footPos.z-Math.cos(footAngle)*9);
   camera.position.lerp(camTarget,.08); camera.lookAt(footPos.x,1,footPos.z);
   speedBarEl.style.width=(footSpeed/FOOT_RUN*100)+'%';
@@ -980,8 +1040,11 @@ function beginEntering(carObj,isTraffic){
   playerType=carObj.type||CAR_TYPES[0];
   playerCarHP=carObj.hp||playerType.maxHP;
   carAngle=carObj.mesh.rotation.y; avatarGroup.visible=false;
-  stateLabelEl.textContent=`// JACKING ${playerType.name}...`;
-  carBadgeEl.textContent=`[ ${playerType.name} ]`; carBadgeEl.style.opacity='1';
+  const carLabel = carObj.isPolice ? 'POLICE CAR' : playerType.name;
+  stateLabelEl.textContent=`// JACKING ${carLabel}...`;
+  carBadgeEl.textContent=`[ ${carLabel} ]`; carBadgeEl.style.opacity='1';
+  // Označíme playerCar jako police auto → ostatní policie nebude pronásledovat
+  playerCar.userData.isPlayerPolice = !!carObj.isPolice;
   // Remove from trafficList so AI never touches this mesh again.
   // The car is now fully under player control, identical to a parked car.
   if(isTraffic){
@@ -1042,9 +1105,9 @@ function updateDriving(dt){
     updateHPBars();
   }
 
-  // HP regen for player
+  // HP plynulá regenerace (pomalejší při jízdě)
   playerHPRegenTimer+=dt;
-  if(playerHPRegenTimer>1.0){playerHPRegenTimer=0;playerHP=Math.min(PLAYER_MAX_HP,playerHP+2);updateHPBars();}
+  if(playerHPRegenTimer>1.5){playerHPRegenTimer=0;playerHP=Math.min(PLAYER_MAX_HP,playerHP+1);updateHPBars();}
 
   playerCar.rotation.y=carAngle;
   // Spin all wheels via userData.wheels (set in makeCar for every type)
@@ -1064,6 +1127,12 @@ function updateDriving(dt){
     playerCarObj.x = playerCar.position.x;
     playerCarObj.z = playerCar.position.z;
   }
+  // Wrap player car na konci mapy (jako NPC)
+  const WRAP=CITY_HALF-2;
+  if(playerCar.position.x> WRAP){playerCar.position.x=-WRAP; if(playerCarObj)playerCarObj.x=-WRAP;}
+  if(playerCar.position.x<-WRAP){playerCar.position.x= WRAP; if(playerCarObj)playerCarObj.x= WRAP;}
+  if(playerCar.position.z> WRAP){playerCar.position.z=-WRAP; if(playerCarObj)playerCarObj.z=-WRAP;}
+  if(playerCar.position.z<-WRAP){playerCar.position.z= WRAP; if(playerCarObj)playerCarObj.z= WRAP;}
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1083,9 +1152,24 @@ function deliverCar(){
 function triggerGameOver(reason='WRECKED'){
   if(state==='gameover') return;
   state='gameover'; finalScoreEl.textContent=score;
-  document.getElementById('gameover-screen').style.display='flex';
-  document.querySelector('#gameover-screen .sub').textContent='// '+reason+' //';
-  doFlash('#ff0000'); avatarGroup.visible=false;
+  const go=document.getElementById('gameover-screen');
+  const goTitle=document.getElementById('gameover-title');
+  const goSub=document.getElementById('gameover-sub');
+  go.style.display='flex';
+  // BUSTED = smrt od policie (HP na nule), jinak WRECKED
+  if(reason==='BUSTED'){
+    goTitle.textContent='BUSTED';
+    goTitle.className='busted';
+    goSub.textContent='// THE LAW CAUGHT YOU //';
+    go.className='overlay busted';
+  } else {
+    goTitle.textContent='WRECKED';
+    goTitle.className='';
+    goSub.textContent='// '+reason+' //';
+    go.className='overlay';
+  }
+  doFlash(reason==='BUSTED'?'#0000ff':'#ff0000');
+  avatarGroup.visible=false;
 }
 
 // ══════════════════════════════════════════════════════════════
