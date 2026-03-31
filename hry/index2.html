@@ -1303,9 +1303,15 @@ function drawMinimap(){
   mmCtx.beginPath(); mmCtx.arc(tickX,tickY,2.8,0,Math.PI*2); mmCtx.fill();
 
   // Player arrow — large, rotates with heading
+  // w2m: worldX→canvasX, worldZ→canvasY
+  // pohyb: mX=sin(angle), mZ=cos(angle)
+  // angle=0 → +Z → canvas +Y (dolů) → špička dolů = (0,+12)
+  // angle=PI/2 → +X → canvas +X (doprava)
+  // canvas rotate(+r) otáčí po hodinách: šipka dolů při r=PI/2 → doleva = ŠPATNĚ
+  // proto rotate(-heading): při -PI/2 → šipka jde doprava = SPRÁVNĚ
   mmCtx.save();
   mmCtx.translate(px,py);
-  mmCtx.rotate(heading);
+  mmCtx.rotate(-heading);
   // Glow
   mmCtx.shadowColor=state==='driving'?'#ffee00':'#00ffff';
   mmCtx.shadowBlur=8;
@@ -1313,10 +1319,10 @@ function drawMinimap(){
   mmCtx.strokeStyle='rgba(0,0,0,0.6)';
   mmCtx.lineWidth=1;
   mmCtx.beginPath();
-  mmCtx.moveTo(0,-12);   // front tip
-  mmCtx.lineTo(-6,6);    // back-left
-  mmCtx.lineTo(0,2);     // back notch
-  mmCtx.lineTo(6,6);     // back-right
+  mmCtx.moveTo(0,12);    // špička = dopředu (+Z = dolů na canvasu)
+  mmCtx.lineTo(-6,-6);   // zadní levý roh
+  mmCtx.lineTo(0,-2);    // zadní zářez
+  mmCtx.lineTo(6,-6);    // zadní pravý roh
   mmCtx.closePath();
   mmCtx.fill(); mmCtx.stroke();
   mmCtx.shadowBlur=0;
