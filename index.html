@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Final dimension</title>
+    <meta name="description" content="Final Dimension — portfolio Filipa Dudy. 2D/3D grafika, design a herní vývoj. Galerie projektů a hry přímo v prohlížeči.">
+    <meta property="og:title" content="Final Dimension — Filip Duda">
+    <meta property="og:description" content="2D/3D grafika, design a herní vývoj.">
+    <meta property="og:image" content="style/logo.png">
 	
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon"> 
 	
@@ -34,7 +38,14 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+  font-size: clamp(12px, 1.2vw, 16px);
 }
+h1 { font-size: clamp(20px, 3.5vw, 26px); }
+h2 { font-size: clamp(18px, 3vw, 24px); }
+h3 { font-size: clamp(16px, 2.5vw, 21px); }
+h4 { font-size: clamp(15px, 2.2vw, 19px); }
+h5 { font-size: clamp(14px, 2vw, 18px); }
+h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
     h1 {
       text-align: center;
@@ -147,15 +158,6 @@ body {
             backdrop-filter: blur(10px);
     }
   .back-button:hover { background-color:  #05d4ff; }
-    #gallery { position: relative; left: 50%; transform: translateX(-50%); }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 1rem;
-      max-width: 1100px;
-    }
-    .gallery a { text-decoration: none; color: silver; }
-  
 
 
     /* ===== UPRAVENÝ MODAL ===== */
@@ -902,54 +904,7 @@ loadFolder(ROOT_FOLDER_ID);
 
 
 
-let previousWidth = window.innerWidth;
 
-window.onresize = () => {
-    const currentWidth = window.innerWidth;
-    
-  
-};
-
-
-
-
-
-
-
-
-//velikost textu
-
-function adjustFontSizes() {
-  const MIN_SIZE = 12;
-  const MAX_SIZE = 16;
-  const SCALE_FACTOR = 0.012; // 1.2% z šířky viewportu
-
-  const BASE_SIZE = Math.min(
-    MAX_SIZE,
-    Math.max(MIN_SIZE, window.innerWidth * SCALE_FACTOR)
-  );
-
-  const elements = document.querySelectorAll("*");
-
-  elements.forEach(el => {
-    if (el.textContent.trim()) {
-      let fontSize = BASE_SIZE;
-
-      // Pokud je to nadpis, zvětši písmo o 20 % až 60 % podle typu nadpisu
-      if (/^H[1-6]$/.test(el.tagName)) {
-        const level = parseInt(el.tagName.charAt(1));
-        const increaseFactor = 1 + (7 - level) * 0.1; // H1 +60 %, H6 +10 %
-        fontSize *= increaseFactor;
-      }
-
-      el.style.fontSize = `${fontSize}px`;
-    }
-  });
-}
-
-// Spusť při načtení a při změně velikosti okna
-adjustFontSizes();
-window.addEventListener("resize", adjustFontSizes);
     </script>
 
 
@@ -1037,10 +992,6 @@ window.addEventListener("resize", adjustFontSizes);
         document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
         hlavniDiv.scrollIntoView({ behavior: 'smooth' });
     }
-
-    window.addEventListener('load', () => {
-        spustitHru('index1', false); 
-    });
 
     window.addEventListener('resize', prizpusobVysku);
 </script>
