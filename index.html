@@ -408,6 +408,41 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   z-index: 1;
   opacity: 1;
 }
+#video-bubbles {
+  position: fixed;
+  bottom: 5%;
+  right: 24px;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 8px;
+  background: rgba(20, 20, 20, 0.45);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+}
+#video-bubbles .bubble {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition: 0.25s;
+}
+#video-bubbles .bubble:hover {
+  background: rgba(5, 212, 255, 0.6);
+  transform: scale(1.15);
+}
+#video-bubbles .bubble.active {
+  background: #05d4ff;
+  border-color: #05d4ff;
+  box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
+}
+@media (max-width: 600px) {
+  #video-bubbles { right: 12px; padding: 10px 6px; }
+}
 #center-section {
   position: absolute;
   top: 60%;
@@ -421,6 +456,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   flex-direction: column;
   align-items: stretch;
   z-index: 10;
+}
+.gallery-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #05d4ff;
+  margin-bottom: 8px;
 }
 .inner-text {
   position:relative;
@@ -627,6 +670,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         Your browser does not support the video tag.
     </video>
 
+    <div id="video-bubbles" role="group" aria-label="Přepínání videa na pozadí"></div>
+
 
     <div id="center-section">
         <div class="logo-section"></div>
@@ -689,6 +734,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 
     <div class="inner-text" id="padding">
+        <span class="gallery-eyebrow">Moje práce</span>
         <h2>Galerie</h2>
        <p>Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.</p>
 
@@ -854,56 +900,77 @@ loadFolder(ROOT_FOLDER_ID);
 
 
 
-        // Funkce pro náhodný výběr videa
-        function getRandomVideo() {
-            const isMobile = window.innerWidth <= 768;
-            const isLandscape = window.innerWidth > window.innerHeight;
+        // Počet dostupných videí ve složce pozadi/ (1.mp4, 2.mp4, 3.mp4)
+        const TOTAL_BACKGROUND_VIDEOS = 3;
+        let currentVideoIndex = 0;
 
-            if (isMobile && isLandscape) {
-                const desktopVideos = [];
-                for (let i = 1; i <= 3; i++) {
-                    desktopVideos.push(`pozadi/${i}.mp4`);
-                }
-                const randomIndex = Math.floor(Math.random() * desktopVideos.length);
-                return desktopVideos[randomIndex];
+        function videoList() {
+            const list = [];
+            for (let i = 1; i <= TOTAL_BACKGROUND_VIDEOS; i++) {
+                list.push(`pozadi/${i}.mp4`);
             }
-
-            if (isMobile) {
-                const mobileVideos = [];
-                for (let i = 1; i <= 3; i++) {
-                    mobileVideos.push(`pozadi/${i}.mp4`);
-                }
-                const randomIndex = Math.floor(Math.random() * mobileVideos.length);
-                return mobileVideos[randomIndex];
-            }
-
-            const desktopVideos = [];
-            for (let i = 1; i <= 3; i++) {
-                desktopVideos.push(`pozadi/${i}.mp4`);
-            }
-
-            const randomIndex = Math.floor(Math.random() * desktopVideos.length);
-            return desktopVideos[randomIndex];
+            return list;
         }
 
-        // Nastavení video pozadí
-        function setBackgroundVideo() {
+        // Nastavení konkrétního videa na pozadí podle indexu (0 = 1.mp4, 1 = 2.mp4, ...)
+        function setBackgroundVideo(index) {
+            const videos = videoList();
+            currentVideoIndex = ((index % videos.length) + videos.length) % videos.length;
+
             const videoElement = document.getElementById('background-video');
-            const videoSource = getRandomVideo();
             const sourceElement = document.getElementById('video-source');
-            sourceElement.src = videoSource;
+            sourceElement.src = videos[currentVideoIndex];
             videoElement.load();
             videoElement.play().catch(error => {
                 console.error("Chyba při přehrávání videa:", error);
             });
+
+            updateVideoBubbles();
+        }
+
+        // Vytvoření bublinek podle počtu nalezených videí
+        function initVideoBubbles() {
+            const container = document.getElementById('video-bubbles');
+            if (!container) return;
+            container.innerHTML = '';
+
+            videoList().forEach((src, index) => {
+                const bubble = document.createElement('button');
+                bubble.type = 'button';
+                bubble.className = 'bubble';
+                bubble.setAttribute('aria-label', `Přepnout na video pozadí ${index + 1}`);
+                bubble.addEventListener('click', () => setBackgroundVideo(index));
+                container.appendChild(bubble);
+            });
+        }
+
+        function updateVideoBubbles() {
+            const bubbles = document.querySelectorAll('#video-bubbles .bubble');
+            bubbles.forEach((b, index) => {
+                b.classList.toggle('active', index === currentVideoIndex);
+            });
         }
 
         window.onload = () => {
-            setBackgroundVideo();
+            initVideoBubbles();
+            const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
+            setBackgroundVideo(randomIndex);
         };
 
-
-
+        // Plynulé přejíždění na odkazy vedoucí na stejnou stránku (#kotva)
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const rawTarget = this.getAttribute('href').slice(1);
+                if (!rawTarget) return;
+                const targetId = decodeURIComponent(rawTarget);
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    e.preventDefault();
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    history.pushState(null, '', '#' + rawTarget);
+                }
+            });
+        });
 
     </script>
 
