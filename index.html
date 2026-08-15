@@ -10,7 +10,7 @@
     <meta property="og:description" content="2D/3D grafika, design a herní vývoj.">
     <meta property="og:image" content="style/logo.png">
 	
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon"> 
+    <link rel="shortcut icon" href="favicon.png" type="image/png"> 
 	
     <style>
 		
@@ -459,11 +459,17 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 .gallery-eyebrow {
   display: inline-block;
-  font-size: 0.78rem;
+  font-size: clamp(16px, 2.5vw, 21px);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #05d4ff;
   margin-bottom: 8px;
+}
+.gallery-lead {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.95rem;
+  max-width: 520px;
+  margin: 0 auto 14px;
 }
 .inner-text {
   position:relative;
@@ -676,22 +682,22 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     <div id="center-section">
         <div class="logo-section"></div>
         <div class="inner-text">
-            <h2>Vítejte</h2>
-
-            <p>Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!</p>
-        </div>
-
-        <div class="inner-text">
             <h2>Portfolio</h2>
       <p>Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...</p>
 
+        </div>
+
+        <div class="inner-text">
+            <h2>Vítejte</h2>
+
+            <p>Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!</p>
         </div>
 
 
 
     </div>
    <div class="scrollbutton">
-       <button class="back-button" class="gallery-button" id="scroll-button">▼</button>
+       <button class="back-button gallery-button" id="scroll-button">▼</button>
     </div>
 
 <script>
@@ -735,6 +741,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
     <div class="inner-text" id="padding">
         <span class="gallery-eyebrow">Moje práce</span>
+        <p class="gallery-lead">Ukázka projektů, na kterých jsem v poslední době pracoval — od grafiky pro tisk po herní vizuály.</p>
         <h2>Galerie</h2>
        <p>Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.</p>
 
@@ -1084,18 +1091,18 @@ loadFolder(ROOT_FOLDER_ID);
 
 <div class="footer">
 
-        <img src="style/profilovka.png" alt="Team Photo or Logo">
+        <img src="style/profilovka.png" alt="Filip Duda">
         <h2>Kontaktujte mě</h2>
         <p><strong>Telefon:</strong> +420 608 122 052</p>
         <p><strong>Email:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
 <br>
         <div class="social-icons">
-            <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank"><img src="style/linkedin.png" alt="LinkedIn"></a>
+            <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank" rel="noopener noreferrer"><img src="style/linkedin.png" alt="LinkedIn"></a>
 	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
-	    <a href="https://wa.me/420608122052" target="_blank"><img src="style/whatsapp.png" alt="Whatsapp"></a>
+	    <a href="https://wa.me/420608122052" target="_blank" rel="noopener noreferrer"><img src="style/whatsapp.png" alt="Whatsapp"></a>
         </div>
    <div class="button-container">
-       <button class="back-button" class="gallery-button" onclick="window.location.href='#center-section'" >▲</button>
+       <button class="back-button gallery-button" onclick="window.location.href='#center-section'" >▲</button>
    </div>
 
  </div> 
