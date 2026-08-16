@@ -178,15 +178,22 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       justify-content: center;
       align-items: center;
     }
-    .preview-modal img,
-    .preview-modal .video-wrapper {
+    .media-frame {
+      position: relative;
+      display: inline-flex;
+      max-width: 95vw;
+      max-height: 80vh;
+    }
+    .media-frame img,
+    .media-frame .video-wrapper {
       max-width: 95vw;
       max-height: 80vh;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      display: block;
     }
-    .preview-modal img {
+    .media-frame img {
       width: auto;
       height: auto;
       object-fit: contain;
@@ -216,17 +223,17 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     }
 
 .preview-modal .close {
-  position: fixed;
-  top: max(16px, env(safe-area-inset-top));
-  right: max(16px, env(safe-area-inset-right));
-  font-size: 32px;
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  font-size: 28px;
   color: white;
   cursor: pointer;
-  z-index: 999999;
-  background: rgba(0,0,0,0.85);
+  z-index: 20;
+  background: rgba(0,0,0,0.9);
   border: 2px solid rgba(255,255,255,0.6);
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -243,11 +250,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 @media (max-width: 480px) {
   .preview-modal .close {
-    top: max(10px, env(safe-area-inset-top));
-    right: max(10px, env(safe-area-inset-right));
-    width: 40px;
-    height: 40px;
-    font-size: 26px;
+    top: -12px;
+    right: -12px;
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
   }
 }
 
@@ -912,7 +919,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 </div>
 
 <div id="previewModal" class="preview-modal" onclick="closePreview(event)">
-  <span class="close">×</span>
   <div id="previewContent"></div>
 </div>
 
@@ -976,6 +982,19 @@ function openPreview(file) {
 
   const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
 
+  const frame = document.createElement('div');
+  frame.className = 'media-frame';
+
+  const closeBtn = document.createElement('span');
+  closeBtn.className = 'close';
+  closeBtn.innerHTML = '×';
+  closeBtn.setAttribute('aria-label', 'Zavřít náhled');
+  closeBtn.onclick = (e) => {
+    e.stopPropagation();
+    modal.style.display = 'none';
+    content.innerHTML = '';
+  };
+
   // 🔹 Obrázek
   if (file.mimeType.startsWith('image/')) {
     const img = document.createElement('img');
@@ -983,7 +1002,7 @@ function openPreview(file) {
     img.onerror = () => {
       img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
     };
-    content.appendChild(img);
+    frame.appendChild(img);
   } 
 
   // 🔹 Video (spolehlivý vestavěný přehrávač Disku, bez vynuceného 16:9)
@@ -996,14 +1015,17 @@ function openPreview(file) {
     iframe.allow = "autoplay; fullscreen";
 
     wrapper.appendChild(iframe);
-    content.appendChild(wrapper);
+    frame.appendChild(wrapper);
   }
+
+  frame.appendChild(closeBtn);
+  content.appendChild(frame);
 
   modal.style.display = 'flex';
 }
 
 function closePreview(event) {
-  if (event.target.id === 'previewModal' || event.target.className === 'close') {
+  if (event.target.id === 'previewModal') {
     document.getElementById('previewModal').style.display = 'none';
     document.getElementById('previewContent').innerHTML = '';
   }
