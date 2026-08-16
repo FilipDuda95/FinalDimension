@@ -1000,7 +1000,7 @@ function hideMediaPreview() {
   document.getElementById('previewContent').innerHTML = '';
   document.querySelectorAll('#previewModal .close').forEach(el => el.remove());
   if (activeVideoResizeHandler) {
-    window.removeEventListener('resize', activeVideoResizeHandler);
+    activeVideoResizeHandler();
     activeVideoResizeHandler = null;
   }
   unlockPageScroll();
@@ -1077,11 +1077,23 @@ function openPreview(file) {
 
     const scaleIframe = () => {
       const scale = Math.min(wrapper.clientWidth / INTRINSIC_W, wrapper.clientHeight / INTRINSIC_H);
-      iframe.style.transform = `scale(${scale})`;
+      if (scale > 0 && isFinite(scale)) {
+        iframe.style.transform = `scale(${scale})`;
+      }
     };
-    requestAnimationFrame(scaleIframe);
-    activeVideoResizeHandler = scaleIframe;
-    window.addEventListener('resize', activeVideoResizeHandler);
+
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(scaleIframe);
+      ro.observe(wrapper);
+      activeVideoResizeHandler = () => ro.disconnect();
+    } else {
+      // Záložní řešení pro starší prohlížeče bez ResizeObserver
+      scaleIframe();
+      requestAnimationFrame(scaleIframe);
+      setTimeout(scaleIframe, 150);
+      window.addEventListener('resize', scaleIframe);
+      activeVideoResizeHandler = () => window.removeEventListener('resize', scaleIframe);
+    }
   }
 
   content.appendChild(frame);
@@ -1346,8 +1358,15 @@ loadFolder(ROOT_FOLDER_ID);
             const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
             setBackgroundVideo(randomIndex);
             alignVideoBubblesToPanel();
+            // Mobilní prohlížeče mění výšku viewportu až po sbalení adresního řádku,
+            // proto přepočet zopakujeme s malým zpožděním.
+            setTimeout(alignVideoBubblesToPanel, 300);
+            setTimeout(alignVideoBubblesToPanel, 1000);
         };
         window.addEventListener('resize', alignVideoBubblesToPanel);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', alignVideoBubblesToPanel);
+        }
 
         // Plynulé přejíždění na odkazy vedoucí na stejnou stránku (#kotva)
         document.querySelectorAll('a[href^="#"]').forEach(link => {
