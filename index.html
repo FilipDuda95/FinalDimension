@@ -223,13 +223,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     }
 
 .preview-modal .close {
-  position: absolute;
-  top: -16px;
+  position: fixed;
+  top: max(24px, env(safe-area-inset-top));
   right: 24px;
   font-size: 28px;
   color: white;
   cursor: pointer;
-  z-index: 20;
+  z-index: 999999;
   background: rgba(20, 20, 20, 0.55);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -251,7 +251,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 @media (max-width: 480px) {
   .preview-modal .close {
-    top: -12px;
+    top: max(14px, env(safe-area-inset-top));
     right: 14px;
     width: 48px;
     height: 48px;
