@@ -206,8 +206,8 @@ body.modal-open {
     }
     .video-wrapper {
       position: relative;
-      width: min(94vw, 1000px);
-      height: min(84vh, 620px);
+      width: min(94vw, 1000px, calc(84vh * 16 / 9));
+      aspect-ratio: 16 / 9;
       background: #000;
       overflow: hidden;
       display: flex;
@@ -483,7 +483,8 @@ body.modal-open {
 }
 #video-bubbles {
   position: fixed;
-  bottom: calc(5% + 80px);
+  top: 50%;
+  transform: translateY(-50%);
   right: 24px;
   z-index: 15;
   display: flex;
@@ -514,7 +515,7 @@ body.modal-open {
   box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
 }
 @media (max-width: 600px) {
-  #video-bubbles { right: 12px; padding: 8px 5px; bottom: calc(5% + 70px); }
+  #video-bubbles { right: 12px; padding: 8px 5px; }
 }
 
 /* ---------- Kruhové plovoucí menu (palcem dosažitelné, pravý dolní roh) ---------- */
@@ -1343,30 +1344,11 @@ loadFolder(ROOT_FOLDER_ID);
             });
         }
 
-        // Zarovná bublinky pro přepínání videa s koncem panelu Portfolio/Vítejte
-        function alignVideoBubblesToPanel() {
-            const panel = document.getElementById('center-section');
-            const bubbles = document.getElementById('video-bubbles');
-            if (!panel || !bubbles) return;
-            const rect = panel.getBoundingClientRect();
-            bubbles.style.top = `${Math.round(rect.bottom + 16)}px`;
-            bubbles.style.bottom = 'auto';
-        }
-
         window.onload = () => {
             initVideoBubbles();
             const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
             setBackgroundVideo(randomIndex);
-            alignVideoBubblesToPanel();
-            // Mobilní prohlížeče mění výšku viewportu až po sbalení adresního řádku,
-            // proto přepočet zopakujeme s malým zpožděním.
-            setTimeout(alignVideoBubblesToPanel, 300);
-            setTimeout(alignVideoBubblesToPanel, 1000);
         };
-        window.addEventListener('resize', alignVideoBubblesToPanel);
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', alignVideoBubblesToPanel);
-        }
 
         // Plynulé přejíždění na odkazy vedoucí na stejnou stránku (#kotva)
         document.querySelectorAll('a[href^="#"]').forEach(link => {
