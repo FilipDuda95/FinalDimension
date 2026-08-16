@@ -160,6 +160,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   .back-button:hover { background-color:  #05d4ff; }
 
 
+html.modal-open,
+body.modal-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
     /* ===== UPRAVENÝ MODAL ===== */
     .preview-modal {
       display: none;
@@ -974,6 +980,24 @@ async function loadFolder(folderId, addToHistory = true) {
   });
 }
 
+function lockPageScroll() {
+  document.documentElement.classList.add('modal-open');
+  document.body.classList.add('modal-open');
+}
+
+function unlockPageScroll() {
+  document.documentElement.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
+}
+
+function closeMediaPreview() {
+  const modal = document.getElementById('previewModal');
+  modal.style.display = 'none';
+  document.getElementById('previewContent').innerHTML = '';
+  document.querySelectorAll('#previewModal .close').forEach(el => el.remove());
+  unlockPageScroll();
+}
+
 function openPreview(file) {
   const modal = document.getElementById('previewModal');
   const content = document.getElementById('previewContent');
@@ -991,9 +1015,7 @@ function openPreview(file) {
   closeBtn.setAttribute('aria-label', 'Zavřít náhled');
   closeBtn.onclick = (e) => {
     e.stopPropagation();
-    modal.style.display = 'none';
-    content.innerHTML = '';
-    closeBtn.remove();
+    closeMediaPreview();
   };
 
   // 🔹 Obrázek
@@ -1023,13 +1045,12 @@ function openPreview(file) {
   modal.appendChild(closeBtn);
 
   modal.style.display = 'flex';
+  lockPageScroll();
 }
 
 function closePreview(event) {
   if (event.target.id === 'previewModal') {
-    document.getElementById('previewModal').style.display = 'none';
-    document.getElementById('previewContent').innerHTML = '';
-    document.querySelectorAll('#previewModal .close').forEach(el => el.remove());
+    closeMediaPreview();
   }
 }
 
@@ -1193,6 +1214,10 @@ loadFolder(ROOT_FOLDER_ID);
                 radialLinks.classList.remove('open');
                 radialToggle.classList.remove('open');
                 radialToggle.setAttribute('aria-expanded', 'false');
+                const modal = document.getElementById('previewModal');
+                if (modal && modal.style.display === 'flex') {
+                    closeMediaPreview();
+                }
             });
         });
 
