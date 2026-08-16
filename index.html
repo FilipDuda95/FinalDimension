@@ -193,7 +193,7 @@ body.modal-open {
     .media-frame img,
     .media-frame .video-wrapper {
       max-width: 95vw;
-      max-height: 80vh;
+      max-height: 85vh;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
@@ -206,8 +206,8 @@ body.modal-open {
     }
     .video-wrapper {
       position: relative;
-      width: min(92vw, 800px);
-      height: min(80vh, 500px);
+      width: min(94vw, 1000px);
+      height: min(84vh, 620px);
       background: #000;
     }
     .video-wrapper iframe {
@@ -483,20 +483,20 @@ body.modal-open {
 }
 #video-bubbles {
   position: fixed;
-  bottom: 5%;
+  bottom: calc(5% + 80px);
   right: 24px;
   z-index: 15;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 12px 8px;
+  gap: 8px;
+  padding: 10px 7px;
   background: rgba(20, 20, 20, 0.45);
   border-radius: 999px;
   backdrop-filter: blur(6px);
 }
 #video-bubbles .bubble {
-  width: 11px;
-  height: 11px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -514,14 +514,14 @@ body.modal-open {
   box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
 }
 @media (max-width: 600px) {
-  #video-bubbles { right: 12px; padding: 10px 6px; }
+  #video-bubbles { right: 12px; padding: 8px 5px; bottom: calc(5% + 70px); }
 }
 
 /* ---------- Kruhové plovoucí menu (palcem dosažitelné, pravý dolní roh) ---------- */
 #radial-menu {
   position: fixed;
   right: 24px;
-  bottom: calc(5% + 140px);
+  bottom: 5%;
   z-index: 50;
 }
 #radial-toggle {
@@ -585,7 +585,7 @@ body.modal-open {
   border-color: #05d4ff;
 }
 @media (max-width: 600px) {
-  #radial-menu { right: 14px; bottom: calc(5% + 130px); }
+  #radial-menu { right: 14px; bottom: 5%; }
   #radial-toggle, .radial-link { width: 48px; height: 48px; font-size: 0.65rem; }
 }
 
@@ -990,13 +990,35 @@ function unlockPageScroll() {
   document.body.classList.remove('modal-open');
 }
 
-function closeMediaPreview() {
+let previewHistoryActive = false;
+
+// Skutečné schování/úklid náhledu (bez zásahu do historie prohlížeče)
+function hideMediaPreview() {
   const modal = document.getElementById('previewModal');
   modal.style.display = 'none';
   document.getElementById('previewContent').innerHTML = '';
   document.querySelectorAll('#previewModal .close').forEach(el => el.remove());
   unlockPageScroll();
 }
+
+// Zavření náhledu vyvolané uživatelem (křížek, klik mimo, odkaz v menu)
+function closeMediaPreview() {
+  if (previewHistoryActive) {
+    previewHistoryActive = false;
+    history.back(); // spustí popstate, který náhled skutečně schová
+  } else {
+    hideMediaPreview();
+  }
+}
+
+// Tlačítko zpět v prohlížeči: pokud je náhled otevřený, jen ho zavře
+window.addEventListener('popstate', () => {
+  const modal = document.getElementById('previewModal');
+  if (modal && modal.style.display === 'flex') {
+    previewHistoryActive = false;
+    hideMediaPreview();
+  }
+});
 
 function openPreview(file) {
   const modal = document.getElementById('previewModal');
@@ -1046,6 +1068,12 @@ function openPreview(file) {
 
   modal.style.display = 'flex';
   lockPageScroll();
+
+  // Blokace tlačítka zpět jen u videí z Google Disku - zpět jen zavře video
+  if (file.mimeType.startsWith('video/') && !previewHistoryActive) {
+    previewHistoryActive = true;
+    history.pushState({ mediaPreview: true }, '');
+  }
 }
 
 function closePreview(event) {
