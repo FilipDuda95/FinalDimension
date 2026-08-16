@@ -209,14 +209,14 @@ body.modal-open {
       width: min(94vw, 1000px);
       height: min(84vh, 620px);
       background: #000;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
       border: none;
+      flex-shrink: 0;
     }
     .video-fallback {
       margin-top: 14px;
@@ -991,6 +991,7 @@ function unlockPageScroll() {
 }
 
 let previewHistoryActive = false;
+let activeVideoResizeHandler = null;
 
 // Skutečné schování/úklid náhledu (bez zásahu do historie prohlížeče)
 function hideMediaPreview() {
@@ -998,6 +999,10 @@ function hideMediaPreview() {
   modal.style.display = 'none';
   document.getElementById('previewContent').innerHTML = '';
   document.querySelectorAll('#previewModal .close').forEach(el => el.remove());
+  if (activeVideoResizeHandler) {
+    window.removeEventListener('resize', activeVideoResizeHandler);
+    activeVideoResizeHandler = null;
+  }
   unlockPageScroll();
 }
 
@@ -1055,12 +1060,28 @@ function openPreview(file) {
     const wrapper = document.createElement('div');
     wrapper.className = 'video-wrapper';
 
+    // Vnitřní "velký" rozměr - donutí Google přehrávač vykreslit desktopové
+    // ovládací prvky (menší ikony, jen jedna časová osa), i na mobilu.
+    const INTRINSIC_W = 1600;
+    const INTRINSIC_H = 900;
+
     const iframe = document.createElement('iframe');
     iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
     iframe.allow = "autoplay; fullscreen";
+    iframe.width = INTRINSIC_W;
+    iframe.height = INTRINSIC_H;
+    iframe.style.transformOrigin = 'center center';
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
+
+    const scaleIframe = () => {
+      const scale = Math.min(wrapper.clientWidth / INTRINSIC_W, wrapper.clientHeight / INTRINSIC_H);
+      iframe.style.transform = `scale(${scale})`;
+    };
+    requestAnimationFrame(scaleIframe);
+    activeVideoResizeHandler = scaleIframe;
+    window.addEventListener('resize', activeVideoResizeHandler);
   }
 
   content.appendChild(frame);
@@ -1310,11 +1331,23 @@ loadFolder(ROOT_FOLDER_ID);
             });
         }
 
+        // Zarovná bublinky pro přepínání videa s koncem panelu Portfolio/Vítejte
+        function alignVideoBubblesToPanel() {
+            const panel = document.getElementById('center-section');
+            const bubbles = document.getElementById('video-bubbles');
+            if (!panel || !bubbles) return;
+            const rect = panel.getBoundingClientRect();
+            bubbles.style.top = `${Math.round(rect.bottom + 16)}px`;
+            bubbles.style.bottom = 'auto';
+        }
+
         window.onload = () => {
             initVideoBubbles();
             const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
             setBackgroundVideo(randomIndex);
+            alignVideoBubblesToPanel();
         };
+        window.addEventListener('resize', alignVideoBubblesToPanel);
 
         // Plynulé přejíždění na odkazy vedoucí na stejnou stránku (#kotva)
         document.querySelectorAll('a[href^="#"]').forEach(link => {
