@@ -224,7 +224,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 .preview-modal .close {
   position: fixed;
-  top: max(24px, env(safe-area-inset-top));
+  top: calc(env(safe-area-inset-top) + 90px);
   right: 24px;
   font-size: 28px;
   color: white;
@@ -255,7 +255,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 @media (max-width: 480px) {
   .preview-modal .close {
-    top: max(14px, env(safe-area-inset-top));
+    top: calc(env(safe-area-inset-top) + 80px);
     right: 14px;
     width: 48px;
     height: 48px;
