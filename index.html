@@ -179,7 +179,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       align-items: center;
     }
     .preview-modal img,
-    .preview-modal .video-wrapper {
+    .preview-modal video {
       max-width: 95vw;
       max-height: 80vh;
       border-radius: 12px;
@@ -191,20 +191,20 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       height: auto;
       object-fit: contain;
     }
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      /* Poměr stran řešíme v JS nebo CSS přes aspect-ratio */
-      aspect-ratio: 16 / 9; 
+    .preview-modal video {
+      width: auto;
+      height: auto;
       background: #000;
+      display: block;
     }
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
+    .video-fallback {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    .video-fallback a {
+      color: #05d4ff;
+      text-decoration: underline;
     }
 
 .preview-modal .close {
@@ -965,17 +965,31 @@ function openPreview(file) {
     content.appendChild(img);
   } 
 
-  // 🔹 Video (UPRAVENO PRO MOBILY)
+  // 🔹 Video (nativní přehrávač – správně respektuje orientaci/poměr stran na mobilu)
   else if (file.mimeType.startsWith('video/')) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'video-wrapper';
+    const wrap = document.createElement('div');
 
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-    iframe.allow = "autoplay; fullscreen";
-    
-    wrapper.appendChild(iframe);
-    content.appendChild(wrapper);
+    const video = document.createElement('video');
+    video.controls = true;
+    video.autoplay = true;
+    video.playsInline = true; // iOS: přehrávat v okně, ne vynucovat fullscreen
+    video.src = `https://www.googleapis.com/drive/v3/files/${file.id}?alt=media&key=${API_KEY}`;
+
+    const fallback = document.createElement('div');
+    fallback.className = 'video-fallback';
+    fallback.innerHTML = `<a href="https://drive.google.com/file/d/${file.id}/view" target="_blank" rel="noopener noreferrer">Nepřehrává se video? Otevřít na Google Disku ↗</a>`;
+
+    video.onerror = () => {
+      wrap.querySelector('video')?.remove();
+      const msg = document.createElement('p');
+      msg.style.color = '#ccc';
+      msg.textContent = 'Video se nepodařilo přehrát přímo zde.';
+      wrap.prepend(msg);
+    };
+
+    wrap.appendChild(video);
+    wrap.appendChild(fallback);
+    content.appendChild(wrap);
   }
 
   modal.style.display = 'flex';
