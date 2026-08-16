@@ -193,7 +193,7 @@ body.modal-open {
     .media-frame img,
     .media-frame .video-wrapper {
       max-width: 95vw;
-      max-height: 85vh;
+      max-height: 80vh;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
@@ -206,17 +206,17 @@ body.modal-open {
     }
     .video-wrapper {
       position: relative;
-      width: min(94vw, 1000px);
-      height: min(84vh, 620px);
+      width: min(92vw, 800px);
+      height: min(80vh, 500px);
       background: #000;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       border: none;
-      flex-shrink: 0;
     }
     .video-fallback {
       margin-top: 14px;
@@ -483,20 +483,20 @@ body.modal-open {
 }
 #video-bubbles {
   position: fixed;
-  bottom: calc(5% + 80px);
+  bottom: 5%;
   right: 24px;
   z-index: 15;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 10px 7px;
+  gap: 10px;
+  padding: 12px 8px;
   background: rgba(20, 20, 20, 0.45);
   border-radius: 999px;
   backdrop-filter: blur(6px);
 }
 #video-bubbles .bubble {
-  width: 9px;
-  height: 9px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -514,14 +514,14 @@ body.modal-open {
   box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
 }
 @media (max-width: 600px) {
-  #video-bubbles { right: 12px; padding: 8px 5px; bottom: calc(5% + 70px); }
+  #video-bubbles { right: 12px; padding: 10px 6px; }
 }
 
 /* ---------- Kruhové plovoucí menu (palcem dosažitelné, pravý dolní roh) ---------- */
 #radial-menu {
   position: fixed;
   right: 24px;
-  bottom: 5%;
+  bottom: calc(5% + 140px);
   z-index: 50;
 }
 #radial-toggle {
@@ -585,7 +585,7 @@ body.modal-open {
   border-color: #05d4ff;
 }
 @media (max-width: 600px) {
-  #radial-menu { right: 14px; bottom: 5%; }
+  #radial-menu { right: 14px; bottom: calc(5% + 130px); }
   #radial-toggle, .radial-link { width: 48px; height: 48px; font-size: 0.65rem; }
 }
 
@@ -990,40 +990,13 @@ function unlockPageScroll() {
   document.body.classList.remove('modal-open');
 }
 
-let previewHistoryActive = false;
-let activeVideoResizeHandler = null;
-
-// Skutečné schování/úklid náhledu (bez zásahu do historie prohlížeče)
-function hideMediaPreview() {
+function closeMediaPreview() {
   const modal = document.getElementById('previewModal');
   modal.style.display = 'none';
   document.getElementById('previewContent').innerHTML = '';
   document.querySelectorAll('#previewModal .close').forEach(el => el.remove());
-  if (activeVideoResizeHandler) {
-    activeVideoResizeHandler();
-    activeVideoResizeHandler = null;
-  }
   unlockPageScroll();
 }
-
-// Zavření náhledu vyvolané uživatelem (křížek, klik mimo, odkaz v menu)
-function closeMediaPreview() {
-  if (previewHistoryActive) {
-    previewHistoryActive = false;
-    history.back(); // spustí popstate, který náhled skutečně schová
-  } else {
-    hideMediaPreview();
-  }
-}
-
-// Tlačítko zpět v prohlížeči: pokud je náhled otevřený, jen ho zavře
-window.addEventListener('popstate', () => {
-  const modal = document.getElementById('previewModal');
-  if (modal && modal.style.display === 'flex') {
-    previewHistoryActive = false;
-    hideMediaPreview();
-  }
-});
 
 function openPreview(file) {
   const modal = document.getElementById('previewModal');
@@ -1060,40 +1033,12 @@ function openPreview(file) {
     const wrapper = document.createElement('div');
     wrapper.className = 'video-wrapper';
 
-    // Vnitřní "velký" rozměr - donutí Google přehrávač vykreslit desktopové
-    // ovládací prvky (menší ikony, jen jedna časová osa), i na mobilu.
-    const INTRINSIC_W = 1600;
-    const INTRINSIC_H = 900;
-
     const iframe = document.createElement('iframe');
     iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
     iframe.allow = "autoplay; fullscreen";
-    iframe.width = INTRINSIC_W;
-    iframe.height = INTRINSIC_H;
-    iframe.style.transformOrigin = 'center center';
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
-
-    const scaleIframe = () => {
-      const scale = Math.min(wrapper.clientWidth / INTRINSIC_W, wrapper.clientHeight / INTRINSIC_H);
-      if (scale > 0 && isFinite(scale)) {
-        iframe.style.transform = `scale(${scale})`;
-      }
-    };
-
-    if ('ResizeObserver' in window) {
-      const ro = new ResizeObserver(scaleIframe);
-      ro.observe(wrapper);
-      activeVideoResizeHandler = () => ro.disconnect();
-    } else {
-      // Záložní řešení pro starší prohlížeče bez ResizeObserver
-      scaleIframe();
-      requestAnimationFrame(scaleIframe);
-      setTimeout(scaleIframe, 150);
-      window.addEventListener('resize', scaleIframe);
-      activeVideoResizeHandler = () => window.removeEventListener('resize', scaleIframe);
-    }
   }
 
   content.appendChild(frame);
@@ -1101,12 +1046,6 @@ function openPreview(file) {
 
   modal.style.display = 'flex';
   lockPageScroll();
-
-  // Blokace tlačítka zpět jen u videí z Google Disku - zpět jen zavře video
-  if (file.mimeType.startsWith('video/') && !previewHistoryActive) {
-    previewHistoryActive = true;
-    history.pushState({ mediaPreview: true }, '');
-  }
 }
 
 function closePreview(event) {
@@ -1343,30 +1282,11 @@ loadFolder(ROOT_FOLDER_ID);
             });
         }
 
-        // Zarovná bublinky pro přepínání videa s koncem panelu Portfolio/Vítejte
-        function alignVideoBubblesToPanel() {
-            const panel = document.getElementById('center-section');
-            const bubbles = document.getElementById('video-bubbles');
-            if (!panel || !bubbles) return;
-            const rect = panel.getBoundingClientRect();
-            bubbles.style.top = `${Math.round(rect.bottom + 16)}px`;
-            bubbles.style.bottom = 'auto';
-        }
-
         window.onload = () => {
             initVideoBubbles();
             const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
             setBackgroundVideo(randomIndex);
-            alignVideoBubblesToPanel();
-            // Mobilní prohlížeče mění výšku viewportu až po sbalení adresního řádku,
-            // proto přepočet zopakujeme s malým zpožděním.
-            setTimeout(alignVideoBubblesToPanel, 300);
-            setTimeout(alignVideoBubblesToPanel, 1000);
         };
-        window.addEventListener('resize', alignVideoBubblesToPanel);
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', alignVideoBubblesToPanel);
-        }
 
         // Plynulé přejíždění na odkazy vedoucí na stejnou stránku (#kotva)
         document.querySelectorAll('a[href^="#"]').forEach(link => {
