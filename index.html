@@ -188,7 +188,7 @@ body.modal-open {
       position: relative;
       display: inline-flex;
       max-width: 95vw;
-      max-height: 80vh;
+      max-height: 85vh;
     }
     .media-frame img,
     .media-frame .video-wrapper {
@@ -206,8 +206,8 @@ body.modal-open {
     }
     .video-wrapper {
       position: relative;
-      width: min(94vw, 1000px, calc(84vh * 16 / 9));
-      aspect-ratio: 16 / 9;
+      width: min(95vw, 1100px);
+      height: min(85vh, 700px);
       background: #000;
       overflow: hidden;
       display: flex;
@@ -515,7 +515,8 @@ body.modal-open {
   box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
 }
 @media (max-width: 600px) {
-  #video-bubbles { right: 12px; padding: 8px 5px; }
+  #video-bubbles { right: 12px; padding: 7px 4px; gap: 6px; }
+  #video-bubbles .bubble { width: 7px; height: 7px; }
 }
 
 /* ---------- Kruhové plovoucí menu (palcem dosažitelné, pravý dolní roh) ---------- */
@@ -1061,23 +1062,34 @@ function openPreview(file) {
     const wrapper = document.createElement('div');
     wrapper.className = 'video-wrapper';
 
-    // Vnitřní "velký" rozměr - donutí Google přehrávač vykreslit desktopové
-    // ovládací prvky (menší ikony, jen jedna časová osa), i na mobilu.
-    const INTRINSIC_W = 1600;
-    const INTRINSIC_H = 900;
-
     const iframe = document.createElement('iframe');
     iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
     iframe.allow = "autoplay; fullscreen";
-    iframe.width = INTRINSIC_W;
-    iframe.height = INTRINSIC_H;
     iframe.style.transformOrigin = 'center center';
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
 
+    // Virtuální plátno se dopočítá podle SKUTEČNÉHO tvaru okna (žádné
+    // černé okraje navíc od nás), ale zůstane dost velké (min. 1280px),
+    // aby si Google přehrávač myslel, že je na desktopu (menší ikony,
+    // jen jedna časová osa).
+    let lastIntrinsicW = 0;
     const scaleIframe = () => {
-      const scale = Math.min(wrapper.clientWidth / INTRINSIC_W, wrapper.clientHeight / INTRINSIC_H);
+      const displayW = wrapper.clientWidth;
+      const displayH = wrapper.clientHeight;
+      if (!displayW || !displayH) return;
+
+      const intrinsicW = Math.max(1280, Math.round(displayW * 2));
+      const intrinsicH = Math.round(intrinsicW * displayH / displayW);
+
+      if (Math.abs(intrinsicW - lastIntrinsicW) > 40) {
+        iframe.width = intrinsicW;
+        iframe.height = intrinsicH;
+        lastIntrinsicW = intrinsicW;
+      }
+
+      const scale = displayW / intrinsicW;
       if (scale > 0 && isFinite(scale)) {
         iframe.style.transform = `scale(${scale})`;
       }
