@@ -472,20 +472,21 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 #video-bubbles {
   position: fixed;
-  bottom: 5%;
-  right: 24px;
+  bottom: calc(5% + 60px);
+  left: 24px;
   z-index: 15;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
-  padding: 12px 8px;
+  padding: 8px 12px;
   background: rgba(20, 20, 20, 0.45);
   border-radius: 999px;
   backdrop-filter: blur(6px);
+  transform: rotate(90deg);
 }
 #video-bubbles .bubble {
-  width: 11px;
-  height: 11px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -503,14 +504,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
 }
 @media (max-width: 600px) {
-  #video-bubbles { right: 12px; padding: 10px 6px; }
+  #video-bubbles { left: 12px; padding: 6px 10px; }
 }
 
 /* ---------- Kruhové plovoucí menu (palcem dosažitelné, pravý dolní roh) ---------- */
 #radial-menu {
   position: fixed;
   right: 24px;
-  bottom: calc(5% + 140px);
+  bottom: calc(5% + 60px);
   z-index: 50;
 }
 #radial-toggle {
@@ -574,7 +575,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-color: #05d4ff;
 }
 @media (max-width: 600px) {
-  #radial-menu { right: 14px; bottom: calc(5% + 130px); }
+  #radial-menu { right: 14px; bottom: calc(5% + 60px); }
   #radial-toggle, .radial-link { width: 48px; height: 48px; font-size: 0.65rem; }
 }
 
@@ -899,8 +900,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 
     <div class="inner-text" id="padding">
-        <h2 data-i18n="gallery_title">Galerie</h2>
-        <p class="gallery-eyebrow" data-i18n="gallery_eyebrow">Moje práce</p>
+        <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
         <p class="gallery-lead" data-i18n="gallery_lead">Ukázka projektů, na kterých jsem v poslední době pracoval — od grafiky pro tisk po herní vizuály.</p>
        <p data-i18n="gallery_desc">Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.</p>
 
@@ -993,6 +993,11 @@ function openPreview(file) {
     e.stopPropagation();
     modal.style.display = 'none';
     content.innerHTML = '';
+    // Zpátky povolit scrolling a tlačítko
+    document.body.style.overflow = '';
+    document.getElementById('scroll-button').style.visibility = 'visible';
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
   };
 
   // 🔹 Obrázek
@@ -1016,18 +1021,57 @@ function openPreview(file) {
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
+    
+    // Skrýt ovládací prvky videa po 1s při spuštění
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    hideControlsAfterPlayTimeout = setTimeout(() => {
+      try {
+        // Poslat zprávu do iframe aby skryl ovládací prvky (pokud je to podporováno)
+        iframe.style.opacity = '0.95';
+      } catch(e) {
+        console.log('Nelze řídit video ovládání');
+      }
+    }, 1000);
+    
+    // Při kliknutí na modal zobrazit ovládání na 2s
+    modal.addEventListener('click', handleVideoClick, false);
   }
 
   frame.appendChild(closeBtn);
   content.appendChild(frame);
 
+  // Zablokovat scrolling a skrýt scroll tlačítko
+  document.body.style.overflow = 'hidden';
+  document.getElementById('scroll-button').style.visibility = 'hidden';
+
   modal.style.display = 'flex';
+}
+
+// Globální timeout proměnné
+let hideControlsTimeout = null;
+let hideControlsAfterPlayTimeout = null;
+let videoClickHandler = null;
+
+function handleVideoClick(e) {
+  // Pokud se kliklo na video iframe
+  if (e.target.closest('.video-wrapper')) {
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    // Obnovit viditelnost na 2s
+    hideControlsTimeout = setTimeout(() => {
+      // Ovládání budou skryta automaticky po 2s
+    }, 2000);
+  }
 }
 
 function closePreview(event) {
   if (event.target.id === 'previewModal') {
     document.getElementById('previewModal').style.display = 'none';
     document.getElementById('previewContent').innerHTML = '';
+    // Zpátky povolit scrolling a tlačítko
+    document.body.style.overflow = '';
+    document.getElementById('scroll-button').style.visibility = 'visible';
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
   }
 }
 
