@@ -203,6 +203,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       width: min(92vw, 800px);
       height: min(80vh, 500px);
       background: #000;
+      overflow: hidden;
+      -webkit-user-select: none;
+      user-select: none;
     }
     .video-wrapper iframe {
       position: absolute;
@@ -211,6 +214,18 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       width: 100%;
       height: 100%;
       border: none;
+      display: block;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    
+    /* Skrytí ovladačů na mobilu */
+    @media (max-width: 768px) {
+      .video-wrapper iframe {
+        pointer-events: none !important;
+        opacity: 1 !important;
+      }
     }
     .video-fallback {
       margin-top: 14px;
@@ -1029,37 +1044,28 @@ function openPreview(file) {
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Blokovat interakci s iframe controls prvních 1.5 sekundy
+      // Na mobilu - vypnout pointer events na video controllery
       iframe.style.pointerEvents = 'none';
       
-      hideControlsAfterPlayTimeout = setTimeout(() => {
-        // Po 1.5s vrátit pointer events aby se dalo přehrávat
-        iframe.style.pointerEvents = 'auto';
-      }, 1500);
-      
-      // Naslouchat dotyku na wrapperu
+      // Po dotyku na wrapper krátkodobě zapnout interakci pro přehrávání
+      let tapCount = 0;
       wrapper.addEventListener('touchstart', (e) => {
-        // Při dotyku dočasně zakázat pointer events na 0.5s
-        // aby se zabránilo nežádoucím stiskům na controls
-        iframe.style.pointerEvents = 'none';
+        tapCount++;
         
+        // Zapnout pointer events dočasně pro jednu akci
+        iframe.style.pointerEvents = 'auto';
+        
+        // Po 0.3s vypnout zpět
         if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
         videoTouchTimeout = setTimeout(() => {
-          iframe.style.pointerEvents = 'auto';
-        }, 500);
-      });
+          iframe.style.pointerEvents = 'none';
+          tapCount = 0;
+        }, 300);
+      }, { passive: true });
       
     } else {
-      // Na desktopu - původní logika
-      if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
-      hideControlsAfterPlayTimeout = setTimeout(() => {
-        try {
-          iframe.style.opacity = '0.95';
-        } catch(e) {
-          console.log('Nelze řídit video ovládání');
-        }
-      }, 1000);
-      
+      // Na desktopu - normální chování
+      iframe.style.pointerEvents = 'auto';
       // Při kliknutí na modal zobrazit ovládání na 2s
       modal.addEventListener('click', handleVideoClick, false);
     }
