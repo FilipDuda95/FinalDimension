@@ -472,28 +472,29 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 #video-bubbles {
   position: fixed;
-  bottom: 8%;
-  left: 5px;
+  bottom: 5%;
+  left: 24px;
   z-index: 15;
   display: flex;
-  flex-direction: row;
-  gap: 5px;
-  padding: 8px 12px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 2px;
   background: rgba(20, 20, 20, 0.45);
   border-radius: 999px;
   backdrop-filter: blur(6px);
-  transform: rotate(90deg) translateY(-22px);
-  transform-origin: center center;
+  align-items: center;
+  justify-content: center;
 }
 #video-bubbles .bubble {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.5);
   cursor: pointer;
   padding: 0;
   transition: 0.25s;
+  flex-shrink: 0;
 }
 #video-bubbles .bubble:hover {
   background: rgba(5, 212, 255, 0.6);
@@ -503,6 +504,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   background: #05d4ff;
   border-color: #05d4ff;
   box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
+}
+@media (max-width: 600px) {
+  #video-bubbles { left: 24px; padding: 2px 12px; }
 }
 
 /* ---------- Kruhové plovoucí menu (palcem dosažitelné, pravý dolní roh) ---------- */
@@ -1028,21 +1032,26 @@ function openPreview(file) {
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Na mobilu - naslouchat dotyku pro schování/zobrazení ovládacích prvků
-      wrapper.addEventListener('touchend', (e) => {
+      // Blokovat interakci s iframe controls prvních 1.5 sekundy
+      iframe.style.pointerEvents = 'none';
+      
+      hideControlsAfterPlayTimeout = setTimeout(() => {
+        // Po 1.5s vrátit pointer events aby se dalo přehrávat
+        iframe.style.pointerEvents = 'auto';
+      }, 1500);
+      
+      // Naslouchat dotyku na wrapperu
+      wrapper.addEventListener('touchstart', (e) => {
+        // Při dotyku dočasně zakázat pointer events na 0.5s
+        // aby se zabránilo nežádoucím stiskům na controls
+        iframe.style.pointerEvents = 'none';
+        
         if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
-        // Zobrazit ovládání na 2s
-        wrapper.style.opacity = '1';
-        // Po 2 sekundách neaktivity schovat
         videoTouchTimeout = setTimeout(() => {
-          wrapper.style.opacity = '0.95';
-        }, 2000);
+          iframe.style.pointerEvents = 'auto';
+        }, 500);
       });
       
-      // Při prvním načtení schovat hned po 1s
-      hideControlsAfterPlayTimeout = setTimeout(() => {
-        wrapper.style.opacity = '0.95';
-      }, 1000);
     } else {
       // Na desktopu - původní logika
       if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
