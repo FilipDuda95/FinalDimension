@@ -472,7 +472,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 #video-bubbles {
   position: fixed;
-  bottom: calc(5% + 60px);
+  bottom: 5%;
   left: 24px;
   z-index: 15;
   display: flex;
@@ -482,7 +482,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   background: rgba(20, 20, 20, 0.45);
   border-radius: 999px;
   backdrop-filter: blur(6px);
-  transform: rotate(90deg);
+  transform: rotate(90deg) translateY(-22px);
+  transform-origin: center center;
 }
 #video-bubbles .bubble {
   width: 8px;
@@ -511,7 +512,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 #radial-menu {
   position: fixed;
   right: 24px;
-  bottom: calc(5% + 60px);
+  bottom: 5%;
   z-index: 50;
 }
 #radial-toggle {
@@ -575,7 +576,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-color: #05d4ff;
 }
 @media (max-width: 600px) {
-  #radial-menu { right: 14px; bottom: calc(5% + 60px); }
+  #radial-menu { right: 14px; bottom: 5%; }
   #radial-toggle, .radial-link { width: 48px; height: 48px; font-size: 0.65rem; }
 }
 
@@ -996,8 +997,12 @@ function openPreview(file) {
     // Zpátky povolit scrolling a tlačítko
     document.body.style.overflow = '';
     document.getElementById('scroll-button').style.visibility = 'visible';
+    document.getElementById('scroll-button').style.pointerEvents = 'auto';
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) backBtn.style.pointerEvents = 'auto';
     if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
     if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
   };
 
   // 🔹 Obrázek
@@ -1022,19 +1027,39 @@ function openPreview(file) {
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
     
-    // Skrýt ovládací prvky videa po 1s při spuštění
-    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
-    hideControlsAfterPlayTimeout = setTimeout(() => {
-      try {
-        // Poslat zprávu do iframe aby skryl ovládací prvky (pokud je to podporováno)
-        iframe.style.opacity = '0.95';
-      } catch(e) {
-        console.log('Nelze řídit video ovládání');
-      }
-    }, 1000);
+    // Detekovat mobilní zařízení
+    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    // Při kliknutí na modal zobrazit ovládání na 2s
-    modal.addEventListener('click', handleVideoClick, false);
+    if (isMobile()) {
+      // Na mobilu - naslouchat dotyku pro schování/zobrazení ovládacích prvků
+      wrapper.addEventListener('touchend', (e) => {
+        if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
+        // Zobrazit ovládání na 2s
+        wrapper.style.opacity = '1';
+        // Po 2 sekundách neaktivity schovat
+        videoTouchTimeout = setTimeout(() => {
+          wrapper.style.opacity = '0.95';
+        }, 2000);
+      });
+      
+      // Při prvním načtení schovat hned po 1s
+      hideControlsAfterPlayTimeout = setTimeout(() => {
+        wrapper.style.opacity = '0.95';
+      }, 1000);
+    } else {
+      // Na desktopu - původní logika
+      if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+      hideControlsAfterPlayTimeout = setTimeout(() => {
+        try {
+          iframe.style.opacity = '0.95';
+        } catch(e) {
+          console.log('Nelze řídit video ovládání');
+        }
+      }, 1000);
+      
+      // Při kliknutí na modal zobrazit ovládání na 2s
+      modal.addEventListener('click', handleVideoClick, false);
+    }
   }
 
   frame.appendChild(closeBtn);
@@ -1043,6 +1068,11 @@ function openPreview(file) {
   // Zablokovat scrolling a skrýt scroll tlačítko
   document.body.style.overflow = 'hidden';
   document.getElementById('scroll-button').style.visibility = 'hidden';
+  document.getElementById('scroll-button').style.pointerEvents = 'none';
+  
+  // Zablokovat Z5 tlačítko (back-btn)
+  const backBtn = document.getElementById('back-btn');
+  if (backBtn) backBtn.style.pointerEvents = 'none';
 
   modal.style.display = 'flex';
 }
@@ -1051,6 +1081,7 @@ function openPreview(file) {
 let hideControlsTimeout = null;
 let hideControlsAfterPlayTimeout = null;
 let videoClickHandler = null;
+let videoTouchTimeout = null;
 
 function handleVideoClick(e) {
   // Pokud se kliklo na video iframe
@@ -1070,8 +1101,12 @@ function closePreview(event) {
     // Zpátky povolit scrolling a tlačítko
     document.body.style.overflow = '';
     document.getElementById('scroll-button').style.visibility = 'visible';
+    document.getElementById('scroll-button').style.pointerEvents = 'auto';
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) backBtn.style.pointerEvents = 'auto';
     if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
     if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
   }
 }
 
@@ -1232,6 +1267,22 @@ loadFolder(ROOT_FOLDER_ID);
 
         radialLinks.querySelectorAll('.radial-link').forEach(link => {
             link.addEventListener('click', () => {
+                // Zavřít otevřené video nebo fotku
+                const modal = document.getElementById('previewModal');
+                if (modal && modal.style.display === 'flex') {
+                    modal.style.display = 'none';
+                    document.getElementById('previewContent').innerHTML = '';
+                    // Zpátky povolit scrolling a tlačítko
+                    document.body.style.overflow = '';
+                    document.getElementById('scroll-button').style.visibility = 'visible';
+                    document.getElementById('scroll-button').style.pointerEvents = 'auto';
+                    const backBtn = document.getElementById('back-btn');
+                    if (backBtn) backBtn.style.pointerEvents = 'auto';
+                    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+                    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+                    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
+                }
+                
                 radialLinks.classList.remove('open');
                 radialToggle.classList.remove('open');
                 radialToggle.setAttribute('aria-expanded', 'false');
