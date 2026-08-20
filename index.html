@@ -215,6 +215,29 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       display: block;
       pointer-events: auto;
     }
+    
+    /* Na mobilu - skrýt ikony přes semi-transparent overlay */
+    @media (max-width: 768px) {
+      .video-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 5;
+        pointer-events: none;
+        transition: opacity 0.3s ease, pointer-events 0.3s ease;
+        opacity: 1;
+      }
+      
+      /* Když je wrapper v focus/active stavu, skrýt overlay */
+      .video-wrapper.controls-hidden::after {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
     .video-fallback {
       margin-top: 14px;
       text-align: center;
@@ -1027,6 +1050,35 @@ function openPreview(file) {
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
+    
+    // Detekovat mobilní zařízení
+    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile()) {
+      let hideControlsTimeout;
+      
+      // Při dotyku na wrapper
+      wrapper.addEventListener('touchstart', (e) => {
+        // Skrýt overlay (zobrazit controls)
+        wrapper.classList.add('controls-hidden');
+        
+        // Po 3 sekundách vrátit overlay (skrýt controls/ikony)
+        if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+        hideControlsTimeout = setTimeout(() => {
+          wrapper.classList.remove('controls-hidden');
+        }, 3000);
+      }, { passive: true });
+      
+      // Také schovat overlay když se dotkneš videa
+      iframe.addEventListener('touchstart', (e) => {
+        wrapper.classList.add('controls-hidden');
+        
+        if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+        hideControlsTimeout = setTimeout(() => {
+          wrapper.classList.remove('controls-hidden');
+        }, 3000);
+      }, { passive: true });
+    }
   }
 
   frame.appendChild(closeBtn);
