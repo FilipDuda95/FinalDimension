@@ -204,6 +204,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       height: min(80vh, 500px);
       background: #000;
       overflow: hidden;
+      -webkit-user-select: none;
+      user-select: none;
     }
     .video-wrapper iframe {
       position: absolute;
@@ -213,25 +215,17 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       height: 100%;
       border: none;
       display: block;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
     
-    /* Overlay na mobilu pro kontrolu dotyků */
-    .video-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      z-index: 10;
-      cursor: pointer;
-      pointer-events: auto;
-    }
-    
-    /* Při hidden stavu - odklopit overlay, aby se dalo klikat na video controls */
-    .video-overlay.hidden {
-      pointer-events: none;
-      display: none;
+    /* Skrytí ovladačů na mobilu */
+    @media (max-width: 768px) {
+      .video-wrapper iframe {
+        pointer-events: none !important;
+        opacity: 1 !important;
+      }
     }
     .video-fallback {
       margin-top: 14px;
@@ -1050,25 +1044,28 @@ function openPreview(file) {
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Na mobilu - vytvořit overlay, který brání nežádoucím klikům
-      const overlay = document.createElement('div');
-      overlay.className = 'video-overlay';
-      wrapper.appendChild(overlay);
+      // Na mobilu - vypnout pointer events na video controllery
+      iframe.style.pointerEvents = 'none';
       
-      // Při dotyku na overlay
-      overlay.addEventListener('touchstart', (e) => {
-        // Skrýt overlay na 500ms aby uživatel mohl klikat na play
-        overlay.classList.add('hidden');
+      // Po dotyku na wrapper krátkodobě zapnout interakci pro přehrávání
+      let tapCount = 0;
+      wrapper.addEventListener('touchstart', (e) => {
+        tapCount++;
         
-        // Zpět zobrazit overlay po 500ms
+        // Zapnout pointer events dočasně pro jednu akci
+        iframe.style.pointerEvents = 'auto';
+        
+        // Po 0.3s vypnout zpět
         if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
         videoTouchTimeout = setTimeout(() => {
-          overlay.classList.remove('hidden');
-        }, 500);
+          iframe.style.pointerEvents = 'none';
+          tapCount = 0;
+        }, 300);
       }, { passive: true });
       
     } else {
       // Na desktopu - normální chování
+      iframe.style.pointerEvents = 'auto';
       // Při kliknutí na modal zobrazit ovládání na 2s
       modal.addEventListener('click', handleVideoClick, false);
     }
