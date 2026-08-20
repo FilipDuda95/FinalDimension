@@ -216,27 +216,23 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       pointer-events: auto;
     }
     
-    /* Na mobilu - skrýt ikony přes semi-transparent overlay */
-    @media (max-width: 768px) {
-      .video-wrapper::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        z-index: 5;
-        pointer-events: none;
-        transition: opacity 0.3s ease, pointer-events 0.3s ease;
-        opacity: 1;
-      }
-      
-      /* Když je wrapper v focus/active stavu, skrýt overlay */
-      .video-wrapper.controls-hidden::after {
-        opacity: 0;
-        pointer-events: none;
-      }
+    /* Overlay pro skrývání ikon na mobilu */
+    .video-overlay-mobile {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.25);
+      z-index: 100;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      opacity: 1;
+    }
+    
+    .video-overlay-mobile.hidden {
+      opacity: 0;
+      z-index: -1;
     }
     .video-fallback {
       margin-top: 14px;
@@ -1049,36 +1045,32 @@ function openPreview(file) {
     iframe.allow = "autoplay; fullscreen";
 
     wrapper.appendChild(iframe);
-    frame.appendChild(wrapper);
     
     // Detekovat mobilní zařízení
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
+      // Vytvorit overlay element pro skryvani ikon
+      const overlay = document.createElement('div');
+      overlay.className = 'video-overlay-mobile';
+      wrapper.appendChild(overlay);
+      
       let hideControlsTimeout;
       
       // Při dotyku na wrapper
       wrapper.addEventListener('touchstart', (e) => {
         // Skrýt overlay (zobrazit controls)
-        wrapper.classList.add('controls-hidden');
+        overlay.classList.add('hidden');
         
         // Po 3 sekundách vrátit overlay (skrýt controls/ikony)
         if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
         hideControlsTimeout = setTimeout(() => {
-          wrapper.classList.remove('controls-hidden');
-        }, 3000);
-      }, { passive: true });
-      
-      // Také schovat overlay když se dotkneš videa
-      iframe.addEventListener('touchstart', (e) => {
-        wrapper.classList.add('controls-hidden');
-        
-        if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
-        hideControlsTimeout = setTimeout(() => {
-          wrapper.classList.remove('controls-hidden');
+          overlay.classList.remove('hidden');
         }, 3000);
       }, { passive: true });
     }
+    
+    frame.appendChild(wrapper);
   }
 
   frame.appendChild(closeBtn);
