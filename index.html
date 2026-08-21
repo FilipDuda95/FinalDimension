@@ -223,16 +223,21 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.2);
       z-index: 100;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-      opacity: 1;
+      pointer-events: auto;
+      transition: background 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .video-overlay-mobile.visible {
+      background: rgba(0, 0, 0, 0.2);
+      pointer-events: auto;
     }
     
     .video-overlay-mobile.hidden {
-      opacity: 0;
-      z-index: -1;
+      background: transparent;
+      pointer-events: none;
     }
     .video-fallback {
       margin-top: 14px;
@@ -1050,24 +1055,44 @@ function openPreview(file) {
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Vytvorit overlay element pro skryvani ikon
+      // Vytvorit overlay element pro blokování ikony
       const overlay = document.createElement('div');
       overlay.className = 'video-overlay-mobile';
       wrapper.appendChild(overlay);
       
+      // Overlay je viditelný výchozí stav
+      overlay.classList.add('visible');
+      
       let hideControlsTimeout;
       
-      // Při dotyku na wrapper
-      wrapper.addEventListener('touchstart', (e) => {
+      // Při dotyku na overlay
+      overlay.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        
         // Skrýt overlay (zobrazit controls)
+        overlay.classList.remove('visible');
         overlay.classList.add('hidden');
         
         // Po 3 sekundách vrátit overlay (skrýt controls/ikony)
         if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
         hideControlsTimeout = setTimeout(() => {
           overlay.classList.remove('hidden');
+          overlay.classList.add('visible');
         }, 3000);
-      }, { passive: true });
+      }, { passive: false });
+      
+      // Také na double-tap reset
+      overlay.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        overlay.classList.remove('visible');
+        overlay.classList.add('hidden');
+        
+        if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+        hideControlsTimeout = setTimeout(() => {
+          overlay.classList.remove('hidden');
+          overlay.classList.add('visible');
+        }, 3000);
+      });
     }
     
     frame.appendChild(wrapper);
