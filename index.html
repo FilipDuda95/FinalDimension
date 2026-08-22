@@ -217,25 +217,17 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       pointer-events: auto;
     }
     
-    /* Na mobilu - overlay na dolní část videa */
+    /* Na mobilu - posunout iframe nahoru aby controls byly mimo obrazovku */
     @media (max-width: 768px) {
-      .video-wrapper::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 120px;
-        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 1) 70%);
-        z-index: 50;
-        pointer-events: none;
-        opacity: 1;
-        transition: opacity 0.3s ease;
+      .video-wrapper {
+        position: relative;
       }
       
-      /* Když jsou controls viditelné - skrýt overlay */
-      .video-wrapper.controls-visible::after {
-        opacity: 0;
+      .video-wrapper iframe {
+        /* Posunout nahoru o 80px aby controls byly skryté */
+        top: -80px;
+        /* Zvětšit na doplnění prázdného místa */
+        height: calc(100% + 80px);
       }
     }
     .video-fallback {
@@ -1050,34 +1042,6 @@ function openPreview(file) {
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
-    
-    // Detekovat mobilní zařízení
-    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile()) {
-      let controlsHideTimeout;
-      let isPlaying = false;
-      
-      // Na dotyky/klikání - zobrazit controls
-      function showControls() {
-        wrapper.classList.add('controls-visible');
-        
-        // Automaticky skrýt controls po 4 sekundách
-        if (controlsHideTimeout) clearTimeout(controlsHideTimeout);
-        controlsHideTimeout = setTimeout(() => {
-          if (isPlaying) {
-            wrapper.classList.remove('controls-visible');
-          }
-        }, 4000);
-      }
-      
-      // Detekovat dotyk/klik
-      wrapper.addEventListener('touchstart', showControls, { passive: true });
-      wrapper.addEventListener('click', showControls);
-      
-      // Při prvním dotyku - kontroly jsou viditelné
-      showControls();
-    }
   }
 
   frame.appendChild(closeBtn);
