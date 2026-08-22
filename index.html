@@ -213,20 +213,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       height: 100%;
       border: none;
       display: block;
-      pointer-events: auto;
     }
     
-    /* Overlay na dolní část videa - kde jsou controls */
+    /* Na mobilu - skrýt dolní část kde jsou controls pomocí clip-path */
     @media (max-width: 768px) {
-      .video-wrapper::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 50px;
-        background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.95));
-        z-index: 100;
+      .video-wrapper iframe {
+        /* Oříznout dolní 60px kde jsou controls */
+        clip-path: inset(0 0 60px 0);
+        height: calc(100% + 60px);
         pointer-events: auto;
       }
     }
@@ -1031,43 +1025,17 @@ function openPreview(file) {
     frame.appendChild(img);
   } 
 
-  // 🔹 Video - místo embedování zobrazit odkaz
+  // 🔹 Video (spolehlivý vestavěný přehrávač Disku, bez vynuceného 16:9)
   else if (file.mimeType.startsWith('video/')) {
-    const videoContainer = document.createElement('div');
-    videoContainer.style.cssText = `
-      background: #000;
-      padding: 20px;
-      border-radius: 4px;
-      text-align: center;
-      max-width: 500px;
-    `;
-    
-    const link = document.createElement('a');
-    link.href = `https://drive.google.com/file/d/${file.id}/view`;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.style.cssText = `
-      display: inline-block;
-      padding: 12px 24px;
-      background: #05d4ff;
-      color: #000;
-      text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 16px;
-    `;
-    link.textContent = '▶ Přehrát video';
-    
-    const filename = document.createElement('p');
-    filename.style.color = '#999';
-    filename.style.marginTop = '8px';
-    filename.style.fontSize = '12px';
-    filename.textContent = file.name;
-    
-    videoContainer.appendChild(link);
-    videoContainer.appendChild(filename);
-    frame.appendChild(videoContainer);
+    const wrapper = document.createElement('div');
+    wrapper.className = 'video-wrapper';
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+    iframe.allow = "autoplay; fullscreen";
+
+    wrapper.appendChild(iframe);
+    frame.appendChild(wrapper);
   }
 
   frame.appendChild(closeBtn);
