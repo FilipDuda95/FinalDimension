@@ -214,24 +214,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       height: 100%;
       border: none;
       display: block;
-      pointer-events: auto;
     }
     
-    /* Na mobilu - posunout iframe až bude video hrát */
+    /* Na mobilu - posunout iframe aby controls byly mimo obrazovku */
     @media (max-width: 768px) {
-      .video-wrapper {
-        position: relative;
-      }
-      
       .video-wrapper iframe {
-        /* Defaultně normální pozice */
-        top: 0;
-        height: 100%;
-        transition: top 0.3s ease, height 0.3s ease;
-      }
-      
-      /* Když se video přehrává - posunout controls mimo obrazovku */
-      .video-wrapper.playing iframe {
         top: -120px;
         height: calc(100% + 120px);
       }
@@ -1037,7 +1024,7 @@ function openPreview(file) {
     frame.appendChild(img);
   } 
 
-  // 🔹 Video (spolehlivý vestavěný přehrávač Disku, bez vynuceného 16:9)
+  // 🔹 Video - Google Drive native player
   else if (file.mimeType.startsWith('video/')) {
     const wrapper = document.createElement('div');
     wrapper.className = 'video-wrapper';
@@ -1048,22 +1035,6 @@ function openPreview(file) {
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
-    
-    // Detekovat mobilní zařízení
-    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile()) {
-      // Při prvním dotyku/kliknutí - přidat class "playing" aby se iframe posunul
-      function activateVideo() {
-        wrapper.classList.add('playing');
-        // Odebrat event listeners aby se nepouštělo znovu
-        wrapper.removeEventListener('touchstart', activateVideo);
-        wrapper.removeEventListener('click', activateVideo);
-      }
-      
-      wrapper.addEventListener('touchstart', activateVideo, { passive: true });
-      wrapper.addEventListener('click', activateVideo);
-    }
   }
 
   frame.appendChild(closeBtn);
