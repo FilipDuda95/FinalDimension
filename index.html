@@ -217,17 +217,23 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       pointer-events: auto;
     }
     
-    /* Na mobilu - posunout iframe nahoru aby controls byly mimo obrazovku */
+    /* Na mobilu - posunout iframe až bude video hrát */
     @media (max-width: 768px) {
       .video-wrapper {
         position: relative;
       }
       
       .video-wrapper iframe {
-        /* Posunout nahoru o 80px aby controls byly skryté */
-        top: -80px;
-        /* Zvětšit na doplnění prázdného místa */
-        height: calc(100% + 80px);
+        /* Defaultně normální pozice */
+        top: 0;
+        height: 100%;
+        transition: top 0.3s ease, height 0.3s ease;
+      }
+      
+      /* Když se video přehrává - posunout controls mimo obrazovku */
+      .video-wrapper.playing iframe {
+        top: -120px;
+        height: calc(100% + 120px);
       }
     }
     .video-fallback {
@@ -1042,6 +1048,22 @@ function openPreview(file) {
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
+    
+    // Detekovat mobilní zařízení
+    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile()) {
+      // Při prvním dotyku/kliknutí - přidat class "playing" aby se iframe posunul
+      function activateVideo() {
+        wrapper.classList.add('playing');
+        // Odebrat event listeners aby se nepouštělo znovu
+        wrapper.removeEventListener('touchstart', activateVideo);
+        wrapper.removeEventListener('click', activateVideo);
+      }
+      
+      wrapper.addEventListener('touchstart', activateVideo, { passive: true });
+      wrapper.addEventListener('click', activateVideo);
+    }
   }
 
   frame.appendChild(closeBtn);
