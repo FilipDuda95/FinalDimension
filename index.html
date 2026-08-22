@@ -218,9 +218,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     /* Na mobilu - skrýt dolní část kde jsou controls pomocí clip-path */
     @media (max-width: 768px) {
       .video-wrapper iframe {
-        /* Oříznout dolní 60px kde jsou controls */
-        clip-path: inset(0 0 60px 0);
-        height: calc(100% + 60px);
+        /* Oříznout dolních 100px kde jsou controls */
+        clip-path: inset(0 0 100px 0);
+        height: calc(100% + 100px);
         pointer-events: auto;
       }
     }
