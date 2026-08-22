@@ -205,6 +205,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       background: #000;
       overflow: hidden;
     }
+    
+    /* Na mobilu - zvětšit wrapper aby měl více videa bez controls */
+    @media (max-width: 768px) {
+      .video-wrapper {
+        height: min(90vh, 600px);
+      }
+    }
+    
     .video-wrapper iframe {
       position: absolute;
       top: 0;
@@ -218,9 +226,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     /* Na mobilu - skrýt dolní část kde jsou controls pomocí clip-path */
     @media (max-width: 768px) {
       .video-wrapper iframe {
-        /* Oříznout dolních 100px kde jsou controls */
-        clip-path: inset(0 0 100px 0);
-        height: calc(100% + 100px);
+        /* Oříznout dolních 135px kde jsou controls */
+        clip-path: inset(0 0 135px 0);
         pointer-events: auto;
       }
     }
