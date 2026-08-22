@@ -206,13 +206,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
-    /* Na mobilu - zvětšit wrapper aby měl více videa bez controls */
-    @media (max-width: 768px) {
-      .video-wrapper {
-        height: min(90vh, 600px);
-      }
-    }
-    
     .video-wrapper iframe {
       position: absolute;
       top: 0;
@@ -221,14 +214,28 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       height: 100%;
       border: none;
       display: block;
+      pointer-events: auto;
     }
     
-    /* Na mobilu - skrýt dolní část kde jsou controls pomocí clip-path */
+    /* Na mobilu - overlay na dolní část videa */
     @media (max-width: 768px) {
-      .video-wrapper iframe {
-        /* Oříznout dolních 135px kde jsou controls */
-        clip-path: inset(0 0 135px 0);
-        pointer-events: auto;
+      .video-wrapper::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 1) 70%);
+        z-index: 50;
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+      }
+      
+      /* Když jsou controls viditelné - skrýt overlay */
+      .video-wrapper.controls-visible::after {
+        opacity: 0;
       }
     }
     .video-fallback {
@@ -1043,6 +1050,34 @@ function openPreview(file) {
 
     wrapper.appendChild(iframe);
     frame.appendChild(wrapper);
+    
+    // Detekovat mobilní zařízení
+    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile()) {
+      let controlsHideTimeout;
+      let isPlaying = false;
+      
+      // Na dotyky/klikání - zobrazit controls
+      function showControls() {
+        wrapper.classList.add('controls-visible');
+        
+        // Automaticky skrýt controls po 4 sekundách
+        if (controlsHideTimeout) clearTimeout(controlsHideTimeout);
+        controlsHideTimeout = setTimeout(() => {
+          if (isPlaying) {
+            wrapper.classList.remove('controls-visible');
+          }
+        }, 4000);
+      }
+      
+      // Detekovat dotyk/klik
+      wrapper.addEventListener('touchstart', showControls, { passive: true });
+      wrapper.addEventListener('click', showControls);
+      
+      // Při prvním dotyku - kontroly jsou viditelné
+      showControls();
+    }
   }
 
   frame.appendChild(closeBtn);
