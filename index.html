@@ -255,24 +255,40 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       transition: height 0.3s ease, top 0.3s ease;
     }
     
-    /* Když se video spustí - zvětší a posune nahoru aby controls byly mimo */
+    /* Schovej Google Drive controls na mobilu */
     @media (max-width: 768px) {
       .video-inner.playing {
-        height: 300%;
-        top: -100%;
+        height: 400%;
+        top: -150%;
       }
     }
     
-    /* Landscape mode na mobilu - stejný posun jako portrait */
-    @media (max-width: 768px) and (orientation: landscape) {
-      .video-wrapper {
-        height: 95vh;
-      }
-      
-      .video-inner.playing {
-        height: 300%;
-        top: -100%;
-      }
+    /* Fullscreen button - otevření v Google Drive */
+    .video-fullscreen-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      z-index: 30;
+      transition: all 0.3s ease;
+    }
+    
+    .video-fullscreen-btn:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+    
+    .video-fullscreen-btn:active {
+      transform: scale(0.95);
     }
     
     /* Vlastní timeline */
@@ -1115,6 +1131,18 @@ function openPreview(file) {
 
     inner.appendChild(iframe);
     wrapper.appendChild(inner);
+    
+    // Fullscreen button
+    const fullscreenBtn = document.createElement('button');
+    fullscreenBtn.className = 'video-fullscreen-btn';
+    fullscreenBtn.innerHTML = '⛶';
+    fullscreenBtn.title = 'Otevřít v Google Drive';
+    fullscreenBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.open(`https://drive.google.com/file/d/${file.id}/view`, '_blank');
+    });
+    
+    wrapper.appendChild(fullscreenBtn);
     frame.appendChild(wrapper);
     
     // Detekovat mobilní zařízení
@@ -1122,11 +1150,6 @@ function openPreview(file) {
     
     if (isMobile()) {
       let isPlaying = false;
-      
-      // Při otočení telefonu - updatovat layout
-      window.addEventListener('orientationchange', () => {
-        console.log('Orientace se změnila');
-      });
       
       // Automaticky spustit video po 1.5 sekundě
       setTimeout(() => {
