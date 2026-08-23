@@ -246,15 +246,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       }
     }
     
-    /* Landscape mode na mobilu */
+    /* Landscape mode na mobilu - stejný posun jako portrait */
     @media (max-width: 768px) and (orientation: landscape) {
       .video-wrapper {
-        height: min(90vh, 350px);
+        height: 95vh;
       }
       
       .video-inner.playing {
-        height: 400%;
-        top: -150%;
+        height: 300%;
+        top: -100%;
       }
     }
     
@@ -1111,7 +1111,18 @@ function openPreview(file) {
         console.log('Orientace se změnila');
       });
       
-      // Uživatel klikne na video - spustí se
+      // Automaticky spustit video po 1.5 sekundě
+      setTimeout(() => {
+        try {
+          isPlaying = true;
+          inner.classList.add('playing');
+          iframe.click();
+        } catch(err) {
+          console.log('Auto-play failed');
+        }
+      }, 1500);
+      
+      // Uživatel může znovu klikat na video když chce
       inner.addEventListener('click', (e) => {
         if (!isPlaying) {
           isPlaying = true;
