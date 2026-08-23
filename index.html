@@ -206,6 +206,38 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
+    /* Custom play button na mobilu */
+    @media (max-width: 768px) {
+      .video-play-btn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        color: #000;
+        transition: all 0.3s ease;
+      }
+      
+      .video-play-btn:hover {
+        background: white;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      
+      /* Skryj play button když se video spustí */
+      .video-inner.playing ~ .video-play-btn {
+        display: none;
+      }
+    }
+    
     /* Vnořené okno - defaultně 100% */
     .video-inner {
       position: absolute;
@@ -242,6 +274,18 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       .video-inner.playing iframe {
         pointer-events: auto;
       }
+    }
+    
+    /* Timeline na dně video okna */
+    .video-timeline {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      z-index: 20;
+      pointer-events: auto;
     }
     .video-fallback {
       margin-top: 14px;
@@ -1062,20 +1106,37 @@ function openPreview(file) {
 
     inner.appendChild(iframe);
     wrapper.appendChild(inner);
-    frame.appendChild(wrapper);
     
     // Detekovat mobilní zařízení
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Na mobilu - pokud se klikne na video, přidej playing class
-      inner.addEventListener('click', (e) => {
-        // Přidej/odeber playing class na toggle
-        if (!inner.classList.contains('playing')) {
-          inner.classList.add('playing');
-        }
+      // Vytvořit custom play button
+      const playBtn = document.createElement('div');
+      playBtn.className = 'video-play-btn';
+      playBtn.innerHTML = '▶';
+      
+      // Vytvořit timeline element
+      const timeline = document.createElement('div');
+      timeline.className = 'video-timeline';
+      timeline.innerHTML = '<p style="color: white; margin: 10px; font-size: 12px;">Posun: 0:00</p>';
+      
+      wrapper.appendChild(playBtn);
+      wrapper.appendChild(timeline);
+      
+      // Při kliknutí na play button
+      playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Rovnou přidej playing class
+        inner.classList.add('playing');
+        // Simuluj klik na iframe aby se video spustilo
+        setTimeout(() => {
+          iframe.click();
+        }, 100);
       });
     }
+    
+    frame.appendChild(wrapper);
   }
 
   frame.appendChild(closeBtn);
