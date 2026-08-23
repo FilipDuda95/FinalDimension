@@ -253,8 +253,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       }
       
       .video-inner.playing {
-        height: 280%;
-        top: -90%;
+        height: 400%;
+        top: -150%;
       }
     }
     
@@ -1108,33 +1108,10 @@ function openPreview(file) {
       
       // Při otočení telefonu - updatovat layout
       window.addEventListener('orientationchange', () => {
-        // CSS se automaticky updatne díky media queries
         console.log('Orientace se změnila');
       });
       
-      // Automaticky spustit video hned po načtení
-      setTimeout(() => {
-        try {
-          // Spustit video script-wise
-          isPlaying = true;
-          inner.classList.add('playing');
-          
-          // Klikat vícekrát na iframe aby se video určitě spustilo
-          setTimeout(() => {
-            iframe.click();
-          }, 300);
-          setTimeout(() => {
-            iframe.click();
-          }, 600);
-          setTimeout(() => {
-            iframe.click();
-          }, 900);
-        } catch(err) {
-          console.log('Auto-play failed');
-        }
-      }, 2500);
-      
-      // Uživatel může znovu klikat na video když chce
+      // Uživatel klikne na video - spustí se
       inner.addEventListener('click', (e) => {
         if (!isPlaying) {
           isPlaying = true;
