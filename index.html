@@ -184,6 +184,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       max-width: 95vw;
       max-height: 80vh;
     }
+    
+    /* Landscape mode */
+    @media (orientation: landscape) {
+      .media-frame {
+        max-height: 95vh;
+      }
+    }
+    
     .media-frame img,
     .media-frame .video-wrapper {
       max-width: 95vw;
@@ -193,6 +201,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
       display: block;
     }
+    
+    /* Landscape mode pro obsah */
+    @media (orientation: landscape) {
+      .media-frame img,
+      .media-frame .video-wrapper {
+        max-height: 95vh;
+      }
+    }
+    
     .media-frame img {
       width: auto;
       height: auto;
