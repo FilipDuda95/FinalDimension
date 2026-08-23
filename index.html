@@ -184,14 +184,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       max-width: 95vw;
       max-height: 80vh;
     }
-    
-    /* Landscape mode */
-    @media (orientation: landscape) {
-      .media-frame {
-        max-height: 95vh;
-      }
-    }
-    
     .media-frame img,
     .media-frame .video-wrapper {
       max-width: 95vw;
@@ -201,15 +193,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
       display: block;
     }
-    
-    /* Landscape mode pro obsah */
-    @media (orientation: landscape) {
-      .media-frame img,
-      .media-frame .video-wrapper {
-        max-height: 95vh;
-      }
-    }
-    
     .media-frame img {
       width: auto;
       height: auto;
@@ -255,40 +238,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       transition: height 0.3s ease, top 0.3s ease;
     }
     
-    /* Schovej Google Drive controls na mobilu */
+    /* Když se video spustí - zvětší a posune nahoru aby controls byly mimo */
     @media (max-width: 768px) {
       .video-inner.playing {
-        height: 400%;
-        top: -150%;
+        height: 300%;
+        top: -100%;
       }
-    }
-    
-    /* Fullscreen button - otevření v Google Drive */
-    .video-fullscreen-btn {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 40px;
-      height: 40px;
-      background: rgba(255, 255, 255, 0.9);
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      z-index: 30;
-      transition: all 0.3s ease;
-    }
-    
-    .video-fullscreen-btn:hover {
-      background: white;
-      transform: scale(1.1);
-    }
-    
-    .video-fullscreen-btn:active {
-      transform: scale(0.95);
     }
     
     /* Vlastní timeline */
@@ -1131,18 +1086,6 @@ function openPreview(file) {
 
     inner.appendChild(iframe);
     wrapper.appendChild(inner);
-    
-    // Fullscreen button
-    const fullscreenBtn = document.createElement('button');
-    fullscreenBtn.className = 'video-fullscreen-btn';
-    fullscreenBtn.innerHTML = '⛶';
-    fullscreenBtn.title = 'Otevřít v Google Drive';
-    fullscreenBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      window.open(`https://drive.google.com/file/d/${file.id}/view`, '_blank');
-    });
-    
-    wrapper.appendChild(fullscreenBtn);
     frame.appendChild(wrapper);
     
     // Detekovat mobilní zařízení
@@ -1151,11 +1094,13 @@ function openPreview(file) {
     if (isMobile()) {
       let isPlaying = false;
       
-      // Automaticky spustit video po 1.5 sekundě
+      // Automaticky spustit video hned po načtení
       setTimeout(() => {
         try {
+          // Spustit video script-wise
           isPlaying = true;
           inner.classList.add('playing');
+          // Kliknout na iframe aby se video spustilo
           iframe.click();
         } catch(err) {
           console.log('Auto-play failed');
