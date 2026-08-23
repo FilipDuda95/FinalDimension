@@ -219,8 +219,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     /* Když se video spustí - zvětší a posune nahoru aby controls byly mimo */
     @media (max-width: 768px) {
       .video-inner.playing {
-        height: 140%;
-        top: -20%;
+        height: 300%;
+        top: -100%;
       }
     }
     
@@ -229,6 +229,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       height: 100%;
       border: none;
       display: block;
+      pointer-events: none;
+    }
+    
+    /* Když se video přehrává - vrátit pointer-events */
+    .video-inner.playing iframe {
+      pointer-events: auto;
     }
     .video-fallback {
       margin-top: 14px;
@@ -1055,10 +1061,25 @@ function openPreview(file) {
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Při prvním kliknutí na video - přidat class "playing" na inner okno
-      wrapper.addEventListener('click', () => {
-        inner.classList.add('playing');
-      }, { once: true }); // Only trigger once
+      // Přidat click listener na inner okno (ne na iframe)
+      let isPlaying = false;
+      
+      inner.addEventListener('click', (e) => {
+        if (!isPlaying) {
+          isPlaying = true;
+          inner.classList.add('playing');
+          console.log('Video playing - toggled');
+        }
+      });
+      
+      // Také na wrapper pro jistotu
+      wrapper.addEventListener('click', (e) => {
+        if (!isPlaying && e.target !== iframe) {
+          isPlaying = true;
+          inner.classList.add('playing');
+          console.log('Video playing - from wrapper');
+        }
+      });
     }
   }
 
