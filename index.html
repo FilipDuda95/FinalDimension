@@ -246,6 +246,18 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       }
     }
     
+    /* Landscape mode na mobilu */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .video-wrapper {
+        height: min(90vh, 350px);
+      }
+      
+      .video-inner.playing {
+        height: 280%;
+        top: -90%;
+      }
+    }
+    
     /* Vlastní timeline */
 
     .video-inner iframe {
@@ -1093,6 +1105,12 @@ function openPreview(file) {
     
     if (isMobile()) {
       let isPlaying = false;
+      
+      // Při otočení telefonu - updatovat layout
+      window.addEventListener('orientationchange', () => {
+        // CSS se automaticky updatne díky media queries
+        console.log('Orientace se změnila');
+      });
       
       // Automaticky spustit video hned po načtení
       setTimeout(() => {
