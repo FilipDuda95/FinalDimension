@@ -206,6 +206,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
+    /* Na mobilu - zvýšit prostor pro timeline */
+    @media (max-width: 768px) {
+      .video-wrapper {
+        height: min(85vh, 550px);
+      }
+    }
+    
     /* Gradient na dně video okna */
     @media (max-width: 768px) {
       .video-wrapper::after {
@@ -214,8 +221,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 60px;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+        height: 80px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
         z-index: 15;
         pointer-events: none;
       }
@@ -234,8 +241,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     /* Když se video spustí - zvětší a posune nahoru aby controls byly mimo */
     @media (max-width: 768px) {
       .video-inner.playing {
-        height: 300%;
-        top: -100%;
+        height: 250%;
+        top: -60%;
       }
     }
     
@@ -1083,13 +1090,17 @@ function openPreview(file) {
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Na mobilu - při kliknutí na video se spustí
-      wrapper.addEventListener('click', (e) => {
-        // Přidej playing class jen jednou
-        if (!inner.classList.contains('playing')) {
+      let isPlaying = false;
+      
+      // Klik na wrapper/inner = spustit video
+      inner.addEventListener('click', (e) => {
+        if (!isPlaying) {
+          isPlaying = true;
           inner.classList.add('playing');
+          // Hned vrátit pointer-events aby se dal klikat na play
+          iframe.style.pointerEvents = 'auto';
         }
-      });
+      }, { capture: true });
     }
   }
 
