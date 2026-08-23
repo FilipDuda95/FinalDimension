@@ -206,28 +206,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
-    /* Na mobilu - zvýšit prostor pro timeline */
-    @media (max-width: 768px) {
-      .video-wrapper {
-        height: min(85vh, 550px);
-      }
-    }
-    
-    /* Gradient na dně video okna */
-    @media (max-width: 768px) {
-      .video-wrapper::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 80px;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-        z-index: 15;
-        pointer-events: none;
-      }
-    }
-    
     /* Vnořené okno - defaultně 100% */
     .video-inner {
       position: absolute;
@@ -244,61 +222,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         height: 300%;
         top: -100%;
       }
-    }
-    
-    /* Vlastní timeline */
-    .video-timeline-custom {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));
-      z-index: 25;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      box-sizing: border-box;
-      gap: 10px;
-    }
-    
-    .timeline-play-btn {
-      width: 30px;
-      height: 30px;
-      background: white;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-    
-    .timeline-progress {
-      flex: 1;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 2px;
-      cursor: pointer;
-      position: relative;
-    }
-    
-    .timeline-progress-bar {
-      height: 100%;
-      background: #05d4ff;
-      border-radius: 2px;
-      width: 0%;
-    }
-    
-    .timeline-time {
-      color: white;
-      font-size: 12px;
-      width: 50px;
-      text-align: right;
-      flex-shrink: 0;
     }
     
     .video-inner iframe {
@@ -1139,107 +1062,20 @@ function openPreview(file) {
 
     inner.appendChild(iframe);
     wrapper.appendChild(inner);
+    frame.appendChild(wrapper);
     
     // Detekovat mobilní zařízení
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Vytvořit vlastní timeline
-      const timeline = document.createElement('div');
-      timeline.className = 'video-timeline-custom';
-      
-      const playBtn = document.createElement('button');
-      playBtn.className = 'timeline-play-btn';
-      playBtn.innerHTML = '▶';
-      
-      const progressContainer = document.createElement('div');
-      progressContainer.className = 'timeline-progress';
-      
-      const progressBar = document.createElement('div');
-      progressBar.className = 'timeline-progress-bar';
-      progressContainer.appendChild(progressBar);
-      
-      const timeDisplay = document.createElement('div');
-      timeDisplay.className = 'timeline-time';
-      timeDisplay.innerHTML = '0:00';
-      
-      timeline.appendChild(playBtn);
-      timeline.appendChild(progressContainer);
-      timeline.appendChild(timeDisplay);
-      wrapper.appendChild(timeline);
-      
-      let isPlaying = false;
-      let videoProgress = 0;
-      
-      // Při kliknutí na inner (video)
+      // Na mobilu - pokud se klikne na video, přidej playing class
       inner.addEventListener('click', (e) => {
-        if (!isPlaying) {
-          isPlaying = true;
+        // Přidej/odeber playing class na toggle
+        if (!inner.classList.contains('playing')) {
           inner.classList.add('playing');
-          playBtn.innerHTML = '⏸';
-          
-          // Automatické spuštění po 1.5 sekundách
-          setTimeout(() => {
-            try {
-              iframe.click();
-            } catch(err) {
-              console.log('Iframe click failed');
-            }
-          }, 1500);
         }
-      }, { capture: true });
-      
-      // Play button na timeline
-      playBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (!isPlaying) {
-          isPlaying = true;
-          inner.classList.add('playing');
-          playBtn.innerHTML = '⏸';
-          
-          setTimeout(() => {
-            try {
-              iframe.click();
-            } catch(err) {
-              console.log('Iframe click failed');
-            }
-          }, 1500);
-        }
-      });
-      
-      // Simulovat progres videa
-      let progressTimer;
-      const updateProgress = () => {
-        if (isPlaying) {
-          videoProgress += 0.5;
-          if (videoProgress > 100) {
-            videoProgress = 100;
-            isPlaying = false;
-            playBtn.innerHTML = '▶';
-          }
-          
-          progressBar.style.width = videoProgress + '%';
-          const minutes = Math.floor(videoProgress / 10);
-          const seconds = Math.floor((videoProgress % 10) * 6);
-          timeDisplay.innerHTML = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-          
-          progressTimer = setTimeout(updateProgress, 500);
-        }
-      };
-      
-      // Progres bar click pro scrubbing
-      progressContainer.addEventListener('click', (e) => {
-        const rect = progressContainer.getBoundingClientRect();
-        const percent = (e.clientX - rect.left) / rect.width * 100;
-        videoProgress = Math.max(0, Math.min(100, percent));
-        progressBar.style.width = videoProgress + '%';
-        const minutes = Math.floor(videoProgress / 10);
-        const seconds = Math.floor((videoProgress % 10) * 6);
-        timeDisplay.innerHTML = `${minutes}:${seconds.toString().padStart(2, '0')}`;
       });
     }
-    
-    frame.appendChild(wrapper);
   }
 
   frame.appendChild(closeBtn);
