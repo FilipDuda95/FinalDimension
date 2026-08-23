@@ -1118,12 +1118,21 @@ function openPreview(file) {
           // Spustit video script-wise
           isPlaying = true;
           inner.classList.add('playing');
-          // Kliknout na iframe aby se video spustilo
-          iframe.click();
+          
+          // Klikat vícekrát na iframe aby se video určitě spustilo
+          setTimeout(() => {
+            iframe.click();
+          }, 300);
+          setTimeout(() => {
+            iframe.click();
+          }, 600);
+          setTimeout(() => {
+            iframe.click();
+          }, 900);
         } catch(err) {
           console.log('Auto-play failed');
         }
-      }, 1500);
+      }, 2500);
       
       // Uživatel může znovu klikat na video když chce
       inner.addEventListener('click', (e) => {
