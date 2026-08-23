@@ -206,6 +206,28 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
+    /* Na mobilu - zvýšit prostor pro timeline */
+    @media (max-width: 768px) {
+      .video-wrapper {
+        height: min(85vh, 550px);
+      }
+    }
+    
+    /* Gradient na dně video okna */
+    @media (max-width: 768px) {
+      .video-wrapper::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        z-index: 15;
+        pointer-events: none;
+      }
+    }
+    
     /* Vnořené okno - defaultně 100% */
     .video-inner {
       position: absolute;
@@ -224,6 +246,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       }
     }
     
+    /* Vlastní timeline */
+
     .video-inner iframe {
       width: 100%;
       height: 100%;
@@ -1068,13 +1092,31 @@ function openPreview(file) {
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Na mobilu - pokud se klikne na video, přidej playing class
-      inner.addEventListener('click', (e) => {
-        // Přidej/odeber playing class na toggle
-        if (!inner.classList.contains('playing')) {
+      let isPlaying = false;
+      
+      // Automaticky spustit video hned po načtení
+      setTimeout(() => {
+        try {
+          // Spustit video script-wise
+          isPlaying = true;
           inner.classList.add('playing');
+          // Kliknout na iframe aby se video spustilo
+          iframe.click();
+        } catch(err) {
+          console.log('Auto-play failed');
         }
-      });
+      }, 1500);
+      
+      // Uživatel může znovu klikat na video když chce
+      inner.addEventListener('click', (e) => {
+        if (!isPlaying) {
+          isPlaying = true;
+          inner.classList.add('playing');
+          setTimeout(() => {
+            iframe.click();
+          }, 300);
+        }
+      }, { capture: true });
     }
   }
 
