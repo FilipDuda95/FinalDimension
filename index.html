@@ -86,7 +86,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 	
     }
 	.square:hover{
-	cursor: pointer; 
+	cursor: pointer; /* ruka při najetí */
 	}
 
     .square img {
@@ -206,13 +206,25 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
+    /* Vnořené okno - defaultně 100% */
+    .video-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transition: height 0.3s ease, top 0.3s ease;
+    }
+    
+    /* Když se video spustí - zvětší a posune nahoru aby controls byly mimo */
     @media (max-width: 768px) {
-      .video-wrapper {
-        height: min(85vh, 550px);
+      .video-inner.playing {
+        height: 300%;
+        top: -100%;
       }
     }
     
-    .video-wrapper iframe {
+    .video-inner iframe {
       width: 100%;
       height: 100%;
       border: none;
@@ -220,6 +232,17 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       pointer-events: auto;
     }
     
+    /* Na mobilu - pointer-events none aby se click propagoval na parent */
+    @media (max-width: 768px) {
+      .video-inner iframe {
+        pointer-events: none;
+      }
+      
+      /* Když se video přehrává - vrátit pointer-events */
+      .video-inner.playing iframe {
+        pointer-events: auto;
+      }
+    }
     .video-fallback {
       margin-top: 14px;
       text-align: center;
@@ -440,7 +463,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   color: white;
   z-index:23;
   display: flex;
-  padding-bottom: 20%; 
+  padding-bottom: 20%; //odsazení patičky
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -1000,13 +1023,18 @@ function openPreview(file) {
     e.stopPropagation();
     modal.style.display = 'none';
     content.innerHTML = '';
-    
+    // Vrátit všechny video-inners na normální stav
+    const videoInners = document.querySelectorAll('.video-inner.playing');
+    videoInners.forEach(inner => inner.classList.remove('playing'));
     // Zpátky povolit scrolling a tlačítko
     document.body.style.overflow = '';
     document.getElementById('scroll-button').style.visibility = 'visible';
     document.getElementById('scroll-button').style.pointerEvents = 'auto';
     const backBtn = document.getElementById('back-btn');
     if (backBtn) backBtn.style.pointerEvents = 'auto';
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
   };
 
   // 🔹 Obrázek
@@ -1023,22 +1051,31 @@ function openPreview(file) {
   else if (file.mimeType.startsWith('video/')) {
     const wrapper = document.createElement('div');
     wrapper.className = 'video-wrapper';
+    
+    // Vnořené okno
+    const inner = document.createElement('div');
+    inner.className = 'video-inner';
 
     const iframe = document.createElement('iframe');
     iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
     iframe.allow = "autoplay; fullscreen";
 
-    wrapper.appendChild(iframe);
+    inner.appendChild(iframe);
+    wrapper.appendChild(inner);
     frame.appendChild(wrapper);
-
-    // Automatický první klik za uživatele hned po vytvoření iFramu
-    setTimeout(() => {
-      try {
-        iframe.click();
-      } catch(err) {
-        console.log('Iframe auto-click failed:', err);
-      }
-    }, 800);
+    
+    // Detekovat mobilní zařízení
+    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile()) {
+      // Na mobilu - pokud se klikne na video, přidej playing class
+      inner.addEventListener('click', (e) => {
+        // Přidej/odeber playing class na toggle
+        if (!inner.classList.contains('playing')) {
+          inner.classList.add('playing');
+        }
+      });
+    }
   }
 
   frame.appendChild(closeBtn);
@@ -1056,18 +1093,39 @@ function openPreview(file) {
   modal.style.display = 'flex';
 }
 
+// Globální timeout proměnné
+let hideControlsTimeout = null;
+let hideControlsAfterPlayTimeout = null;
+let videoClickHandler = null;
+let videoTouchTimeout = null;
+
+function handleVideoClick(e) {
+  // Pokud se kliklo na video iframe
+  if (e.target.closest('.video-wrapper')) {
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    // Obnovit viditelnost na 2s
+    hideControlsTimeout = setTimeout(() => {
+      // Ovládání budou skryta automaticky po 2s
+    }, 2000);
+  }
+}
 
 function closePreview(event) {
   if (event.target.id === 'previewModal') {
     document.getElementById('previewModal').style.display = 'none';
     document.getElementById('previewContent').innerHTML = '';
-    
+    // Vrátit všechny video-inner na normální stav (smazat playing class)
+    const videoInners = document.querySelectorAll('.video-inner.playing');
+    videoInners.forEach(inner => inner.classList.remove('playing'));
     // Zpátky povolit scrolling a tlačítko
     document.body.style.overflow = '';
     document.getElementById('scroll-button').style.visibility = 'visible';
     document.getElementById('scroll-button').style.pointerEvents = 'auto';
     const backBtn = document.getElementById('back-btn');
     if (backBtn) backBtn.style.pointerEvents = 'auto';
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
   }
 }
 
@@ -1239,6 +1297,9 @@ loadFolder(ROOT_FOLDER_ID);
                     document.getElementById('scroll-button').style.pointerEvents = 'auto';
                     const backBtn = document.getElementById('back-btn');
                     if (backBtn) backBtn.style.pointerEvents = 'auto';
+                    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+                    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+                    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
                 }
                 
                 radialLinks.classList.remove('open');
