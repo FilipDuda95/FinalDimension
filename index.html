@@ -206,30 +206,30 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
-    .video-wrapper iframe {
+    /* Vnořené okno - defaultně 100% */
+    .video-inner {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      border: none;
-      display: block;
-      transition: top 0.3s ease, height 0.3s ease;
+      transition: height 0.3s ease, top 0.3s ease;
     }
     
-    /* Na mobilu - posunout iframe když je video "playing" */
+    /* Když se video spustí - změní na 90vh a centruje */
     @media (max-width: 768px) {
-      /* Defaultně bez odsazení */
-      .video-wrapper iframe {
-        top: 0;
-        height: 100%;
+      .video-inner.playing {
+        height: 90vh;
+        top: 50%;
+        transform: translateY(-50%);
       }
-      
-      /* Když se video přehrává - posunout controls mimo obrazovku */
-      .video-wrapper.playing iframe {
-        top: -500px;
-        height: calc(100% + 500px);
-      }
+    }
+    
+    .video-inner iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
     }
     .video-fallback {
       margin-top: 14px;
@@ -1011,9 +1011,9 @@ function openPreview(file) {
     e.stopPropagation();
     modal.style.display = 'none';
     content.innerHTML = '';
-    // Vrátit všechny video-wrappers na normální stav
-    const videoWrappers = document.querySelectorAll('.video-wrapper.playing');
-    videoWrappers.forEach(wrapper => wrapper.classList.remove('playing'));
+    // Vrátit všechny video-inners na normální stav
+    const videoInners = document.querySelectorAll('.video-inner.playing');
+    videoInners.forEach(inner => inner.classList.remove('playing'));
     // Zpátky povolit scrolling a tlačítko
     document.body.style.overflow = '';
     document.getElementById('scroll-button').style.visibility = 'visible';
@@ -1039,21 +1039,26 @@ function openPreview(file) {
   else if (file.mimeType.startsWith('video/')) {
     const wrapper = document.createElement('div');
     wrapper.className = 'video-wrapper';
+    
+    // Vnořené okno
+    const inner = document.createElement('div');
+    inner.className = 'video-inner';
 
     const iframe = document.createElement('iframe');
     iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
     iframe.allow = "autoplay; fullscreen";
 
-    wrapper.appendChild(iframe);
+    inner.appendChild(iframe);
+    wrapper.appendChild(inner);
     frame.appendChild(wrapper);
     
     // Detekovat mobilní zařízení
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
-      // Při prvním kliknutí na video - přidat class "playing" aby se controls schovali
+      // Při prvním kliknutí na video - přidat class "playing" na inner okno
       wrapper.addEventListener('click', () => {
-        wrapper.classList.add('playing');
+        inner.classList.add('playing');
       }, { once: true }); // Only trigger once
     }
   }
@@ -1094,9 +1099,9 @@ function closePreview(event) {
   if (event.target.id === 'previewModal') {
     document.getElementById('previewModal').style.display = 'none';
     document.getElementById('previewContent').innerHTML = '';
-    // Vrátit všechny video-wrappers na normální stav (smazat playing class)
-    const videoWrappers = document.querySelectorAll('.video-wrapper.playing');
-    videoWrappers.forEach(wrapper => wrapper.classList.remove('playing'));
+    // Vrátit všechny video-inner na normální stav (smazat playing class)
+    const videoInners = document.querySelectorAll('.video-inner.playing');
+    videoInners.forEach(inner => inner.classList.remove('playing'));
     // Zpátky povolit scrolling a tlačítko
     document.body.style.overflow = '';
     document.getElementById('scroll-button').style.visibility = 'visible';
