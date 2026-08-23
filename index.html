@@ -216,12 +216,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       transition: height 0.3s ease, top 0.3s ease;
     }
     
-    /* Když se video spustí - změní na 90vh a centruje */
+    /* Když se video spustí - zvětší a posune nahoru aby controls byly mimo */
     @media (max-width: 768px) {
       .video-inner.playing {
-        height: 90vh;
-        top: 50%;
-        transform: translateY(-50%);
+        height: 140%;
+        top: -20%;
       }
     }
     
