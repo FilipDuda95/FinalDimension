@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Final dimension</title>
@@ -8,6 +9,7 @@
     <meta property="og:title" content="Final Dimension — Filip Duda">
     <meta property="og:description" content="2D/3D grafika, design a herní vývoj.">
     <meta property="og:image" content="style/logo.png">
+	
     <link rel="shortcut icon" href="favicon.png" type="image/png"> 
 	
     <style>
@@ -25,6 +27,7 @@ html, body {
   font-family: Arial, sans-serif;
 }
 body {
+  font-family: 'Arial', sans-serif;
   background:black;
   background-image:url("style/1.jpg");
   background-size: cover;
@@ -37,17 +40,21 @@ body {
   margin: 0;
   font-size: clamp(12px, 1.2vw, 16px);
 }
-h1 { font-size: clamp(20px, 3.5vw, 26px); text-align: center; }
+h1 { font-size: clamp(20px, 3.5vw, 26px); }
 h2 { font-size: clamp(18px, 3vw, 24px); }
 h3 { font-size: clamp(16px, 2.5vw, 21px); }
 h4 { font-size: clamp(15px, 2.2vw, 19px); }
 h5 { font-size: clamp(14px, 2vw, 18px); }
 h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
+    h1 {
+      text-align: center;
+    }
     .controls {
       text-align: center;
       margin-bottom: 1rem;
     }
+
 
     #gallery { 
       position: relative;
@@ -76,9 +83,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       background-image: url('Folder.jpg');
       background-size: cover;
       background-position: bottom center;  
+	
     }
 	.square:hover{
-	  cursor: pointer;
+	cursor: pointer; /* ruka při najetí */
 	}
 
     .square img {
@@ -107,11 +115,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       width: auto;
     }
 
+
+
     @media (max-width: 600px) {
       .gallery {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
     }
+
 
 .button-container {
   margin-left:50%;
@@ -127,17 +138,24 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   transform: translateX(-50%);
 }
 
+
+
+
+
+
+
+
     .back-button {
       color: white;
       padding: 0.5rem 1rem;
       font-size: 1rem;
-      background: rgba(20, 20, 20, 0.6);
-      text-align: center;
-      border-radius: 24px;
-      border: 1px solid #1a1a1a;
-      cursor: pointer;
-      transition: 0.5s;
-      backdrop-filter: blur(10px);
+            background: rgba(20, 20, 20, 0.6);
+            text-align: center;
+            border-radius: 24px;
+            border: 1px solid #1a1a1a;
+            cursor: pointer;
+            transition: 0.5s;
+            backdrop-filter: blur(10px);
     }
   .back-button:hover { background-color:  #05d4ff; }
 
@@ -188,10 +206,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
+    /* Na mobilu - zvýšit prostor pro timeline */
     @media (max-width: 768px) {
       .video-wrapper {
         height: min(85vh, 550px);
       }
+    }
+    
+    /* Gradient na dně video okna */
+    @media (max-width: 768px) {
       .video-wrapper::after {
         content: '';
         position: absolute;
@@ -204,15 +227,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         pointer-events: none;
       }
     }
-
-    /* Na mobilu na šířku zmenši okno videa */
-    @media (max-width: 900px) and (orientation: landscape) {
-      .video-wrapper {
-        height: min(70vh, 350px);
-        width: min(80vw, 550px);
-      }
-    }
     
+    /* Vnořené okno - defaultně 100% */
     .video-inner {
       position: absolute;
       top: 0;
@@ -222,6 +238,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       transition: height 0.3s ease, top 0.3s ease;
     }
     
+    /* Když se video spustí - zvětší a posune nahoru aby controls byly mimo */
     @media (max-width: 768px) {
       .video-inner.playing {
         height: 300%;
@@ -229,6 +246,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       }
     }
     
+    /* Vlastní timeline */
+
     .video-inner iframe {
       width: 100%;
       height: 100%;
@@ -237,13 +256,25 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       pointer-events: auto;
     }
     
+    /* Na mobilu - pointer-events none aby se click propagoval na parent */
     @media (max-width: 768px) {
       .video-inner iframe {
         pointer-events: none;
       }
+      
+      /* Když se video přehrává - vrátit pointer-events */
       .video-inner.playing iframe {
         pointer-events: auto;
       }
+    }
+    .video-fallback {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    .video-fallback a {
+      color: #05d4ff;
+      text-decoration: underline;
     }
 
 .preview-modal .close {
@@ -281,6 +312,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     font-size: 22px;
   }
 }
+
+
+
+
+
 
 #top-bar {
   position: fixed;
@@ -391,16 +427,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   justify-content: center;
   align-items: center;
 }
-
-/* NOVÁ TŘÍDA PRO SJEDNOCENÍ ODSÁZENÍ V BLACK-SECTION */
-.uniform-spacing {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 60px 5%;
-  box-sizing: border-box;
-}
-
 .logo-section {
   position: absolute;
   width: 45%;
@@ -454,13 +480,54 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 /* ===== KEYFRAME ANIMACE ===== */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-40px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(5, 212, 255, 0.3), 0 5px 20px rgba(5, 212, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(5, 212, 255, 0.6), 0 5px 30px rgba(5, 212, 255, 0.25);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    border-left-color: #05d4ff;
+    box-shadow: inset 0 0 10px rgba(5, 212, 255, 0);
+  }
+  50% {
+    border-left-color: #00ffff;
+    box-shadow: inset 0 0 10px rgba(5, 212, 255, 0.3);
+  }
 }
 
 /* ===== ABOUT SECTION ===== */
@@ -470,6 +537,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   box-sizing: border-box;
   background: linear-gradient(135deg, #1a1a1a 0%, #1f1f2e 100%);
   color: #f0f0f0;
+  padding: 60px 4%;
   text-align: center;
   opacity: 0;
   animation: fadeInUp 0.8s ease-out forwards;
@@ -487,15 +555,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   animation: slideInLeft 1s ease-out;
 }
 
-/* Zvětšený přechod do ztracena */
 .about-section::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 180px; 
-  background: linear-gradient(to bottom, rgba(26, 26, 26, 0), rgba(0, 0, 0, 1));
+  height: 120px;
+  background: linear-gradient(to bottom, rgba(26, 26, 26, 0), rgba(0, 0, 0, 0.9));
   pointer-events: none;
   z-index: 10;
 }
@@ -516,8 +583,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   position: relative;
   display: inline-block;
   animation: fadeInUp 0.8s ease-out 0.2s backwards;
+  /* Gallery styling */
   letter-spacing: 0.22em;
   text-transform: uppercase;
+  font-size: clamp(16px, 2.5vw, 21px);
 }
 
 .about-section h2::after {
@@ -537,9 +606,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   margin-bottom: 30px;
   font-size: clamp(20px, 3vw, 28px);
   animation: fadeInUp 0.8s ease-out 0.3s backwards;
+  /* Gallery styling */
   display: inline-block;
   letter-spacing: 0.22em;
   text-transform: uppercase;
+  font-size: clamp(16px, 2.5vw, 21px);
 }
 
 .about-section > p:first-of-type {
@@ -608,6 +679,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   font-size: clamp(16px, 2vw, 20px);
 }
 
+.skill-item:hover h4 {
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(5, 212, 255, 0.8);
+}
+
 .skill-item p {
   font-size: clamp(13px, 1.3vw, 16px);
   color: #b0b0b0;
@@ -615,23 +691,58 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 @media (min-width: 769px) {
-  .about-section { text-align: left; }
-  .about-section h2, .about-section h3 { text-align: left; }
-  .about-container { text-align: left; }
+  .about-section {
+    text-align: left;
+    padding-left: 8%;
+  }
+  
+  .about-section h2,
+  .about-section h3 {
+    text-align: left;
+  }
+  
+  .about-container {
+    text-align: left;
+  }
 }
 
 @media (max-width: 600px) {
-  .skills-grid { grid-template-columns: 1fr; }
-  .about-section { padding: 40px 4%; }
-  .skill-item { animation: fadeInUp 0.6s ease-out forwards; }
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-section {
+    padding: 40px 4%;
+  }
+  
+  /* Zpomalit animace na mobilu pro lepší performanci */
+  .skill-item {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+  
   .skill-item:nth-child(1) { animation-delay: 0.3s; }
   .skill-item:nth-child(2) { animation-delay: 0.4s; }
   .skill-item:nth-child(3) { animation-delay: 0.5s; }
   .skill-item:nth-child(4) { animation-delay: 0.6s; }
+  
+  /* Touch-friendly aktivace na mobilu */
+  .skill-item:active {
+    transform: translateY(-8px) scale(1.02);
+    background-color: rgba(5, 212, 255, 0.15);
+  }
+}
+
+/* Vylepšení pro fullscreen video */
+@media (prefers-reduced-motion: reduce) {
+  .skill-item,
+  .about-section,
+  .about-section h2::after {
+    animation: none !important;
+    opacity: 1 !important;
+  }
 }
 
 #Patička{
-  position: absolute;
+ position: absolute;
   top: 100%;
   left: 0;
   width: 100%;	 
@@ -639,12 +750,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   color: white;
   z-index:23;
   display: flex;
-  padding-bottom: 20%;
+  padding-bottom: 20%; //odsazení patičky
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align:center;
+  background-color:black;
 }
+
 
 @media (orientation: portrait) {
   #dropdown-menu {
@@ -655,7 +768,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     width: 100%;
     height: auto;
   }
-  #top-bar { height: 8%; }
+  #top-bar {
+    height: 8%;
+  }
   .logo-section {
     width: 50%;
     height: 50%;
@@ -663,7 +778,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     padding: 0px;
   }
 }
-
 #background-video {
   position: fixed;
   top: 0;
@@ -710,7 +824,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
 }
 
-/* ---------- Kruhové plovoucí menu ---------- */
+/* ---------- Kruhové plovoucí menu (palcem dosažitelné, pravý dolní roh) ---------- */
 #radial-menu {
   position: fixed;
   right: 24px;
@@ -777,41 +891,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   background: rgba(5, 212, 255, 0.55);
   border-color: #05d4ff;
 }
-
-/* Bublina pro vyhledávání (input bar uvnitř) */
-.search-bubble-container {
-  position: absolute;
-  top: -5px;
-  left: 0;
-  opacity: 0;
-  transform: translate(0, 0) scale(0.3);
-  transition: transform 0.35s ease, opacity 0.25s ease;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-}
-.radial-links.open .search-bubble-container {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(var(--tx), var(--ty)) scale(1);
-}
-.search-input {
-  width: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: width 0.3s, opacity 0.3s;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  border-radius: 20px;
-  padding: 5px 10px;
-  margin-left: 8px;
-  outline: none;
-}
-.search-bubble-container.active .search-input {
-  width: 120px;
-  opacity: 1;
-}
-
 @media (max-width: 600px) {
   #radial-menu { right: 14px; bottom: 5%; }
   #radial-toggle { width: 46px; height: 46px; font-size: 1.1rem; }
@@ -823,7 +902,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 70%, rgba(0, 0, 0, 0)); /* Větší přechod */
+  background: rgba(0, 0, 0, 0.7);
   padding: 20px;
   border-radius: 15px;
   width: 75%;
@@ -855,97 +934,186 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   flex-grow: 1;
 }
 @media (min-width: 768px) {
-  #top-bar { height: 8%; }
-  #center-section { flex-direction: row; justify-content: space-between; }
-  .logo-section {
-    width: 45%; height: 45%; top: -48%;
-    z-index: 200; position: absolute;
+  .modal-arrow {
+    display: block;
   }
-  .inner-text { width:92%; padding:2%; flex-grow: 1; }
-  .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
+  #top-bar {
+    height: 8%;
+  }
+  #center-section {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .logo-section {
+    width: 45%;
+    height: 45%;
+    top: -48%;
+    z-index: 200;
+    position: absolute;
+  }
+  .inner-text {
+    width:92%;
+    padding:2%;
+    flex-grow: 1;
+  }
+  .inner-text:first-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+  }
 }
 
-/* Úpravy pro telefon na šířku */
-@media (max-width: 900px) and (orientation: landscape) {
-  #top-bar { height: 18%; } /* Mírně zvýšeno */
-  #dropdown-menu { width:35vw; }
-  #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; }
-  
-  .logo-section {
-    width: 25%;  /* Zmenšeno */
-    height: 25%;
-    top: -20%;   /* Posunuto níže */
-    padding: 2%;
+@media (max-width: 768px) and (orientation: landscape) {
+  #top-bar {
+    height:15%;
   }
-  #black-section { padding: 10px; }
-  .inner-text { width:92%; margin:2%; text-align: center; flex-grow: 1; }
-  .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
+  #dropdown-menu {
+    width:35vw;
+  }
+  #center-section {
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 10px;
+  }
+  .logo-section {
+    width: 30%;
+    height: 30%;
+    top: -33%;
+    padding: 5%;
+  }
+  #black-section {
+    padding: 10px;
+  }
+  .inner-text {
+    width:92%;
+    margin:2%;
+    text-align: center;
+    flex-grow: 1;
+  }
+  .inner-text:first-child {
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+  }
 }
+
 
   #výška_herního_okna {
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 60vh;
-      width:100vw;
-      position: relative; 
-      padding-top: 150px;
-      z-index: 2;
-  }
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 60vh;
+	    width:100vw;
+            position: relative; 
+            padding-top: 150px;
+            z-index: 2;
+        }
 
-  .top-vignette {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 250px;
-      z-index: 10005; pointer-events: none;
-  }
+        .top-vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 250px;
+            z-index: 10005; 
+            pointer-events: none;
+        }
 
-  h3 {
-      margin-top: 0; font-weight: 200; letter-spacing: 5px;
-      color: #00d4ff; text-transform: uppercase; position: relative; z-index: 10;
-  }
+        h3 {
+            margin-top: 0;
+            font-weight: 200;
+            letter-spacing: 5px;
+            color: #00d4ff;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 10;
+        }
 
-  #game-menu {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 40px; width: 85%; max-width: 1200px; margin-top: 60px;
-      padding-bottom: 150px; position: relative; z-index: 10;
-  }
+        #game-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            width: 85%;
+            max-width: 1200px;
+            margin-top: 60px;
+            padding-bottom: 150px;
+            position: relative;
+            z-index: 10;
+        }
 
-  .game-card {
-      background: rgba(20, 20, 20, 0.6); padding: 50px 20px;
-      text-align: center; border-radius: 24px; border: 1px solid #1a1a1a;
-      cursor: pointer; transition: 0.5s; backdrop-filter: blur(10px);
-  }
+        .game-card {
+            background: rgba(20, 20, 20, 0.6);
+            padding: 50px 20px;
+            text-align: center;
+            border-radius: 24px;
+            border: 1px solid #1a1a1a;
+            cursor: pointer;
+            transition: 0.5s;
+            backdrop-filter: blur(10px);
+        }
 
-  .game-card:hover {
-      border-color: #00d4ff; transform: translateY(-10px); background: rgba(30, 30, 30, 0.9);
-  }
+        .game-card:hover {
+            border-color: #00d4ff;
+            transform: translateY(-10px);
+            background: rgba(30, 30, 30, 0.9);
+        }
 
-  #overlay {
-      display: none; position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%; background: transparent; 
-      z-index: 9999; padding-top: 120px; box-sizing: border-box;
-  }
+        #overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent; 
+            z-index: 9999;
+            padding-top: 120px; 
+            box-sizing: border-box;
+        }
 
-  .back-btn {
-      position: absolute; top: 50%; right: 2vw;
-      height: 50px; width: 50px; border-radius: 50%;
-      background: rgba(0, 0, 0, 0.7); color: white; border: 1px solid #333;
-      cursor: pointer; display: flex; justify-content: center; align-items: center;
-      font-size: 2rem; z-index: 10010; backdrop-filter: blur(15px); transition: 0.4s;
-  }
-  .back-btn:hover { background-color: #05d4ff; }
+        .back-btn {
+            position: absolute;
+            top:  50%;
+            right: 2vw;
+            height: 5hw;
+	    width: 5hw;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 1px solid #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: font-size: 2rem;
+            z-index: 10010;
+            backdrop-filter: blur(15px);
+            transition: 0.4s;
+        }
 
-  iframe { width: 100%; height: 100%; border: none; background: #000; display: block; }
-  #konec { position:absolute; z-index:2; bottom:0px; color:black; }
+  .back-btn:hover { background-color:  #05d4ff; }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+            display: block;
+        }
+#konec {
+  position:absolute;
+  z-index:2;
+  bottom:0px;
+  color:black;
+}
+
 
     </style>
+
 </head>
 
 <body id="top">
+
     
     <div id="top-bar">
+
         <a id="icon" href="#top"><img src="style/logo.png" alt="Logo" class="menu-icon"></a>
 
         <div id="dropdown-container">
@@ -954,6 +1122,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
                 <a href="#top"><li data-i18n="nav_home">Hlavní</li></a>
                 <a href="#about-section-1"><li data-i18n="nav_about">O mě</li></a>
                 <a href="#padding"><li data-i18n="nav_gallery">Galerie</li></a>
+		<a href="#výška_herního_okna"><li data-i18n="nav_games">Hry</li></a>
                 <a href="#konec"><li data-i18n="nav_contact">Kontakt</li></a>
                 <li class="lang-item" id="lang-toggle">
                     <span id="lang-current">CS ▾</span>
@@ -967,6 +1136,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         </div>
     </div>
 
+
+
+
+
     <video id="background-video" autoplay muted loop>
         <source id="video-source" type="video/mp4" src="video-source">
         Your browser does not support the video tag.
@@ -977,33 +1150,32 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     <div id="radial-menu">
         <button id="radial-toggle" aria-label="Otevřít rychlé menu" aria-expanded="false">☰</button>
         <nav id="radial-links" class="radial-links">
-            <!-- Galerie zespodu 70px (jako Hlavní zprava), Hlavní vlevo 70px -->
-            <a href="#padding" class="radial-link" style="--tx:0px; --ty:-70px;" data-i18n="nav_gallery">Galerie</a>
-            <a href="#top" class="radial-link" style="--tx:-70px; --ty:0px;" data-i18n="nav_home">Hlavní</a>
-            
-            <!-- Vyhledávání nad "Hlavní" -->
-            <div class="search-bubble-container" style="--tx:-70px; --ty:-50px;">
-               <button class="radial-link" style="position:relative; top:0; left:0; transform:none;" id="search-toggle-btn" aria-label="Hledat">🔍</button>
-               <input type="text" class="search-input" placeholder="Hledat..." data-i18n-placeholder="nav_search">
-            </div>
-
+            <a href="#top" class="radial-link" style="--tx:0px; --ty:-70px;" data-i18n="nav_home">Hlavní</a>
             <a href="#about-section-1" class="radial-link" style="--tx:-50px; --ty:-50px;" data-i18n="nav_about">O mě</a>
-            <a href="#konec" class="radial-link" style="--tx:-30px; --ty:-80px;" data-i18n="nav_contact">Kontakt</a>
+            <a href="#padding" class="radial-link" style="--tx:-70px; --ty:0px;" data-i18n="nav_gallery">Galerie</a>
+            <a href="#výška_herního_okna" class="radial-link" style="--tx:-50px; --ty:50px;" data-i18n="nav_games">Hry</a>
+            <a href="#konec" class="radial-link" style="--tx:0px; --ty:70px;" data-i18n="nav_contact">Kontakt</a>
         </nav>
     </div>
+
 
     <div id="center-section">
         <div class="logo-section"></div>
         <div class="inner-text">
             <h2 data-i18n="hero_portfolio_title">Portfolio</h2>
       <p data-i18n="hero_portfolio_text">Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...</p>
+
         </div>
+
         <div class="inner-text">
             <h2 data-i18n="hero_welcome_title">Vítejte</h2>
+
             <p data-i18n="hero_welcome_text">Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!</p>
         </div>
+
+
+
     </div>
-    
    <div class="scrollbutton">
        <button class="back-button gallery-button" id="scroll-button">▼</button>
     </div>
@@ -1015,19 +1187,23 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
                 behavior: "smooth"       
             });
         });
-
-        // Vyhledávací tlačítko chování
-        document.getElementById("search-toggle-btn").addEventListener("click", function(e) {
-            e.preventDefault();
-            this.parentElement.classList.toggle("active");
-            if(this.parentElement.classList.contains("active")) {
-                this.nextElementSibling.focus();
-            }
-        });
 </script>
 
+
+
+
+
+
+
+	
+   
 <div id="black-section">
+
+
+	
     <script>
+
+        // Ovládání rozbalovacího menu
         const dropdownButton = document.getElementById('dropdown-button');
         const dropdownMenu = document.getElementById('dropdown-menu');
 
@@ -1036,6 +1212,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             dropdownMenu.style.display = isVisible ? 'none' : 'block';
         });
 
+        // Zavřít menu při kliknutí mimo něj
         window.addEventListener('click', (e) => {
             if (!e.target.closest('#dropdown-container')) {
                 dropdownMenu.style.display = 'none';
@@ -1043,13 +1220,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             }
         });
 
+
+        // ---------- Přepínání jazyka ----------
         const translations = {
             cs: {
                 nav_home: "Hlavní",
                 nav_about: "O mě",
                 nav_gallery: "Galerie",
+                nav_games: "Hry",
                 nav_contact: "Kontakt",
-                nav_search: "Hledat...",
                 hero_portfolio_title: "Portfolio",
                 hero_portfolio_text: "Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...",
                 hero_welcome_title: "Vítejte",
@@ -1075,8 +1254,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
                 nav_home: "Home",
                 nav_about: "About Me",
                 nav_gallery: "Gallery",
+                nav_games: "Games",
                 nav_contact: "Contact",
-                nav_search: "Search...",
                 hero_portfolio_title: "Portfolio",
                 hero_portfolio_text: "My name is Filip Duda. <br>I focus on graphic design and testing, mainly 2D and 3D graphics and simple programming...",
                 hero_welcome_title: "Welcome",
@@ -1102,8 +1281,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
                 nav_home: "Start",
                 nav_about: "Über mich",
                 nav_gallery: "Galerie",
+                nav_games: "Spiele",
                 nav_contact: "Kontakt",
-                nav_search: "Suchen...",
                 hero_portfolio_title: "Portfolio",
                 hero_portfolio_text: "Ich heiße Filip Duda. <br>Ich beschäftige mich mit Grafik, Design und Testing, vor allem mit 2D-/3D-Grafik und einfacher Programmierung...",
                 hero_welcome_title: "Willkommen",
@@ -1135,11 +1314,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             const dict = translations[lang] || translations.cs;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (dict[key] !== undefined) el.innerHTML = dict[key];
-            });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (dict[key] !== undefined) el.placeholder = dict[key];
+                if (dict[key] !== undefined) {
+                    el.innerHTML = dict[key];
+                }
             });
             document.documentElement.lang = lang;
             langCurrent.textContent = dict.lang_label;
@@ -1163,8 +1340,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             });
         });
 
+        // Načtení uložené jazykové preference (výchozí čeština)
         setLanguage(localStorage.getItem('fd_lang') || 'cs');
 
+        // ---------- Kruhové plovoucí menu ----------
         const radialToggle = document.getElementById('radial-toggle');
         const radialLinks = document.getElementById('radial-links');
 
@@ -1173,26 +1352,29 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             const isOpen = radialLinks.classList.toggle('open');
             radialToggle.classList.toggle('open', isOpen);
             radialToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            if(!isOpen) document.querySelector('.search-bubble-container').classList.remove('active');
         });
 
         radialLinks.querySelectorAll('.radial-link').forEach(link => {
-            if(link.id === 'search-toggle-btn') return; // Necháme search input nezavřený po kliku na něj
             link.addEventListener('click', () => {
+                // Zavřít otevřené video nebo fotku
                 const modal = document.getElementById('previewModal');
                 if (modal && modal.style.display === 'flex') {
                     modal.style.display = 'none';
                     document.getElementById('previewContent').innerHTML = '';
+                    // Zpátky povolit scrolling a tlačítko
                     document.body.style.overflow = '';
                     document.getElementById('scroll-button').style.visibility = 'visible';
                     document.getElementById('scroll-button').style.pointerEvents = 'auto';
                     const backBtn = document.getElementById('back-btn');
                     if (backBtn) backBtn.style.pointerEvents = 'auto';
+                    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+                    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+                    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
                 }
+                
                 radialLinks.classList.remove('open');
                 radialToggle.classList.remove('open');
                 radialToggle.setAttribute('aria-expanded', 'false');
-                document.querySelector('.search-bubble-container').classList.remove('active');
             });
         });
 
@@ -1201,10 +1383,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
                 radialLinks.classList.remove('open');
                 radialToggle.classList.remove('open');
                 radialToggle.setAttribute('aria-expanded', 'false');
-                document.querySelector('.search-bubble-container').classList.remove('active');
             }
         });
 
+
+
+        // Počet dostupných videí ve složce pozadi/ (1.mp4, 2.mp4, 3.mp4)
         const TOTAL_BACKGROUND_VIDEOS = 3;
         let currentVideoIndex = 0;
 
@@ -1216,46 +1400,58 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             return list;
         }
 
+        // Nastavení konkrétního videa na pozadí podle indexu (0 = 1.mp4, 1 = 2.mp4, ...)
         function setBackgroundVideo(index) {
             const videos = videoList();
             currentVideoIndex = ((index % videos.length) + videos.length) % videos.length;
+
             const videoElement = document.getElementById('background-video');
             const sourceElement = document.getElementById('video-source');
             sourceElement.src = videos[currentVideoIndex];
             videoElement.load();
-            videoElement.play().catch(error => console.error("Chyba přehrávání:", error));
+            videoElement.play().catch(error => {
+                console.error("Chyba při přehrávání videa:", error);
+            });
+
             updateVideoBubbles();
         }
 
+        // Vytvoření bublinek podle počtu nalezených videí
         function initVideoBubbles() {
             const container = document.getElementById('video-bubbles');
             if (!container) return;
             container.innerHTML = '';
+
             videoList().forEach((src, index) => {
                 const bubble = document.createElement('button');
                 bubble.type = 'button';
                 bubble.className = 'bubble';
+                bubble.setAttribute('aria-label', `Přepnout na video pozadí ${index + 1}`);
                 bubble.addEventListener('click', () => setBackgroundVideo(index));
                 container.appendChild(bubble);
             });
         }
 
         function updateVideoBubbles() {
-            document.querySelectorAll('#video-bubbles .bubble').forEach((b, index) => {
+            const bubbles = document.querySelectorAll('#video-bubbles .bubble');
+            bubbles.forEach((b, index) => {
                 b.classList.toggle('active', index === currentVideoIndex);
             });
         }
 
         window.onload = () => {
             initVideoBubbles();
-            setBackgroundVideo(Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS));
+            const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
+            setBackgroundVideo(randomIndex);
         };
 
+        // Plynulé přejíždění na odkazy vedoucí na stejnou stránku (#kotva)
         document.querySelectorAll('a[href^="#"]').forEach(link => {
             link.addEventListener('click', function (e) {
                 const rawTarget = this.getAttribute('href').slice(1);
                 if (!rawTarget) return;
-                const targetEl = document.getElementById(decodeURIComponent(rawTarget));
+                const targetId = decodeURIComponent(rawTarget);
+                const targetEl = document.getElementById(targetId);
                 if (targetEl) {
                     e.preventDefault();
                     targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1263,10 +1459,23 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
                 }
             });
         });
+
     </script>
 
-<!-- ===== ABOUT SECTION 1 (Včleněno do uniformního odsazení) ===== -->
-<div id="about-section-1" class="about-section uniform-spacing">
+
+
+	
+
+
+
+
+
+
+
+
+
+<!-- ===== ABOUT SECTION 1 (mezi galerií a hrami) ===== -->
+<div id="about-section-1" class="about-section">
     <div class="about-container">
         <h2>Kdo jsem a co přináším</h2>
         <p>Jsem všestranný IT profesionál s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od robustní technické podstaty až po dotažený vizuální zážitek pro uživatele.</p>
@@ -1293,132 +1502,267 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     </div>
 </div>
 
-<div class="inner-text uniform-spacing" id="padding">
-    <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
-    <p class="gallery-lead" data-i18n="gallery_lead">Ukázka projektů, na kterých jsem v poslední době pracoval — od grafiky pro tisk po herní vizuály.</p>
-    <p data-i18n="gallery_desc">Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.</p>
-    <br>
-    
-    <div class="controls">
-      <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;" data-i18n="back_button">Zpět</button>
-    </div>
 
-    <div id="galerie">
-      <div class="gallery" id="gallery"></div>
-    </div>
+    <div class="inner-text" id="padding">
+        <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
+        <p class="gallery-lead" data-i18n="gallery_lead">Ukázka projektů, na kterých jsem v poslední době pracoval — od grafiky pro tisk po herní vizuály.</p>
+       <p data-i18n="gallery_desc">Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.</p>
 
-    <div id="previewModal" class="preview-modal" onclick="closePreview(event)">
-      <div id="previewContent"></div>
-    </div>
+<br>
 
-    <script>
-    const API_KEY = 'AIzaSyAFRT_OOuYQDnSexM2SGLdSYZDKQ_10GME';
-    const ROOT_FOLDER_ID = '17BDpjapbHbx_unFVchSwgtWlgnZvG1sJ';
-    const folderStack = [ROOT_FOLDER_ID];
 
-    async function loadFolder(folderId, addToHistory = true) {
-      if (addToHistory) history.pushState({ folderId }, '');
-      const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
-      const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id,name,mimeType,thumbnailLink)`;
 
-      const response = await fetch(url);
-      const data = await response.json();
+		
+<div class="controls">
+  <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;" data-i18n="back_button">Zpět</button>
+</div>
 
-      const gallery = document.getElementById('gallery');
-      const backBtn = document.getElementById('backBtn');
-      gallery.innerHTML = '';
-      backBtn.style.display = folderStack.length > 1 ? 'inline-block' : 'none';
+<div id="galerie">
+  <div class="gallery" id="gallery"></div>
+</div>
 
-      data.files.forEach(file => {
-        const container = document.createElement('div');
-        container.className = 'square';
-        if (file.mimeType === 'application/vnd.google-apps.folder') {
-          container.onclick = () => { folderStack.push(file.id); loadFolder(file.id); };
-          const folderDiv = document.createElement('div');
-          folderDiv.className = 'folder'; folderDiv.innerHTML = file.name;
-          container.appendChild(folderDiv);
-        } else {
-          container.style.backgroundImage = 'none';
-          const img = document.createElement('img');
-          img.src = file.thumbnailLink || 'https://via.placeholder.com/250?text=Soubor';
-          img.loading = 'lazy'; container.appendChild(img);
-          container.onclick = () => openPreview(file);
-        }
-        gallery.appendChild(container);
-      });
-    }
+<div id="previewModal" class="preview-modal" onclick="closePreview(event)">
+  <div id="previewContent"></div>
+</div>
 
-    function openPreview(file) {
-      const modal = document.getElementById('previewModal');
-      const content = document.getElementById('previewContent');
-      content.innerHTML = '';
-      const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
-      const frame = document.createElement('div'); frame.className = 'media-frame';
-      
-      const closeBtn = document.createElement('span'); closeBtn.className = 'close';
-      closeBtn.innerHTML = '×'; closeBtn.onclick = (e) => {
-        e.stopPropagation(); modal.style.display = 'none'; content.innerHTML = '';
-        document.body.style.overflow = '';
-        document.getElementById('scroll-button').style.visibility = 'visible';
-        document.getElementById('scroll-button').style.pointerEvents = 'auto';
+<script>
+const API_KEY = 'AIzaSyAFRT_OOuYQDnSexM2SGLdSYZDKQ_10GME';
+const ROOT_FOLDER_ID = '17BDpjapbHbx_unFVchSwgtWlgnZvG1sJ';
+const folderStack = [ROOT_FOLDER_ID];
+
+async function loadFolder(folderId, addToHistory = true) {
+  if (addToHistory) history.pushState({ folderId }, '');
+
+  const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+  const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id,name,mimeType,thumbnailLink)`;
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  const gallery = document.getElementById('gallery');
+  const backBtn = document.getElementById('backBtn');
+  gallery.innerHTML = '';
+  backBtn.style.display = folderStack.length > 1 ? 'inline-block' : 'none';
+
+  data.files.forEach(file => {
+    const container = document.createElement('div');
+    container.className = 'square';
+
+    // 🔹 Pokud je to složka
+    if (file.mimeType === 'application/vnd.google-apps.folder') {
+
+      container.onclick = () => {
+        folderStack.push(file.id);
+        loadFolder(file.id);
       };
 
-      if (file.mimeType.startsWith('image/')) {
-        const img = document.createElement('img'); img.src = fileUrl;
-        img.onerror = () => { img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`; };
-        frame.appendChild(img);
-      } else if (file.mimeType.startsWith('video/')) {
-        const wrapper = document.createElement('div'); wrapper.className = 'video-wrapper';
-        const inner = document.createElement('div'); inner.className = 'video-inner';
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://drive.google.com/file/d/${file.id}/preview`; iframe.allow = "autoplay; fullscreen";
-        inner.appendChild(iframe); wrapper.appendChild(inner); frame.appendChild(wrapper);
-      }
-      frame.appendChild(closeBtn); content.appendChild(frame);
-      document.body.style.overflow = 'hidden';
-      document.getElementById('scroll-button').style.visibility = 'hidden';
-      modal.style.display = 'flex';
+      const folderDiv = document.createElement('div');
+      folderDiv.className = 'folder';
+      folderDiv.innerHTML = file.name;
+      container.appendChild(folderDiv);
+    }
+    // 🔹 Pokud je to obrázek nebo video
+    else {
+
+      container.style.backgroundImage = 'none';
+
+      const img = document.createElement('img');
+      img.src = file.thumbnailLink || 'https://via.placeholder.com/250?text=Soubor';
+      img.loading = 'lazy';
+      container.appendChild(img);
+
+      container.onclick = () => openPreview(file);
     }
 
-    function closePreview(event) {
-      if (event.target.id === 'previewModal') {
-        document.getElementById('previewModal').style.display = 'none';
-        document.getElementById('previewContent').innerHTML = '';
-        document.body.style.overflow = '';
-        document.getElementById('scroll-button').style.visibility = 'visible';
-      }
-    }
+    gallery.appendChild(container);
+  });
+}
 
-    function goBack() {
-      if (folderStack.length > 1) { folderStack.pop(); loadFolder(folderStack[folderStack.length - 1], false); }
-    }
-    window.onpopstate = function(event) {
-      if (event.state && event.state.folderId) {
-        if (folderStack.length > 1) folderStack.pop(); loadFolder(event.state.folderId, false);
-      }
+function openPreview(file) {
+  const modal = document.getElementById('previewModal');
+  const content = document.getElementById('previewContent');
+  content.innerHTML = '';
+
+  const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
+
+  const frame = document.createElement('div');
+  frame.className = 'media-frame';
+
+  const closeBtn = document.createElement('span');
+  closeBtn.className = 'close';
+  closeBtn.innerHTML = '×';
+  closeBtn.setAttribute('aria-label', 'Zavřít náhled');
+  closeBtn.onclick = (e) => {
+    e.stopPropagation();
+    modal.style.display = 'none';
+    content.innerHTML = '';
+    // Vrátit všechny video-inners na normální stav
+    const videoInners = document.querySelectorAll('.video-inner.playing');
+    videoInners.forEach(inner => inner.classList.remove('playing'));
+    // Zpátky povolit scrolling a tlačítko
+    document.body.style.overflow = '';
+    document.getElementById('scroll-button').style.visibility = 'visible';
+    document.getElementById('scroll-button').style.pointerEvents = 'auto';
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) backBtn.style.pointerEvents = 'auto';
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
+  };
+
+  // 🔹 Obrázek
+  if (file.mimeType.startsWith('image/')) {
+    const img = document.createElement('img');
+    img.src = fileUrl;
+    img.onerror = () => {
+      img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
     };
-    loadFolder(ROOT_FOLDER_ID);
-    </script>
-</div>
+    frame.appendChild(img);
+  } 
+
+  // 🔹 Video - Google Drive native player
+  else if (file.mimeType.startsWith('video/')) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'video-wrapper';
+    
+    // Vnořené okno
+    const inner = document.createElement('div');
+    inner.className = 'video-inner';
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+    iframe.allow = "autoplay; fullscreen";
+
+    inner.appendChild(iframe);
+    wrapper.appendChild(inner);
+    frame.appendChild(wrapper);
+    
+    // Detekovat mobilní zařízení
+    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile()) {
+      let isPlaying = false;
+      
+      // Automaticky spustit video hned po načtení
+      setTimeout(() => {
+        try {
+          // Spustit video script-wise
+          isPlaying = true;
+          inner.classList.add('playing');
+          // Kliknout na iframe aby se video spustilo
+          iframe.click();
+        } catch(err) {
+          console.log('Auto-play failed');
+        }
+      }, 1500);
+      
+      // Uživatel může znovu klikat na video když chce
+      inner.addEventListener('click', (e) => {
+        if (!isPlaying) {
+          isPlaying = true;
+          inner.classList.add('playing');
+          setTimeout(() => {
+            iframe.click();
+          }, 300);
+        }
+      }, { capture: true });
+    }
+  }
+
+  frame.appendChild(closeBtn);
+  content.appendChild(frame);
+
+  // Zablokovat scrolling a skrýt scroll tlačítko
+  document.body.style.overflow = 'hidden';
+  document.getElementById('scroll-button').style.visibility = 'hidden';
+  document.getElementById('scroll-button').style.pointerEvents = 'none';
+  
+  // Zablokovat Z5 tlačítko (back-btn)
+  const backBtn = document.getElementById('back-btn');
+  if (backBtn) backBtn.style.pointerEvents = 'none';
+
+  modal.style.display = 'flex';
+}
+
+// Globální timeout proměnné
+let hideControlsTimeout = null;
+let hideControlsAfterPlayTimeout = null;
+let videoClickHandler = null;
+let videoTouchTimeout = null;
+
+function handleVideoClick(e) {
+  // Pokud se kliklo na video iframe
+  if (e.target.closest('.video-wrapper')) {
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    // Obnovit viditelnost na 2s
+    hideControlsTimeout = setTimeout(() => {
+      // Ovládání budou skryta automaticky po 0.5s
+    }, 500);
+  }
+}
+
+function closePreview(event) {
+  if (event.target.id === 'previewModal') {
+    document.getElementById('previewModal').style.display = 'none';
+    document.getElementById('previewContent').innerHTML = '';
+    // Vrátit všechny video-inner na normální stav (smazat playing class)
+    const videoInners = document.querySelectorAll('.video-inner.playing');
+    videoInners.forEach(inner => inner.classList.remove('playing'));
+    // Zpátky povolit scrolling a tlačítko
+    document.body.style.overflow = '';
+    document.getElementById('scroll-button').style.visibility = 'visible';
+    document.getElementById('scroll-button').style.pointerEvents = 'auto';
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) backBtn.style.pointerEvents = 'auto';
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
+  }
+}
+
+function goBack() {
+  if (folderStack.length > 1) {
+    folderStack.pop();
+    loadFolder(folderStack[folderStack.length - 1], false);
+  }
+}
+
+window.onpopstate = function(event) {
+  if (event.state && event.state.folderId) {
+    if (folderStack.length > 1) folderStack.pop();
+    loadFolder(event.state.folderId, false);
+  }
+};
+
+loadFolder(ROOT_FOLDER_ID);
+</script>
+
+
+
+    </div>
+
+
 	
-<!-- Výška herního okna VYJMUTA z class uniform-spacing (jak sis přál) -->
 <div class="hero-spacer">
+
     <div id="výška_herního_okna">
         <div class="top-vignette"></div>
         <h3 data-i18n="games_title">Vyberte hru</h3>
         <div id="game-menu"></div>
+
         <div id="overlay">
             <iframe id="game-frame" src=""></iframe>
         </div>
+
         <button id="back-btn" class="back-btn" onclick="zavritHru()" title="Návrat do menu" style="display: none;">✕</button>
     </div>
 </div>
-
-<script>
+ <script>
     const seznamHer = [
         { id: 'index1', nazev: 'Vesmírná-mise' }, 
         { id: 'index2', nazev: 'Vesmírná-mise2' },
     ];
+
     const hlavniDiv = document.getElementById('výška_herního_okna');
     const menuContainer = document.getElementById('game-menu');
     const overlay = document.getElementById('overlay');
@@ -1428,22 +1772,30 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     function prizpusobVysku() {
         const vyskaRodice = hlavniDiv.offsetHeight;
         const paddingTop = parseInt(window.getComputedStyle(overlay).paddingTop);
-        if (overlay.style.display === 'block') { iframe.style.height = (vyskaRodice - paddingTop) + "px"; }
+        if (overlay.style.display === 'block') {
+            iframe.style.height = (vyskaRodice - paddingTop) + "px";
+        }
     }
 
     seznamHer.forEach(hra => {
-        const karta = document.createElement('div'); karta.className = 'game-card';
+        const karta = document.createElement('div');
+        karta.className = 'game-card';
         karta.innerHTML = `<h3>${hra.nazev}</h3><p>Spustit</p>`;
-        karta.onclick = () => spustitHru(hra.id); menuContainer.appendChild(karta);
+        karta.onclick = () => spustitHru(hra.id);
+        menuContainer.appendChild(karta);
     });
 
     function spustitHru(id, autoScroll = true) {
         iframe.src = `hry/${id}.html`; 
-        overlay.style.display = 'block'; backBtn.style.display = 'flex';
+        
+        overlay.style.display = 'block';
+        backBtn.style.display = 'flex';
+
         document.getElementById('game-menu').style.visibility = 'hidden';
         document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
+
         prizpusobVysku();
-        
+
         if (autoScroll) {
             const yOffset = -50; 
             const y = hlavniDiv.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -1452,23 +1804,32 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     }
 
     function zavritHru() {
-        overlay.style.display = 'none'; backBtn.style.display = 'none'; iframe.src = '';
+        overlay.style.display = 'none';
+        backBtn.style.display = 'none';
+        iframe.src = '';
         document.getElementById('game-menu').style.visibility = 'visible';
         document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
         hlavniDiv.scrollIntoView({ behavior: 'smooth' });
     }
+
     window.addEventListener('resize', prizpusobVysku);
 
-    // Automatické spuštění hry index1, ALE BEZ SCROLLU
+    // Automatické spuštění hry index1 při načtení stránky
     window.addEventListener('load', () => {
         setTimeout(() => {
-            spustitHru('index1', false);
-        }, 800);
+            spustitHru('index1', true);
+        }, 800); // Малá prodleva pro lepší UX
     });
 </script>
 
+<!-- ===== INTERSECTION OBSERVER PRO ANIMACE ===== -->
 <script>
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -100px 0px' };
+    // Spustit animace když se element dostane do view
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -1478,14 +1839,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         });
     }, observerOptions);
 
+    // Pozorovat všechny about-section prvky
     document.querySelectorAll('.about-section').forEach(section => {
         section.style.opacity = '0';
         observer.observe(section);
     });
 </script>
 
-<!-- ===== ABOUT SECTION 2 ===== -->
-<div id="about-section-2" class="about-section uniform-spacing">
+<!-- ===== ABOUT SECTION 2 (za hrami) ===== -->
+<div id="about-section-2" class="about-section">
     <div class="about-container">
         <h2>Proč spolupracovat právě se mnou?</h2>
         <p>Díky pestré praxi (od technické podpory a správy databází v NbServisu a Klouček Computer přes vedení provozu ve SportVision až po navrhování v Oresi) jsem si zvykl rychle se adaptovat na nové prostředí a přebírat zodpovědnost za výsledky. Nezáleží na tom, zda řeším kód, stavím síť nebo komunikuji s klientem – vždy kladu důraz na preciznost, efektivitu a lidský přístup.</p>
@@ -1494,13 +1856,29 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     </div>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div id="Patička"> 
- <div class="footer">
+
+<div class="footer">
+
         <img src="style/profilovka.png" alt="Filip Duda">
         <h2 data-i18n="contact_title">Kontaktujte mě</h2>
         <p><strong>Telefon:</strong> +420 608 122 052</p>
         <p><strong>Email:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
-        <br>
+<br>
         <div class="social-icons">
             <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank" rel="noopener noreferrer"><img src="style/linkedin.png" alt="LinkedIn"></a>
 	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
@@ -1509,25 +1887,38 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
    <div class="button-container">
        <button class="back-button gallery-button" onclick="window.location.href='#center-section'" >▲</button>
    </div>
+
  </div> 
+
 </div> 
 	
  <div id="konec">
-        <br><br>
+        <br>
+	    <br>
  </div> 
 
 <script>
+
+//zobrazí, schová kontakt
         const footer = document.querySelector('.footer');
+
         window.addEventListener('scroll', () => {
             const scrollPosition = window.scrollY + window.innerHeight;
             const documentHeight = document.documentElement.scrollHeight;
+
             if (Math.ceil(scrollPosition) >= documentHeight) {
                 footer.classList.add('visible');
             } else {
                 footer.classList.remove('visible');
             }
         });
+
     </script>
+
+
+
+
+
  </div>
 </body>
 </html>
