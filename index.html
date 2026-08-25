@@ -1785,7 +1785,7 @@ loadFolder(ROOT_FOLDER_ID);
         menuContainer.appendChild(karta);
     });
 
-    function spustitHru(id, autoScroll = true) {
+    function spustitHru(id, autoScroll = false) {
         iframe.src = `hry/${id}.html`; 
         
         overlay.style.display = 'block';
