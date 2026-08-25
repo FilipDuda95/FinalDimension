@@ -1785,7 +1785,8 @@ loadFolder(ROOT_FOLDER_ID);
         menuContainer.appendChild(karta);
     });
 
-    function spustitHru(id) {
+    function spustitHru(id, autoScroll = true) {
+        iframe.src = `hry/${id}.html`; 
         
         overlay.style.display = 'block';
         backBtn.style.display = 'flex';
@@ -1794,6 +1795,12 @@ loadFolder(ROOT_FOLDER_ID);
         document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
 
         prizpusobVysku();
+
+        if (autoScroll) {
+            const yOffset = -50; 
+            const y = hlavniDiv.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+        }
     }
 
     function zavritHru() {
