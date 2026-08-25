@@ -1817,7 +1817,7 @@ loadFolder(ROOT_FOLDER_ID);
     // Automatické spuštění hry index1 při načtení stránky
     window.addEventListener('load', () => {
         setTimeout(() => {
-            spustitHru('index1', true);
+            spustitHru('index1', false); // ZMĚNĚNO NA FALSE PRO VYPNUTÍ AUTOSCROLLU
         }, 800); // Малá prodleva pro lepší UX
     });
 </script>
