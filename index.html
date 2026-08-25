@@ -478,6 +478,271 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 30px;
 }
 
+/* ===== KEYFRAME ANIMACE ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(5, 212, 255, 0.3), 0 5px 20px rgba(5, 212, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(5, 212, 255, 0.6), 0 5px 30px rgba(5, 212, 255, 0.25);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    border-left-color: #05d4ff;
+    box-shadow: inset 0 0 10px rgba(5, 212, 255, 0);
+  }
+  50% {
+    border-left-color: #00ffff;
+    box-shadow: inset 0 0 10px rgba(5, 212, 255, 0.3);
+  }
+}
+
+/* ===== ABOUT SECTION ===== */
+.about-section {
+  position: relative;
+  width: 100%;
+  background: linear-gradient(135deg, #1a1a1a 0%, #1f1f2e 100%);
+  color: #f0f0f0;
+  padding: 60px 20px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  overflow: hidden;
+}
+
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #05d4ff, transparent);
+  animation: slideInLeft 1s ease-out;
+}
+
+.about-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.about-section h2 {
+  color: #05d4ff;
+  margin-bottom: 20px;
+  font-size: clamp(24px, 4vw, 36px);
+  position: relative;
+  display: inline-block;
+  animation: fadeInUp 0.8s ease-out 0.2s backwards;
+  /* Gallery styling */
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: clamp(16px, 2.5vw, 21px);
+}
+
+.about-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #05d4ff, #00ffff);
+  animation: slideInLeft 0.6s ease-out 0.4s forwards;
+}
+
+.about-section h3 {
+  color: #05d4ff;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  font-size: clamp(20px, 3vw, 28px);
+  animation: fadeInUp 0.8s ease-out 0.3s backwards;
+  /* Gallery styling */
+  display: inline-block;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: clamp(16px, 2.5vw, 21px);
+}
+
+.about-section > p:first-of-type {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.95rem;
+  max-width: 520px;
+  margin: 20px auto 14px;
+}
+
+.motivation-text {
+  margin-top: 30px !important;
+  font-style: italic;
+  color: #05d4ff;
+  font-size: clamp(14px, 1.5vw, 18px);
+}
+
+.contact-text {
+  margin-top: 20px !important;
+  color: #d0d0d0;
+  font-size: clamp(14px, 1.5vw, 18px);
+}
+
+.contact-text a {
+  color: #05d4ff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.contact-text a:hover {
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(5, 212, 255, 0.8);
+}
+
+.about-section p {
+  font-size: clamp(14px, 1.5vw, 18px);
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: #d0d0d0;
+  animation: fadeInUp 0.8s ease-out 0.25s backwards;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.skill-item {
+  background-color: rgba(5, 212, 255, 0.08);
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #05d4ff;
+  text-align: left;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Stagger efekt pro skill items */
+.skill-item:nth-child(1) { animation-delay: 0.4s; }
+.skill-item:nth-child(2) { animation-delay: 0.5s; }
+.skill-item:nth-child(3) { animation-delay: 0.6s; }
+.skill-item:nth-child(4) { animation-delay: 0.7s; }
+
+.skill-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(5, 212, 255, 0.15), transparent);
+  transition: left 0.5s ease;
+}
+
+.skill-item:hover::before {
+  left: 100%;
+}
+
+.skill-item:hover {
+  transform: translateY(-8px) scale(1.02);
+  background-color: rgba(5, 212, 255, 0.15);
+  animation: borderGlow 2s ease-in-out infinite;
+  box-shadow: 
+    0 10px 30px rgba(5, 212, 255, 0.3),
+    0 0 20px rgba(5, 212, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.skill-item h4 {
+  color: #05d4ff;
+  margin-bottom: 10px;
+  font-size: clamp(16px, 2vw, 20px);
+  transition: color 0.3s ease;
+}
+
+.skill-item:hover h4 {
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(5, 212, 255, 0.8);
+}
+
+.skill-item p {
+  font-size: clamp(13px, 1.3vw, 16px);
+  color: #b0b0b0;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-section {
+    padding: 40px 15px;
+  }
+  
+  /* Zpomalit animace na mobilu pro lepší performanci */
+  .skill-item {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+  
+  .skill-item:nth-child(1) { animation-delay: 0.3s; }
+  .skill-item:nth-child(2) { animation-delay: 0.4s; }
+  .skill-item:nth-child(3) { animation-delay: 0.5s; }
+  .skill-item:nth-child(4) { animation-delay: 0.6s; }
+  
+  /* Touch-friendly aktivace na mobilu */
+  .skill-item:active {
+    transform: translateY(-8px) scale(1.02);
+    background-color: rgba(5, 212, 255, 0.15);
+  }
+}
+
+/* Vylepšení pro fullscreen video */
+@media (prefers-reduced-motion: reduce) {
+  .skill-item,
+  .about-section,
+  .about-section h2::after {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
+
 #Patička{
  position: absolute;
   top: 100%;
@@ -856,6 +1121,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             <button id="dropdown-button"> <img src="style/menu2.png" alt="Menu Icon" class="menu-icon"></button> 
             <ul id="dropdown-menu">
                 <a href="#top"><li data-i18n="nav_home">Hlavní</li></a>
+                <a href="#about-section-1"><li data-i18n="nav_about">O mě</li></a>
                 <a href="#padding"><li data-i18n="nav_gallery">Galerie</li></a>
 		<a href="#výška_herního_okna"><li data-i18n="nav_games">Hry</li></a>
                 <a href="#konec"><li data-i18n="nav_contact">Kontakt</li></a>
@@ -886,6 +1152,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         <button id="radial-toggle" aria-label="Otevřít rychlé menu" aria-expanded="false">☰</button>
         <nav id="radial-links" class="radial-links">
             <a href="#top" class="radial-link" style="--tx:-90px; --ty:0px;" data-i18n="nav_home">Hlavní</a>
+            <a href="#about-section-1" class="radial-link" style="--tx:-63px; --ty:-63px;" data-i18n="nav_about">O mě</a>
             <a href="#padding" class="radial-link" style="--tx:-78px; --ty:-45px;" data-i18n="nav_gallery">Galerie</a>
             <a href="#výška_herního_okna" class="radial-link" style="--tx:-45px; --ty:-78px;" data-i18n="nav_games">Hry</a>
             <a href="#konec" class="radial-link" style="--tx:0px; --ty:-90px;" data-i18n="nav_contact">Kontakt</a>
@@ -1224,6 +1491,7 @@ loadFolder(ROOT_FOLDER_ID);
         const translations = {
             cs: {
                 nav_home: "Hlavní",
+                nav_about: "O mě",
                 nav_gallery: "Galerie",
                 nav_games: "Hry",
                 nav_contact: "Kontakt",
@@ -1242,6 +1510,7 @@ loadFolder(ROOT_FOLDER_ID);
             },
             en: {
                 nav_home: "Home",
+                nav_about: "About Me",
                 nav_gallery: "Gallery",
                 nav_games: "Games",
                 nav_contact: "Contact",
@@ -1260,6 +1529,7 @@ loadFolder(ROOT_FOLDER_ID);
             },
             de: {
                 nav_home: "Start",
+                nav_about: "Über mich",
                 nav_gallery: "Galerie",
                 nav_games: "Spiele",
                 nav_contact: "Kontakt",
@@ -1447,9 +1717,33 @@ loadFolder(ROOT_FOLDER_ID);
 
 
 
-
-
-
+<!-- ===== ABOUT SECTION 1 (mezi galerií a hrami) ===== -->
+<div id="about-section-1" class="about-section">
+    <div class="about-container">
+        <h2>Kdo jsem a co přináším</h2>
+        <p>Jsem všestranný IT profesionál s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od robustní technické podstaty až po dotažený vizuální zážitek pro uživatele.</p>
+        
+        <h3>Moje silné stránky v praxi</h3>
+        <div class="skills-grid">
+            <div class="skill-item">
+                <h4>💻 IT & Vývoj</h4>
+                <p>Správa OS (Windows, Android), diagnostika a stavba PC, Frontend/Backend vývoj (HTML, CSS, JS, GitHub) a efektivní využití moderních AI nástrojů.</p>
+            </div>
+            <div class="skill-item">
+                <h4>🎨 Design & 3D</h4>
+                <p>Tvorba detailních 3D vizualizací, interiérových návrhů a grafických materiálů (Adobe Photoshop, GIMP, Corel).</p>
+            </div>
+            <div class="skill-item">
+                <h4>🤝 Leadership & Obchod</h4>
+                <p>Zkušenosti s vedením týmu, správou logistiky, řešením reklamací a úspěšným zaváděním nových systémů na pobočkách.</p>
+            </div>
+            <div class="skill-item">
+                <h4>🗣 Soft Skills</h4>
+                <p>Schopnost přeložit složité technické koncepty do srozumitelného jazyka pro laiky, analytické myšlení a orientace na zákazníka.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="hero-spacer">
 
@@ -1523,8 +1817,39 @@ loadFolder(ROOT_FOLDER_ID);
     window.addEventListener('resize', prizpusobVysku);
 </script>
 
+<!-- ===== INTERSECTION OBSERVER PRO ANIMACE ===== -->
+<script>
+    // Spustit animace když se element dostane do view
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
 
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
 
+    // Pozorovat všechny about-section prvky
+    document.querySelectorAll('.about-section').forEach(section => {
+        section.style.opacity = '0';
+        observer.observe(section);
+    });
+</script>
+
+<!-- ===== ABOUT SECTION 2 (za hrami) ===== -->
+<div id="about-section-2" class="about-section">
+    <div class="about-container">
+        <h2>Proč spolupracovat právě se mnou?</h2>
+        <p>Díky pestré praxi (od technické podpory a správy databází v NbServisu a Klouček Computer přes vedení provozu ve SportVision až po navrhování v Oresi) jsem si zvykl rychle se adaptovat na nové prostředí a přebírat zodpovědnost za výsledky. Nezáleží na tom, zda řeším kód, stavím síť nebo komunikuji s klientem – vždy kladu důraz na preciznost, efektivitu a lidský přístup.</p>
+        <p class="motivation-text">Hledáte někoho, do koho se vyplatí investovat? Pojďme společně vytvořit něco skvělého.</p>
+        <p class="contact-text"><strong>Ozvěte se mi:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
+    </div>
+</div>
 
 
 
