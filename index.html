@@ -1696,8 +1696,8 @@ function handleVideoClick(e) {
     if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
     // Obnovit viditelnost na 2s
     hideControlsTimeout = setTimeout(() => {
-      // Ovládání budou skryta automaticky po 2s
-    }, 2000);
+      // Ovládání budou skryta automaticky po 0.5s
+    }, 500);
   }
 }
 
@@ -1786,7 +1786,6 @@ loadFolder(ROOT_FOLDER_ID);
     });
 
     function spustitHru(id, autoScroll = true) {
-        iframe.src = `hry/${id}.html`; 
         
         overlay.style.display = 'block';
         backBtn.style.display = 'flex';
