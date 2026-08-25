@@ -673,37 +673,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   overflow: hidden;
 }
 
-/* Stagger efekt pro skill items */
-.skill-item:nth-child(1) { animation-delay: 0.4s; }
-.skill-item:nth-child(2) { animation-delay: 0.5s; }
-.skill-item:nth-child(3) { animation-delay: 0.6s; }
-.skill-item:nth-child(4) { animation-delay: 0.7s; }
-
-.skill-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(5, 212, 255, 0.15), transparent);
-  transition: left 0.5s ease;
-}
-
-.skill-item:hover::before {
-  left: 100%;
-}
-
-.skill-item:hover {
-  transform: translateY(-8px) scale(1.02);
-  background-color: rgba(5, 212, 255, 0.15);
-  animation: borderGlow 2s ease-in-out infinite;
-  box-shadow: 
-    0 10px 30px rgba(5, 212, 255, 0.3),
-    0 0 20px rgba(5, 212, 255, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
 .skill-item h4 {
   color: #05d4ff;
   margin-bottom: 10px;
