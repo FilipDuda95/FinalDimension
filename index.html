@@ -1233,270 +1233,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 <div id="black-section">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="inner-text" id="padding">
-        <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
-        <p class="gallery-lead" data-i18n="gallery_lead">Ukázka projektů, na kterých jsem v poslední době pracoval — od grafiky pro tisk po herní vizuály.</p>
-       <p data-i18n="gallery_desc">Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.</p>
-
-<br>
-
-
-
-		
-<div class="controls">
-  <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;" data-i18n="back_button">Zpět</button>
-</div>
-
-<div id="galerie">
-  <div class="gallery" id="gallery"></div>
-</div>
-
-<div id="previewModal" class="preview-modal" onclick="closePreview(event)">
-  <div id="previewContent"></div>
-</div>
-
-<script>
-const API_KEY = 'AIzaSyAFRT_OOuYQDnSexM2SGLdSYZDKQ_10GME';
-const ROOT_FOLDER_ID = '17BDpjapbHbx_unFVchSwgtWlgnZvG1sJ';
-const folderStack = [ROOT_FOLDER_ID];
-
-async function loadFolder(folderId, addToHistory = true) {
-  if (addToHistory) history.pushState({ folderId }, '');
-
-  const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
-  const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id,name,mimeType,thumbnailLink)`;
-
-  const response = await fetch(url);
-  const data = await response.json();
-
-  const gallery = document.getElementById('gallery');
-  const backBtn = document.getElementById('backBtn');
-  gallery.innerHTML = '';
-  backBtn.style.display = folderStack.length > 1 ? 'inline-block' : 'none';
-
-  data.files.forEach(file => {
-    const container = document.createElement('div');
-    container.className = 'square';
-
-    // 🔹 Pokud je to složka
-    if (file.mimeType === 'application/vnd.google-apps.folder') {
-
-      container.onclick = () => {
-        folderStack.push(file.id);
-        loadFolder(file.id);
-      };
-
-      const folderDiv = document.createElement('div');
-      folderDiv.className = 'folder';
-      folderDiv.innerHTML = file.name;
-      container.appendChild(folderDiv);
-    }
-    // 🔹 Pokud je to obrázek nebo video
-    else {
-
-      container.style.backgroundImage = 'none';
-
-      const img = document.createElement('img');
-      img.src = file.thumbnailLink || 'https://via.placeholder.com/250?text=Soubor';
-      img.loading = 'lazy';
-      container.appendChild(img);
-
-      container.onclick = () => openPreview(file);
-    }
-
-    gallery.appendChild(container);
-  });
-}
-
-function openPreview(file) {
-  const modal = document.getElementById('previewModal');
-  const content = document.getElementById('previewContent');
-  content.innerHTML = '';
-
-  const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
-
-  const frame = document.createElement('div');
-  frame.className = 'media-frame';
-
-  const closeBtn = document.createElement('span');
-  closeBtn.className = 'close';
-  closeBtn.innerHTML = '×';
-  closeBtn.setAttribute('aria-label', 'Zavřít náhled');
-  closeBtn.onclick = (e) => {
-    e.stopPropagation();
-    modal.style.display = 'none';
-    content.innerHTML = '';
-    // Vrátit všechny video-inners na normální stav
-    const videoInners = document.querySelectorAll('.video-inner.playing');
-    videoInners.forEach(inner => inner.classList.remove('playing'));
-    // Zpátky povolit scrolling a tlačítko
-    document.body.style.overflow = '';
-    document.getElementById('scroll-button').style.visibility = 'visible';
-    document.getElementById('scroll-button').style.pointerEvents = 'auto';
-    const backBtn = document.getElementById('back-btn');
-    if (backBtn) backBtn.style.pointerEvents = 'auto';
-    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
-    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
-    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
-  };
-
-  // 🔹 Obrázek
-  if (file.mimeType.startsWith('image/')) {
-    const img = document.createElement('img');
-    img.src = fileUrl;
-    img.onerror = () => {
-      img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
-    };
-    frame.appendChild(img);
-  } 
-
-  // 🔹 Video - Google Drive native player
-  else if (file.mimeType.startsWith('video/')) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'video-wrapper';
-    
-    // Vnořené okno
-    const inner = document.createElement('div');
-    inner.className = 'video-inner';
-
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-    iframe.allow = "autoplay; fullscreen";
-
-    inner.appendChild(iframe);
-    wrapper.appendChild(inner);
-    frame.appendChild(wrapper);
-    
-    // Detekovat mobilní zařízení
-    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    if (isMobile()) {
-      let isPlaying = false;
-      
-      // Automaticky spustit video hned po načtení
-      setTimeout(() => {
-        try {
-          // Spustit video script-wise
-          isPlaying = true;
-          inner.classList.add('playing');
-          // Kliknout na iframe aby se video spustilo
-          iframe.click();
-        } catch(err) {
-          console.log('Auto-play failed');
-        }
-      }, 1500);
-      
-      // Uživatel může znovu klikat na video když chce
-      inner.addEventListener('click', (e) => {
-        if (!isPlaying) {
-          isPlaying = true;
-          inner.classList.add('playing');
-          setTimeout(() => {
-            iframe.click();
-          }, 300);
-        }
-      }, { capture: true });
-    }
-  }
-
-  frame.appendChild(closeBtn);
-  content.appendChild(frame);
-
-  // Zablokovat scrolling a skrýt scroll tlačítko
-  document.body.style.overflow = 'hidden';
-  document.getElementById('scroll-button').style.visibility = 'hidden';
-  document.getElementById('scroll-button').style.pointerEvents = 'none';
-  
-  // Zablokovat Z5 tlačítko (back-btn)
-  const backBtn = document.getElementById('back-btn');
-  if (backBtn) backBtn.style.pointerEvents = 'none';
-
-  modal.style.display = 'flex';
-}
-
-// Globální timeout proměnné
-let hideControlsTimeout = null;
-let hideControlsAfterPlayTimeout = null;
-let videoClickHandler = null;
-let videoTouchTimeout = null;
-
-function handleVideoClick(e) {
-  // Pokud se kliklo na video iframe
-  if (e.target.closest('.video-wrapper')) {
-    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
-    // Obnovit viditelnost na 2s
-    hideControlsTimeout = setTimeout(() => {
-      // Ovládání budou skryta automaticky po 2s
-    }, 2000);
-  }
-}
-
-function closePreview(event) {
-  if (event.target.id === 'previewModal') {
-    document.getElementById('previewModal').style.display = 'none';
-    document.getElementById('previewContent').innerHTML = '';
-    // Vrátit všechny video-inner na normální stav (smazat playing class)
-    const videoInners = document.querySelectorAll('.video-inner.playing');
-    videoInners.forEach(inner => inner.classList.remove('playing'));
-    // Zpátky povolit scrolling a tlačítko
-    document.body.style.overflow = '';
-    document.getElementById('scroll-button').style.visibility = 'visible';
-    document.getElementById('scroll-button').style.pointerEvents = 'auto';
-    const backBtn = document.getElementById('back-btn');
-    if (backBtn) backBtn.style.pointerEvents = 'auto';
-    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
-    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
-    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
-  }
-}
-
-function goBack() {
-  if (folderStack.length > 1) {
-    folderStack.pop();
-    loadFolder(folderStack[folderStack.length - 1], false);
-  }
-}
-
-window.onpopstate = function(event) {
-  if (event.state && event.state.folderId) {
-    if (folderStack.length > 1) folderStack.pop();
-    loadFolder(event.state.folderId, false);
-  }
-};
-
-loadFolder(ROOT_FOLDER_ID);
-</script>
-
-
-
-    </div>
-
-
-
-
-
-
-
-
 	
     <script>
 
@@ -1799,6 +1535,247 @@ loadFolder(ROOT_FOLDER_ID);
     </div>
 </div>
 
+
+    <div class="inner-text" id="padding">
+        <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
+        <p class="gallery-lead" data-i18n="gallery_lead">Ukázka projektů, na kterých jsem v poslední době pracoval — od grafiky pro tisk po herní vizuály.</p>
+       <p data-i18n="gallery_desc">Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.</p>
+
+<br>
+
+
+
+		
+<div class="controls">
+  <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;" data-i18n="back_button">Zpět</button>
+</div>
+
+<div id="galerie">
+  <div class="gallery" id="gallery"></div>
+</div>
+
+<div id="previewModal" class="preview-modal" onclick="closePreview(event)">
+  <div id="previewContent"></div>
+</div>
+
+<script>
+const API_KEY = 'AIzaSyAFRT_OOuYQDnSexM2SGLdSYZDKQ_10GME';
+const ROOT_FOLDER_ID = '17BDpjapbHbx_unFVchSwgtWlgnZvG1sJ';
+const folderStack = [ROOT_FOLDER_ID];
+
+async function loadFolder(folderId, addToHistory = true) {
+  if (addToHistory) history.pushState({ folderId }, '');
+
+  const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
+  const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id,name,mimeType,thumbnailLink)`;
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  const gallery = document.getElementById('gallery');
+  const backBtn = document.getElementById('backBtn');
+  gallery.innerHTML = '';
+  backBtn.style.display = folderStack.length > 1 ? 'inline-block' : 'none';
+
+  data.files.forEach(file => {
+    const container = document.createElement('div');
+    container.className = 'square';
+
+    // 🔹 Pokud je to složka
+    if (file.mimeType === 'application/vnd.google-apps.folder') {
+
+      container.onclick = () => {
+        folderStack.push(file.id);
+        loadFolder(file.id);
+      };
+
+      const folderDiv = document.createElement('div');
+      folderDiv.className = 'folder';
+      folderDiv.innerHTML = file.name;
+      container.appendChild(folderDiv);
+    }
+    // 🔹 Pokud je to obrázek nebo video
+    else {
+
+      container.style.backgroundImage = 'none';
+
+      const img = document.createElement('img');
+      img.src = file.thumbnailLink || 'https://via.placeholder.com/250?text=Soubor';
+      img.loading = 'lazy';
+      container.appendChild(img);
+
+      container.onclick = () => openPreview(file);
+    }
+
+    gallery.appendChild(container);
+  });
+}
+
+function openPreview(file) {
+  const modal = document.getElementById('previewModal');
+  const content = document.getElementById('previewContent');
+  content.innerHTML = '';
+
+  const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
+
+  const frame = document.createElement('div');
+  frame.className = 'media-frame';
+
+  const closeBtn = document.createElement('span');
+  closeBtn.className = 'close';
+  closeBtn.innerHTML = '×';
+  closeBtn.setAttribute('aria-label', 'Zavřít náhled');
+  closeBtn.onclick = (e) => {
+    e.stopPropagation();
+    modal.style.display = 'none';
+    content.innerHTML = '';
+    // Vrátit všechny video-inners na normální stav
+    const videoInners = document.querySelectorAll('.video-inner.playing');
+    videoInners.forEach(inner => inner.classList.remove('playing'));
+    // Zpátky povolit scrolling a tlačítko
+    document.body.style.overflow = '';
+    document.getElementById('scroll-button').style.visibility = 'visible';
+    document.getElementById('scroll-button').style.pointerEvents = 'auto';
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) backBtn.style.pointerEvents = 'auto';
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
+  };
+
+  // 🔹 Obrázek
+  if (file.mimeType.startsWith('image/')) {
+    const img = document.createElement('img');
+    img.src = fileUrl;
+    img.onerror = () => {
+      img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
+    };
+    frame.appendChild(img);
+  } 
+
+  // 🔹 Video - Google Drive native player
+  else if (file.mimeType.startsWith('video/')) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'video-wrapper';
+    
+    // Vnořené okno
+    const inner = document.createElement('div');
+    inner.className = 'video-inner';
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
+    iframe.allow = "autoplay; fullscreen";
+
+    inner.appendChild(iframe);
+    wrapper.appendChild(inner);
+    frame.appendChild(wrapper);
+    
+    // Detekovat mobilní zařízení
+    const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile()) {
+      let isPlaying = false;
+      
+      // Automaticky spustit video hned po načtení
+      setTimeout(() => {
+        try {
+          // Spustit video script-wise
+          isPlaying = true;
+          inner.classList.add('playing');
+          // Kliknout na iframe aby se video spustilo
+          iframe.click();
+        } catch(err) {
+          console.log('Auto-play failed');
+        }
+      }, 1500);
+      
+      // Uživatel může znovu klikat na video když chce
+      inner.addEventListener('click', (e) => {
+        if (!isPlaying) {
+          isPlaying = true;
+          inner.classList.add('playing');
+          setTimeout(() => {
+            iframe.click();
+          }, 300);
+        }
+      }, { capture: true });
+    }
+  }
+
+  frame.appendChild(closeBtn);
+  content.appendChild(frame);
+
+  // Zablokovat scrolling a skrýt scroll tlačítko
+  document.body.style.overflow = 'hidden';
+  document.getElementById('scroll-button').style.visibility = 'hidden';
+  document.getElementById('scroll-button').style.pointerEvents = 'none';
+  
+  // Zablokovat Z5 tlačítko (back-btn)
+  const backBtn = document.getElementById('back-btn');
+  if (backBtn) backBtn.style.pointerEvents = 'none';
+
+  modal.style.display = 'flex';
+}
+
+// Globální timeout proměnné
+let hideControlsTimeout = null;
+let hideControlsAfterPlayTimeout = null;
+let videoClickHandler = null;
+let videoTouchTimeout = null;
+
+function handleVideoClick(e) {
+  // Pokud se kliklo na video iframe
+  if (e.target.closest('.video-wrapper')) {
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    // Obnovit viditelnost na 2s
+    hideControlsTimeout = setTimeout(() => {
+      // Ovládání budou skryta automaticky po 2s
+    }, 2000);
+  }
+}
+
+function closePreview(event) {
+  if (event.target.id === 'previewModal') {
+    document.getElementById('previewModal').style.display = 'none';
+    document.getElementById('previewContent').innerHTML = '';
+    // Vrátit všechny video-inner na normální stav (smazat playing class)
+    const videoInners = document.querySelectorAll('.video-inner.playing');
+    videoInners.forEach(inner => inner.classList.remove('playing'));
+    // Zpátky povolit scrolling a tlačítko
+    document.body.style.overflow = '';
+    document.getElementById('scroll-button').style.visibility = 'visible';
+    document.getElementById('scroll-button').style.pointerEvents = 'auto';
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) backBtn.style.pointerEvents = 'auto';
+    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
+  }
+}
+
+function goBack() {
+  if (folderStack.length > 1) {
+    folderStack.pop();
+    loadFolder(folderStack[folderStack.length - 1], false);
+  }
+}
+
+window.onpopstate = function(event) {
+  if (event.state && event.state.folderId) {
+    if (folderStack.length > 1) folderStack.pop();
+    loadFolder(event.state.folderId, false);
+  }
+};
+
+loadFolder(ROOT_FOLDER_ID);
+</script>
+
+
+
+    </div>
+
+
+	
 <div class="hero-spacer">
 
     <div id="výška_herního_okna">
