@@ -534,9 +534,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .about-section {
   position: relative;
   width: 100%;
+  box-sizing: border-box;
   background: linear-gradient(135deg, #1a1a1a 0%, #1f1f2e 100%);
   color: #f0f0f0;
-  padding: 60px 20px;
+  padding: 60px 4%;
   text-align: center;
   opacity: 0;
   animation: fadeInUp 0.8s ease-out forwards;
@@ -571,6 +572,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .about-section h2 {
@@ -720,12 +723,28 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   transition: color 0.3s ease;
 }
 
+@media (min-width: 769px) {
+  .about-section {
+    text-align: left;
+    padding-left: 8%;
+  }
+  
+  .about-section h2,
+  .about-section h3 {
+    text-align: left;
+  }
+  
+  .about-container {
+    text-align: left;
+  }
+}
+
 @media (max-width: 600px) {
   .skills-grid {
     grid-template-columns: 1fr;
   }
   .about-section {
-    padding: 40px 15px;
+    padding: 40px 4%;
   }
   
   /* Zpomalit animace na mobilu pro lepší performanci */
@@ -874,17 +893,17 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 .radial-link {
   position: absolute;
-  top: 0;
+  top: -5px;
   left: 0;
-  width: 54px;
-  height: 54px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(20, 20, 20, 0.55);
   backdrop-filter: blur(6px);
   color: #fff;
   text-decoration: none;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   text-align: center;
   display: flex;
   align-items: center;
@@ -907,7 +926,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 @media (max-width: 600px) {
   #radial-menu { right: 14px; bottom: 5%; }
-  #radial-toggle, .radial-link { width: 48px; height: 48px; font-size: 0.65rem; }
+  #radial-toggle { width: 46px; height: 46px; font-size: 1.1rem; }
+  .radial-link { width: 40px; height: 40px; font-size: 0.6rem; }
 }
 
 #center-section {
@@ -1163,11 +1183,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     <div id="radial-menu">
         <button id="radial-toggle" aria-label="Otevřít rychlé menu" aria-expanded="false">☰</button>
         <nav id="radial-links" class="radial-links">
-            <a href="#top" class="radial-link" style="--tx:-90px; --ty:0px;" data-i18n="nav_home">Hlavní</a>
-            <a href="#about-section-1" class="radial-link" style="--tx:-63px; --ty:-63px;" data-i18n="nav_about">O mě</a>
-            <a href="#padding" class="radial-link" style="--tx:-78px; --ty:-45px;" data-i18n="nav_gallery">Galerie</a>
-            <a href="#výška_herního_okna" class="radial-link" style="--tx:-45px; --ty:-78px;" data-i18n="nav_games">Hry</a>
-            <a href="#konec" class="radial-link" style="--tx:0px; --ty:-90px;" data-i18n="nav_contact">Kontakt</a>
+            <a href="#top" class="radial-link" style="--tx:0px; --ty:-70px;" data-i18n="nav_home">Hlavní</a>
+            <a href="#about-section-1" class="radial-link" style="--tx:-50px; --ty:-50px;" data-i18n="nav_about">O mě</a>
+            <a href="#padding" class="radial-link" style="--tx:-70px; --ty:0px;" data-i18n="nav_gallery">Galerie</a>
+            <a href="#výška_herního_okna" class="radial-link" style="--tx:-50px; --ty:50px;" data-i18n="nav_games">Hry</a>
+            <a href="#konec" class="radial-link" style="--tx:0px; --ty:70px;" data-i18n="nav_contact">Kontakt</a>
         </nav>
     </div>
 
@@ -1518,6 +1538,14 @@ loadFolder(ROOT_FOLDER_ID);
                 games_title: "Vyberte hru",
                 contact_title: "Kontaktujte mě",
                 back_button: "Zpět",
+                about_skill_1_title: "IT & Vývoj",
+                about_skill_1_desc: "Správa OS, diagnostika PC, Frontend/Backend vývoj (HTML, CSS, JS), AI nástroje.",
+                about_skill_2_title: "Design & 3D",
+                about_skill_2_desc: "3D vizualizace, interiérové návrhy, grafické materiály (Photoshop, GIMP, Corel).",
+                about_skill_3_title: "Leadership & Obchod",
+                about_skill_3_desc: "Vedení týmu, logistika, řešení reklamací, zavádění nových systémů.",
+                about_skill_4_title: "Soft Skills",
+                about_skill_4_desc: "Komunikace složitých konceptů, analytické myšlení, orientace na zákazníka.",
                 lang_label: "CS ▾"
             },
             en: {
@@ -1537,6 +1565,14 @@ loadFolder(ROOT_FOLDER_ID);
                 games_title: "Choose a game",
                 contact_title: "Get in touch",
                 back_button: "Back",
+                about_skill_1_title: "IT & Development",
+                about_skill_1_desc: "OS management, PC diagnostics, Frontend/Backend development (HTML, CSS, JS), AI tools.",
+                about_skill_2_title: "Design & 3D",
+                about_skill_2_desc: "3D visualization, interior design, graphic materials (Photoshop, GIMP, Corel).",
+                about_skill_3_title: "Leadership & Commerce",
+                about_skill_3_desc: "Team management, logistics, complaint resolution, system implementation.",
+                about_skill_4_title: "Soft Skills",
+                about_skill_4_desc: "Communication of complex concepts, analytical thinking, customer focus.",
                 lang_label: "EN ▾"
             },
             de: {
@@ -1556,6 +1592,14 @@ loadFolder(ROOT_FOLDER_ID);
                 games_title: "Spiel auswählen",
                 contact_title: "Kontaktieren Sie mich",
                 back_button: "Zurück",
+                about_skill_1_title: "IT & Entwicklung",
+                about_skill_1_desc: "Betriebssystemverwaltung, PC-Diagnose, Frontend/Backend-Entwicklung (HTML, CSS, JS), AI-Tools.",
+                about_skill_2_title: "Design & 3D",
+                about_skill_2_desc: "3D-Visualisierung, Innenarchitektur, Grafikmaterialien (Photoshop, GIMP, Corel).",
+                about_skill_3_title: "Führung & Geschäft",
+                about_skill_3_desc: "Teamleitung, Logistik, Reklamationsbearbeitung, Systemimplementierung.",
+                about_skill_4_title: "Soft Skills",
+                about_skill_4_desc: "Kommunikation komplexer Konzepte, analytisches Denken, Kundenorientierung.",
                 lang_label: "DE ▾"
             }
         };
@@ -1738,20 +1782,20 @@ loadFolder(ROOT_FOLDER_ID);
         <h3>Moje silné stránky v praxi</h3>
         <div class="skills-grid">
             <div class="skill-item">
-                <h4>💻 IT & Vývoj</h4>
-                <p>Správa OS (Windows, Android), diagnostika a stavba PC, Frontend/Backend vývoj (HTML, CSS, JS, GitHub) a efektivní využití moderních AI nástrojů.</p>
+                <h4 data-i18n="about_skill_1_title">IT & Vývoj</h4>
+                <p data-i18n="about_skill_1_desc">Správa OS, diagnostika PC, Frontend/Backend vývoj (HTML, CSS, JS), AI nástroje.</p>
             </div>
             <div class="skill-item">
-                <h4>🎨 Design & 3D</h4>
-                <p>Tvorba detailních 3D vizualizací, interiérových návrhů a grafických materiálů (Adobe Photoshop, GIMP, Corel).</p>
+                <h4 data-i18n="about_skill_2_title">Design & 3D</h4>
+                <p data-i18n="about_skill_2_desc">3D vizualizace, interiérové návrhy, grafické materiály (Photoshop, GIMP, Corel).</p>
             </div>
             <div class="skill-item">
-                <h4>🤝 Leadership & Obchod</h4>
-                <p>Zkušenosti s vedením týmu, správou logistiky, řešením reklamací a úspěšným zaváděním nových systémů na pobočkách.</p>
+                <h4 data-i18n="about_skill_3_title">Leadership & Obchod</h4>
+                <p data-i18n="about_skill_3_desc">Vedení týmu, logistika, řešení reklamací, zavádění nových systémů.</p>
             </div>
             <div class="skill-item">
-                <h4>🗣 Soft Skills</h4>
-                <p>Schopnost přeložit složité technické koncepty do srozumitelného jazyka pro laiky, analytické myšlení a orientace na zákazníka.</p>
+                <h4 data-i18n="about_skill_4_title">Soft Skills</h4>
+                <p data-i18n="about_skill_4_desc">Komunikace složitých konceptů, analytické myšlení, orientace na zákazníka.</p>
             </div>
         </div>
     </div>
