@@ -55,16 +55,30 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       margin-bottom: 1rem;
     }
 
+    /* Centralizace obsahu se stejným odsazením */
+    main {
+      margin: 0 auto;
+      padding: 0 2rem;
+      max-width: 1400px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
     #gallery { 
       position: relative;
-      left: 50%;
-      transform: translateX(-50%);
+      left: auto;
+      transform: none;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      box-sizing: border-box;
     }
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 1rem;
-      max-width: 1100px; /* Sjednocená šířka galerie */
+      max-width: 100%;
       width: 100%;
     }
     .gallery a {
@@ -119,6 +133,32 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       .gallery {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
+      main {
+        padding: 0 1rem;
+      }
+      #top-bar {
+        padding: 0 1rem;
+      }
+      .about-section {
+        padding: 60px 0;
+      }
+      .about-container {
+        padding: 0 1rem;
+      }
+      #padding {
+        padding: 0 1rem;
+      }
+      #výška_herního_okna {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      #game-menu {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .footer {
+        padding: 40px 1rem;
+      }
     }
 
 .button-container {
@@ -126,6 +166,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   z-index: 30;
   bottom:5%;
   transform: translateX(-50%);
+  max-width: 1400px;
+  padding: 0 2rem;
+  width: calc(100% - 4rem);
+  box-sizing: border-box;
 }
 .scrollbutton {
   position:absolute;
@@ -306,6 +350,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
+  padding: 0 2rem;
+  box-sizing: border-box;
 }
 #top-bar a {
   text-decoration: none;
@@ -394,14 +440,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   top: 100%;
   left: 0;
   width: 100%;
+  box-sizing: border-box;
   background-color: black;
   color: white;
-  z-index:23;
-  display: flex;
-  padding-bottom:15%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  z-index: 23;
+  padding-bottom: 15%;
 }
 .logo-section {
   position: absolute;
@@ -427,14 +470,17 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   display: none;
   opacity: 0;
   position: absolute;
-  bottom:0px;
-  z-index:1;
-  color:black;
+  bottom: 0px;
+  z-index: 1;
+  color: black;
   background-color: #f8f8f8;
-  padding: 40px 20px;
+  padding: 40px 2rem;
   text-align: center;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1400px;
 }
 .footer img {
   width: 150px;
@@ -484,10 +530,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .about-section {
   position: relative;
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   box-sizing: border-box;
   background: linear-gradient(135deg, #1a1a1a 0%, #1f1f2e 100%);
   color: #f0f0f0;
-  padding: 60px 4%;
+  padding: 60px 2rem;
   text-align: center;
   opacity: 0;
   animation: fadeInUp 0.8s ease-out forwards;
@@ -518,8 +566,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .about-container {
-  max-width: 1100px; /* Sjednocená šířka textu */
-  margin: 0 auto;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -646,7 +692,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 @media (max-width: 600px) {
   .skills-grid { grid-template-columns: 1fr; }
-  .about-section { padding: 40px 4%; }
+  .about-section { padding: 40px 0; }
   .skill-item { animation: fadeInUp 0.6s ease-out forwards; }
   .skill-item:nth-child(1) { animation-delay: 0.3s; }
   .skill-item:nth-child(2) { animation-delay: 0.4s; }
@@ -833,53 +879,58 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 /* ===== UPRAVENÁ ČÁST PRO ZAROVNÁNÍ GALERIE DOLEVA ===== */
 #padding {
   text-align: left;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
 }
 .gallery-lead {
   color: rgba(255,255,255,0.7);
   font-size: 0.95rem;
-  max-width: 1100px; /* Sjednoceno na šířku galerie */
-  margin: 0 0 14px 0; /* Zrušeno centrování margin: auto */
+  max-width: 100%;
+  margin: 0 0 14px 0;
   text-align: left;
 }
 /* ======================================================= */
 
 .inner-text {
-  position:relative;
-  width:92%;
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   color: white;
-  margin:4%;
   text-align: center;
-  flex-grow: 1;
+  padding: 0 2rem;
+  box-sizing: border-box;
 }
 
-/* OPRAVENÉ OKRAJE PRO TEXT V BLACK-SECTION */
 #black-section > .inner-text {
-  max-width: 1100px;
   width: 100%;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 20px;
-  padding-right: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
   box-sizing: border-box;
-  text-align: left;
 }
 
 @media (min-width: 768px) {
   .modal-arrow { display: block; }
   #top-bar { height: 8%; }
-  #center-section { flex-direction: row; justify-content: space-between; }
+  #center-section { flex-direction: row; justify-content: space-between; max-width: 1400px; margin-left: auto; margin-right: auto; }
   .logo-section { width: 45%; height: 45%; top: -48%; z-index: 200; position: absolute; }
-  .inner-text { width:92%; padding:2%; flex-grow: 1; }
+  .inner-text { width: 100%; max-width: 1400px; margin: 0 auto; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
+  .about-container {
+    padding: 0 2rem;
+  }
 }
 
 @media (max-width: 768px) and (orientation: landscape) {
-  #top-bar { height:15%; }
+  #top-bar { height:15%; padding: 0 1rem; }
   #dropdown-menu { width:35vw; }
-  #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; }
+  #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; max-width: 1400px; margin-left: auto; margin-right: auto; }
   .logo-section { width: 30%; height: 30%; top: -33%; padding: 5%; }
-  #black-section { padding: 10px; }
-  .inner-text { width:92%; margin:2%; text-align: center; flex-grow: 1; }
+  #black-section { padding: 10px 0; }
+  .inner-text { width: auto; margin: 0 auto; text-align: center; flex-grow: 1; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
 }
 
@@ -889,9 +940,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             flex-direction: column;
             align-items: center;
             height: 60vh;
-	    width:100vw; 
+	    width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
             position: relative; 
-            padding-top: 150px;
+            padding: 150px 2rem 0 2rem;
+            box-sizing: border-box;
             z-index: 2;
         }
 
@@ -919,10 +973,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 40px;
-            width: 85%;
-            max-width: 1100px;
-            margin-top: 60px;
-            padding-bottom: 150px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 60px auto 0 auto;
+            padding: 0 2rem 150px 2rem;
+            box-sizing: border-box;
             position: relative;
             z-index: 10;
         }
@@ -1382,7 +1437,7 @@ loadFolder(ROOT_FOLDER_ID);
         }
     }
 
-    // Při generování herních karet jsme přidali data-i18n="game_start"
+    // Při generování HTML herních karet jsme přidali data-i18n="game_start"
     seznamHer.forEach(hra => {
         const karta = document.createElement('div');
         karta.className = 'game-card';
@@ -1426,7 +1481,7 @@ loadFolder(ROOT_FOLDER_ID);
         }, 800);
     });
 	
-    // --- 2. Jazykové překlady ---
+    // --- 2. Jazykové překklady ---
     const translations = {
         cs: {
             nav_home: "Hlavní",
@@ -1691,7 +1746,6 @@ loadFolder(ROOT_FOLDER_ID);
     };
 
     document.querySelectorAll('a[href^="#"]').forEach(link => {
-        link.endswith = link.getAttribute('href');
         link.addEventListener('click', function (e) {
             const rawTarget = this.getAttribute('href').slice(1);
             if (!rawTarget) return;
