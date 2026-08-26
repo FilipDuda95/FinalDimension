@@ -55,7 +55,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       margin-bottom: 1rem;
     }
 
-
     #gallery { 
       position: relative;
       left: 50%;
@@ -116,14 +115,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       width: auto;
     }
 
-
-
     @media (max-width: 600px) {
       .gallery {
         grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
     }
-
 
 .button-container {
   margin-left:50%;
@@ -138,13 +134,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   z-index: 20;
   transform: translateX(-50%);
 }
-
-
-
-
-
-
-
 
     .back-button {
       color: white;
@@ -207,14 +196,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       overflow: hidden;
     }
     
-    /* Na mobilu - zvýšit prostor pro timeline */
     @media (max-width: 768px) {
       .video-wrapper {
         height: min(85vh, 550px);
       }
     }
     
-    /* Gradient na dně video okna */
     @media (max-width: 768px) {
       .video-wrapper::after {
         content: '';
@@ -229,7 +216,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       }
     }
     
-    /* Vnořené okno - defaultně 100% */
     .video-inner {
       position: absolute;
       top: 0;
@@ -239,7 +225,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       transition: height 0.3s ease, top 0.3s ease;
     }
     
-    /* Když se video spustí - zvětší a posune nahoru aby controls byly mimo */
     @media (max-width: 768px) {
       .video-inner.playing {
         height: 300%;
@@ -247,8 +232,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       }
     }
     
-    /* Vlastní timeline */
-
     .video-inner iframe {
       width: 100%;
       height: 100%;
@@ -257,13 +240,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       pointer-events: auto;
     }
     
-    /* Na mobilu - pointer-events none aby se click propagoval na parent */
     @media (max-width: 768px) {
       .video-inner iframe {
         pointer-events: none;
       }
-      
-      /* Když se video přehrává - vrátit pointer-events */
       .video-inner.playing iframe {
         pointer-events: auto;
       }
@@ -313,11 +293,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     font-size: 22px;
   }
 }
-
-
-
-
-
 
 #top-bar {
   position: fixed;
@@ -481,54 +456,28 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 /* ===== KEYFRAME ANIMACE ===== */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(5, 212, 255, 0.3), 0 5px 20px rgba(5, 212, 255, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(5, 212, 255, 0.6), 0 5px 30px rgba(5, 212, 255, 0.25);
-  }
+  0%, 100% { box-shadow: 0 0 10px rgba(5, 212, 255, 0.3), 0 5px 20px rgba(5, 212, 255, 0.1); }
+  50% { box-shadow: 0 0 20px rgba(5, 212, 255, 0.6), 0 5px 30px rgba(5, 212, 255, 0.25); }
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
 }
 
 @keyframes borderGlow {
-  0%, 100% {
-    border-left-color: #05d4ff;
-    box-shadow: inset 0 0 10px rgba(5, 212, 255, 0);
-  }
-  50% {
-    border-left-color: #00ffff;
-    box-shadow: inset 0 0 10px rgba(5, 212, 255, 0.3);
-  }
+  0%, 100% { border-left-color: #05d4ff; box-shadow: inset 0 0 10px rgba(5, 212, 255, 0); }
+  50% { border-left-color: #00ffff; box-shadow: inset 0 0 10px rgba(5, 212, 255, 0.3); }
 }
 
 /* ===== ABOUT SECTION ===== */
@@ -584,7 +533,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   position: relative;
   display: inline-block;
   animation: fadeInUp 0.8s ease-out 0.2s backwards;
-  /* Gallery styling */
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-size: clamp(16px, 2.5vw, 21px);
@@ -607,7 +555,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   margin-bottom: 30px;
   font-size: clamp(20px, 3vw, 28px);
   animation: fadeInUp 0.8s ease-out 0.3s backwards;
-  /* Gallery styling */
   display: inline-block;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -692,54 +639,24 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 @media (min-width: 769px) {
-  .about-section {
-    text-align: left;
-    padding-left: 8%;
-  }
-  
-  .about-section h2,
-  .about-section h3 {
-    text-align: left;
-  }
-  
-  .about-container {
-    text-align: left;
-  }
+  .about-section { text-align: left; padding-left: 8%; }
+  .about-section h2, .about-section h3 { text-align: left; }
+  .about-container { text-align: left; }
 }
 
 @media (max-width: 600px) {
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
-  .about-section {
-    padding: 40px 4%;
-  }
-  
-  /* Zpomalit animace na mobilu pro lepší performanci */
-  .skill-item {
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
-  
+  .skills-grid { grid-template-columns: 1fr; }
+  .about-section { padding: 40px 4%; }
+  .skill-item { animation: fadeInUp 0.6s ease-out forwards; }
   .skill-item:nth-child(1) { animation-delay: 0.3s; }
   .skill-item:nth-child(2) { animation-delay: 0.4s; }
   .skill-item:nth-child(3) { animation-delay: 0.5s; }
   .skill-item:nth-child(4) { animation-delay: 0.6s; }
-  
-  /* Touch-friendly aktivace na mobilu */
-  .skill-item:active {
-    transform: translateY(-8px) scale(1.02);
-    background-color: rgba(5, 212, 255, 0.15);
-  }
+  .skill-item:active { transform: translateY(-8px) scale(1.02); background-color: rgba(5, 212, 255, 0.15); }
 }
 
-/* Vylepšení pro fullscreen video */
 @media (prefers-reduced-motion: reduce) {
-  .skill-item,
-  .about-section,
-  .about-section h2::after {
-    animation: none !important;
-    opacity: 1 !important;
-  }
+  .skill-item, .about-section, .about-section h2::after { animation: none !important; opacity: 1 !important; }
 }
 
 #Patička{
@@ -751,14 +668,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   color: white;
   z-index:23;
   display: flex;
-  padding-bottom: 20%; /* odsazení patičky */
+  padding-bottom: 20%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align:center;
   background-color:black;
 }
-
 
 @media (orientation: portrait) {
   #dropdown-menu {
@@ -769,15 +685,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     width: 100%;
     height: auto;
   }
-  #top-bar {
-    height: 8%;
-  }
-  .logo-section {
-    width: 50%;
-    height: 50%;
-    top: -30%;
-    padding: 0px;
-  }
+  #top-bar { height: 8%; }
+  .logo-section { width: 50%; height: 50%; top: -30%; padding: 0px; }
 }
 #background-video {
   position: fixed;
@@ -825,7 +734,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
 }
 
-/* ---------- Kruhové plovoucí menu (palcem dosažitelné, pravý dolní roh) ---------- */
+/* ---------- Kruhové plovoucí menu ---------- */
 #radial-menu {
   position: fixed;
   right: 24px;
@@ -935,74 +844,31 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   flex-grow: 1;
 }
 
-/* ===== SJEDNOCENÍ ŠÍŘKY TEXTOVÝCH PRVKŮ V BLACK SECTION ===== */
 #black-section > .inner-text {
-  max-width: 1100px; /* Sjednocená šířka galerie (textu nad ní) */
+  max-width: 1100px;
   margin-left: auto !important;
   margin-right: auto !important;
   box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
-  .modal-arrow {
-    display: block;
-  }
-  #top-bar {
-    height: 8%;
-  }
-  #center-section {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .logo-section {
-    width: 45%;
-    height: 45%;
-    top: -48%;
-    z-index: 200;
-    position: absolute;
-  }
-  .inner-text {
-    width:92%;
-    padding:2%;
-    flex-grow: 1;
-  }
-  .inner-text:first-child {
-    border-right: 1px solid rgba(255, 255, 255, 0.18);
-  }
+  .modal-arrow { display: block; }
+  #top-bar { height: 8%; }
+  #center-section { flex-direction: row; justify-content: space-between; }
+  .logo-section { width: 45%; height: 45%; top: -48%; z-index: 200; position: absolute; }
+  .inner-text { width:92%; padding:2%; flex-grow: 1; }
+  .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
 }
 
 @media (max-width: 768px) and (orientation: landscape) {
-  #top-bar {
-    height:15%;
-  }
-  #dropdown-menu {
-    width:35vw;
-  }
-  #center-section {
-    flex-direction: row;
-    justify-content: space-evenly;
-    padding: 10px;
-  }
-  .logo-section {
-    width: 30%;
-    height: 30%;
-    top: -33%;
-    padding: 5%;
-  }
-  #black-section {
-    padding: 10px;
-  }
-  .inner-text {
-    width:92%;
-    margin:2%;
-    text-align: center;
-    flex-grow: 1;
-  }
-  .inner-text:first-child {
-    border-right: 1px solid rgba(255, 255, 255, 0.18);
-  }
+  #top-bar { height:15%; }
+  #dropdown-menu { width:35vw; }
+  #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; }
+  .logo-section { width: 30%; height: 30%; top: -33%; padding: 5%; }
+  #black-section { padding: 10px; }
+  .inner-text { width:92%; margin:2%; text-align: center; flex-grow: 1; }
+  .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
 }
-
 
   #výška_herního_okna {
             color: #ffffff;
@@ -1010,7 +876,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             flex-direction: column;
             align-items: center;
             height: 60vh;
-	    width:100vw; /* Hry jsou stále roztažené na celou šířku */
+	    width:100vw; 
             position: relative; 
             padding-top: 150px;
             z-index: 2;
@@ -1041,7 +907,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 40px;
             width: 85%;
-            max-width: 1100px; /* Sjednocená šířka nabídky her */
+            max-width: 1100px;
             margin-top: 60px;
             padding-bottom: 150px;
             position: relative;
@@ -1114,7 +980,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   color:black;
 }
 
-
     </style>
 
 </head>
@@ -1145,9 +1010,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             </ul>
         </div>
     </div>
-
-
-
 
 
     <video id="background-video" autoplay muted loop>
@@ -1183,8 +1045,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             <p data-i18n="hero_welcome_text">Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!</p>
         </div>
 
-
-
     </div>
    <div class="scrollbutton">
        <button class="back-button gallery-button" id="scroll-button">▼</button>
@@ -1199,298 +1059,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         });
 </script>
 
-
-
-
-
-
-
-	
-   
 <div id="black-section">
-
-
-	
-    <script>
-
-        // Ovládání rozbalovacího menu
-        const dropdownButton = document.getElementById('dropdown-button');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-
-        dropdownButton.addEventListener('click', () => {
-            const isVisible = dropdownMenu.style.display === 'block';
-            dropdownMenu.style.display = isVisible ? 'none' : 'block';
-        });
-
-        // Zavřít menu při kliknutí mimo něj
-        window.addEventListener('click', (e) => {
-            if (!e.target.closest('#dropdown-container')) {
-                dropdownMenu.style.display = 'none';
-                langToggle.classList.remove('open');
-            }
-        });
-
-
-        // ---------- Přepínání jazyka ----------
-        const translations = {
-            cs: {
-                nav_home: "Hlavní",
-                nav_about: "O mě",
-                nav_gallery: "Galerie",
-                nav_games: "Hry",
-                nav_contact: "Kontakt",
-                hero_portfolio_title: "Portfolio",
-                hero_portfolio_text: "Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...",
-                hero_welcome_title: "Vítejte",
-                hero_welcome_text: "Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!",
-                gallery_title: "Galerie",
-                gallery_eyebrow: "Má práce",
-                gallery_lead: "Ukázka projektů, na kterých jsem v poslední době pracoval — od grafiky pro tisk po herní vizuály.",
-                gallery_desc: "Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.",
-                games_title: "Vyberte hru",
-                contact_title: "Kontaktujte mě",
-                back_button: "Zpět",
-                about_skill_1_title: "IT & Vývoj",
-                about_skill_1_desc: "Správa OS, diagnostika PC, Frontend/Backend vývoj (HTML, CSS, JS), AI nástroje.",
-                about_skill_2_title: "Design & 3D",
-                about_skill_2_desc: "3D vizualizace, interiérové návrhy, grafické materiály (Photoshop, GIMP, Corel).",
-                about_skill_3_title: "Leadership & Obchod",
-                about_skill_3_desc: "Vedení týmu, logistika, řešení reklamací, zavádění nových systémů.",
-                about_skill_4_title: "Soft Skills",
-                about_skill_4_desc: "Komunikace složitých konceptů, analytické myšlení, orientace na zákazníka.",
-                lang_label: "CS ▾"
-            },
-            en: {
-                nav_home: "Home",
-                nav_about: "About Me",
-                nav_gallery: "Gallery",
-                nav_games: "Games",
-                nav_contact: "Contact",
-                hero_portfolio_title: "Portfolio",
-                hero_portfolio_text: "My name is Filip Duda. <br>I focus on graphic design and testing, mainly 2D and 3D graphics and simple programming...",
-                hero_welcome_title: "Welcome",
-                hero_welcome_text: "Together we'll turn your ideas into reality. Let's combine creativity and precision to create something exceptional!",
-                gallery_title: "Gallery",
-                gallery_eyebrow: "My work",
-                gallery_lead: "A selection of projects I've worked on recently — from print graphics to game visuals.",
-                gallery_desc: "The portfolio covers a wide range of projects, from print design to game graphics and original world concepts. Take a look at some of my completed projects that reflect my skills and attention to detail.",
-                games_title: "Choose a game",
-                contact_title: "Get in touch",
-                back_button: "Back",
-                about_skill_1_title: "IT & Development",
-                about_skill_1_desc: "OS management, PC diagnostics, Frontend/Backend development (HTML, CSS, JS), AI tools.",
-                about_skill_2_title: "Design & 3D",
-                about_skill_2_desc: "3D visualization, interior design, graphic materials (Photoshop, GIMP, Corel).",
-                about_skill_3_title: "Leadership & Commerce",
-                about_skill_3_desc: "Team management, logistics, complaint resolution, system implementation.",
-                about_skill_4_title: "Soft Skills",
-                about_skill_4_desc: "Communication of complex concepts, analytical thinking, customer focus.",
-                lang_label: "EN ▾"
-            },
-            de: {
-                nav_home: "Start",
-                nav_about: "Über mich",
-                nav_gallery: "Galerie",
-                nav_games: "Spiele",
-                nav_contact: "Kontakt",
-                hero_portfolio_title: "Portfolio",
-                hero_portfolio_text: "Ich heiße Filip Duda. <br>Ich beschäftige mich mit Grafik, Design und Testing, vor allem mit 2D-/3D-Grafik und einfacher Programmierung...",
-                hero_welcome_title: "Willkommen",
-                hero_welcome_text: "Gemeinsam verwandeln wir Ihre Ideen in Realität. Verbinden wir Kreativität und Präzision, um etwas Außergewöhnliches zu schaffen!",
-                gallery_title: "Galerie",
-                gallery_eyebrow: "Meine Arbeiten",
-                gallery_lead: "Eine Auswahl meiner jüngsten Projekte — von Printgrafik bis zu Spielgrafiken.",
-                gallery_desc: "Das Portfolio umfasst eine breite Palette an Projekten, vom Printdesign über Spielgrafik bis zu eigenen Weltentwürfen. Werfen Sie einen Blick auf einige meiner realisierten Projekte.",
-                games_title: "Spiel auswählen",
-                contact_title: "Kontaktieren Sie mich",
-                back_button: "Zurück",
-                about_skill_1_title: "IT & Entwicklung",
-                about_skill_1_desc: "Betriebssystemverwaltung, PC-Diagnose, Frontend/Backend-Entwicklung (HTML, CSS, JS), AI-Tools.",
-                about_skill_2_title: "Design & 3D",
-                about_skill_2_desc: "3D-Visualisierung, Innenarchitektur, Grafikmaterialien (Photoshop, GIMP, Corel).",
-                about_skill_3_title: "Führung & Geschäft",
-                about_skill_3_desc: "Teamleitung, Logistik, Reklamationsbearbeitung, Systemimplementierung.",
-                about_skill_4_title: "Soft Skills",
-                about_skill_4_desc: "Kommunikation komplexer Konzepte, analytisches Denken, Kundenorientierung.",
-                lang_label: "DE ▾"
-            }
-        };
-
-        const langToggle = document.getElementById('lang-toggle');
-        const langCurrent = document.getElementById('lang-current');
-        const langSubmenu = document.getElementById('lang-submenu');
-
-        function setLanguage(lang) {
-            const dict = translations[lang] || translations.cs;
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (dict[key] !== undefined) {
-                    el.innerHTML = dict[key];
-                }
-            });
-            document.documentElement.lang = lang;
-            langCurrent.textContent = dict.lang_label;
-            langSubmenu.querySelectorAll('li').forEach(li => {
-                li.classList.toggle('active', li.getAttribute('data-lang') === lang);
-            });
-            localStorage.setItem('fd_lang', lang);
-        }
-
-        langToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            langToggle.classList.toggle('open');
-        });
-
-        langSubmenu.querySelectorAll('li').forEach(li => {
-            li.addEventListener('click', (e) => {
-                e.stopPropagation();
-                setLanguage(li.getAttribute('data-lang'));
-                langToggle.classList.remove('open');
-                dropdownMenu.style.display = 'none';
-            });
-        });
-
-        // Načtení uložené jazykové preference (výchozí čeština)
-        setLanguage(localStorage.getItem('fd_lang') || 'cs');
-
-        // ---------- Kruhové plovoucí menu ----------
-        const radialToggle = document.getElementById('radial-toggle');
-        const radialLinks = document.getElementById('radial-links');
-
-        radialToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isOpen = radialLinks.classList.toggle('open');
-            radialToggle.classList.toggle('open', isOpen);
-            radialToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        });
-
-        radialLinks.querySelectorAll('.radial-link').forEach(link => {
-            link.addEventListener('click', () => {
-                // Zavřít otevřené video nebo fotku
-                const modal = document.getElementById('previewModal');
-                if (modal && modal.style.display === 'flex') {
-                    modal.style.display = 'none';
-                    document.getElementById('previewContent').innerHTML = '';
-                    // Zpátky povolit scrolling a tlačítko
-                    document.body.style.overflow = '';
-                    document.getElementById('scroll-button').style.visibility = 'visible';
-                    document.getElementById('scroll-button').style.pointerEvents = 'auto';
-                    const backBtn = document.getElementById('back-btn');
-                    if (backBtn) backBtn.style.pointerEvents = 'auto';
-                    if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
-                    if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
-                    if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
-                }
-                
-                radialLinks.classList.remove('open');
-                radialToggle.classList.remove('open');
-                radialToggle.setAttribute('aria-expanded', 'false');
-            });
-        });
-
-        window.addEventListener('click', (e) => {
-            if (!e.target.closest('#radial-menu')) {
-                radialLinks.classList.remove('open');
-                radialToggle.classList.remove('open');
-                radialToggle.setAttribute('aria-expanded', 'false');
-            }
-        });
-
-
-
-        // Počet dostupných videí ve složce pozadi/ (1.mp4, 2.mp4, 3.mp4)
-        const TOTAL_BACKGROUND_VIDEOS = 3;
-        let currentVideoIndex = 0;
-
-        function videoList() {
-            const list = [];
-            for (let i = 1; i <= TOTAL_BACKGROUND_VIDEOS; i++) {
-                list.push(`pozadi/${i}.mp4`);
-            }
-            return list;
-        }
-
-        // Nastavení konkrétního videa na pozadí podle indexu (0 = 1.mp4, 1 = 2.mp4, ...)
-        function setBackgroundVideo(index) {
-            const videos = videoList();
-            currentVideoIndex = ((index % videos.length) + videos.length) % videos.length;
-
-            const videoElement = document.getElementById('background-video');
-            const sourceElement = document.getElementById('video-source');
-            sourceElement.src = videos[currentVideoIndex];
-            videoElement.load();
-            videoElement.play().catch(error => {
-                console.error("Chyba při přehrávání videa:", error);
-            });
-
-            updateVideoBubbles();
-        }
-
-        // Vytvoření bublinek podle počtu nalezených videí
-        function initVideoBubbles() {
-            const container = document.getElementById('video-bubbles');
-            if (!container) return;
-            container.innerHTML = '';
-
-            videoList().forEach((src, index) => {
-                const bubble = document.createElement('button');
-                bubble.type = 'button';
-                bubble.className = 'bubble';
-                bubble.setAttribute('aria-label', `Přepnout na video pozadí ${index + 1}`);
-                bubble.addEventListener('click', () => setBackgroundVideo(index));
-                container.appendChild(bubble);
-            });
-        }
-
-        function updateVideoBubbles() {
-            const bubbles = document.querySelectorAll('#video-bubbles .bubble');
-            bubbles.forEach((b, index) => {
-                b.classList.toggle('active', index === currentVideoIndex);
-            });
-        }
-
-        window.onload = () => {
-            initVideoBubbles();
-            const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
-            setBackgroundVideo(randomIndex);
-        };
-
-        // Plynulé přejíždění na odkazy vedoucí na stejnou stránku (#kotva)
-        document.querySelectorAll('a[href^="#"]').forEach(link => {
-            link.addEventListener('click', function (e) {
-                const rawTarget = this.getAttribute('href').slice(1);
-                if (!rawTarget) return;
-                const targetId = decodeURIComponent(rawTarget);
-                const targetEl = document.getElementById(targetId);
-                if (targetEl) {
-                    e.preventDefault();
-                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    history.pushState(null, '', '#' + rawTarget);
-                }
-            });
-        });
-
-    </script>
-
-
-
-	
-
-
-
-
-
-
-
-
 
 <!-- ===== ABOUT SECTION 1 (mezi galerií a hrami) ===== -->
 <div id="about-section-1" class="about-section">
     <div class="about-container">
-        <h2>Kdo jsem a co přináším</h2>
-        <p>Jsem všestranný IT profesionál s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od robustní technické podstaty až po dotažený vizuální zážitek pro uživatele.</p>
+        <h2 data-i18n="about1_title">Kdo jsem a co přináším</h2>
+        <p data-i18n="about1_text">Jsem všestranný IT profesionál s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od robustní technické podstaty až po dotažený vizuální zážitek pro uživatele.</p>
         
-        <h3>Mé silné stránky v praxi</h3>
+        <h3 data-i18n="about1_subtitle">Mé silné stránky v praxi</h3>
         <div class="skills-grid">
             <div class="skill-item">
                 <h4 data-i18n="about_skill_1_title">IT & Vývoj</h4>
@@ -1520,9 +1097,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 <br>
 
-
-
-		
 <div class="controls">
   <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;" data-i18n="back_button">Zpět</button>
 </div>
@@ -1558,32 +1132,23 @@ async function loadFolder(folderId, addToHistory = true) {
     const container = document.createElement('div');
     container.className = 'square';
 
-    // 🔹 Pokud je to složka
     if (file.mimeType === 'application/vnd.google-apps.folder') {
-
       container.onclick = () => {
         folderStack.push(file.id);
         loadFolder(file.id);
       };
-
       const folderDiv = document.createElement('div');
       folderDiv.className = 'folder';
       folderDiv.innerHTML = file.name;
       container.appendChild(folderDiv);
-    }
-    // 🔹 Pokud je to obrázek nebo video
-    else {
-
+    } else {
       container.style.backgroundImage = 'none';
-
       const img = document.createElement('img');
       img.src = file.thumbnailLink || 'https://via.placeholder.com/250?text=Soubor';
       img.loading = 'lazy';
       container.appendChild(img);
-
       container.onclick = () => openPreview(file);
     }
-
     gallery.appendChild(container);
   });
 }
@@ -1606,10 +1171,8 @@ function openPreview(file) {
     e.stopPropagation();
     modal.style.display = 'none';
     content.innerHTML = '';
-    // Vrátit všechny video-inners na normální stav
     const videoInners = document.querySelectorAll('.video-inner.playing');
     videoInners.forEach(inner => inner.classList.remove('playing'));
-    // Zpátky povolit scrolling a tlačítko
     document.body.style.overflow = '';
     document.getElementById('scroll-button').style.visibility = 'visible';
     document.getElementById('scroll-button').style.pointerEvents = 'auto';
@@ -1620,7 +1183,6 @@ function openPreview(file) {
     if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
   };
 
-  // 🔹 Obrázek
   if (file.mimeType.startsWith('image/')) {
     const img = document.createElement('img');
     img.src = fileUrl;
@@ -1628,14 +1190,10 @@ function openPreview(file) {
       img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
     };
     frame.appendChild(img);
-  } 
-
-  // 🔹 Video - Google Drive native player
-  else if (file.mimeType.startsWith('video/')) {
+  } else if (file.mimeType.startsWith('video/')) {
     const wrapper = document.createElement('div');
     wrapper.className = 'video-wrapper';
     
-    // Vnořené okno
     const inner = document.createElement('div');
     inner.className = 'video-inner';
 
@@ -1647,26 +1205,20 @@ function openPreview(file) {
     wrapper.appendChild(inner);
     frame.appendChild(wrapper);
     
-    // Detekovat mobilní zařízení
     const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile()) {
       let isPlaying = false;
-      
-      // Automaticky spustit video hned po načtení
       setTimeout(() => {
         try {
-          // Spustit video script-wise
           isPlaying = true;
           inner.classList.add('playing');
-          // Kliknout na iframe aby se video spustilo
           iframe.click();
         } catch(err) {
           console.log('Auto-play failed');
         }
       }, 1500);
       
-      // Uživatel může znovu klikat na video když chce
       inner.addEventListener('click', (e) => {
         if (!isPlaying) {
           isPlaying = true;
@@ -1682,31 +1234,25 @@ function openPreview(file) {
   frame.appendChild(closeBtn);
   content.appendChild(frame);
 
-  // Zablokovat scrolling a skrýt scroll tlačítko
   document.body.style.overflow = 'hidden';
   document.getElementById('scroll-button').style.visibility = 'hidden';
   document.getElementById('scroll-button').style.pointerEvents = 'none';
   
-  // Zablokovat Z5 tlačítko (back-btn)
   const backBtn = document.getElementById('back-btn');
   if (backBtn) backBtn.style.pointerEvents = 'none';
 
   modal.style.display = 'flex';
 }
 
-// Globální timeout proměnné
 let hideControlsTimeout = null;
 let hideControlsAfterPlayTimeout = null;
 let videoClickHandler = null;
 let videoTouchTimeout = null;
 
 function handleVideoClick(e) {
-  // Pokud se kliklo na video iframe
   if (e.target.closest('.video-wrapper')) {
     if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
-    // Obnovit viditelnost na 2s
     hideControlsTimeout = setTimeout(() => {
-      // Ovládání budou skryta automaticky po 0.5s
     }, 500);
   }
 }
@@ -1715,10 +1261,8 @@ function closePreview(event) {
   if (event.target.id === 'previewModal') {
     document.getElementById('previewModal').style.display = 'none';
     document.getElementById('previewContent').innerHTML = '';
-    // Vrátit všechny video-inner na normální stav (smazat playing class)
     const videoInners = document.querySelectorAll('.video-inner.playing');
     videoInners.forEach(inner => inner.classList.remove('playing'));
-    // Zpátky povolit scrolling a tlačítko
     document.body.style.overflow = '';
     document.getElementById('scroll-button').style.visibility = 'visible';
     document.getElementById('scroll-button').style.pointerEvents = 'auto';
@@ -1747,12 +1291,9 @@ window.onpopstate = function(event) {
 loadFolder(ROOT_FOLDER_ID);
 </script>
 
-
-
     </div>
 
 
-	
 <div class="hero-spacer">
 
     <div id="výška_herního_okna">
@@ -1767,7 +1308,48 @@ loadFolder(ROOT_FOLDER_ID);
         <button id="back-btn" class="back-btn" onclick="zavritHru()" title="Návrat do menu" style="display: none;">✕</button>
     </div>
 </div>
- <script>
+
+<!-- ===== ABOUT SECTION 2 (za hrami) ===== -->
+<div id="about-section-2" class="about-section">
+    <div class="about-container">
+        <h2 data-i18n="about2_title">Proč spolupracovat právě se mnou?</h2>
+        <p data-i18n="about2_text">Díky pestré praxi (od technické podpory a správy databází v NbServisu a Klouček Computer přes vedení provozu ve SportVision až po navrhování v Oresi) jsem si zvykl rychle se adaptovat na nové prostředí a přebírat zodpovědnost za výsledky. Nezáleží na tom, zda řeším kód, stavím síť nebo komunikuji s klientem – vždy kladu důraz na preciznost, efektivitu a lidský přístup.</p>
+        <p class="motivation-text" data-i18n="about2_motivation">Hledáte někoho, do koho se vyplatí investovat? Pojďme společně vytvořit něco skvělého.</p>
+        <p class="contact-text"><strong data-i18n="contact_reach_out">Ozvěte se mi:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
+    </div>
+</div>
+
+<div id="Patička"> 
+
+<div class="footer">
+
+        <img src="style/profilovka.png" alt="Filip Duda">
+        <h2 data-i18n="contact_title">Kontaktujte mě</h2>
+        <p><strong data-i18n="footer_phone">Telefon:</strong> +420 608 122 052</p>
+        <p><strong data-i18n="footer_email">Email:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
+<br>
+        <div class="social-icons">
+            <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank" rel="noopener noreferrer"><img src="style/linkedin.png" alt="LinkedIn"></a>
+	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
+	    <a href="https://wa.me/420608122052" target="_blank" rel="noopener noreferrer"><img src="style/whatsapp.png" alt="Whatsapp"></a>
+        </div>
+   <div class="button-container">
+       <button class="back-button gallery-button" onclick="window.location.href='#center-section'" >▲</button>
+   </div>
+
+ </div> 
+
+</div> 
+	
+ <div id="konec">
+        <br>
+	    <br>
+ </div> 
+
+
+<!-- HERNÍ SCRIPT + JAZYKOVÝ PŘEKLADAČ SPOLU -->
+<script>
+    // --- 1. Generování her ---
     const seznamHer = [
         { id: 'index1', nazev: 'Vesmírná-mise' }, 
         { id: 'index2', nazev: 'Vesmírná-mise2' },
@@ -1787,10 +1369,11 @@ loadFolder(ROOT_FOLDER_ID);
         }
     }
 
+    // Při generování HTML herních karet jsme přidali data-i18n="game_start"
     seznamHer.forEach(hra => {
         const karta = document.createElement('div');
         karta.className = 'game-card';
-        karta.innerHTML = `<h3>${hra.nazev}</h3><p>Spustit</p>`;
+        karta.innerHTML = `<h3>${hra.nazev}</h3><p data-i18n="game_start">Spustit</p>`;
         karta.onclick = () => spustitHru(hra.id);
         menuContainer.appendChild(karta);
     });
@@ -1824,17 +1407,290 @@ loadFolder(ROOT_FOLDER_ID);
 
     window.addEventListener('resize', prizpusobVysku);
 
-    // Automatické spuštění hry index1 při načtení stránky
     window.addEventListener('load', () => {
         setTimeout(() => {
             spustitHru('index1', false); 
         }, 800);
     });
+	
+    // --- 2. Jazykové překlady ---
+    const translations = {
+        cs: {
+            nav_home: "Hlavní",
+            nav_about: "O mě",
+            nav_gallery: "Galerie",
+            nav_games: "Hry",
+            nav_contact: "Kontakt",
+            hero_portfolio_title: "Portfolio",
+            hero_portfolio_text: "Jmenuji se Filip Duda, <br>věnuji se grafice, designu a testování. Zaměřuji se hlavně na 2D, 3D grafiku a jednoduché programování...",
+            hero_welcome_title: "Vítejte",
+            hero_welcome_text: "Společně proměníme Vaše nápady v realitu. Spojme kreativitu a preciznost k vytvoření něčeho výjimečného!",
+            gallery_title: "Galerie",
+            gallery_eyebrow: "Má práce",
+            gallery_lead: "Ukázka projektů, na kterých jsem v poslední době pracoval — od grafiky pro tisk po herní vizuály.",
+            gallery_desc: "Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých realizovaných projektů, které reflektují mé dovednosti a přístup k detailu.",
+            games_title: "Vyberte hru",
+            contact_title: "Kontaktujte mě",
+            back_button: "Zpět",
+            about_skill_1_title: "IT & Vývoj",
+            about_skill_1_desc: "Správa OS, diagnostika PC, Frontend/Backend vývoj (HTML, CSS, JS), AI nástroje.",
+            about_skill_2_title: "Design & 3D",
+            about_skill_2_desc: "3D vizualizace, interiérové návrhy, grafické materiály (Photoshop, GIMP, Corel).",
+            about_skill_3_title: "Leadership & Obchod",
+            about_skill_3_desc: "Vedení týmu, logistika, řešení reklamací, zavádění nových systémů.",
+            about_skill_4_title: "Soft Skills",
+            about_skill_4_desc: "Komunikace složitých konceptů, analytické myšlení, orientace na zákazníka.",
+            lang_label: "CS ▾",
+
+            // --- Nově doplněné překlady ---
+            about1_title: "Kdo jsem a co přináším",
+            about1_text: "Jsem všestranný IT profesionál s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od robustní technické podstaty až po dotažený vizuální zážitek pro uživatele.",
+            about1_subtitle: "Mé silné stránky v praxi",
+            about2_title: "Proč spolupracovat právě se mnou?",
+            about2_text: "Díky pestré praxi (od technické podpory a správy databází v NbServisu a Klouček Computer přes vedení provozu ve SportVision až po navrhování v Oresi) jsem si zvykl rychle se adaptovat na nové prostředí a přebírat zodpovědnost za výsledky. Nezáleží na tom, zda řeším kód, stavím síť nebo komunikuji s klientem – vždy kladu důraz na preciznost, efektivitu a lidský přístup.",
+            about2_motivation: "Hledáte někoho, do koho se vyplatí investovat? Pojďme společně vytvořit něco skvělého.",
+            contact_reach_out: "Ozvěte se mi:",
+            game_start: "Spustit",
+            footer_phone: "Telefon:",
+            footer_email: "Email:"
+        },
+        en: {
+            nav_home: "Home",
+            nav_about: "About Me",
+            nav_gallery: "Gallery",
+            nav_games: "Games",
+            nav_contact: "Contact",
+            hero_portfolio_title: "Portfolio",
+            hero_portfolio_text: "My name is Filip Duda. <br>I focus on graphic design and testing, mainly 2D and 3D graphics and simple programming...",
+            hero_welcome_title: "Welcome",
+            hero_welcome_text: "Together we'll turn your ideas into reality. Let's combine creativity and precision to create something exceptional!",
+            gallery_title: "Gallery",
+            gallery_eyebrow: "My work",
+            gallery_lead: "A selection of projects I've worked on recently — from print graphics to game visuals.",
+            gallery_desc: "The portfolio covers a wide range of projects, from print design to game graphics and original world concepts. Take a look at some of my completed projects that reflect my skills and attention to detail.",
+            games_title: "Choose a game",
+            contact_title: "Get in touch",
+            back_button: "Back",
+            about_skill_1_title: "IT & Development",
+            about_skill_1_desc: "OS management, PC diagnostics, Frontend/Backend development (HTML, CSS, JS), AI tools.",
+            about_skill_2_title: "Design & 3D",
+            about_skill_2_desc: "3D visualization, interior design, graphic materials (Photoshop, GIMP, Corel).",
+            about_skill_3_title: "Leadership & Commerce",
+            about_skill_3_desc: "Team management, logistics, complaint resolution, system implementation.",
+            about_skill_4_title: "Soft Skills",
+            about_skill_4_desc: "Communication of complex concepts, analytical thinking, customer focus.",
+            lang_label: "EN ▾",
+
+            about1_title: "Who I am and what I bring",
+            about1_text: "I am a versatile IT professional with a comprehensive scope ranging from hardware and software management to web development, 3D visualization, and graphic design. I believe the true value of a modern specialist lies not only in narrow specialization but in the ability to see a project in a broader context – from a robust technical foundation to a polished visual experience for the user.",
+            about1_subtitle: "My strengths in practice",
+            about2_title: "Why work with me?",
+            about2_text: "Thanks to diverse experience (from technical support and database management at NbServis and Klouček Computer, through operations management at SportVision, to designing at Oresi), I am used to quickly adapting to new environments and taking responsibility for results. Whether I'm dealing with code, building a network, or communicating with a client – I always emphasize precision, efficiency, and a human approach.",
+            about2_motivation: "Looking for someone worth investing in? Let's create something great together.",
+            contact_reach_out: "Get in touch:",
+            game_start: "Play",
+            footer_phone: "Phone:",
+            footer_email: "Email:"
+        },
+        de: {
+            nav_home: "Start",
+            nav_about: "Über mich",
+            nav_gallery: "Galerie",
+            nav_games: "Spiele",
+            nav_contact: "Kontakt",
+            hero_portfolio_title: "Portfolio",
+            hero_portfolio_text: "Ich heiße Filip Duda. <br>Ich beschäftige mich mit Grafik, Design und Testing, vor allem mit 2D-/3D-Grafik und einfacher Programmierung...",
+            hero_welcome_title: "Willkommen",
+            hero_welcome_text: "Gemeinsam verwandeln wir Ihre Ideen in Realität. Verbinden wir Kreativität und Präzision, um etwas Außergewöhnliches zu schaffen!",
+            gallery_title: "Galerie",
+            gallery_eyebrow: "Meine Arbeiten",
+            gallery_lead: "Eine Auswahl meiner jüngsten Projekte — von Printgrafik bis zu Spielgrafiken.",
+            gallery_desc: "Das Portfolio umfasst eine breite Palette an Projekten, vom Printdesign über Spielgrafik bis zu eigenen Weltentwürfen. Werfen Sie einen Blick auf einige meiner realisierten Projekte.",
+            games_title: "Spiel auswählen",
+            contact_title: "Kontaktieren Sie mich",
+            back_button: "Zurück",
+            about_skill_1_title: "IT & Entwicklung",
+            about_skill_1_desc: "Betriebssystemverwaltung, PC-Diagnose, Frontend/Backend-Entwicklung (HTML, CSS, JS), AI-Tools.",
+            about_skill_2_title: "Design & 3D",
+            about_skill_2_desc: "3D-Visualisierung, Innenarchitektur, Grafikmaterialien (Photoshop, GIMP, Corel).",
+            about_skill_3_title: "Führung & Geschäft",
+            about_skill_3_desc: "Teamleitung, Logistik, Reklamationsbearbeitung, Systemimplementierung.",
+            about_skill_4_title: "Soft Skills",
+            about_skill_4_desc: "Kommunikation komplexer Konzepte, analytisches Denken, Kundenorientierung.",
+            lang_label: "DE ▾",
+
+            about1_title: "Wer ich bin und was ich mitbringe",
+            about1_text: "Ich bin ein vielseitiger IT-Experte mit einem umfassenden Spektrum, das von der Hardware- und Softwareverwaltung über Webentwicklung bis hin zu 3D-Visualisierung und Grafikdesign reicht. Ich glaube, dass der wahre Wert eines modernen Spezialisten nicht nur in einer engen Spezialisierung liegt, sondern in der Fähigkeit, ein Projekt im größeren Zusammenhang zu sehen – von einer soliden technischen Grundlage bis hin zu einem perfekten visuellen Erlebnis für den Benutzer.",
+            about1_subtitle: "Meine Stärken in der Praxis",
+            about2_title: "Warum mit mir zusammenarbeiten?",
+            about2_text: "Dank vielfältiger Erfahrungen (von technischem Support und Datenbankmanagement bei NbServis und Klouček Computer über die Betriebsleitung bei SportVision bis hin zum Design bei Oresi) bin ich es gewohnt, mich schnell an neue Umgebungen anzupassen und Verantwortung für Ergebnisse zu übernehmen. Ob ich mich mit Code beschäftige, ein Netzwerk aufbaue oder mit Kunden kommuniziere – ich lege immer Wert auf Präzision, Effizienz und einen menschlichen Ansatz.",
+            about2_motivation: "Suchen Sie jemanden, in den es sich zu investieren lohnt? Lassen Sie uns gemeinsam etwas Großartiges schaffen.",
+            contact_reach_out: "Melden Sie sich bei mir:",
+            game_start: "Spielen",
+            footer_phone: "Telefon:",
+            footer_email: "E-Mail:"
+        }
+    };
+
+    const dropdownButton = document.getElementById('dropdown-button');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+
+    dropdownButton.addEventListener('click', () => {
+        const isVisible = dropdownMenu.style.display === 'block';
+        dropdownMenu.style.display = isVisible ? 'none' : 'block';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (!e.target.closest('#dropdown-container')) {
+            dropdownMenu.style.display = 'none';
+            langToggle.classList.remove('open');
+        }
+    });
+
+    const langToggle = document.getElementById('lang-toggle');
+    const langCurrent = document.getElementById('lang-current');
+    const langSubmenu = document.getElementById('lang-submenu');
+
+    function setLanguage(lang) {
+        const dict = translations[lang] || translations.cs; // fallback vždy na CS
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key] !== undefined) {
+                el.innerHTML = dict[key];
+            }
+        });
+        document.documentElement.lang = lang;
+        langCurrent.textContent = dict.lang_label;
+        langSubmenu.querySelectorAll('li').forEach(li => {
+            li.classList.toggle('active', li.getAttribute('data-lang') === lang);
+        });
+        localStorage.setItem('fd_lang', lang);
+    }
+
+    langToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langToggle.classList.toggle('open');
+    });
+
+    langSubmenu.querySelectorAll('li').forEach(li => {
+        li.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setLanguage(li.getAttribute('data-lang'));
+            langToggle.classList.remove('open');
+            dropdownMenu.style.display = 'none';
+        });
+    });
+
+    // Načtení překladů jakmile jsou prvky generovány (výchozí CS)
+    setLanguage(localStorage.getItem('fd_lang') || 'cs');
 </script>
 
-<!-- ===== INTERSECTION OBSERVER PRO ANIMACE ===== -->
 <script>
-    // Spustit animace když se element dostane do view
+    // --- Další UI události ---
+    const radialToggle = document.getElementById('radial-toggle');
+    const radialLinks = document.getElementById('radial-links');
+
+    radialToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = radialLinks.classList.toggle('open');
+        radialToggle.classList.toggle('open', isOpen);
+        radialToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    radialLinks.querySelectorAll('.radial-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const modal = document.getElementById('previewModal');
+            if (modal && modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                document.getElementById('previewContent').innerHTML = '';
+                document.body.style.overflow = '';
+                document.getElementById('scroll-button').style.visibility = 'visible';
+                document.getElementById('scroll-button').style.pointerEvents = 'auto';
+                const backBtn = document.getElementById('back-btn');
+                if (backBtn) backBtn.style.pointerEvents = 'auto';
+                if (hideControlsTimeout) clearTimeout(hideControlsTimeout);
+                if (hideControlsAfterPlayTimeout) clearTimeout(hideControlsAfterPlayTimeout);
+                if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
+            }
+            
+            radialLinks.classList.remove('open');
+            radialToggle.classList.remove('open');
+            radialToggle.setAttribute('aria-expanded', 'false');
+        });
+    });
+
+    window.addEventListener('click', (e) => {
+        if (!e.target.closest('#radial-menu')) {
+            radialLinks.classList.remove('open');
+            radialToggle.classList.remove('open');
+            radialToggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    const TOTAL_BACKGROUND_VIDEOS = 3;
+    let currentVideoIndex = 0;
+
+    function videoList() {
+        const list = [];
+        for (let i = 1; i <= TOTAL_BACKGROUND_VIDEOS; i++) {
+            list.push(`pozadi/${i}.mp4`);
+        }
+        return list;
+    }
+
+    function setBackgroundVideo(index) {
+        const videos = videoList();
+        currentVideoIndex = ((index % videos.length) + videos.length) % videos.length;
+
+        const videoElement = document.getElementById('background-video');
+        const sourceElement = document.getElementById('video-source');
+        sourceElement.src = videos[currentVideoIndex];
+        videoElement.load();
+        videoElement.play().catch(error => console.error("Chyba při přehrávání videa:", error));
+        updateVideoBubbles();
+    }
+
+    function initVideoBubbles() {
+        const container = document.getElementById('video-bubbles');
+        if (!container) return;
+        container.innerHTML = '';
+        videoList().forEach((src, index) => {
+            const bubble = document.createElement('button');
+            bubble.type = 'button';
+            bubble.className = 'bubble';
+            bubble.setAttribute('aria-label', `Přepnout na video pozadí ${index + 1}`);
+            bubble.addEventListener('click', () => setBackgroundVideo(index));
+            container.appendChild(bubble);
+        });
+    }
+
+    function updateVideoBubbles() {
+        const bubbles = document.querySelectorAll('#video-bubbles .bubble');
+        bubbles.forEach((b, index) => {
+            b.classList.toggle('active', index === currentVideoIndex);
+        });
+    }
+
+    window.onload = () => {
+        initVideoBubbles();
+        const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
+        setBackgroundVideo(randomIndex);
+    };
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            const rawTarget = this.getAttribute('href').slice(1);
+            if (!rawTarget) return;
+            const targetId = decodeURIComponent(rawTarget);
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                e.preventDefault();
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                history.pushState(null, '', '#' + rawTarget);
+            }
+        });
+    });
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -100px 0px'
@@ -1849,85 +1705,23 @@ loadFolder(ROOT_FOLDER_ID);
         });
     }, observerOptions);
 
-    // Pozorovat všechny about-section prvky
     document.querySelectorAll('.about-section').forEach(section => {
         section.style.opacity = '0';
         observer.observe(section);
     });
+
+    const footer = document.querySelector('.footer');
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        if (Math.ceil(scrollPosition) >= documentHeight) {
+            footer.classList.add('visible');
+        } else {
+            footer.classList.remove('visible');
+        }
+    });
+
 </script>
-
-<!-- ===== ABOUT SECTION 2 (za hrami) ===== -->
-<div id="about-section-2" class="about-section">
-    <div class="about-container">
-        <h2>Proč spolupracovat právě se mnou?</h2>
-        <p>Díky pestré praxi (od technické podpory a správy databází v NbServisu a Klouček Computer přes vedení provozu ve SportVision až po navrhování v Oresi) jsem si zvykl rychle se adaptovat na nové prostředí a přebírat zodpovědnost za výsledky. Nezáleží na tom, zda řeším kód, stavím síť nebo komunikuji s klientem – vždy kladu důraz na preciznost, efektivitu a lidský přístup.</p>
-        <p class="motivation-text">Hledáte někoho, do koho se vyplatí investovat? Pojďme společně vytvořit něco skvělého.</p>
-        <p class="contact-text"><strong>Ozvěte se mi:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="Patička"> 
-
-<div class="footer">
-
-        <img src="style/profilovka.png" alt="Filip Duda">
-        <h2 data-i18n="contact_title">Kontaktujte mě</h2>
-        <p><strong>Telefon:</strong> +420 608 122 052</p>
-        <p><strong>Email:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
-<br>
-        <div class="social-icons">
-            <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank" rel="noopener noreferrer"><img src="style/linkedin.png" alt="LinkedIn"></a>
-	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
-	    <a href="https://wa.me/420608122052" target="_blank" rel="noopener noreferrer"><img src="style/whatsapp.png" alt="Whatsapp"></a>
-        </div>
-   <div class="button-container">
-       <button class="back-button gallery-button" onclick="window.location.href='#center-section'" >▲</button>
-   </div>
-
- </div> 
-
-</div> 
-	
- <div id="konec">
-        <br>
-	    <br>
- </div> 
-
-<script>
-
-//zobrazí, schová kontakt
-        const footer = document.querySelector('.footer');
-
-        window.addEventListener('scroll', () => {
-            const scrollPosition = window.scrollY + window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-
-            if (Math.ceil(scrollPosition) >= documentHeight) {
-                footer.classList.add('visible');
-            } else {
-                footer.classList.remove('visible');
-            }
-        });
-
-    </script>
-
-
-
-
 
  </div>
 </body>
