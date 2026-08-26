@@ -56,9 +56,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     }
 
     #gallery { 
-      position: relative;
-      left: 50%;
-      transform: translateX(-50%);
+      margin: 0 auto;
     }
     .gallery {
       display: grid;
@@ -639,7 +637,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 @media (min-width: 769px) {
-  .about-section { text-align: left; padding-left: 8%; }
+  .about-section { text-align: left; padding: 60px 4%; }
   .about-section h2, .about-section h3 { text-align: left; }
   .about-container { text-align: left; }
 }
@@ -853,9 +851,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 #black-section > .inner-text {
+  width: 100%;
   max-width: 1100px;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  margin: 0 auto !important;
+  padding: 0 4%;
   box-sizing: border-box;
 }
 
