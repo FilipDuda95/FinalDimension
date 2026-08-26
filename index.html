@@ -65,7 +65,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 1rem;
-      max-width: 1100px;
+      max-width: 1100px; /* Sjednocená šířka galerie */
+      width: 100%;
     }
     .gallery a {
       text-decoration: none;
@@ -568,7 +569,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .about-container {
-  max-width: 1100px;
+  max-width: 1100px; /* Sjednocená šířka textu */
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -750,7 +751,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   color: white;
   z-index:23;
   display: flex;
-  padding-bottom: 20%; //odsazení patičky
+  padding-bottom: 20%; /* odsazení patičky */
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -933,6 +934,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   text-align: center;
   flex-grow: 1;
 }
+
+/* ===== SJEDNOCENÍ ŠÍŘKY TEXTOVÝCH PRVKŮ V BLACK SECTION ===== */
+#black-section > .inner-text {
+  max-width: 1100px; /* Sjednocená šířka galerie (textu nad ní) */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+}
+
 @media (min-width: 768px) {
   .modal-arrow {
     display: block;
@@ -1000,7 +1010,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             flex-direction: column;
             align-items: center;
             height: 60vh;
-	    width:100vw;
+	    width:100vw; /* Hry jsou stále roztažené na celou šířku */
             position: relative; 
             padding-top: 150px;
             z-index: 2;
@@ -1031,7 +1041,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 40px;
             width: 85%;
-            max-width: 1200px;
+            max-width: 1100px; /* Sjednocená šířka nabídky her */
             margin-top: 60px;
             padding-bottom: 150px;
             position: relative;
@@ -1082,7 +1092,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: font-size: 2rem;
+            font-size: 2rem;
             z-index: 10010;
             backdrop-filter: blur(15px);
             transition: 0.4s;
@@ -1817,8 +1827,8 @@ loadFolder(ROOT_FOLDER_ID);
     // Automatické spuštění hry index1 při načtení stránky
     window.addEventListener('load', () => {
         setTimeout(() => {
-            spustitHru('index1', false); // ZMĚNĚNO NA FALSE PRO VYPNUTÍ AUTOSCROLLU
-        }, 800); // Малá prodleva pro lepší UX
+            spustitHru('index1', false); 
+        }, 800);
     });
 </script>
 
