@@ -805,6 +805,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   #radial-menu { right: 14px; bottom: 5%; transform: translateY(-30px); }
   #radial-toggle { width: 46px; height: 46px; font-size: 1.1rem; }
   .radial-link { width: 40px; height: 40px; font-size: 0.6rem; }
+  #video-bubbles { left: 14px; }
+  
+  /* Menší vzdálenosti pro mobilní menu */
+  .radial-link:nth-child(1) { --ty: -50px; }
+  .radial-link:nth-child(2) { --tx: -35px; --ty: -35px; }
+  .radial-link:nth-child(3) { --tx: -50px; }
+  .radial-link:nth-child(4) { --tx: -35px; --ty: 35px; }
+  .radial-link:nth-child(5) { --ty: 50px; }
 }
 
 #center-section {
