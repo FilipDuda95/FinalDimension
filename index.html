@@ -130,7 +130,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   bottom:5%;
   left:50%;
   z-index: 20;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-30px);
 }
 
     .back-button {
@@ -710,6 +710,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   backdrop-filter: blur(6px);
   align-items: center;
   justify-content: center;
+  transform: translateY(-30px);
 }
 #video-bubbles .bubble {
   width: 5px;
@@ -738,6 +739,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   right: 24px;
   bottom: 5%;
   z-index: 50;
+  transform: translateY(-30px);
 }
 #radial-toggle {
   position: relative;
@@ -768,7 +770,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 .radial-link {
   position: absolute;
-  top: -5px;
+  top: 0px;
   left: 0;
   width: 46px;
   height: 46px;
@@ -800,7 +802,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-color: #05d4ff;
 }
 @media (max-width: 600px) {
-  #radial-menu { right: 14px; bottom: 5%; }
+  #radial-menu { right: 14px; bottom: 5%; transform: translateY(-30px); }
   #radial-toggle { width: 46px; height: 46px; font-size: 1.1rem; }
   .radial-link { width: 40px; height: 40px; font-size: 0.6rem; }
 }
