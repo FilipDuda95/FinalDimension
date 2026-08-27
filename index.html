@@ -706,8 +706,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   z-index: 15;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 8px 8px;
+  gap: 6px;
+  padding: 6px 6px;
   background: rgba(20, 20, 20, 0.45);
   border-radius: 999px;
   backdrop-filter: blur(6px);
@@ -813,11 +813,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   .scrollbutton { bottom: 5%; transform: translateX(-50%) translateY(-30px); }
   
   /* Menší vzdálenosti pro mobilní menu */
-  .radial-link:nth-child(1) { --ty: -50px; }
-  .radial-link:nth-child(2) { --tx: -35px; --ty: -35px; }
-  .radial-link:nth-child(3) { --tx: -50px; }
-  .radial-link:nth-child(4) { --tx: -35px; --ty: 35px; }
-  .radial-link:nth-child(5) { --ty: 50px; }
+  .radial-link:nth-child(1) { --ty: -35px; }
+  .radial-link:nth-child(2) { --tx: -25px; --ty: -25px; }
+  .radial-link:nth-child(3) { --tx: -35px; }
+  .radial-link:nth-child(4) { --tx: -25px; --ty: 25px; }
+  .radial-link:nth-child(5) { --ty: 35px; }
 }
 
 #center-section {
@@ -876,7 +876,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   #top-bar { height:15%; }
   #dropdown-menu { width:35vw; }
   #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; }
-  .logo-section { width: 30% !important; height: 30% !important; top: 5% !important; padding: 5%; }
+  .logo-section { position: absolute !important; width: 30% !important; height: 30% !important; top: 10% !important; padding: 5%; }
   #black-section { padding: 10px; }
   .inner-text { width:92%; margin:2%; text-align: center; flex-grow: 1; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
