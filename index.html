@@ -414,6 +414,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-radius: 50%;
   z-index: 24;
 }
+.hero-spacer {
+  padding-bottom: 120px;
+}
 .footer.visible {
   opacity: 1;
   z-index:40;
@@ -873,13 +876,23 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   #top-bar { height:15%; }
   #dropdown-menu { width:35vw; }
   #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; }
-  .logo-section { width: 30%; height: 30%; top: -33%; padding: 5%; }
+  .logo-section { width: 30%; height: 30%; top: -40%; padding: 5%; }
   #black-section { padding: 10px; }
   .inner-text { width:92%; margin:2%; text-align: center; flex-grow: 1; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
- #padding {
-  text-align: left;
-}
+  #padding { text-align: left; }
+  
+  /* Herní okno v landscape módu */
+  #výška_herního_okna {
+    height: 80vh;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+  #game-menu {
+    padding-bottom: 100px;
+    margin-top: 30px;
+    gap: 20px;
+  }
 }
 
   #výška_herního_okna {
