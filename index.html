@@ -706,8 +706,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   z-index: 15;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 6px 6px;
+  gap: 8px;
+  padding: 8px 8px;
   background: rgba(20, 20, 20, 0.45);
   border-radius: 999px;
   backdrop-filter: blur(6px);
@@ -893,6 +893,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     margin-top: 30px;
     gap: 20px;
   }
+  
+  /* Blíž k sobě v landscape módu */
+  #radial-menu { transform: translateY(-35px); }
+  .radial-link:nth-child(1) { --ty: -25px; }
+  .radial-link:nth-child(2) { --tx: -18px; --ty: -18px; }
+  .radial-link:nth-child(3) { --tx: -25px; }
+  .radial-link:nth-child(4) { --tx: -18px; --ty: 18px; }
+  .radial-link:nth-child(5) { --ty: 25px; }
 }
 
   #výška_herního_okna {
