@@ -876,7 +876,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   #top-bar { height:15%; }
   #dropdown-menu { width:35vw; }
   #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; }
-  .logo-section { width: 30%; height: 30%; top: -40%; padding: 5%; }
+  .logo-section { width: 30%; height: 30%; top: -15%; padding: 5%; }
   #black-section { padding: 10px; }
   .inner-text { width:92%; margin:2%; text-align: center; flex-grow: 1; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
@@ -1425,6 +1425,7 @@ loadFolder(ROOT_FOLDER_ID);
 
         document.getElementById('game-menu').style.visibility = 'hidden';
         document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
+        document.querySelector('.hero-spacer').style.paddingBottom = '0px';
 
         prizpusobVysku();
 
@@ -1441,6 +1442,7 @@ loadFolder(ROOT_FOLDER_ID);
         iframe.src = '';
         document.getElementById('game-menu').style.visibility = 'visible';
         document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
+        document.querySelector('.hero-spacer').style.paddingBottom = '120px';
         hlavniDiv.scrollIntoView({ behavior: 'smooth' });
     }
 
