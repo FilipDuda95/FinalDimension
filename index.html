@@ -155,7 +155,7 @@
             to { transform: translateX(0) rotateY(0deg); opacity: 1; }
         }
 
-        /* Iframe s povoleným plynulým skrolováním */
+        /* Iframe */
         .viewport-iframe {
             display: block;
             width: 100%;
@@ -253,7 +253,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            color: #ccc;
             font-size: 18px;
             font-weight: bold;
             user-select: none;
@@ -268,6 +268,17 @@
 
         .control-btn:active {
             transform: scale(0.92);
+        }
+
+        /* SVG ikona v tlačítku */
+        .control-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .rotate-panel {
@@ -315,18 +326,18 @@
             display: none !important;
         }
 
-        /* Při aktivované lupě přesun tlačítka do levého dolního rohu */
+        /* Při lúpě mínus posun cca o 20px doprava od původní levé pozice (20px + 20px = 40px) */
         body.is-fullscreen .controls-container {
-            left: 20px !important;
+            left: 40px !important;
             bottom: 20px !important;
             transform: none !important;
         }
 
-        /* Responzivita a optimalizace výšky na mobilních zařízeních */
-        @media (max-width: 768px) {
+        /* Responzivita pro telefony */
+        @media (max-width: 768px) and (orientation: portrait) {
             .viewport-wrapper {
                 width: 92vw;
-                height: 65vh;
+                height: 76vh; /* Zvětšeno pro odstranění volného prostoru nahoře */
             }
 
             .nav-arrow {
@@ -345,8 +356,9 @@
                 max-width: calc(100vw - 16px);
             }
 
+            /* Na mobilu při lúpě posun na 32px (12px + 20px) */
             body.is-fullscreen .controls-container {
-                left: 12px !important;
+                left: 32px !important;
                 bottom: 12px !important;
             }
 
@@ -355,6 +367,11 @@
                 height: 36px;
                 min-width: 36px;
                 font-size: 16px;
+            }
+
+            .control-btn svg {
+                width: 16px;
+                height: 16px;
             }
 
             .rotate-panel {
@@ -414,7 +431,15 @@
             </div>
 
             <div class="panel-box">
-                <button class="control-btn" id="toggleFullscreen" title="Zvětšit na celou obrazovku">🔍</button>
+                <button class="control-btn" id="toggleFullscreen" title="Zvětšit na celou obrazovku">
+                    <!-- SVG Lupa (plus) -->
+                    <svg id="searchIcon" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        <line x1="11" y1="8" x2="11" y2="14"></line>
+                        <line x1="8" y1="11" x2="14" y2="11"></line>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
@@ -434,6 +459,7 @@
         const navLeft = document.getElementById('navLeft');
         const navRight = document.getElementById('navRight');
         const toggleFullscreen = document.getElementById('toggleFullscreen');
+        const searchIcon = document.getElementById('searchIcon');
 
         let currentIndex = 1;
         let zoomLevel = 1;
@@ -527,12 +553,23 @@
             if (isFullscreen) {
                 document.body.classList.add('is-fullscreen');
                 viewportWrapper.classList.add('fullscreen');
-                toggleFullscreen.textContent = '🔍⁻';
+                // Změna ikonky na lupu mínus
+                searchIcon.innerHTML = `
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                `;
                 toggleFullscreen.title = 'Zmenšit zpět';
             } else {
                 document.body.classList.remove('is-fullscreen');
                 viewportWrapper.classList.remove('fullscreen');
-                toggleFullscreen.textContent = '🔍';
+                // Změna ikonky zpět na lupu plus
+                searchIcon.innerHTML = `
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="11" y1="8" x2="11" y2="14"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                `;
                 toggleFullscreen.title = 'Zvětšit na celou obrazovku';
                 updateView();
             }
