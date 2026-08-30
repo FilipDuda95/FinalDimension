@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Vypouklý Monitor (Three.js 20 Lamel)</title>
+    <title>3D Prohnutý Monitor (20 Lamel - Perfektní Geometrie)</title>
     <style>
         html, body {
             margin: 0;
@@ -15,215 +15,191 @@
             font-family: sans-serif;
         }
 
-        /* Skrytý zdrojový iframe - načte se pouze JEDNOU */
-        #master-iframe {
-            position: absolute;
-            width: 1280px;
-            height: 820px;
-            top: -9999px;
-            left: -9999px;
-            border: none;
-            pointer-events: auto;
-        }
-
-        #canvas-container {
+        .scene {
             width: 100%;
             height: 100%;
+            perspective: 2000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: grab;
+            user-select: none;
         }
-
-        #canvas-container:active {
+        .scene:active {
             cursor: grabbing;
         }
 
-        #cors-error {
-            display: none;
+        .cylinder {
+            position: relative;
+            width: 1000px;
+            height: 650px;
+            transform-style: preserve-3d;
+            pointer-events: none;
+        }
+
+        .segment {
             position: absolute;
-            top: 20px;
+            top: 0;
             left: 50%;
-            transform: translateX(-50%);
-            background: #d9534f;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: bold;
-            z-index: 9999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            text-align: center;
+            height: 100%;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            will-change: transform;
+            pointer-events: auto;
+        }
+
+        .crop-box {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .crop-box iframe {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            pointer-events: none;
         }
     </style>
-    <!-- Načtení Three.js a html2canvas pro 3D zrcadlení -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
-    <div id="cors-error">
-        POZOR: Pro živé zrcadlení obsahu a funkční skript spusťte web přes lokální HTTP server (např. Live Server).
+    <div class="scene" id="scene">
+        <div class="cylinder" id="cylinder"></div>
     </div>
 
-    <!-- Jediný zdrojový iframe -->
-    <iframe id="master-iframe" src="index1.html"></iframe>
-
-    <div id="canvas-container"></div>
-
     <script>
-        if (window.location.protocol === 'file:') {
-            document.getElementById('cors-error').style.display = 'block';
-        }
-
-        const container = document.getElementById('canvas-container');
-        const iframe = document.getElementById('master-iframe');
-
-        // 1. Nastavení 3D Scény
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 0, 8);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
-
-        // Osvětlení
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-        scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.3);
-        dirLight.position.set(0, 5, 10);
-        scene.add(dirLight);
-
-        // 2. Vytvoření 20 lamel v 3D prostoru
-        const totalSegments = 20;
-        const radius = 6;
-        const totalAngle = Math.PI / 5; // Úhel prohnutí
-        const angleStep = totalAngle / totalSegments;
+        const scene = document.getElementById('scene');
+        const cylinder = document.getElementById('cylinder');
         
-        const group = new THREE.Group();
-        scene.add(group);
+        const totalSegments = 20;
+        const totalWidth = 1000;
+        const segWidth = totalWidth / totalSegments;
 
-        // Dynamická canvas textura
-        const canvasTexture = new THREE.CanvasTexture(document.createElement('canvas'));
-        canvasTexture.minFilter = THREE.LinearFilter;
-        canvasTexture.magFilter = THREE.LinearFilter;
+        // Parametry prohnutí (poloměr a úhel)
+        const radius = 2200; 
+        const totalArcAngle = 20; 
+        const angleStep = totalArcAngle / totalSegments;
 
-        const segmentWidth = (2 * radius * Math.sin(totalAngle / 2)) / totalSegments;
-        const geometry = new THREE.PlaneGeometry(segmentWidth, 4);
+        const iframes = [];
 
-        const segments = [];
-
-        for (let i = 0; i < totalSegments; i++) {
-            // Výpočet přesných UV souřadnic (aby 20 lamel tvořilo 1 obraz)
-            const segGeo = geometry.clone();
-            const uvAttribute = segGeo.attributes.uv;
+        // Synchronizace scrollu skrze koordinátor (šetří výkon)
+        let isSyncing = false;
+        function syncScroll(scrollTop) {
+            if (isSyncing) return;
+            isSyncing = true;
             
-            const uMin = i / totalSegments;
-            const uMax = (i + 1) / totalSegments;
-
-            uvAttribute.setXY(0, uMin, 1);
-            uvAttribute.setXY(1, uMax, 1);
-            uvAttribute.setXY(2, uMin, 0);
-            uvAttribute.setXY(3, uMax, 0);
-
-            const material = new THREE.MeshStandardMaterial({
-                map: canvasTexture,
-                roughness: 0.3,
-                metalness: 0.1,
-                side: THREE.DoubleSide
+            iframes.forEach(iframe => {
+                if (iframe.contentWindow) {
+                    iframe.contentWindow.scrollTo(0, scrollTop);
+                }
             });
 
-            const mesh = new THREE.Mesh(segGeo, material);
-
-            // Výpočet pozice v oblouku
-            const angle = -(i - (totalSegments - 1) / 2) * angleStep;
-            mesh.position.x = Math.sin(-angle) * radius;
-            mesh.position.z = radius - Math.cos(angle) * radius;
-            mesh.rotation.y = angle;
-
-            group.add(mesh);
-            segments.push(mesh);
+            requestAnimationFrame(() => { isSyncing = false; });
         }
 
-        // Naklonění 3D monitoru
-        group.rotation.x = 0.15;
+        for (let i = 0; i < totalSegments; i++) {
+            const seg = document.createElement('div');
+            seg.className = 'segment';
+            
+            // Šířka prvku s přesným překryvem 0.4px proti vlásečnicovým mezerám
+            seg.style.width = `${segWidth + 0.4}px`;
+            seg.style.marginLeft = `-${segWidth / 2}px`;
 
-        // 3. Aktualizace obsahu z iframe do 3D textury
-        let isUpdating = false;
-        function updateTexture() {
-            if (isUpdating) return;
-            isUpdating = true;
+            const centerIndex = (totalSegments - 1) / 2;
+            const offsetFromCenter = i - centerIndex;
+            
+            const segAngle = -offsetFromCenter * angleStep;
+            const rad = (segAngle * Math.PI) / 180;
 
-            try {
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                if (iframeDoc && iframeDoc.body) {
-                    html2canvas(iframeDoc.body, {
-                        width: 1280,
-                        height: 820,
-                        logging: false,
-                        useCORS: true
-                    }).then(canvas => {
-                        canvasTexture.image = canvas;
-                        canvasTexture.needsUpdate = true;
-                        isUpdating = false;
-                    }).catch(() => { isUpdating = false; });
-                }
-            } catch (e) {
-                isUpdating = false;
-            }
+            // Nativní matematické pozicování v 3D
+            const xPos = offsetFromCenter * segWidth;
+            const zPos = radius - (Math.cos(rad) * radius);
+
+            seg.style.transform = `translateX(${xPos}px) translateZ(${zPos}px) rotateY(${segAngle}deg)`;
+
+            const cropBox = document.createElement('div');
+            cropBox.className = 'crop-box';
+
+            const iframe = document.createElement('iframe');
+            iframe.src = 'index1.html';
+            
+            iframe.style.width = `${totalWidth}px`;
+            iframe.style.left = `-${i * segWidth}px`;
+
+            iframe.addEventListener('load', () => {
+                try {
+                    const win = iframe.contentWindow;
+                    win.addEventListener('scroll', () => syncScroll(win.scrollY), { passive: true });
+                    win.addEventListener('wheel', (e) => syncScroll(win.scrollY + e.deltaY), { passive: true });
+                } catch (e) {}
+            });
+
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            // Vizuální stínování okrajových lamel pro 3D efekt
+            const shadowIntensity = Math.abs(offsetFromCenter) * 0.012;
+            overlay.style.background = `rgba(0,0,0,${shadowIntensity})`;
+
+            cropBox.appendChild(iframe);
+            cropBox.appendChild(overlay);
+            seg.appendChild(cropBox);
+            cylinder.appendChild(seg);
+
+            iframes.push(iframe);
         }
 
-        iframe.addEventListener('load', () => {
-            updateTexture();
-            // Pravidelná synchronizace pro plynulý obraz
-            setInterval(updateTexture, 100);
-        });
-
-        // 4. Jednotný Scroll pro všechny lamely
-        window.addEventListener('wheel', (e) => {
-            if (iframe.contentWindow) {
-                iframe.contentWindow.scrollBy(0, e.deltaY);
-                setTimeout(updateTexture, 50);
-            }
-        }, { passive: true });
-
-        // 5. Otáčení 3D Scény myší
+        // Ovládání otáčení monitoru v prostoru
         let isDragging = false;
-        let previousMousePosition = { x: 0, y: 0 };
+        let startX = 0, startY = 0;
+        let rotX = 8, rotY = 0;
 
-        container.addEventListener('pointerdown', (e) => {
+        cylinder.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+
+        scene.addEventListener('pointerdown', (e) => {
             isDragging = true;
-            previousMousePosition = { x: e.clientX, y: e.clientY };
+            startX = e.clientX;
+            startY = e.clientY;
         });
 
         window.addEventListener('pointermove', (e) => {
             if (!isDragging) return;
+            
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
 
-            const deltaMove = {
-                x: e.clientX - previousMousePosition.x,
-                y: e.clientY - previousMousePosition.y
-            };
+            rotY += dx * 0.25;
+            rotX -= dy * 0.25;
+            rotX = Math.max(-35, Math.min(35, rotX));
 
-            group.rotation.y += deltaMove.x * 0.005;
-            group.rotation.x += deltaMove.y * 0.002;
-            group.rotation.x = Math.max(-0.4, Math.min(0.4, group.rotation.x));
-
-            previousMousePosition = { x: e.clientX, y: e.clientY };
+            cylinder.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            
+            startX = e.clientX;
+            startY = e.clientY;
         });
 
         window.addEventListener('pointerup', () => { isDragging = false; });
 
-        // Resizing okna
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Render smyčka
-        function animate() {
-            requestAnimationFrame(animate);
-            renderer.render(scene, camera);
-        }
-        animate();
+        // Globální odchytávání kolečka myši
+        window.addEventListener('wheel', (e) => {
+            if (iframes[0] && iframes[0].contentWindow) {
+                syncScroll(iframes[0].contentWindow.scrollY + e.deltaY);
+            }
+        }, { passive: true });
     </script>
 </body>
 </html>
