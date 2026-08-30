@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ukázková stránka</title>
+<style>
+  /* Úplně obyčejná stránka. Nic o monitoru neví — a nemusí.
+     Přesně takhle můžeš na monitor poslat svůj vlastní index.html. */
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; min-height:100vh;
+    display:flex; flex-direction:column;   /* ať patička drží dole i na vysoké obrazovce */
+    background:linear-gradient(155deg,#fdfbf7 0%,#f3ece1 100%);
+    color:#1d1a16;
+    font-family:"Georgia","Times New Roman",serif;
+  }
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:26px 60px; border-bottom:1px solid #e0d6c6;
+  }
+  .logo{ font-size:22px; font-weight:700; letter-spacing:-.02em; }
+  nav{ display:flex; gap:30px; font-size:16px; color:#6b6153; font-family:system-ui,sans-serif; }
+  main{ flex:1; padding:70px 60px 40px; display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-content:center; }
+  h1{ font-size:64px; line-height:1.02; letter-spacing:-.03em; margin:0 0 20px; }
+  h1 span{ color:#b4552a; font-style:italic; }
+  p{ font-size:19px; line-height:1.6; color:#4d463c; margin:0 0 26px; max-width:46ch; }
+  .cta{
+    display:inline-block; background:#1d1a16; color:#fdfbf7;
+    padding:14px 30px; border-radius:4px; font-size:16px;
+    font-family:system-ui,sans-serif;
+    border:0; cursor:pointer;
+  }
+  .cta.hotovo{ background:#3f7a4a; }
+
+  /* sekce pod prvním pohledem — kvůli ní se dá stránka rolovat */
+  .dole{ padding:10px 60px 60px; }
+  .dole h2{ font-size:34px; margin:0 0 22px; }
+  .mriz{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; }
+  .mriz article{ background:#fff; border:1px solid #e3d8c6; border-radius:6px; padding:20px 24px; }
+  .mriz h3{ margin:0 0 6px; font-size:22px; }
+  .mriz p{ font-size:16px; margin:0; }
+  .foto{
+    border-radius:6px; height:330px;
+    background:
+      repeating-linear-gradient(45deg, rgba(180,85,42,.10) 0 14px, transparent 14px 28px),
+      linear-gradient(160deg,#e8d9c4,#cbb69a);
+    border:1px solid #ddcdb6;
+    display:flex; align-items:flex-end; padding:20px;
+    font-family:system-ui,sans-serif; font-size:14px; color:#6b6153;
+  }
+  footer{
+    padding:22px 60px; border-top:1px solid #e0d6c6;
+    font-family:system-ui,sans-serif; font-size:14px; color:#6b6153;
+    display:flex; gap:26px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Pekárna U Duba</div>
+  <nav><span>Pečivo</span><span>Kavárna</span><span>O nás</span><span>Kontakt</span></nav>
+</header>
+
+<main>
+  <div>
+    <h1>Kvásek, čas<br><span>a nic víc.</span></h1>
+    <p>Pečeme každé ráno od čtyř. Bez zlepšováků, bez spěchu — jen mouka,
+       voda, sůl a osmnáct hodin trpělivosti.</p>
+    <button class="cta" id="objednat" type="button">Objednat dopředu</button>
+  </div>
+  <div class="foto">Sem patří fotka výlohy</div>
+</main>
+
+<section class="dole">
+  <h2>Co pečeme</h2>
+  <div class="mriz">
+    <article><h3>Šumava</h3><p>Žitno-pšeničný, 24 hodin zrání. Vydrží týden a chutná líp druhý den.</p></article>
+    <article><h3>Bageta</h3><p>Dlouhá studená fermentace, tenká křupavá kůrka, velké oko.</p></article>
+    <article><h3>Croissant</h3><p>Máslo od Kouřimi, 27 vrstev, pečeme jen do vyprodání.</p></article>
+    <article><h3>Kváskový věnec</h3><p>Na objednávku, ideálně dva dny dopředu. Váha 1,2 kg.</p></article>
+  </div>
+</section>
+
+<footer>
+  <span>Dubová 12, Brno</span><span>Út–So 7:00–17:00</span><span>ahoj@udubu.cz</span>
+</footer>
+
+<script>
+  /* Obyčejné tlačítko — slouží k ověření, že klik projde do všech
+     segmentů monitoru najednou. */
+  document.getElementById("objednat").addEventListener("click", function () {
+    this.textContent = "Objednáno ✓";
+    this.classList.add("hotovo");
+  });
+</script>
+
+</body>
+</html>
