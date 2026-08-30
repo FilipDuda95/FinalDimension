@@ -14,6 +14,7 @@
         html, body {
             width: 100%;
             height: 100vh;
+            height: 100dvh;
             overflow: hidden;
             font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', sans-serif;
             background: linear-gradient(180deg, #ffffff 0%, #333333 55%, #000000 100%);
@@ -100,6 +101,7 @@
         .viewport-wrapper.fullscreen {
             width: 100vw !important;
             height: 100vh !important;
+            height: 100dvh !important;
             max-width: none !important;
             max-height: none !important;
             transform: none !important;
@@ -153,7 +155,7 @@
             to { transform: translateX(0) rotateY(0deg); opacity: 1; }
         }
 
-        /* Iframe */
+        /* Iframe s povoleným plynulým skrolováním */
         .viewport-iframe {
             display: block;
             width: 100%;
@@ -163,6 +165,7 @@
             pointer-events: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            -webkit-overflow-scrolling: touch;
         }
 
         .viewport-iframe::-webkit-scrollbar {
@@ -210,7 +213,7 @@
         .nav-arrow.left { left: 30px; }
         .nav-arrow.right { right: 30px; }
 
-        /* Ovládací panel — standardně vycentrovaný na střed dole */
+        /* Ovládací panel */
         .controls-container {
             position: fixed;
             bottom: 20px;
@@ -304,7 +307,7 @@
             text-align: right;
         }
 
-        /* Ukrytí nepotřebných prvků při aktivní lupě */
+        /* Ukrytí prvků při aktivní lupě */
         body.is-fullscreen .nav-arrow,
         body.is-fullscreen .zoom-panel,
         body.is-fullscreen .rotate-panel,
@@ -319,11 +322,11 @@
             transform: none !important;
         }
 
-        /* Responzitivita pro telefony */
+        /* Responzivita a optimalizace výšky na mobilních zařízeních */
         @media (max-width: 768px) {
             .viewport-wrapper {
-                width: 90vw;
-                height: 70vh;
+                width: 92vw;
+                height: 65vh;
             }
 
             .nav-arrow {
@@ -594,6 +597,7 @@
                         overflow-x: hidden !important;
                         width: 100% !important;
                         max-width: 100% !important;
+                        min-height: 100% !important;
                     }
                 `;
                 iframeDoc.head.appendChild(style);
