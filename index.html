@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Curved Monitor</title>
+    <title>3D Vypouklý Monitor (Perfektní lícování)</title>
     <style>
         html, body {
             margin: 0;
@@ -45,20 +45,18 @@
             height: 100%;
             transform-style: preserve-3d;
             backface-visibility: hidden;
+            will-change: transform;
             pointer-events: auto;
-            /* Zrušeno background: #fff - to vytvářelo bílé pruhy */
         }
 
         .crop-box {
             position: absolute;
             top: 0;
             left: 0;
-            /* Přidaný 1px přesahu pro skrytí subpixelové spáry obrazem */
-            width: calc(100% + 1.2px);
+            width: 100%;
             height: 100%;
             overflow: hidden;
             pointer-events: none;
-            transform-style: flat;
         }
 
         .crop-box iframe {
@@ -116,12 +114,13 @@
         
         const totalSegments = 20;
         const totalWidth = 900;
-        // Šířka jednoho segmentu
+        
+        // Přesná šířka jedné lamely bez zakřivení
         const segWidth = totalWidth / totalSegments;
-        const halfSegWidth = segWidth / 2;
 
-        const radius = 1200; 
-        const totalArcAngle = 40; 
+        // Poloměr a úhel zakřivení
+        const radius = 2500; 
+        const totalArcAngle = 18; 
         const angleStep = totalArcAngle / totalSegments;
 
         const iframes = [];
@@ -131,15 +130,20 @@
             const seg = document.createElement('div');
             seg.className = 'segment';
             
-            // Přičteme 0.5px k šířce segmentu pro fyzické splynutí v 3D
+            // Šířka prvku se kryje s přesným výřezem + 0.5px přesahu proti vlásečnicím
             seg.style.width = `${segWidth + 0.5}px`;
-            seg.style.marginLeft = `-${halfSegWidth}px`;
+            seg.style.marginLeft = `-${segWidth / 2}px`;
 
-            const segAngle = (i - (totalSegments - 1) / 2) * angleStep;
-            const rad = (segAngle * Math.PI) / 180;
+            // Spočítáme stříhání přesně v ose
+            const centerIndex = (totalSegments - 1) / 2;
+            const offsetFromCenter = i - centerIndex;
             
-            const xPos = Math.sin(rad) * radius;
-            const zPos = (Math.cos(rad) * radius) - radius;
+            const segAngle = -offsetFromCenter * angleStep;
+            const rad = (segAngle * Math.PI) / 180;
+
+            // X pozice je lineárně svázaná s šířkou lamely, aby se grafika nepotrhala
+            const xPos = offsetFromCenter * segWidth;
+            const zPos = radius - (Math.cos(rad) * radius);
 
             seg.style.transform = `translateX(${xPos}px) translateZ(${zPos}px) rotateY(${segAngle}deg)`;
 
@@ -149,8 +153,8 @@
             const iframe = document.createElement('iframe');
             iframe.src = 'index1.html';
             
-            // Iframe mírně zvětšíme a posuneme tak, aby obraz plynule přetekl přes hranu
-            iframe.style.width = `${totalWidth + 5}px`;
+            iframe.style.width = `${totalWidth}px`;
+            // Přesný posun výřezu: vracíme offset přesně na stávající lamelu
             iframe.style.left = `-${i * segWidth}px`;
 
             iframe.addEventListener('load', () => {
@@ -167,7 +171,7 @@
 
             const overlay = document.createElement('div');
             overlay.className = 'overlay';
-            const shadowIntensity = Math.abs(i - (totalSegments - 1) / 2) * 0.025;
+            const shadowIntensity = Math.abs(offsetFromCenter) * 0.01;
             overlay.style.background = `rgba(0,0,0,${shadowIntensity})`;
 
             cropBox.appendChild(iframe);
