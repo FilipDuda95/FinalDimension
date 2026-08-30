@@ -30,7 +30,7 @@
             align-items: center;
             justify-content: center;
             perspective: 1200px;
-            overflow: hidden; /* Zamezí přetékání 3D scény na mobilu */
+            overflow: hidden;
         }
 
         /* Mraky před stránkou */
@@ -43,6 +43,7 @@
             pointer-events: none;
             overflow: hidden;
             z-index: 15;
+            transition: opacity 0.3s ease;
         }
 
         .cloud {
@@ -92,7 +93,17 @@
             max-width: 1100px;
             max-height: 800px;
             transform-style: preserve-3d;
-            transition: transform 0.15s ease-out;
+            transition: transform 0.3s ease-out, width 0.3s ease, height 0.3s ease, max-width 0.3s ease, max-height 0.3s ease;
+        }
+
+        /* Režim celé obrazovky pro iframe kontejner */
+        .viewport-wrapper.fullscreen {
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            max-height: none !important;
+            transform: none !important;
+            z-index: 30;
         }
 
         .viewport-frame {
@@ -105,7 +116,12 @@
             box-shadow: 0 30px 90px rgba(0,0,0,0.85);
             border-radius: 6px;
             overflow: hidden;
-            transition: transform 0.35s ease, opacity 0.35s ease;
+            transition: transform 0.35s ease, opacity 0.35s ease, border-radius 0.3s ease;
+        }
+
+        .viewport-wrapper.fullscreen .viewport-frame {
+            border-radius: 0;
+            box-shadow: none;
         }
 
         /* Třídy pro animovaný přechod stránek */
@@ -137,7 +153,7 @@
             to { transform: translateX(0) rotateY(0deg); opacity: 1; }
         }
 
-        /* Iframe přesně na 100% bez jakéhokoli přetékání */
+        /* Iframe */
         .viewport-iframe {
             display: block;
             width: 100%;
@@ -155,36 +171,38 @@
             height: 0;
         }
 
-        /* Šipky pro posun stránek */
+        /* Šipky pro posun stránek - ztmavené */
         .nav-arrow {
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(0,0,0,0.1);
+            width: 50px;
+            height: 50px;
+            background: rgba(20, 20, 20, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #111;
-            font-size: 32px;
+            color: #fff;
+            font-size: 28px;
             transition: all 0.2s ease;
             user-select: none;
             z-index: 25;
             font-weight: bold;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
         }
 
         .nav-arrow:hover {
-            background: #ffffff;
+            background: rgba(0, 0, 0, 0.9);
             transform: translateY(-50%) scale(1.1);
+            color: #4facfe;
         }
 
         .nav-arrow.disabled {
-            opacity: 0.3;
+            opacity: 0.2;
             cursor: not-allowed;
             pointer-events: none;
         }
@@ -192,104 +210,110 @@
         .nav-arrow.left { left: 30px; }
         .nav-arrow.right { right: 30px; }
 
-        /* Ovládací panely vlevo dole */
+        /* Ovládací panel - ztmavený a vycentrovaný dole */
         .controls-container {
             position: fixed;
-            bottom: 30px;
-            left: 30px;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 25;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+            z-index: 35;
+            transition: all 0.3s ease;
         }
 
         .panel-box {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(18, 18, 18, 0.85);
             padding: 8px 14px;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.35);
-            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .zoom-panel {
-            width: fit-content;
-        }
-
         .control-btn {
-            width: 36px;
-            height: 36px;
-            background: #ffffff;
-            border: 1px solid rgba(0,0,0,0.18);
-            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #222;
-            font-size: 20px;
+            color: #fff;
+            font-size: 18px;
             font-weight: bold;
             user-select: none;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s, transform 0.1s, color 0.2s;
         }
 
         .control-btn:hover { 
-            background: #f0f0f0; 
+            background: rgba(255, 255, 255, 0.25);
+            color: #4facfe;
         }
 
         .control-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .rotate-panel {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 12px 14px;
+            flex-direction: row;
+            gap: 16px;
+            padding: 8px 18px;
         }
 
         .rotate-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .rotate-label {
             font-size: 11px;
-            color: #333;
+            color: #aaa;
             font-weight: 700;
             text-transform: uppercase;
-            min-width: 60px;
         }
 
         .rotate-slider {
-            width: 120px;
+            width: 90px;
             cursor: pointer;
+            accent-color: #4facfe;
         }
 
         .rotate-value {
             font-size: 12px;
-            color: #222;
+            color: #fff;
             font-weight: 600;
-            min-width: 36px;
+            min-width: 30px;
             font-family: monospace;
             text-align: right;
         }
 
-        .page-indicator {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 14px;
-            z-index: 25;
-            backdrop-filter: blur(4px);
+        /* Ukrytí ostatních prvků v režimu celé obrazovky */
+        body.is-fullscreen .nav-arrow,
+        body.is-fullscreen .zoom-panel,
+        body.is-fullscreen .rotate-panel,
+        body.is-fullscreen .clouds {
+            display: none !important;
+        }
+
+        /* Pozicování tlačítka ve fullscreen režimu na spodní střed */
+        body.is-fullscreen .controls-container {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 50% !important;
+            top: auto !important;
+            right: auto !important;
+            transform: translateX(-50%) !important;
+            z-index: 40 !important;
         }
 
         /* Kompletní oprava mobilního zobrazení */
@@ -300,8 +324,8 @@
             }
 
             .nav-arrow {
-                width: 44px;
-                height: 44px;
+                width: 42px;
+                height: 42px;
                 font-size: 22px;
             }
             .nav-arrow.left { left: 8px; }
@@ -309,9 +333,18 @@
 
             .controls-container {
                 bottom: 12px;
-                left: 12px;
-                transform: scale(0.85);
-                transform-origin: bottom left;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 95%;
+            }
+
+            .rotate-panel {
+                gap: 8px;
+                padding: 6px 12px;
+            }
+
+            .rotate-slider {
+                width: 65px;
             }
         }
     </style>
@@ -346,26 +379,27 @@
 
             <div class="panel-box rotate-panel">
                 <div class="rotate-row">
-                    <span class="rotate-label">Rotace Y</span>
+                    <span class="rotate-label">Y</span>
                     <input type="range" class="rotate-slider" id="rotateYSlider" min="-45" max="45" value="0">
                     <span class="rotate-value" id="rotateYValue">0°</span>
                 </div>
                 <div class="rotate-row">
-                    <span class="rotate-label">Rotace X</span>
+                    <span class="rotate-label">X</span>
                     <input type="range" class="rotate-slider" id="rotateXSlider" min="-45" max="45" value="12">
                     <span class="rotate-value" id="rotateXValue">12°</span>
                 </div>
             </div>
-        </div>
 
-        <div class="page-indicator" id="pageIndicator">index1.html</div>
+            <div class="panel-box">
+                <button class="control-btn" id="toggleFullscreen" title="Zvětšit na celou obrazovku">🔍</button>
+            </div>
+        </div>
     </div>
 
     <script>
         const viewportWrapper = document.getElementById('viewportWrapper');
         const viewportFrame = document.getElementById('viewportFrame');
         const iframe = document.getElementById('contentIframe');
-        const pageIndicator = document.getElementById('pageIndicator');
         
         const rotateYSlider = document.getElementById('rotateYSlider');
         const rotateYValue = document.getElementById('rotateYValue');
@@ -376,15 +410,16 @@
         const zoomOut = document.getElementById('zoomOut');
         const navLeft = document.getElementById('navLeft');
         const navRight = document.getElementById('navRight');
+        const toggleFullscreen = document.getElementById('toggleFullscreen');
 
         let currentIndex = 1;
         let zoomLevel = 1;
         let rotationY = 0;
-        let rotationX = window.innerWidth <= 768 ? 6 : 12; // Menší úhel naklonění pro mobily
+        let rotationX = window.innerWidth <= 768 ? 6 : 12;
         let availablePages = [];
         let isAnimating = false;
+        let isFullscreen = false;
 
-        // Nastavení výchozí hodnoty slideru dle zařízení
         rotateXSlider.value = rotationX;
         rotateXValue.textContent = `${rotationX}°`;
 
@@ -431,6 +466,7 @@
         }
 
         function updateView() {
+            if (isFullscreen) return;
             viewportWrapper.style.transform = `
                 rotateX(${rotationX}deg) 
                 rotateY(${rotationY}deg) 
@@ -450,7 +486,6 @@
             setTimeout(() => {
                 currentIndex = targetIndex;
                 iframe.src = `index${currentIndex}.html`;
-                pageIndicator.textContent = `index${currentIndex}.html`;
                 updateNavButtons();
 
                 viewportFrame.className = `viewport-frame ${inClass}`;
@@ -461,6 +496,24 @@
                 }, 350);
             }, 350);
         }
+
+        /* Přepínání režimu lupy / Fullscreen */
+        toggleFullscreen.addEventListener('click', () => {
+            isFullscreen = !isFullscreen;
+
+            if (isFullscreen) {
+                document.body.classList.add('is-fullscreen');
+                viewportWrapper.classList.add('fullscreen');
+                toggleFullscreen.textContent = '🔍⁻';
+                toggleFullscreen.title = 'Zmenšit zpět';
+            } else {
+                document.body.classList.remove('is-fullscreen');
+                viewportWrapper.classList.remove('fullscreen');
+                toggleFullscreen.textContent = '🔍';
+                toggleFullscreen.title = 'Zvětšit na celou obrazovku';
+                updateView();
+            }
+        });
 
         zoomIn.addEventListener('click', () => {
             zoomLevel = Math.min(zoomLevel + 0.1, 1.8);
@@ -499,11 +552,11 @@
         });
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') navLeft.click();
-            if (e.key === 'ArrowRight') navRight.click();
+            if (e.key === 'ArrowLeft' && !isFullscreen) navLeft.click();
+            if (e.key === 'ArrowRight' && !isFullscreen) navRight.click();
+            if (e.key === 'Escape' && isFullscreen) toggleFullscreen.click();
         });
 
-        // Vložení CSS přímo do podstránky pro skrytí scrollbaru a zajištění přizpůsobení šířky
         iframe.addEventListener('load', () => {
             try {
                 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
