@@ -79,7 +79,7 @@
             50% { transform: translateX(120px) translateY(-20px); }
         }
 
-        /* 3D Kontajner pro okno i obsah */
+        /* 3D Kontejner pro okno i obsah */
         .viewport-wrapper {
             position: relative;
             z-index: 5;
@@ -133,26 +133,21 @@
             to { transform: translateX(0) rotateY(0deg); opacity: 1; }
         }
 
-        /* Ořezový kontejner pro schování posuvníku */
-        .iframe-clipper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        /* Iframe je širší a posuvník schovaný pod ořezem vpravo */
+        /* Přesný iframe bez ořezávání stran + vypnutí scrollbaru */
         .viewport-iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: calc(100% + 25px);
+            width: 100%;
             height: 100%;
             border: none;
             background: white;
             pointer-events: auto;
+            scrollbar-width: none; /* Firefox, Chrome/Safari (nové verze) */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+
+        .viewport-iframe::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
         }
 
         /* Šipky pro posun stránek */
@@ -192,7 +187,7 @@
         .nav-arrow.left { left: 30px; }
         .nav-arrow.right { right: 30px; }
 
-        /* Oddělené ovládací panely vlevo dole */
+        /* Ovládací panely vlevo dole */
         .controls-container {
             position: fixed;
             bottom: 30px;
@@ -291,6 +286,27 @@
             z-index: 25;
             backdrop-filter: blur(4px);
         }
+
+        /* Responsivní úpravy pro mobilní zařízení */
+        @media (max-width: 768px) {
+            .viewport-wrapper {
+                width: 92%;
+                height: 75%;
+            }
+            .nav-arrow {
+                width: 44px;
+                height: 44px;
+                font-size: 24px;
+            }
+            .nav-arrow.left { left: 10px; }
+            .nav-arrow.right { right: 10px; }
+            .controls-container {
+                bottom: 15px;
+                left: 15px;
+                scale: 0.9;
+                transform-origin: bottom left;
+            }
+        }
     </style>
 </head>
 <body>
@@ -304,13 +320,11 @@
     <div class="scene">
         <div class="viewport-wrapper" id="viewportWrapper">
             <div class="viewport-frame" id="viewportFrame">
-                <div class="iframe-clipper">
-                    <iframe 
-                        class="viewport-iframe" 
-                        id="contentIframe"
-                        src="index1.html"
-                    ></iframe>
-                </div>
+                <iframe 
+                    class="viewport-iframe" 
+                    id="contentIframe"
+                    src="index1.html"
+                ></iframe>
             </div>
         </div>
 
@@ -478,15 +492,21 @@
             if (e.key === 'ArrowRight') navRight.click();
         });
 
+        /* Bezpečné vložení CSS pravidel přímo do dokumentu uvnitř iframe */
         iframe.addEventListener('load', () => {
             try {
                 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                 const style = iframeDoc.createElement('style');
                 style.textContent = `
-                    ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+                    html::-webkit-scrollbar, body::-webkit-scrollbar { 
+                        display: none !important; 
+                        width: 0 !important; 
+                        height: 0 !important; 
+                    }
                     html, body { 
                         -ms-overflow-style: none !important; 
                         scrollbar-width: none !important; 
+                        overflow-y: auto !important;
                     }
                 `;
                 iframeDoc.head.appendChild(style);
