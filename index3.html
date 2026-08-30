@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Final dimension</title>
@@ -40,16 +39,13 @@ body {
   margin: 0;
   font-size: clamp(12px, 1.2vw, 16px);
 }
-h1 { font-size: clamp(20px, 3.5vw, 26px); }
+h1 { font-size: clamp(20px, 3.5vw, 26px); text-align: center; }
 h2 { font-size: clamp(18px, 3vw, 24px); }
 h3 { font-size: clamp(16px, 2.5vw, 21px); }
 h4 { font-size: clamp(15px, 2.2vw, 19px); }
 h5 { font-size: clamp(14px, 2vw, 18px); }
 h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
-    h1 {
-      text-align: center;
-    }
     .controls {
       text-align: center;
       margin-bottom: 1rem;
@@ -81,7 +77,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       background-image: url('Folder.jpg');
       background-size: cover;
       background-position: bottom center;  
-	
     }
 	.square:hover{
 	cursor: pointer;
@@ -119,35 +114,53 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       }
     }
 
-.button-container {
-  margin-left:50%;
-  z-index: 30;
-  bottom:5%;
-  transform: translateX(-50%);
-}
+/* SJEDNOCENÁ TLAČÍTKA SCROLLOVÁNÍ (▼ a ▲) */
 .scrollbutton {
-  position:fixed;
-  bottom:5%;
-  left:50%;
-  z-index: 20;
-  transform: translateX(-50%) translateY(-30px);
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  z-index: 10;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scrollupbutton {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  z-index: 50;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
     .back-button {
       color: white;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-            background: rgba(20, 20, 20, 0.6);
-            text-align: center;
-            border-radius: 24px;
-            border: 1px solid #1a1a1a;
-            cursor: pointer;
-            transition: 0.5s;
-            backdrop-filter: blur(10px);
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      background: rgba(20, 20, 20, 0.6);
+      text-align: center;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: 0.3s;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-  .back-button:hover { background-color:  #05d4ff; }
+    .back-button:hover { 
+      background-color: #05d4ff; 
+      border-color: #05d4ff;
+    }
 
-    /* ===== UPRAVENÝ MODAL ===== */
+    /* ===== PREVIEW MODAL ===== */
     .preview-modal {
       display: none;
       position: fixed;
@@ -197,9 +210,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       .video-wrapper {
         height: min(85vh, 550px);
       }
-    }
-    
-    @media (max-width: 768px) {
       .video-wrapper::after {
         content: '';
         position: absolute;
@@ -244,15 +254,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       .video-inner.playing iframe {
         pointer-events: auto;
       }
-    }
-    .video-fallback {
-      margin-top: 14px;
-      text-align: center;
-      font-size: 0.85rem;
-    }
-    .video-fallback a {
-      color: #05d4ff;
-      text-decoration: underline;
     }
 
 .preview-modal .close {
@@ -401,7 +402,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   align-items: center;
 }
 
-/* ZÁKLADNÍ NASTAVENÍ LOGA PRO DESKTOP (Zvětšeno) */
 .logo-section {
   position: absolute;
   width: 500px;
@@ -433,7 +433,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   z-index:1;
   color:black;
   background-color: #f8f8f8;
-  padding: 40px 20px;
+  padding: 40px 20px 80px 20px;
   text-align: center;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
@@ -465,21 +465,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 @keyframes slideInLeft {
   from { opacity: 0; transform: translateX(-40px); }
   to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 10px rgba(5, 212, 255, 0.3), 0 5px 20px rgba(5, 212, 255, 0.1); }
-  50% { box-shadow: 0 0 20px rgba(5, 212, 255, 0.6), 0 5px 30px rgba(5, 212, 255, 0.25); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-
-@keyframes borderGlow {
-  0%, 100% { border-left-color: #05d4ff; box-shadow: inset 0 0 10px rgba(5, 212, 255, 0); }
-  50% { border-left-color: #00ffff; box-shadow: inset 0 0 10px rgba(5, 212, 255, 0.3); }
 }
 
 /* ===== ABOUT SECTION ===== */
@@ -532,7 +517,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .about-section h2 {
   color: #05d4ff;
   margin-bottom: 20px;
-  font-size: clamp(24px, 4vw, 36px);
   position: relative;
   display: inline-block;
   animation: fadeInUp 0.8s ease-out 0.2s backwards;
@@ -556,7 +540,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   color: #05d4ff;
   margin-top: 40px;
   margin-bottom: 30px;
-  font-size: clamp(20px, 3vw, 28px);
   animation: fadeInUp 0.8s ease-out 0.3s backwards;
   display: inline-block;
   letter-spacing: 0.22em;
@@ -663,7 +646,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 #Patička{
- position: absolute;
+  position: absolute;
   top: 100%;
   left: 0;
   width: 100%;	 
@@ -676,7 +659,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   justify-content: center;
   align-items: center;
   text-align:center;
-  background-color:black;
 }
 
 @media (orientation: portrait) {
@@ -690,7 +672,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   }
   #top-bar { height: 8%; }
   
-  /* Zobrazení na výšku - zachována výchozí velikost loga pro mobil */
   .logo-section { 
     width: 220px !important; 
     height: 220px !important; 
@@ -709,25 +690,30 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   z-index: 1;
   opacity: 1;
 }
+
+/* Sjednocená výška a zarovnání pro spodní ikony */
 #video-bubbles {
   position: fixed;
-  bottom: 5%;
+  bottom: 24px;
   left: 24px;
-  z-index: 15;
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px 8px;
-  background: rgba(20, 20, 20, 0.45);
+  gap: 6px;
+  padding: 6px;
+  background: rgba(20, 20, 20, 0.55);
   border-radius: 999px;
   backdrop-filter: blur(6px);
   align-items: center;
   justify-content: center;
-  transform: translateY(-30px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: 50px;
+  width: 24px;
+  box-sizing: border-box;
 }
 #video-bubbles .bubble {
-  width: 5px;
-  height: 5px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -750,26 +736,26 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 #radial-menu {
   position: fixed;
   right: 24px;
-  bottom: 5%;
+  bottom: 24px;
   z-index: 50;
-  transform: translateY(-30px);
 }
 #radial-toggle {
   position: relative;
   z-index: 2;
-  width: 54px;
-  height: 54px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(20, 20, 20, 0.55);
+  background: rgba(20, 20, 20, 0.6);
   backdrop-filter: blur(6px);
   color: #fff;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease, background 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 #radial-toggle.open {
   transform: rotate(45deg);
@@ -789,7 +775,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 46px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(20, 20, 20, 0.55);
+  background: rgba(20, 20, 20, 0.85);
   backdrop-filter: blur(6px);
   color: #fff;
   text-decoration: none;
@@ -814,27 +800,28 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   background: rgba(5, 212, 255, 0.55);
   border-color: #05d4ff;
 }
+
 @media (max-width: 600px) {
-  #radial-menu { right: 14px; bottom: 5%; transform: translateY(-30px); }
-  #radial-toggle { width: 42px; height: 42px; font-size: 1rem; }
-  .radial-link { width: 40px; height: 40px; font-size: 0.6rem; }
-  #video-bubbles { left: 14px; bottom: 5%; transform: translateY(-30px); }
-  #video-bubbles .bubble { width: 3px; height: 3px; }
-  .scrollbutton { bottom: 5%; transform: translateX(-50%) translateY(-30px); }
+  #radial-menu { right: 16px; bottom: 20px; }
+  #radial-toggle { width: 46px; height: 46px; font-size: 1.1rem; }
+  .radial-link { width: 42px; height: 42px; font-size: 0.6rem; }
   
-  /* VELIKOST LOGA NA MOBILNÍCH DISPLEJÍCH DO 600px */
+  #video-bubbles { 
+    left: 16px; 
+    bottom: 20px; 
+    height: 46px;
+    width: 22px;
+    padding: 5px; 
+  }
+  #video-bubbles .bubble { width: 6px; height: 6px; }
+  .scrollbutton { bottom: 20px; }
+  .back-button { width: 46px; height: 46px; font-size: 1.1rem; }
+  
   .logo-section {
     width: 220px !important;
     height: 220px !important;
     top: -110px !important;
   }
-  
-  /* Menší vzdálenosti pro mobilní menu */
-  .radial-link:nth-child(1) { --ty: -8px; }
-  .radial-link:nth-child(2) { --tx: -5px; --ty: -5px; }
-  .radial-link:nth-child(3) { --tx: -8px; }
-  .radial-link:nth-child(4) { --tx: -5px; --ty: 5px; }
-  .radial-link:nth-child(5) { --ty: 8px; }
 }
 
 #center-section {
@@ -860,7 +847,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   margin-bottom: 8px;
 }
 
-/* ===== SJEDNOCENÉ ZAROVNÁNÍ SEKCE GALERIE ===== */
 #padding {
   text-align: center;
   width: 100%;
@@ -884,18 +870,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   .logo-section { z-index: 200; position: absolute; }
   .inner-text { width:92%; padding:2%; flex-grow: 1; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
-	 #padding {
-  text-align: left;
-}
+  #padding { text-align: left; }
 }
 
-/* ===== Zobrazení na šířku (Mobile Landscape - Středně velké logo) ===== */
 @media (max-width: 768px) and (orientation: landscape) {
   #top-bar { height:15%; }
   #dropdown-menu { width:35vw; }
   #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; margin-top: 25px; }
   
-  /* Posunutí a mírné zvětšení loga v landscape módu oproti původním 100px */
   .logo-section { 
     position: absolute !important; 
     width: 180px !important; 
@@ -909,7 +891,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
   #padding { text-align: left; }
   
-  /* Herní okno v landscape módu */
   #výška_herního_okna {
     height: 80vh;
     padding-top: 80px;
@@ -920,148 +901,128 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     margin-top: 30px;
     gap: 20px;
   }
-  
-  /* Blíž k sobě v landscape módu */
-  #radial-menu { transform: translateY(-40px); }
-  .radial-link:nth-child(1) { --ty: -20px; }
-  .radial-link:nth-child(2) { --tx: -10px; --ty: -10px; }
-  .radial-link:nth-child(3) { --tx: -20px; }
-  .radial-link:nth-child(4) { --tx: -10px; --ty: 10px; }
-  .radial-link:nth-child(5) { --ty: 20px; }
 }
 
   #výška_herního_okna {
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 60vh;
-	    width:100vw; 
-            position: relative; 
-            padding-top: 150px;
-            z-index: 2;
-        }
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 60vh;
+    width:100vw; 
+    position: relative; 
+    padding-top: 150px;
+    z-index: 2;
+  }
 
-        .top-vignette {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 250px;
-            z-index: 10005; 
-            pointer-events: none;
-        }
+  .top-vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 250px;
+    z-index: 10005; 
+    pointer-events: none;
+  }
 
-        h3 {
-            margin-top: 0;
-            font-weight: 200;
-            letter-spacing: 5px;
-            color: #00d4ff;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 10;
-        }
+  #game-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 60px;
+    padding-bottom: 100px;
+    position: relative;
+    z-index: 10;
+    box-sizing: border-box;
+  }
 
-        #game-menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            width: 100%;
-            max-width: 1100px;
-            margin-top: 60px;
-            padding-bottom: 100px;
-            position: relative;
-            z-index: 10;
-            box-sizing: border-box;
-        }
+  .game-card {
+    background: rgba(20, 20, 20, 0.6);
+    padding: 50px 20px;
+    text-align: center;
+    border-radius: 24px;
+    border: 1px solid #1a1a1a;
+    cursor: pointer;
+    transition: 0.5s;
+    backdrop-filter: blur(10px);
+  }
 
-        .game-card {
-            background: rgba(20, 20, 20, 0.6);
-            padding: 50px 20px;
-            text-align: center;
-            border-radius: 24px;
-            border: 1px solid #1a1a1a;
-            cursor: pointer;
-            transition: 0.5s;
-            backdrop-filter: blur(10px);
-        }
+  .game-card:hover {
+    border-color: #00d4ff;
+    transform: translateY(-10px);
+    background: rgba(30, 30, 30, 0.9);
+  }
 
-        .game-card:hover {
-            border-color: #00d4ff;
-            transform: translateY(-10px);
-            background: rgba(30, 30, 30, 0.9);
-        }
+  #overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent; 
+    z-index: 9999;
+    padding-top: 120px; 
+    box-sizing: border-box;
+  }
 
-        #overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent; 
-            z-index: 9999;
-            padding-top: 120px; 
-            box-sizing: border-box;
-        }
+  .back-btn {
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 1px solid #333;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    line-height: 1;
+    padding: 0;
+    z-index: 10010;
+    backdrop-filter: blur(15px);
+    transition: 0.4s;
+  }
 
-        .back-btn {
-            position: absolute;
-            top: 50%;
-            right: 24px;
-            width: 44px;
-            height: 44px;
-            aspect-ratio: 1 / 1;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: 1px solid #333;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            line-height: 1;
-            padding: 0;
-            z-index: 10010;
-            backdrop-filter: blur(15px);
-            transition: 0.4s;
-        }
+  .back-btn:hover { background-color: #05d4ff; }
 
-        .back-btn:hover { background-color: #05d4ff; }
+  @media (max-width: 600px) {
+      .back-btn {
+          right: 14px;
+          width: 38px;
+          height: 38px;
+          font-size: 1rem;
+      }
+  }
 
-        @media (max-width: 600px) {
-            .back-btn {
-                right: 14px;
-                width: 38px;
-                height: 38px;
-                font-size: 1rem;
-            }
-        }
+  iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000;
+      display: block;
+  }
+  #konec {
+    position:absolute;
+    z-index:2;
+    bottom:0px;
+    color:black;
+  }
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: #000;
-            display: block;
-        }
-#konec {
-  position:absolute;
-  z-index:2;
-  bottom:0px;
-  color:black;
-}
-
-    </style>
+  </style>
 
 </head>
 
 <body id="top">
 
-    
     <div id="top-bar">
-
         <a id="icon" href="#top"><img src="style/logo.png" alt="Logo" class="menu-icon"></a>
 
         <div id="dropdown-container">
@@ -1070,7 +1031,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
                 <a href="#top"><li data-i18n="nav_home">Hlavní</li></a>
                 <a href="#about-section-1"><li data-i18n="nav_about">O mě</li></a>
                 <a href="#padding"><li data-i18n="nav_gallery">Galerie</li></a>
-		<a href="#výška_herního_okna"><li data-i18n="nav_games">Hry</li></a>
+		            <a href="#výška_herního_okna"><li data-i18n="nav_games">Hry</li></a>
                 <a href="#konec"><li data-i18n="nav_contact">Kontakt</li></a>
                 <li class="lang-item" id="lang-toggle">
                     <span id="lang-current">CS ▾</span>
@@ -1083,7 +1044,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
             </ul>
         </div>
     </div>
-
 
     <video id="background-video" autoplay muted loop>
         <source id="video-source" type="video/mp4" src="video-source">
@@ -1103,24 +1063,21 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         </nav>
     </div>
 
-
     <div id="center-section">
         <div class="logo-section"></div>
 
         <div class="inner-text">
             <h2 data-i18n="hero_welcome_title">Vítejte</h2>
-
             <p data-i18n="hero_welcome_text">Společně proměníme Vaše nápady v realitu. Spojíme kreativitu a preciznost k vytvoření něčeho výjimečného!</p>
         </div>
 
         <div class="inner-text">
             <h2 data-i18n="hero_portfolio_title">Portfolio</h2>
-      <p data-i18n="hero_portfolio_text">Dobrý den Vážení,<br> jmenuji se Filip Duda, věnuji se jednoduchému programování, grafickému designu a testování.</p>
-
+            <p data-i18n="hero_portfolio_text">Dobrý den Vážení,<br> jmenuji se Filip Duda, věnuji se jednoduchému programování, grafickému designu a testování.</p>
         </div>
-
     </div>
-   <div class="scrollbutton">
+
+    <div class="scrollbutton">
        <button class="back-button gallery-button" id="scroll-button">▼</button>
     </div>
 
@@ -1135,11 +1092,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 <div id="black-section">
 
-<!-- ===== ABOUT SECTION 1 ===== -->
 <div id="about-section-1" class="about-section">
     <div class="about-container">
         <h2 data-i18n="about1_title">Kdo jsem a co přináším</h2>
-        <p data-i18n="about1_text">Jsem všestranný člověk s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od technické části až po dotažený vizuální zážitek pro uživatele.</p>
+        <p data-i18n="about1_text">Jsem všestranný človek s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od technické části až po dotažený vizuální zážitek pro uživatele.</p>
         
         <h3 data-i18n="about1_subtitle">Mé silné stránky v praxi</h3>
         <div class="skills-grid">
@@ -1163,12 +1119,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     </div>
 </div>
 
-
     <div class="inner-text" id="padding">
       <div class="gallery-container">
         <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
         <p data-i18n="gallery_lead">Zde je ukázka projektů, na kterých jsem v poslední době pracoval — od grafického designu po herní vizuály.</p>
-        <p data-i18n="gallery_desc">Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých projektů, které reflektují mé dovednosti a přístup k detailu.</p>
+        <p data-i18n="gallery_desc">Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých projectsů, které reflektují mé dovednosti a přístup k detailu.</p>
 
 <br>
 
@@ -1385,7 +1340,6 @@ loadFolder(ROOT_FOLDER_ID);
     </div>
 </div>
 
-<!-- ===== ABOUT SECTION 2 ===== -->
 <div id="about-section-2" class="about-section">
     <div class="about-container">
         <h2 data-i18n="about2_title">Proč spolupracovat právě se mnou?</h2>
@@ -1409,9 +1363,9 @@ loadFolder(ROOT_FOLDER_ID);
 	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
 	    <a href="https://wa.me/420608122052" target="_blank" rel="noopener noreferrer"><img src="style/whatsapp.png" alt="Whatsapp"></a>
         </div>
-   <div class="button-container">
-       <button class="back-button gallery-button" onclick="window.location.href='#center-section'" >▲</button>
-   </div>
+        <div class="scrollupbutton">
+            <button class="back-button" onclick="window.location.href='#center-section'">▲</button>
+        </div>
 
  </div> 
 
@@ -1422,10 +1376,7 @@ loadFolder(ROOT_FOLDER_ID);
 	    <br>
  </div> 
 
-
-<!-- HERNÍ SCRIPT + JAZYKOVÝ PŘEKLADAČ -->
 <script>
-    // --- 1. Generování her ---
     const seznamHer = [
         { id: 'index1', nazev: 'Vesmírná-mise' }, 
         { id: 'index2', nazev: 'Vesmírná-mise2' },
@@ -1490,7 +1441,6 @@ loadFolder(ROOT_FOLDER_ID);
         }, 800);
     });
 	
-    // --- 2. Jazykové překlady ---
     const translations = {
         cs: {
             nav_home: "Hlavní",
@@ -1661,7 +1611,6 @@ loadFolder(ROOT_FOLDER_ID);
 </script>
 
 <script>
-    // --- Další UI události ---
     const radialToggle = document.getElementById('radial-toggle');
     const radialLinks = document.getElementById('radial-links');
 
