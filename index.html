@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Prohnutý Monitor (20 Lamel - Perfektní Geometrie)</title>
+    <title>Skutečně 3D Prohnutý Monitor (WebGL Shader)</title>
     <style>
         html, body {
             margin: 0;
@@ -12,194 +12,193 @@
             height: 100%;
             overflow: hidden;
             background-color: #1a1918;
-            font-family: sans-serif;
         }
 
-        .scene {
+        /* Skrytý zdrojový iframe - načte se pouze 1x */
+        #source-container {
+            position: absolute;
+            width: 1280px;
+            height: 720px;
+            left: -9999px;
+            top: -9999px;
+        }
+
+        #source-iframe {
             width: 100%;
-            height: 100%;
-            perspective: 2000px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: grab;
-            user-select: none;
-        }
-        .scene:active {
-            cursor: grabbing;
-        }
-
-        .cylinder {
-            position: relative;
-            width: 1000px;
-            height: 650px;
-            transform-style: preserve-3d;
-            pointer-events: none;
-        }
-
-        .segment {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            height: 100%;
-            transform-style: preserve-3d;
-            backface-visibility: hidden;
-            will-change: transform;
-            pointer-events: auto;
-        }
-
-        .crop-box {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .crop-box iframe {
-            position: absolute;
-            top: 0;
             height: 100%;
             border: none;
-            pointer-events: none;
         }
 
-        .overlay {
-            position: absolute;
-            top: 0; 
-            left: 0; 
-            width: 100%; 
+        #webgl-container {
+            width: 100%;
             height: 100%;
-            pointer-events: none;
+            cursor: grab;
+        }
+        #webgl-container:active {
+            cursor: grabbing;
         }
     </style>
+    <!-- Načtení Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <div class="scene" id="scene">
-        <div class="cylinder" id="cylinder"></div>
+    <div id="source-container">
+        <iframe id="source-iframe" src="index1.html"></iframe>
     </div>
 
+    <div id="webgl-container"></div>
+
     <script>
-        const scene = document.getElementById('scene');
-        const cylinder = document.getElementById('cylinder');
+        const container = document.getElementById('webgl-container');
+        const iframe = document.getElementById('source-iframe');
+
+        // 1. Scene & Camera Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 6;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // 2. Vytvoření dynamické 2D plátna (Canvas Texture)
+        const canvas = document.createElement('canvas');
+        canvas.width = 1280;
+        canvas.height = 720;
+        const ctx = canvas.getContext('2d');
         
-        const totalSegments = 20;
-        const totalWidth = 1000;
-        const segWidth = totalWidth / totalSegments;
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
 
-        // Parametry prohnutí (poloměr a úhel)
-        const radius = 2200; 
-        const totalArcAngle = 20; 
-        const angleStep = totalArcAngle / totalSegments;
+        // 3. Custom Shader pro SKUTEČNÉ CYLINDRICKÉ PROHNUTÍ 20 LAMEL
+        const curvedMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                uTexture: { value: texture },
+                uSegments: { value: 20.0 },
+                uRadius: { value: 2.5 }, // Poloměr zakřivení
+                uCurvature: { value: 0.4 } // Síla prohnutí
+            },
+            vertexShader: `
+                uniform float uSegments;
+                uniform float uRadius;
+                uniform float uCurvature;
+                varying vec2 vUv;
+                varying float vSlatEdge;
 
-        const iframes = [];
+                void main() {
+                    vUv = uv;
 
-        // Synchronizace scrollu skrze koordinátor (šetří výkon)
-        let isSyncing = false;
-        function syncScroll(scrollTop) {
-            if (isSyncing) return;
-            isSyncing = true;
-            
-            iframes.forEach(iframe => {
-                if (iframe.contentWindow) {
-                    iframe.contentWindow.scrollTo(0, scrollTop);
+                    vec3 pos = position;
+                    
+                    // Matematické zakřivení osy Z (OHYB DO OBLOUKU)
+                    float angle = pos.x * uCurvature;
+                    pos.z += (1.0 - cos(angle)) * uRadius;
+                    pos.x = sin(angle) * uRadius;
+
+                    // Výpočet hrany pro efekt 20 lamel
+                    float segmentGrid = fract(uv.x * uSegments);
+                    vSlatEdge = smoothstep(0.0, 0.05, segmentGrid) * smoothstep(1.0, 0.95, segmentGrid);
+
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
                 }
-            });
+            `,
+            fragmentShader: `
+                uniform sampler2D uTexture;
+                varying vec2 vUv;
+                varying float vSlatEdge;
 
-            requestAnimationFrame(() => { isSyncing = false; });
+                void main() {
+                    vec4 color = texture2D(uTexture, vUv);
+                    
+                    // Jemné stínování lamelových spár
+                    float shadow = mix(0.75, 1.0, vSlatEdge);
+                    gl_FragColor = vec4(color.rgb * shadow, color.a);
+                }
+            `,
+            side: THREE.DoubleSide,
+            transparent: true
+        });
+
+        // Geometry (hustá mřížka, aby se ohyb nesekal)
+        const geometry = new THREE.PlaneGeometry(4, 2.25, 80, 1);
+        const mesh = new THREE.Mesh(geometry, curvedMaterial);
+        mesh.rotation.x = 0.15;
+        scene.add(mesh);
+
+        // 4. Překreslování skrytého iframe do 3D textury přes SVG Image
+        function updateTextureFromIframe() {
+            try {
+                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                if (!doc || !doc.body) return;
+
+                const htmlString = new XMLSerializer().serializeToString(doc);
+                const svgString = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720">
+                        <foreignObject width="100%" height="100%">
+                            <div xmlns="http://www.w3.org/1999/xhtml">
+                                ${htmlString}
+                            </div>
+                        </foreignObject>
+                    </svg>
+                `;
+
+                const img = new Image();
+                const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                    texture.needsUpdate = true;
+                    URL.revokeObjectURL(url);
+                };
+                img.src = url;
+            } catch (e) {}
         }
 
-        for (let i = 0; i < totalSegments; i++) {
-            const seg = document.createElement('div');
-            seg.className = 'segment';
-            
-            // Šířka prvku s přesným překryvem 0.4px proti vlásečnicovým mezerám
-            seg.style.width = `${segWidth + 0.4}px`;
-            seg.style.marginLeft = `-${segWidth / 2}px`;
+        iframe.addEventListener('load', () => {
+            updateTextureFromIframe();
+            setInterval(updateTextureFromIframe, 150);
+        });
 
-            const centerIndex = (totalSegments - 1) / 2;
-            const offsetFromCenter = i - centerIndex;
-            
-            const segAngle = -offsetFromCenter * angleStep;
-            const rad = (segAngle * Math.PI) / 180;
-
-            // Nativní matematické pozicování v 3D
-            const xPos = offsetFromCenter * segWidth;
-            const zPos = radius - (Math.cos(rad) * radius);
-
-            seg.style.transform = `translateX(${xPos}px) translateZ(${zPos}px) rotateY(${segAngle}deg)`;
-
-            const cropBox = document.createElement('div');
-            cropBox.className = 'crop-box';
-
-            const iframe = document.createElement('iframe');
-            iframe.src = 'index1.html';
-            
-            iframe.style.width = `${totalWidth}px`;
-            iframe.style.left = `-${i * segWidth}px`;
-
-            iframe.addEventListener('load', () => {
-                try {
-                    const win = iframe.contentWindow;
-                    win.addEventListener('scroll', () => syncScroll(win.scrollY), { passive: true });
-                    win.addEventListener('wheel', (e) => syncScroll(win.scrollY + e.deltaY), { passive: true });
-                } catch (e) {}
-            });
-
-            const overlay = document.createElement('div');
-            overlay.className = 'overlay';
-            // Vizuální stínování okrajových lamel pro 3D efekt
-            const shadowIntensity = Math.abs(offsetFromCenter) * 0.012;
-            overlay.style.background = `rgba(0,0,0,${shadowIntensity})`;
-
-            cropBox.appendChild(iframe);
-            cropBox.appendChild(overlay);
-            seg.appendChild(cropBox);
-            cylinder.appendChild(seg);
-
-            iframes.push(iframe);
-        }
-
-        // Ovládání otáčení monitoru v prostoru
+        // 5. Otáčení a Scroll
         let isDragging = false;
-        let startX = 0, startY = 0;
-        let rotX = 8, rotY = 0;
+        let prevMouse = { x: 0, y: 0 };
 
-        cylinder.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-
-        scene.addEventListener('pointerdown', (e) => {
+        container.addEventListener('pointerdown', (e) => {
             isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
+            prevMouse = { x: e.clientX, y: e.clientY };
         });
 
         window.addEventListener('pointermove', (e) => {
             if (!isDragging) return;
-            
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
+            const dx = e.clientX - prevMouse.x;
+            const dy = e.clientY - prevMouse.y;
 
-            rotY += dx * 0.25;
-            rotX -= dy * 0.25;
-            rotX = Math.max(-35, Math.min(35, rotX));
+            mesh.rotation.y += dx * 0.005;
+            mesh.rotation.x += dy * 0.003;
 
-            cylinder.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-            
-            startX = e.clientX;
-            startY = e.clientY;
+            prevMouse = { x: e.clientX, y: e.clientY };
         });
 
         window.addEventListener('pointerup', () => { isDragging = false; });
 
-        // Globální odchytávání kolečka myši
         window.addEventListener('wheel', (e) => {
-            if (iframes[0] && iframes[0].contentWindow) {
-                syncScroll(iframes[0].contentWindow.scrollY + e.deltaY);
+            if (iframe.contentWindow) {
+                iframe.contentWindow.scrollBy(0, e.deltaY);
+                setTimeout(updateTextureFromIframe, 40);
             }
         }, { passive: true });
+
+        // Render smyčka
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
     </script>
 </body>
 </html>
