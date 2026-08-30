@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Vypouklý Monitor (Perfektní lícování)</title>
+    <title>3D Vypouklý Monitor</title>
     <style>
         html, body {
             margin: 0;
@@ -114,11 +114,8 @@
         
         const totalSegments = 20;
         const totalWidth = 900;
-        
-        // Přesná šířka jedné lamely bez zakřivení
         const segWidth = totalWidth / totalSegments;
 
-        // Poloměr a úhel zakřivení
         const radius = 2500; 
         const totalArcAngle = 18; 
         const angleStep = totalArcAngle / totalSegments;
@@ -126,22 +123,37 @@
         const iframes = [];
         let loadedIframesCount = 0;
 
+        // Synchronizace scrollu pro všechny lamely
+        let isSyncingScroll = false;
+        function syncAllScrolls(scrollTop) {
+            if (isSyncingScroll) return;
+            isSyncingScroll = true;
+
+            iframes.forEach(iframe => {
+                if (iframe.contentWindow) {
+                    iframe.contentWindow.scrollTo(0, scrollTop);
+                }
+            });
+
+            requestAnimationFrame(() => {
+                isSyncingScroll = false;
+            });
+        }
+
         for (let i = 0; i < totalSegments; i++) {
             const seg = document.createElement('div');
             seg.className = 'segment';
             
-            // Šířka prvku se kryje s přesným výřezem + 0.5px přesahu proti vlásečnicím
+            // Šířka prvku + 0.5px jemný přesah proti vlásečnicím
             seg.style.width = `${segWidth + 0.5}px`;
             seg.style.marginLeft = `-${segWidth / 2}px`;
 
-            // Spočítáme stříhání přesně v ose
             const centerIndex = (totalSegments - 1) / 2;
             const offsetFromCenter = i - centerIndex;
             
             const segAngle = -offsetFromCenter * angleStep;
             const rad = (segAngle * Math.PI) / 180;
 
-            // X pozice je lineárně svázaná s šířkou lamely, aby se grafika nepotrhala
             const xPos = offsetFromCenter * segWidth;
             const zPos = radius - (Math.cos(rad) * radius);
 
@@ -154,13 +166,25 @@
             iframe.src = 'index1.html';
             
             iframe.style.width = `${totalWidth}px`;
-            // Přesný posun výřezu: vracíme offset přesně na stávající lamelu
             iframe.style.left = `-${i * segWidth}px`;
 
             iframe.addEventListener('load', () => {
                 try {
-                    const links = iframe.contentDocument.querySelectorAll('a[target="_blank"]');
+                    const win = iframe.contentWindow;
+                    const doc = iframe.contentDocument;
+
+                    const links = doc.querySelectorAll('a[target="_blank"]');
                     links.forEach(link => link.removeAttribute('target'));
+
+                    // Odchytávání a předání scrollu přímo z vnitřku iframe
+                    win.addEventListener('scroll', () => {
+                        syncAllScrolls(win.scrollY);
+                    }, { passive: true });
+
+                    win.addEventListener('wheel', (e) => {
+                        syncAllScrolls(win.scrollY + e.deltaY);
+                    }, { passive: true });
+
                 } catch (e) {}
 
                 loadedIframesCount++;
@@ -182,7 +206,7 @@
             iframes.push(iframe);
         }
 
-        // Ovládání otáčení a kliků
+        // Ovládání otáčení scény a detekce kliků
         let isDragging = false;
         let startX = 0, startY = 0;
         let dragDistance = 0;
@@ -217,6 +241,7 @@
 
         window.addEventListener('pointerup', () => { isDragging = false; });
 
+        // Kliknutí skrze prázdný prostor do iframe
         scene.addEventListener('click', (e) => {
             if (dragDistance > 6) return;
             const rect = scene.getBoundingClientRect();
@@ -229,12 +254,12 @@
             }
         });
 
+        // Globální wheel event z hlavní scény
         window.addEventListener('wheel', (e) => {
-            iframes.forEach(iframe => {
-                if (iframe.contentWindow) {
-                    iframe.contentWindow.scrollBy(0, e.deltaY);
-                }
-            });
+            if (iframes[0] && iframes[0].contentWindow) {
+                const currentScroll = iframes[0].contentWindow.scrollY;
+                syncAllScrolls(currentScroll + e.deltaY);
+            }
         }, { passive: true });
     </script>
 </body>
