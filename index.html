@@ -201,7 +201,7 @@
         .nav-arrow:hover {
             background: rgba(0, 0, 0, 0.9);
             transform: translateY(-50%) scale(1.1);
-            color: #4facfe;
+            color: #ffffff;
         }
 
         .nav-arrow.disabled {
@@ -263,14 +263,13 @@
 
         .control-btn:hover { 
             background: rgba(255, 255, 255, 0.25);
-            color: #4facfe;
+            color: #ffffff;
         }
 
         .control-btn:active {
             transform: scale(0.92);
         }
 
-        /* SVG ikona v tlačítku */
         .control-btn svg {
             width: 18px;
             height: 18px;
@@ -306,7 +305,7 @@
         .rotate-slider {
             width: 60px;
             cursor: pointer;
-            accent-color: #4facfe;
+            accent-color: #888888;
         }
 
         .rotate-value {
@@ -318,7 +317,6 @@
             text-align: right;
         }
 
-        /* Ukrytí prvků při aktivní lupě */
         body.is-fullscreen .nav-arrow,
         body.is-fullscreen .zoom-panel,
         body.is-fullscreen .rotate-panel,
@@ -326,15 +324,14 @@
             display: none !important;
         }
 
-        /* POSUNUTO O 20PX DOPRAVA A UPRAVENO ODSAZENÍ OD SPODNÍ HRANY (24px) */
         body.is-fullscreen .controls-container {
             left: 44px !important;
             bottom: 24px !important;
             transform: none !important;
         }
 
-        /* Responzivita pro telefony */
-        @media (max-width: 768px) and (orientation: portrait) {
+        /* Úprava rozvržení pouze pro dotykové mobilní telefony */
+        @media (max-width: 768px) and (pointer: coarse) {
             .viewport-wrapper {
                 width: 92vw;
                 height: 76vh;
@@ -356,7 +353,6 @@
                 max-width: calc(100vw - 16px);
             }
 
-            /* Na mobilu posunuto o 20px doprava a spodní hranice sjednocena na 20px */
             body.is-fullscreen .controls-container {
                 left: 34px !important;
                 bottom: 20px !important;
@@ -403,7 +399,7 @@
                 <iframe 
                     class="viewport-iframe" 
                     id="contentIframe"
-                    src="index1.html"
+                    src=""
                 ></iframe>
             </div>
         </div>
@@ -432,7 +428,6 @@
 
             <div class="panel-box">
                 <button class="control-btn" id="toggleFullscreen" title="Zvětšit na celou obrazovku">
-                    <!-- SVG Lupa (plus) -->
                     <svg id="searchIcon" viewBox="0 0 24 24">
                         <circle cx="11" cy="11" r="7"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -445,6 +440,13 @@
     </div>
 
     <script>
+        // Sem doplň názvy tvých index souborů ve složce (index.html se vynechá):
+        const availablePages = [
+            "index1.html",
+            "index2.html",
+            "index3.html"
+        ];
+
         const viewportWrapper = document.getElementById('viewportWrapper');
         const viewportFrame = document.getElementById('viewportFrame');
         const iframe = document.getElementById('contentIframe');
@@ -461,53 +463,29 @@
         const toggleFullscreen = document.getElementById('toggleFullscreen');
         const searchIcon = document.getElementById('searchIcon');
 
-        let currentIndex = 1;
+        const isMobile = window.innerWidth <= 768 && window.matchMedia('(pointer: coarse)').matches;
+
+        let currentFileIndex = 0;
         let zoomLevel = 1;
-        let rotationY = 0;
-        let rotationX = window.innerWidth <= 768 ? 6 : 12;
-        let availablePages = [];
+        let rotationY = isMobile ? 12 : 0;
+        let rotationX = isMobile ? 0 : 12;
         let isAnimating = false;
         let isFullscreen = false;
 
         rotateXSlider.value = rotationX;
         rotateXValue.textContent = `${rotationX}°`;
 
-        async function checkPages() {
-            availablePages = [];
-            let i = 1;
-            
-            while (i <= 100) {
-                const filename = `index${i}.html`;
-                try {
-                    const res = await fetch(filename, { method: 'HEAD' });
-                    if (res.ok) {
-                        availablePages.push(i);
-                        i++;
-                    } else {
-                        break;
-                    }
-                } catch (e) {
-                    break;
-                }
-            }
-
-            if (availablePages.length === 0) {
-                availablePages = [1, 2, 3];
-            }
-
-            updateNavButtons();
-        }
+        rotateYSlider.value = rotationY;
+        rotateYValue.textContent = `${rotationY}°`;
 
         function updateNavButtons() {
-            const pos = availablePages.indexOf(currentIndex);
-            
-            if (pos <= 0) {
+            if (currentFileIndex <= 0) {
                 navLeft.classList.add('disabled');
             } else {
                 navLeft.classList.remove('disabled');
             }
 
-            if (pos >= availablePages.length - 1) {
+            if (currentFileIndex >= availablePages.length - 1) {
                 navRight.classList.add('disabled');
             } else {
                 navRight.classList.remove('disabled');
@@ -524,7 +502,7 @@
         }
 
         function navigateTo(targetIndex, direction) {
-            if (isAnimating || targetIndex === currentIndex) return;
+            if (isAnimating || targetIndex === currentFileIndex || !availablePages[targetIndex]) return;
             isAnimating = true;
 
             const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
@@ -533,8 +511,8 @@
             viewportFrame.className = `viewport-frame ${outClass}`;
 
             setTimeout(() => {
-                currentIndex = targetIndex;
-                iframe.src = `index${currentIndex}.html`;
+                currentFileIndex = targetIndex;
+                iframe.src = availablePages[currentFileIndex];
                 updateNavButtons();
 
                 viewportFrame.className = `viewport-frame ${inClass}`;
@@ -546,14 +524,12 @@
             }, 350);
         }
 
-        /* Přepínání režimu lupy / Fullscreen */
         toggleFullscreen.addEventListener('click', () => {
             isFullscreen = !isFullscreen;
 
             if (isFullscreen) {
                 document.body.classList.add('is-fullscreen');
                 viewportWrapper.classList.add('fullscreen');
-                // Změna ikonky na lupu mínus
                 searchIcon.innerHTML = `
                     <circle cx="11" cy="11" r="7"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -563,7 +539,6 @@
             } else {
                 document.body.classList.remove('is-fullscreen');
                 viewportWrapper.classList.remove('fullscreen');
-                // Změna ikonky zpět na lupu plus
                 searchIcon.innerHTML = `
                     <circle cx="11" cy="11" r="7"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -598,16 +573,14 @@
         });
 
         navLeft.addEventListener('click', () => {
-            const pos = availablePages.indexOf(currentIndex);
-            if (pos > 0) {
-                navigateTo(availablePages[pos - 1], 'prev');
+            if (currentFileIndex > 0) {
+                navigateTo(currentFileIndex - 1, 'prev');
             }
         });
 
         navRight.addEventListener('click', () => {
-            const pos = availablePages.indexOf(currentIndex);
-            if (pos < availablePages.length - 1) {
-                navigateTo(availablePages[pos + 1], 'next');
+            if (currentFileIndex < availablePages.length - 1) {
+                navigateTo(currentFileIndex + 1, 'next');
             }
         });
 
@@ -617,32 +590,11 @@
             if (e.key === 'Escape' && isFullscreen) toggleFullscreen.click();
         });
 
-        iframe.addEventListener('load', () => {
-            try {
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                const style = iframeDoc.createElement('style');
-                style.textContent = `
-                    html::-webkit-scrollbar, body::-webkit-scrollbar { 
-                        display: none !important; 
-                        width: 0 !important; 
-                        height: 0 !important; 
-                    }
-                    html, body { 
-                        -ms-overflow-style: none !important; 
-                        scrollbar-width: none !important; 
-                        overflow-y: auto !important;
-                        overflow-x: hidden !important;
-                        width: 100% !important;
-                        max-width: 100% !important;
-                        min-height: 100% !important;
-                    }
-                `;
-                iframeDoc.head.appendChild(style);
-            } catch (e) {}
-        });
-
-        async function init() {
-            await checkPages();
+        function init() {
+            if (availablePages.length > 0) {
+                iframe.src = availablePages[0];
+            }
+            updateNavButtons();
             updateView();
         }
 
