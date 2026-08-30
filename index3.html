@@ -400,13 +400,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   justify-content: center;
   align-items: center;
 }
+
+/* ZÁKLADNÍ NASTAVENÍ LOGA PRO DESKTOP (Zvětšeno) */
 .logo-section {
   position: absolute;
-  width: 45%;
-  height: 45%;
-  top: -60%;
+  width: 500px;
+  height: 500px;
+  top: -250px;
   left: 50%;
-  padding: 5%;
   transform: translateX(-50%);
   background-image: url('style/logo.png');
   background-size: cover;
@@ -414,6 +415,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-radius: 50%;
   z-index: 24;
 }
+
 .hero-spacer {
   padding-bottom: 120px;
 }
@@ -687,8 +689,16 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     height: auto;
   }
   #top-bar { height: 8%; }
-  .logo-section { width: 50%; height: 50%; top: -30%; padding: 0px; }
+  
+  /* Zobrazení na výšku - zachována výchozí velikost loga pro mobil */
+  .logo-section { 
+    width: 220px !important; 
+    height: 220px !important; 
+    top: -110px !important; 
+    padding: 0px; 
+  }
 }
+
 #background-video {
   position: fixed;
   top: 0;
@@ -812,6 +822,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   #video-bubbles .bubble { width: 3px; height: 3px; }
   .scrollbutton { bottom: 5%; transform: translateX(-50%) translateY(-30px); }
   
+  /* VELIKOST LOGA NA MOBILNÍCH DISPLEJÍCH DO 600px */
+  .logo-section {
+    width: 220px !important;
+    height: 220px !important;
+    top: -110px !important;
+  }
+  
   /* Menší vzdálenosti pro mobilní menu */
   .radial-link:nth-child(1) { --ty: -8px; }
   .radial-link:nth-child(2) { --tx: -5px; --ty: -5px; }
@@ -864,7 +881,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   .modal-arrow { display: block; }
   #top-bar { height: 8%; }
   #center-section { flex-direction: row; justify-content: space-between; }
-  .logo-section { width: 45%; height: 45%; top: -48%; z-index: 200; position: absolute; }
+  .logo-section { z-index: 200; position: absolute; }
   .inner-text { width:92%; padding:2%; flex-grow: 1; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
 	 #padding {
@@ -872,11 +889,21 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 }
 
+/* ===== Zobrazení na šířku (Mobile Landscape - Středně velké logo) ===== */
 @media (max-width: 768px) and (orientation: landscape) {
   #top-bar { height:15%; }
   #dropdown-menu { width:35vw; }
-  #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; }
-  .logo-section { position: absolute !important; width: 30% !important; height: 30% !important; top: 10% !important; padding: 5%; }
+  #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; margin-top: 25px; }
+  
+  /* Posunutí a mírné zvětšení loga v landscape módu oproti původním 100px */
+  .logo-section { 
+    position: absolute !important; 
+    width: 180px !important; 
+    height: 180px !important; 
+    top: -90px !important; 
+    padding: 0 !important; 
+  }
+  
   #black-section { padding: 10px; }
   .inner-text { width:92%; margin:2%; text-align: center; flex-grow: 1; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
@@ -1493,7 +1520,7 @@ loadFolder(ROOT_FOLDER_ID);
             lang_label: "CS ▾",
 
             about1_title: "Kdo jsem a co přináším",
-            about1_text: "Jsem všestranný člověk s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od technické části až po dotažený vizuální zážitek pro uživatele.",
+            about1_text: "Jsem všestranný človek s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od technické části až po dotažený vizuální zážitek pro uživatele.",
             about1_subtitle: "Mé silné stránky v praxi",
             about2_title: "Proč spolupracovat právě se mnou?",
             about2_text: "Díky pestré praxi (od technické podpory na městkém úřadě, diagnostice hardwaru v NbServis a Klouček Computer přes vedení provozu ve SportVision až po navrhování interiérů v Oresi) jsem si zvykl rychle se adaptovat na nové prostředí a přebírat zodpovědnost za výsledky. Nezáleží na tom, zda řeším kód, stavím síť nebo komunikuji s klientem – vždy kladu důraz na preciznost, efektivitu a lidský přístup.",
