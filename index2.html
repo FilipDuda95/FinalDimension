@@ -738,6 +738,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   right: 24px;
   bottom: 24px;
   z-index: 50;
+  transition: transform 0.35s ease;
+}
+#radial-menu.shifted {
+  transform: translateY(-80px);
 }
 #radial-toggle {
   position: relative;
@@ -803,6 +807,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 @media (max-width: 600px) {
   #radial-menu { right: 16px; bottom: 20px; }
+  #radial-menu.shifted { transform: translateY(-70px); }
   #radial-toggle { width: 46px; height: 46px; font-size: 1.1rem; }
   .radial-link { width: 42px; height: 42px; font-size: 0.6rem; }
   
@@ -1611,13 +1616,22 @@ loadFolder(ROOT_FOLDER_ID);
 </script>
 
 <script>
+    const radialMenu = document.getElementById('radial-menu');
     const radialToggle = document.getElementById('radial-toggle');
     const radialLinks = document.getElementById('radial-links');
+
+    function closeRadialMenu() {
+        radialLinks.classList.remove('open');
+        radialToggle.classList.remove('open');
+        radialMenu.classList.remove('shifted');
+        radialToggle.setAttribute('aria-expanded', 'false');
+    }
 
     radialToggle.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpen = radialLinks.classList.toggle('open');
         radialToggle.classList.toggle('open', isOpen);
+        radialMenu.classList.toggle('shifted', isOpen);
         radialToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
 
@@ -1637,17 +1651,13 @@ loadFolder(ROOT_FOLDER_ID);
                 if (videoTouchTimeout) clearTimeout(videoTouchTimeout);
             }
             
-            radialLinks.classList.remove('open');
-            radialToggle.classList.remove('open');
-            radialToggle.setAttribute('aria-expanded', 'false');
+            closeRadialMenu();
         });
     });
 
     window.addEventListener('click', (e) => {
         if (!e.target.closest('#radial-menu')) {
-            radialLinks.classList.remove('open');
-            radialToggle.classList.remove('open');
-            radialToggle.setAttribute('aria-expanded', 'false');
+            closeRadialMenu();
         }
     });
 
