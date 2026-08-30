@@ -171,7 +171,7 @@
             height: 0;
         }
 
-        /* Šipky pro posun stránek - ztmavené */
+        /* Šipky pro posun stránek */
         .nav-arrow {
             position: fixed;
             top: 50%;
@@ -210,7 +210,7 @@
         .nav-arrow.left { left: 30px; }
         .nav-arrow.right { right: 30px; }
 
-        /* Ovládací panel - ztmavený a vycentrovaný dole */
+        /* Ovládací panel — standardně vycentrovaný na střed dole */
         .controls-container {
             position: fixed;
             bottom: 20px;
@@ -219,26 +219,30 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 12px;
-            z-index: 35;
-            transition: all 0.3s ease;
-        }
-
-        .panel-box {
+            gap: 8px;
+            z-index: 40;
             background: rgba(18, 18, 18, 0.85);
-            padding: 8px 14px;
+            padding: 6px;
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 25px rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
+            height: 52px;
+            max-width: calc(100vw - 20px);
+            transition: left 0.3s ease, transform 0.3s ease, bottom 0.3s ease;
+        }
+
+        .panel-box {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
+            height: 100%;
         }
 
         .control-btn {
             width: 40px;
             height: 40px;
+            min-width: 40px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 50%;
@@ -251,6 +255,7 @@
             font-weight: bold;
             user-select: none;
             transition: background 0.2s, transform 0.1s, color 0.2s;
+            flex-shrink: 0;
         }
 
         .control-btn:hover { 
@@ -265,14 +270,16 @@
         .rotate-panel {
             display: flex;
             flex-direction: row;
-            gap: 16px;
-            padding: 8px 18px;
+            align-items: center;
+            gap: 8px;
+            padding: 0 6px;
+            height: 100%;
         }
 
         .rotate-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
         }
 
         .rotate-label {
@@ -283,21 +290,21 @@
         }
 
         .rotate-slider {
-            width: 90px;
+            width: 60px;
             cursor: pointer;
             accent-color: #4facfe;
         }
 
         .rotate-value {
-            font-size: 12px;
+            font-size: 11px;
             color: #fff;
             font-weight: 600;
-            min-width: 30px;
+            min-width: 24px;
             font-family: monospace;
             text-align: right;
         }
 
-        /* Ukrytí ostatních prvků v režimu celé obrazovky */
+        /* Ukrytí nepotřebných prvků při aktivní lupě */
         body.is-fullscreen .nav-arrow,
         body.is-fullscreen .zoom-panel,
         body.is-fullscreen .rotate-panel,
@@ -305,18 +312,14 @@
             display: none !important;
         }
 
-        /* Pozicování tlačítka ve fullscreen režimu na spodní střed */
+        /* Při aktivované lupě přesun tlačítka do levého dolního rohu */
         body.is-fullscreen .controls-container {
-            position: fixed !important;
+            left: 20px !important;
             bottom: 20px !important;
-            left: 50% !important;
-            top: auto !important;
-            right: auto !important;
-            transform: translateX(-50%) !important;
-            z-index: 40 !important;
+            transform: none !important;
         }
 
-        /* Kompletní oprava mobilního zobrazení */
+        /* Responzitivita pro telefony */
         @media (max-width: 768px) {
             .viewport-wrapper {
                 width: 90vw;
@@ -333,18 +336,35 @@
 
             .controls-container {
                 bottom: 12px;
-                flex-wrap: wrap;
-                justify-content: center;
-                width: 95%;
+                gap: 4px;
+                padding: 4px;
+                height: 46px;
+                max-width: calc(100vw - 16px);
+            }
+
+            body.is-fullscreen .controls-container {
+                left: 12px !important;
+                bottom: 12px !important;
+            }
+
+            .control-btn {
+                width: 36px;
+                height: 36px;
+                min-width: 36px;
+                font-size: 16px;
             }
 
             .rotate-panel {
-                gap: 8px;
-                padding: 6px 12px;
+                gap: 6px;
+                padding: 0 2px;
             }
 
             .rotate-slider {
-                width: 65px;
+                width: 40px;
+            }
+
+            .rotate-value {
+                display: none;
             }
         }
     </style>
