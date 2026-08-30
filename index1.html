@@ -130,7 +130,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   bottom:5%;
   left:50%;
   z-index: 20;
-  transform: translateX(-50%) translateY(-30px);
+  transform: translateX(-50%);
 }
 
     .back-button {
@@ -723,7 +723,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   backdrop-filter: blur(6px);
   align-items: center;
   justify-content: center;
-  transform: translateY(-30px);
+  transform: none;
 }
 #video-bubbles .bubble {
   width: 5px;
@@ -752,7 +752,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   right: 24px;
   bottom: 5%;
   z-index: 50;
-  transform: translateY(-30px);
+  transform: none;
 }
 #radial-toggle {
   position: relative;
@@ -815,12 +815,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-color: #05d4ff;
 }
 @media (max-width: 600px) {
-  #radial-menu { right: 14px; bottom: 5%; transform: translateY(-30px); }
+  #radial-menu { right: 14px; bottom: 5%; transform: none; }
   #radial-toggle { width: 42px; height: 42px; font-size: 1rem; }
   .radial-link { width: 40px; height: 40px; font-size: 0.6rem; }
-  #video-bubbles { left: 14px; bottom: 5%; transform: translateY(-30px); }
+  #video-bubbles { left: 14px; bottom: 5%; transform: none; }
   #video-bubbles .bubble { width: 3px; height: 3px; }
-  .scrollbutton { bottom: 5%; transform: translateX(-50%) translateY(-30px); }
+  .scrollbutton { bottom: 5%; transform: translateX(-50%); }
   
   /* VELIKOST LOGA NA MOBILNÍCH DISPLEJÍCH DO 600px */
   .logo-section {
@@ -922,7 +922,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   }
   
   /* Blíž k sobě v landscape módu */
-  #radial-menu { transform: translateY(-40px); }
+  #radial-menu { transform: none; }
   .radial-link:nth-child(1) { --ty: -20px; }
   .radial-link:nth-child(2) { --tx: -10px; --ty: -10px; }
   .radial-link:nth-child(3) { --tx: -20px; }
@@ -1139,7 +1139,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 <div id="about-section-1" class="about-section">
     <div class="about-container">
         <h2 data-i18n="about1_title">Kdo jsem a co přináším</h2>
-        <p data-i18n="about1_text">Jsem všestranný člověk s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od technické části až po dotažený vizuální zážitek pro uživatele.</p>
+        <p data-i18n="about1_text">Jsem všestranný človek s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od technické části až po dotažený vizuální zážitek pro uživatele.</p>
         
         <h3 data-i18n="about1_subtitle">Mé silné stránky v praxi</h3>
         <div class="skills-grid">

@@ -326,10 +326,10 @@
             display: none !important;
         }
 
-        /* Při lúpě mínus posun cca o 20px doprava od původní levé pozice (20px + 20px = 40px) */
+        /* POSUNITO O 20PX DOPRAVA: left upraven z 24px na 44px */
         body.is-fullscreen .controls-container {
-            left: 40px !important;
-            bottom: 20px !important;
+            left: 44px !important;
+            bottom: 5% !important;
             transform: none !important;
         }
 
@@ -337,7 +337,7 @@
         @media (max-width: 768px) and (orientation: portrait) {
             .viewport-wrapper {
                 width: 92vw;
-                height: 76vh; /* Zvětšeno pro odstranění volného prostoru nahoře */
+                height: 76vh;
             }
 
             .nav-arrow {
@@ -356,10 +356,10 @@
                 max-width: calc(100vw - 16px);
             }
 
-            /* Na mobilu při lúpě posun na 32px (12px + 20px) */
+            /* Na mobilu posunuto o 20px doprava: left upraven z 14px na 34px */
             body.is-fullscreen .controls-container {
-                left: 32px !important;
-                bottom: 12px !important;
+                left: 34px !important;
+                bottom: 5% !important;
             }
 
             .control-btn {
