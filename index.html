@@ -121,6 +121,7 @@ html, body {
             max-height: none !important;
             transform: none !important;
             z-index: 30;
+            margin-top: 0 !important;
         }
 
         .viewport-frame {
@@ -410,7 +411,8 @@ html, body {
         @media (max-width: 768px) and (pointer: coarse) {
             .viewport-wrapper {
                 width: 92vw;
-                height: 76vh;
+                height: 74vh;
+                margin-top: -25px; /* Posun iframe trošku nahoru pro mobily */
             }
 
             .nav-arrow {
@@ -605,7 +607,8 @@ html, body {
                 ? startHeight + (deltaY * 2) 
                 : startHeight - (deltaY * 2);
 
-            const minHeight = 180;
+            /* Zvýšeno na 480px (2x větší minimální výška) */
+            const minHeight = 480;
             const maxHeight = window.innerHeight * 0.95;
 
             if (newHeight >= minHeight && newHeight <= maxHeight) {
