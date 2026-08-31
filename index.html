@@ -109,7 +109,7 @@ html, body {
             max-width: 1100px;
             max-height: 800px;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-out, width 0.3s ease, height 0.3s ease, max-width 0.3s ease, max-height 0.3s ease;
+            transition: transform 0.3s ease-out, width 0.3s ease, max-width 0.3s ease, max-height 0.3s ease;
         }
 
         /* Režim celé obrazovky pro iframe kontejner */
@@ -132,13 +132,58 @@ html, body {
             background: #fff;
             box-shadow: 0 30px 90px rgba(0,0,0,0.85);
             border-radius: 6px;
-            overflow: hidden;
+            overflow: visible; /* Umožní vyčnívání uchytů mimo rám okna */
             transition: transform 0.35s ease, opacity 0.35s ease, border-radius 0.3s ease;
         }
 
         .viewport-wrapper.fullscreen .viewport-frame {
             border-radius: 0;
             box-shadow: none;
+            overflow: hidden;
+        }
+
+        /* Lišty pro změnu výšky (Resize bar nahoru/dolů) */
+        .resize-handle {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            cursor: ns-resize;
+            z-index: 35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, opacity 0.3s, box-shadow 0.2s;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .resize-handle:hover, .resize-handle.active {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+        }
+
+        .resize-handle::after {
+            content: '';
+            width: 30px;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 2px;
+        }
+
+        .resize-handle.top {
+            top: -10px;
+        }
+
+        .resize-handle.bottom {
+            bottom: -10px;
+        }
+
+        body.is-fullscreen .resize-handle {
+            display: none !important;
         }
 
         /* Třídy pro animovaný přechod stránek */
@@ -179,6 +224,7 @@ html, body {
             background: white;
             pointer-events: auto;
             scrollbar-width: none;
+            border-radius: inherit;
             -ms-overflow-style: none;
             -webkit-overflow-scrolling: touch;
         }
@@ -228,10 +274,10 @@ html, body {
         .nav-arrow.left { left: 30px; }
         .nav-arrow.right { right: 30px; }
 
-        /* Ovládací panel — Výchozí menší stav (vypnutý fullscreen) */
+        /* Ovládací panel */
         .controls-container {
             position: fixed;
-            bottom: 20px;
+            bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -340,7 +386,6 @@ html, body {
             display: none !important;
         }
 
-        /* Zvětšení ovládání zpět na původní hodnoty při rozkliknutí lupy (fullscreen) */
         body.is-fullscreen .controls-container {
             left: 44px !important;
             bottom: 24px !important;
@@ -362,7 +407,6 @@ html, body {
             height: 18px !important;
         }
 
-        /* Úprava rozvržení pouze pro dotykové mobilní telefony */
         @media (max-width: 768px) and (pointer: coarse) {
             .viewport-wrapper {
                 width: 92vw;
@@ -378,7 +422,7 @@ html, body {
             .nav-arrow.right { right: 8px; }
 
             .controls-container {
-                bottom: 12px;
+                bottom: 6px;
                 gap: 4px;
                 padding: 3px;
                 height: 36px;
@@ -442,11 +486,13 @@ html, body {
     <div class="scene">
         <div class="viewport-wrapper" id="viewportWrapper">
             <div class="viewport-frame" id="viewportFrame">
+                <div class="resize-handle top" id="resizeTop"></div>
                 <iframe 
                     class="viewport-iframe" 
                     id="contentIframe"
                     src=""
                 ></iframe>
+                <div class="resize-handle bottom" id="resizeBottom"></div>
             </div>
         </div>
 
@@ -508,6 +554,9 @@ html, body {
         const toggleFullscreen = document.getElementById('toggleFullscreen');
         const searchIcon = document.getElementById('searchIcon');
 
+        const resizeTop = document.getElementById('resizeTop');
+        const resizeBottom = document.getElementById('resizeBottom');
+
         const isMobile = window.innerWidth <= 768 && window.matchMedia('(pointer: coarse)').matches;
 
         let currentFileIndex = 0;
@@ -522,6 +571,75 @@ html, body {
 
         rotateYSlider.value = rotationY;
         rotateYValue.textContent = `${rotationY}°`;
+
+        /* Spolehlivé odchytávání pomocí Pointer Events (Myš i Dotyk) */
+        let isResizing = false;
+        let startY = 0;
+        let startHeight = 0;
+        let activeTarget = null;
+        let handleType = '';
+
+        function onPointerDown(e, type) {
+            if (isFullscreen) return;
+            isResizing = true;
+            handleType = type;
+            activeTarget = e.currentTarget;
+            
+            activeTarget.setPointerCapture(e.pointerId);
+            
+            startY = e.clientY;
+            startHeight = viewportWrapper.offsetHeight;
+
+            iframe.style.pointerEvents = 'none';
+            viewportWrapper.style.transition = 'none';
+            document.body.style.cursor = 'ns-resize';
+            
+            activeTarget.classList.add('active');
+        }
+
+        function onPointerMove(e) {
+            if (!isResizing) return;
+
+            const deltaY = e.clientY - startY;
+            let newHeight = handleType === 'bottom' 
+                ? startHeight + (deltaY * 2) 
+                : startHeight - (deltaY * 2);
+
+            const minHeight = 180;
+            const maxHeight = window.innerHeight * 0.95;
+
+            if (newHeight >= minHeight && newHeight <= maxHeight) {
+                viewportWrapper.style.height = `${newHeight}px`;
+                viewportWrapper.style.maxHeight = 'none';
+            }
+        }
+
+        function onPointerUp(e) {
+            if (!isResizing) return;
+            isResizing = false;
+
+            if (activeTarget) {
+                try {
+                    activeTarget.releasePointerCapture(e.pointerId);
+                } catch (err) {}
+                activeTarget.classList.remove('active');
+            }
+
+            iframe.style.pointerEvents = 'auto';
+            viewportWrapper.style.transition = 'transform 0.3s ease-out, width 0.3s ease, height 0.3s ease, max-width 0.3s ease, max-height 0.3s ease';
+            document.body.style.cursor = '';
+            activeTarget = null;
+        }
+
+        resizeTop.addEventListener('pointerdown', (e) => onPointerDown(e, 'top'));
+        resizeTop.addEventListener('pointermove', onPointerMove);
+        resizeTop.addEventListener('pointerup', onPointerUp);
+        resizeTop.addEventListener('pointercancel', onPointerUp);
+
+        resizeBottom.addEventListener('pointerdown', (e) => onPointerDown(e, 'bottom'));
+        resizeBottom.addEventListener('pointermove', onPointerMove);
+        resizeBottom.addEventListener('pointerup', onPointerUp);
+        resizeBottom.addEventListener('pointercancel', onPointerUp);
 
         function updateNavButtons() {
             if (currentFileIndex <= 0) {
@@ -643,33 +761,30 @@ html, body {
             updateView();
         }
 
-// Funkce pro skrytí scrollbaru uvnitř načteného iframe
-function hideIframeScrollbar() {
-    try {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        if (!iframeDoc) return;
+        function hideIframeScrollbar() {
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (!iframeDoc) return;
 
-        const style = iframeDoc.createElement('style');
-        style.textContent = `
-            html::-webkit-scrollbar, body::-webkit-scrollbar {
-                display: none !important;
-                width: 0 !important;
-                height: 0 !important;
+                const style = iframeDoc.createElement('style');
+                style.textContent = `
+                    html::-webkit-scrollbar, body::-webkit-scrollbar {
+                        display: none !important;
+                        width: 0 !important;
+                        height: 0 !important;
+                    }
+                    html, body {
+                        scrollbar-width: none !important;
+                        -ms-overflow-style: none !important;
+                    }
+                `;
+                iframeDoc.head.appendChild(style);
+            } catch (e) {
+                console.warn("Nelze upravit styl iframe kvůli Same-Origin policy:", e);
             }
-            html, body {
-                scrollbar-width: none !important;
-                -ms-overflow-style: none !important;
-            }
-        `;
-        iframeDoc.head.appendChild(style);
-    } catch (e) {
-        // V případě Cross-Origin omezení (pokud iframe načítá jinou doménu)
-        console.warn("Nelze upravit styl iframe kvůli Same-Origin policy:", e);
-    }
-}
+        }
 
-// Spustí se při každé změně obsahu iframe
-iframe.addEventListener('load', hideIframeScrollbar);
+        iframe.addEventListener('load', hideIframeScrollbar);
 
         init();
     </script>
