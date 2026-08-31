@@ -283,19 +283,17 @@ html, body {
             transform: translateX(-50%);
             display: flex;
             flex-direction: row;
-            flex-wrap: nowrap; /* Zamezí zalomení ovládacích prvků */
             align-items: center;
             gap: 6px;
             z-index: 40;
             background: rgba(18, 18, 18, 0.85);
-            padding: 5px 10px;
+            padding: 5px;
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 25px rgba(0,0,0,0.6);
             backdrop-filter: blur(10px);
             height: 40px;
             max-width: calc(100vw - 20px);
-            white-space: nowrap;
             transition: left 0.3s ease, transform 0.3s ease, bottom 0.3s ease, height 0.3s ease, padding 0.3s ease, gap 0.3s ease;
         }
 
@@ -304,7 +302,6 @@ html, body {
             align-items: center;
             gap: 5px;
             height: 100%;
-            flex-shrink: 0;
         }
 
         .control-btn {
@@ -335,7 +332,6 @@ html, body {
             transform: scale(0.92);
         }
 
-        /* Absolutní vycentrování SVG ikony */
         .control-btn svg {
             width: 14px;
             height: 14px;
@@ -344,27 +340,22 @@ html, body {
             stroke-width: 2;
             stroke-linecap: round;
             stroke-linejoin: round;
-            display: block;
-            margin: auto;
-            flex-shrink: 0;
+            transition: width 0.3s ease, height 0.3s ease;
         }
 
         .rotate-panel {
             display: flex;
             flex-direction: row;
-            flex-wrap: nowrap;
             align-items: center;
             gap: 6px;
             padding: 0 4px;
             height: 100%;
-            flex-shrink: 0;
         }
 
         .rotate-row {
             display: flex;
             align-items: center;
             gap: 4px;
-            flex-shrink: 0;
         }
 
         .rotate-label {
@@ -375,10 +366,9 @@ html, body {
         }
 
         .rotate-slider {
-            width: 45px;
+            width: 50px;
             cursor: pointer;
             accent-color: #888888;
-            flex-shrink: 0;
         }
 
         .rotate-value {
@@ -418,11 +408,11 @@ html, body {
             height: 18px !important;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 768px) and (pointer: coarse) {
             .viewport-wrapper {
                 width: 92vw;
                 height: 74vh;
-                margin-top: -25px;
+                margin-top: -25px; /* Posun iframe trošku nahoru pro mobily */
             }
 
             .nav-arrow {
@@ -436,12 +426,13 @@ html, body {
             .controls-container {
                 bottom: 6px;
                 gap: 4px;
-                padding: 3px 6px;
+                padding: 3px;
                 height: 36px;
+                max-width: calc(100vw - 16px);
             }
 
             body.is-fullscreen .controls-container {
-                left: 20px !important;
+                left: 34px !important;
                 bottom: 20px !important;
                 height: 46px !important;
                 padding: 4px !important;
@@ -477,7 +468,7 @@ html, body {
             }
 
             .rotate-slider {
-                width: 30px;
+                width: 35px;
             }
 
             .rotate-value {
@@ -616,6 +607,7 @@ html, body {
                 ? startHeight + (deltaY * 2) 
                 : startHeight - (deltaY * 2);
 
+            /* Zvýšeno na 480px (2x větší minimální výška) */
             const minHeight = 480;
             const maxHeight = window.innerHeight * 0.95;
 
@@ -704,7 +696,6 @@ html, body {
             if (isFullscreen) {
                 document.body.classList.add('is-fullscreen');
                 viewportWrapper.classList.add('fullscreen');
-                /* Čisté SVG pro zmenšení zpět (Lupa s mínusem) */
                 searchIcon.innerHTML = `
                     <circle cx="11" cy="11" r="7"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -714,7 +705,6 @@ html, body {
             } else {
                 document.body.classList.remove('is-fullscreen');
                 viewportWrapper.classList.remove('fullscreen');
-                /* Čisté SVG pro zvětšení (Lupa s plusem) */
                 searchIcon.innerHTML = `
                     <circle cx="11" cy="11" r="7"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
