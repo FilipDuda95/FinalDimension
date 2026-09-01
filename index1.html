@@ -444,24 +444,29 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   width: 100%;
   clear: both;
 }
-.footer.visible {
-  opacity: 1;
-  z-index:40;
-  width:100%;
-  display:block;
-}
+
+/* OPRAVENÁ PATIČKA (FOOTER) - VYSOUVACÍ PŘEKYVNÁ LIŠTA */
 .footer {
-  display: none;
-  opacity: 0;
-  position: relative;
-  z-index:1;
-  color:black;
+  display: block;
+  position: fixed;
+  bottom: -100%; /* Skryto pod okrajem */
+  left: 0;
+  width: 100%;
+  z-index: 9999; /* Překryje veškerý obsah */
+  color: black;
   background-color: #f8f8f8;
-  padding: 40px 20px 80px 20px;
+  padding: 40px 20px 40px 20px;
   text-align: center;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.5);
+  transition: bottom 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
+
+.footer.visible {
+  bottom: 0; /* Vysune se do pohledu */
+}
+
 .footer img {
   width: 150px;
   height: auto;
@@ -1767,11 +1772,12 @@ loadFolder(ROOT_FOLDER_ID);
         observer.observe(section);
     });
 
+    /* OPRAVENÝ SKRIPT PRO VYSUVOVÁNÍ FOOTERU A PŘEKRYTÍ OBSAHU SEKCÍ */
     const footer = document.querySelector('.footer');
     window.addEventListener('scroll', () => {
         const scrollPosition = window.scrollY + window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
-        if (Math.ceil(scrollPosition) >= documentHeight - 50) {
+        if (scrollPosition >= documentHeight - 20) {
             footer.classList.add('visible');
         } else {
             footer.classList.remove('visible');
