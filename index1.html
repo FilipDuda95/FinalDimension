@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -778,17 +779,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   box-sizing: border-box;
 }
 
-/* Oprava mobilního rozvržení a vycentrování rozklikávacího menu pro VŠECHNY jazyky (včetně Arabštiny a Hebrejštiny) */
 @media (orientation: portrait) {
   #dropdown-menu {
-    position: fixed !important;
-    top: 8% !important;
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%) !important;
-    width: 90vw !important;
-    max-width: 400px !important;
-    height: auto !important;
+    position: fixed;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: auto;
   }
   #top-bar { height: 8%; }
   
@@ -1593,7 +1591,7 @@ iframe {
       }
     }
 
-    // MAPA VŠECH JAZYKŮ A JEJICH PŘEKLADŮ (Opravena Hindština)
+    // MAPA VŠECH JAZYKŮ A JEJICH PŘEKLADŮ
     const languageNamesMaster = {
         cs: { cs: "Čeština", en: "Czech", de: "Tschechisch", es: "Checo", fr: "Tchèque", zh: "捷克语", ar: "التشيكية", bn: "চেক", bg: "Чешки", "zh-tw": "捷克語", da: "Tjekkisk", fi: "Tšekki", he: "צ'כית", hi: "चेक", nl: "Tsjechisch", hr: "Češki", id: "Ceko", it: "Ceco", ja: "チェコ語", ko: "체코어", hu: "Cseh", no: "Tsjekkisk", pl: "Czeski", pt: "Tcheco", ro: "Cehă", ru: "Чешский", el: "Τσεχικά", sk: "Čeština", sv: "Tjeckiska", th: "เช็ก", tr: "Çekçe", uk: "Чеська", vi: "Tiếng Séc" },
         en: { cs: "Angličtina", en: "English", de: "Englisch", es: "Inglés", fr: "Anglais", zh: "英语", ar: "الإنجليزية", bn: "ইংরেজি", bg: "Английски", "zh-tw": "英語", da: "Engelsk", fi: "Englanti", he: "אנגלית", hi: "अंग्रेज़ी", nl: "Engels", hr: "Engleski", id: "Inggris", it: "Inglese", ja: "英語", ko: "영어", hu: "Angol", no: "Engelsk", pl: "Angielski", pt: "Inglês", ro: "Engleză", ru: "Английский", el: "Αγγλικά", sk: "Angličtina", sv: "Engelska", th: "อังกฤษ", tr: "İngilizce", uk: "Англійська", vi: "Tiếng Anh" },
@@ -1602,27 +1600,27 @@ iframe {
         bg: { cs: "Bulharština", en: "Bulgarian", de: "Bulgarisch", es: "Búlgaro", fr: "Bulgare", zh: "保加利亚语", ar: "البلغارية", bn: "বুলগেরীয়", bg: "Български", "zh-tw": "保加利亞語", da: "Bulgarsk", fi: "Bulgaria", he: "בולגרית", hi: "बुल्गारियाई", nl: "Bulgaars", hr: "Bugarski", id: "Bulgaria", it: "Bulgaro", ja: "ブルガリア語", ko: "불가리아어", hu: "Bolgár", no: "Bulgarsk", pl: "Bułgarski", pt: "Búlgaro", ro: "Bulgară", ru: "Болгарский", el: "Βουλγαρικά", sk: "Bulharčina", sv: "Bulgariska", th: "บัลแกเรีย", tr: "Bulgarca", uk: "Болгарська", vi: "Tiếng Bulgar" },
         "zh-tw": { cs: "Čínština (tradiční)", en: "Chinese (Traditional)", de: "Chinesisch (Traditionell)", es: "Chino (Tradicional)", fr: "Chinois (Traditionnel)", zh: "中文 (繁体)", ar: "الصينية (التقليدية)", bn: "চীনা (ঐতিহ্যবাহী)", bg: "Китайски (традиционен)", "zh-tw": "繁體中文", da: "Kinesisk (traditionelt)", fi: "Kiina (perinteinen)", he: "סינית (מסורתית)", hi: "चीनी (पारंपरिक)", nl: "Chinees (Traditioneel)", hr: "Kineski (tradicionalni)", id: "Cina (Tradisional)", it: "Cinese (Tradizionale)", ja: "中国語 (繁体字)", ko: "중국어 (번체)", hu: "Kínai (Hagyományos)", no: "Kinesisk (tradisjonell)", pl: "Chiński (tradycyjny)", pt: "Chinês (Tradicional)", ro: "Chineză (Tradițională)", ru: "Китайский (традиционный)", el: "Κινεζικά (Παραδοσιακά)", sk: "Čínština (tradičná)", sv: "Kinesiska (traditionell)", th: "จีน (ดั้งเดิม)", tr: "Geleneksel Çince", uk: "Китайська (традиційна)", vi: "Tiếng Trung (Phồn thể)" },
         zh: { cs: "Čínština (zjednodušená)", en: "Chinese (Simplified)", de: "Chinesisch (Vereinfacht)", es: "Chino (Simplificado)", fr: "Chinois (Simplifié)", zh: "简体中文", ar: "الصينية (المبسطة)", bn: "চীনা (সরলীকৃত)", bg: "Китайски (опростен)", "zh-tw": "簡體中文", da: "Kinesisk (forenklet)", fi: "Kiina (yksinkertaistettu)", he: "סינית (מפושטת)", hi: "चीनी (सरलीकृत)", nl: "Chinees (Vereenvoudigd)", hr: "Kineski (pojednostavljeni)", id: "Cina (Sederhana)", it: "Cinese (Semplificato)", ja: "中国語 (簡体字)", ko: "중국어 (간체)", hu: "Kínai (Egyszerűsített)", no: "Kinesisk (forenklet)", pl: "Chiński (uproszczony)", pt: "Chinês (Simplificado)", ro: "Chineză (Simplificată)", ru: "Китайский (упрощенный)", el: "Κινεζικά (Απλοποιημένα)", sk: "Čínština (zjednodušená)", sv: "Kinesiska (förenklad)", th: "จีน (ตัวย่อ)", tr: "Basitleştirilmiş Çince", uk: "Китайська (спрощена)", vi: "Tiếng Trung (Giản thể)" },
-        da: { cs: "Dánština", en: "Danish", de: "Dänisch", es: "Danés", fr: "Danois", zh: "丹麦语", ar: "الدنماركية", bn: "ড্যানিশ", bg: "Датски", "zh-tw": "丹麥語", da: "Dansk", fi: "Tanska", he: "דנית", hi: "डेनिश", nl: "Deens", hr: "Danski", id: "Denmark", it: "Danese", ja: "デンマーク語", ko: "덴마크어", hu: "Dán", no: "Dansk", pl: "Duński", pt: "Dinamarquês", ro: "Daneză", ru: "Датский", el: "Δανικά", sk: "Dánčina", sv: "Danska", th: "เดนมาร์ก", tr: "Danimarkaca", uk: "Данська", vi: "Tiếng Đan Mạch" },
-        fi: { cs: "Finština", en: "Finnish", de: "Finnisch", es: "Finlandés", fr: "Finnois", zh: "芬兰语", ar: "الفنلندية", bn: "ফিনিশ", bg: "Финландски", "zh-tw": "芬蘭語", da: "Finsk", fi: "Suomi", he: "פינית", hi: "फ़िनिश", nl: "Fins", hr: "Finski", id: "Finlandia", it: "Finlandese", ja: "フィンランド語", ko: "핀란드어", hu: "Finn", no: "Finsk", pl: "Fiński", pt: "Finlandês", ro: "Finlandeză", ru: "Финский", el: "Φινλανδικά", sk: "Fínština", sv: "Finska", th: "ฟินแลนด์", tr: "Finl financiero", uk: "Фінська", vi: "Tiếng Phần Lan" },
+        da: { cs: "Dánština", en: "Danish", de: "Dänisch", es: "Danés", fr: "Danois", zh: "丹麦语", ar: "الدنماركية", bn: "ড্যানিশ", bg: "Датски", "zh-tw": "丹麥語", da: "Dansk", fi: "Tanska", he: "דנית", hi: "डेนิश", nl: "Deens", hr: "Danski", id: "Denmark", it: "Danese", ja: "デンマーク語", ko: "덴마크어", hu: "Dán", no: "Dansk", pl: "Duński", pt: "Dinamarquês", ro: "Daneză", ru: "Датский", el: "Δανικά", sk: "Dánčina", sv: "Danska", th: "เดนมาร์ก", tr: "Danimarkaca", uk: "Данська", vi: "Tiếng Đan Mạch" },
+        fi: { cs: "Finština", en: "Finnish", de: "Finnisch", es: "Finlandés", fr: "Finnois", zh: "芬兰语", ar: "الفنلندية", bn: "ফিনিশ", bg: "Финландски", "zh-tw": "芬蘭語", da: "Finsk", fi: "Suomi", he: "פינית", hi: "फ़िनिश", nl: "Fins", hr: "Finski", id: "Finlandia", it: "Finlandese", ja: "フィンランド語", ko: "핀란드어", hu: "Finn", no: "Finsk", pl: "Fiński", pt: "Finlandês", ro: "Finlandeză", ru: "Финский", el: "Φινλανδικά", sk: "Fínština", sv: "Finska", th: "ฟินแลนด์", tr: "Finl финансо", uk: "Фінська", vi: "Tiếng Phần Lan" },
         fr: { cs: "Francouzština", en: "French", de: "Französisch", es: "Francés", fr: "Français", zh: "法语", ar: "الفرنسية", bn: "ফরাসি", bg: "Френски", "zh-tw": "法語", da: "Fransk", fi: "Ranska", he: "צרפתית", hi: "फ़्रेंच", nl: "Frans", hr: "Francuski", id: "Prancis", it: "Francese", ja: "フランス語", ko: "프랑스어", hu: "Francia", no: "Fransk", pl: "Francuski", pt: "Francês", ro: "Franceză", ru: "Французский", el: "Γαλλικά", sk: "Francúzština", sv: "Franska", th: "ฝรั่งเศส", tr: "Fransızca", uk: "Французька", vi: "Tiếng Pháp" },
         he: { cs: "Hebrejština", en: "Hebrew", de: "Hebräisch", es: "Hebreo", fr: "Hébreu", zh: "希伯来语", ar: "العبرية", bn: "হিব্রু", bg: "Иврит", "zh-tw": "希伯來語", da: "Hebraisk", fi: "Heprea", he: "עברית", hi: "हिब्रू", nl: "Hebreeuws", hr: "Hebrejski", id: "Ibrani", it: "Ebraico", ja: "ヘブライ語", ko: "히브리어", hu: "Héber", no: "Hebraisk", pl: "Hebrajski", pt: "Hebraico", ro: "Ebraică", ru: "Иврит", el: "Εβραϊκά", sk: "Hebrejčina", sv: "Hebreiska", th: "ฮีบรู", tr: "İbranice", uk: "Іврит", vi: "Tiếng Do Thái" },
         hi: { cs: "Hindština", en: "Hindi", de: "Hindi", es: "Hindi", fr: "Hindi", zh: "印地语", ar: "الهندية", bn: "হিন্দি", bg: "Хинди", "zh-tw": "印地語", da: "Hindi", fi: "Hindi", he: "הינדי", hi: "हिन्दी", nl: "Hindi", hr: "Hindski", id: "Hindi", it: "Hindi", ja: "ヒンディー語", ko: "힌디어", hu: "Hindi", no: "Hindi", pl: "Hindi", pt: "Hindi", ro: "Hindi", ru: "Хинди", el: "Χίντι", sk: "Hindčina", sv: "Hindi", th: "ฮินดี", tr: "Hintçe", uk: "Хінді", vi: "Tiếng Hindi" },
         nl: { cs: "Holandština", en: "Dutch", de: "Niederländisch", es: "Holandés", fr: "Néerlandais", zh: "荷兰语", ar: "الهولندية", bn: "ডাচ", bg: "Холандски", "zh-tw": "荷蘭語", da: "Hollandsk", fi: "Hollanti", he: "הולנדית", hi: "डच", nl: "Nederlands", hr: "Nizozemski", id: "Belanda", it: "Olandese", ja: "オランダ語", ko: "네덜란드어", hu: "Holland", no: "Nederlandsk", pl: "Holenderski", pt: "Holandês", ro: "Olandeză", ru: "Голландский", el: "Ολλανδικά", sk: "Holandčina", sv: "Nederländska", th: "ดัตช์", tr: "Hollandaca", uk: "Нідерландська", vi: "Tiếng Hà Lan" },
         hr: { cs: "Chorvatština", en: "Croatian", de: "Kroatisch", es: "Croata", fr: "Croate", zh: "克罗地亚语", ar: "الكرواتية", bn: "ক্রোয়েশীয়", bg: "Хърватски", "zh-tw": "克羅地亞語", da: "Kroatisk", fi: "Kroatia", he: "קרואטית", hi: "क्रोएशियाई", nl: "Kroatisch", hr: "Hrvatski", id: "Kroasia", it: "Croato", ja: "クロアチア語", ko: "크로아티아어", hu: "Horvát", no: "Kroatisk", pl: "Chorwacki", pt: "Croata", ro: "Croată", ru: "Хорватский", el: "Κροατικά", sk: "Chorvátčina", sv: "Kroatiska", th: "โครเอเชีย", tr: "Hırvatça", uk: "Хорватська", vi: "Tiếng Croatia" },
         id: { cs: "Indonéština", en: "Indonesian", de: "Indonesisch", es: "Indonesio", fr: "Indonésien", zh: "印度尼西亚语", ar: "الإندونيسية", bn: "ইন্দোনেশীয়", bg: "Индонезийски", "zh-tw": "印尼語", da: "Indonesisk", fi: "Indonesia", he: "אינדונזית", hi: "इंडोनेशियाई", nl: "Indonesisch", hr: "Indonezijski", id: "Bahasa Indonesia", it: "Indonesiano", ja: "インドネシア語", ko: "인도네시아어", hu: "Indonéz", no: "Indonesisk", pl: "Indonezyjski", pt: "Indonésio", ro: "Indoneziană", ru: "Индонезийский", el: "Ινδονησιακά", sk: "Indonézština", sv: "Indonesiska", th: "อินโดนีเซีย", tr: "Endonezce", uk: "Індонезійська", vi: "Tiếng Indonesia" },
-        it: { cs: "Italština", en: "Italian", de: "Italienisch", es: "Italiano", fr: "Italien", zh: "意大利语", ar: "الإيطالية", bn: "ইতালীয়", bg: "Италиански", "zh-tw": "義大利語", da: "Italiensk", fi: "Italia", he: "איטלקית", hi: "इतालवी", nl: "Italiaans", hr: "Talijanski", id: "Italia", it: "Italiano", ja: "イタリア語", ko: "이탈リア語", hu: "Olasz", no: "Italiensk", pl: "Włoski", pt: "Italiano", ro: "Italiană", ru: "Итальянский", el: "Ιταλικά", sk: "Taliančina", sv: "Italienska", th: "อิตาลี", tr: "İtalyanca", uk: "Італійська", vi: "Tiếng Ý" },
+        it: { cs: "Italština", en: "Italian", de: "Italienisch", es: "Italiano", fr: "Italien", zh: "意大利语", ar: "الإيطالية", bn: "ইতালীয়", bg: "Италиански", "zh-tw": "義大利語", da: "Italiensk", fi: "Italia", he: "איטלקית", hi: "इतालवी", nl: "Italiaans", hr: "Talijanski", id: "Italia", it: "Italiano", ja: "イタリア語", ko: "이탈리아어", hu: "Olasz", no: "Italiensk", pl: "Włoski", pt: "Italiano", ro: "Italiană", ru: "Итальянский", el: "Ιταλικά", sk: "Taliančina", sv: "Italienska", th: "อิตาลี", tr: "İtalyanca", uk: "Італійська", vi: "Tiếng Ý" },
         ja: { cs: "Japonština", en: "Japanese", de: "Japanisch", es: "Japonés", fr: "Japonais", zh: "日语", ar: "اليابانية", bn: "জাপানি", bg: "Японски", "zh-tw": "日語", da: "Japansk", fi: "Japani", he: "יפנית", hi: "जापानी", nl: "Japans", hr: "Japanski", id: "Jepang", it: "Giapponese", ja: "日本語", ko: "일본어", hu: "Japán", no: "Japansk", pl: "Japoński", pt: "Japonês", ro: "Japoneză", ru: "Японский", el: "Ιαπωνικά", sk: "Japončina", sv: "Japanska", th: "ญี่ปุ่น", tr: "Japonca", uk: "Японська", vi: "Tiếng Nhật" },
         ko: { cs: "Korejština", en: "Korean", de: "Koreanisch", es: "Coreano", fr: "Coréen", zh: "韩语", ar: "الكورية", bn: "কোরীয়", bg: "Корейски", "zh-tw": "韓語", da: "Koreansk", fi: "Korea", he: "קוריאנית", hi: "कोरियाई", nl: "Koreans", hr: "Korejski", id: "Korea", it: "Coreano", ja: "韓国語", ko: "한국어", hu: "Koreai", no: "Koreansk", pl: "Koreański", pt: "Coreano", ro: "Coreeană", ru: "Корейский", el: "Κορεατικά", sk: "Kórejčina", sv: "Koreanska", th: "เกาหลี", tr: "Korece", uk: "Корейська", vi: "Tiếng Hàn" },
-        hu: { cs: "Maďarština", en: "Hungarian", de: "Ungarisch", es: "Húngaro", fr: "Hongrois", zh: "匈牙利语", ar: "المجرية", bn: "হাঙ্গেরীয়", bg: "Унгарски", "zh-tw": "匈牙利語", da: "Ungarsk", fi: "Unkari", he: "הונגרית", hi: "हंगेरियन", nl: "Hongaars", hr: "Mađarski", id: "Hongaria", it: "Ungherese", ja: "ハンガリー語", ko: "헝가리어", hu: "Magyar", no: "Ungarsk", pl: "Węgierski", pt: "Húngaro", ro: "Maghiară", ru: "Венгерский", el: "Οουγγρικά", sk: "Maďarčina", sv: "Ungerska", th: "ฮังการี", tr: "Macarca", uk: "Угорська", vi: "Tiếng Hungari" },
+        hu: { cs: "Maďarština", en: "Hungarian", de: "Ungarisch", es: "Húngaro", fr: "Hongrois", zh: "匈牙利语", ar: "المجرية", bn: "হাঙ্গেরীয়", bg: "Унгарски", "zh-tw": "匈牙利語", da: "Ungarsk", fi: "Unkari", he: "הונגרית", hi: "हंगेरियन", nl: "Hongaars", hr: "Mađarski", id: "Hongaria", it: "Ungherese", ja: "ハンガリー語", ko: "헝가리어", hu: "Magyar", no: "Ungarsk", pl: "Węgierski", pt: "Húngaro", ro: "Maghiară", ru: "Венгерский", el: "Ουγγρικά", sk: "Maďarčina", sv: "Ungerska", th: "ฮังการี", tr: "Macarca", uk: "Угорська", vi: "Tiếng Hungari" },
         de: { cs: "Němčina", en: "German", de: "Deutsch", es: "Alemán", fr: "Allemand", zh: "德语", ar: "الألمانية", bn: "জার্মান", bg: "Немски", "zh-tw": "德語", da: "Tysk", fi: "Saksa", he: "גרמנית", hi: "जर्मन", nl: "Duits", hr: "Njemački", id: "Jerman", it: "Tedesco", ja: "ドイツ語", ko: "독일어", hu: "Német", no: "Tysk", pl: "Niemiecki", pt: "Alemão", ro: "Germană", ru: "Немецкий", el: "Γερμανικά", sk: "Nemčina", sv: "Tyska", th: "เยอรมัน", tr: "Almanca", uk: "Німецька", vi: "Tiếng Đức" },
         no: { cs: "Norština", en: "Norwegian", de: "Norwegisch", es: "Noruego", fr: "Norvégien", zh: "挪威语", ar: "النرويجية", bn: "নরওয়েজীয়", bg: "Норвежки", "zh-tw": "挪威語", da: "Norsk", fi: "Norja", he: "נורווגית", hi: "नार्वेजियन", nl: "Noors", hr: "Norveški", id: "Norwegia", it: "Norvegese", ja: "ノルウェー語", ko: "노르웨이어", hu: "Norvég", no: "Norsk", pl: "Norweski", pt: "Norueguês", ro: "Norvegiană", ru: "Норвежский", el: "Νορβηγικά", sk: "Nórština", sv: "Norska", th: "นอร์เวย์", tr: "Norveççe", uk: "Норвезька", vi: "Tiếng Na Uy" },
         pl: { cs: "Polština", en: "Polish", de: "Polnisch", es: "Polaco", fr: "Polonais", zh: "波兰语", ar: "البولندية", bn: "পোলিশ", bg: "Полски", "zh-tw": "波蘭語", da: "Polsk", fi: "Puola", he: "פולנית", hi: "पोलिश", nl: "Pools", hr: "Poljski", id: "Polandia", it: "Polacco", ja: "ポーランド語", ko: "폴란드어", hu: "Lengyel", no: "Polsk", pl: "Polski", pt: "Polonês", ro: "Poloneză", ru: "Польский", el: "Πολωνικά", sk: "Poľština", sv: "Polska", th: "โปแลนด์", tr: "Polonya dili", uk: "Польська", vi: "Tiếng Ba Lan" },
-        pt: { cs: "Portugalština", en: "Portuguese", de: "Portugiesisch", es: "Portugués", fr: "Portugais", zh: "葡萄牙语", ar: "البرتغالية", bn: "পর্তুগিজ", bg: "Португалски", "zh-tw": "葡萄牙語", da: "Portugisisk", fi: "Portugali", he: "פורטוגזית", hi: "पुर्तगाली", nl: "Portugees", hr: "Portugalski", id: "Portugis", it: "Portoghese", ja: "ポルトガル語", ko: "포르투ガル語", hu: "Portugál", no: "Portugisisk", pl: "Portugalski", pt: "Português", ro: "Portugheză", ru: "Португальский", el: "Πορτογαλικά", sk: "Portugalčina", sv: "Portugisiska", th: "โปรตุเกส", tr: "Portekizce", uk: "Португальська", vi: "Tiếng Bồ Đào Nha" },
-        ro: { cs: "Rumunština", en: "Romanian", de: "Rumänisch", es: "Rumano", fr: "Roumain", zh: "罗马尼亚语", ar: "الرومانية", bn: "রোমানীয়", bg: "Румънски", "zh-tw": "羅馬尼亞語", da: "Rumænsk", fi: "Romania", he: "רומנית", hi: "रोमानियाई", nl: "Roemeens", hr: "Rumunjski", id: "Rumania", it: "Romeno", ja: "ルーマニア語", ko: "루마니아어", hu: "Maghiară", no: "Rumensk", pl: "Rumuński", pt: "Romeno", ro: "Română", ru: "Румынский", el: "Ρουμανικά", sk: "Rumunčina", sv: "Rumänska", th: "โรมาเนีย", tr: "Rumence", uk: "Румунська", vi: "Tiếng Rumani" },
+        pt: { cs: "Portugalština", en: "Portuguese", de: "Portugiesisch", es: "Portugués", fr: "Portugais", zh: "葡萄牙语", ar: "البرتغالية", bn: "পর্তুগিজ", bg: "Португалски", "zh-tw": "葡萄牙語", da: "Portugisisk", fi: "Portugali", he: "פורטוגזית", hi: "पुर्तगाली", nl: "Portugees", hr: "Portugalski", id: "Portugis", it: "Portoghese", ja: "ポルトガル語", ko: "포르투갈어", hu: "Portugál", no: "Portugisisk", pl: "Portugalski", pt: "Português", ro: "Portugheză", ru: "Португальский", el: "Πορτογαλικά", sk: "Portugalčina", sv: "Portugisiska", th: "โปรตุเกส", tr: "Portekizce", uk: "Португальська", vi: "Tiếng Bồ Đào Nha" },
+        ro: { cs: "Rumunština", en: "Romanian", de: "Rumänisch", es: "Rumano", fr: "Roumain", zh: "罗马尼亚语", ar: "الرومانية", bn: "রোলেনীয়", bg: "Румънски", "zh-tw": "羅馬尼亞語", da: "Rumænsk", fi: "Romania", he: "רומנית", hi: "रोमानियाई", nl: "Roemeens", hr: "Rumunjski", id: "Rumania", it: "Romeno", ja: "ルーマニア語", ko: "루마니아어", hu: "Román", no: "Rumensk", pl: "Rumuński", pt: "Romeno", ro: "Română", ru: "Румынский", el: "Ρουμανικά", sk: "Rumunčina", sv: "Rumänska", th: "โรมาเนีย", tr: "Rumence", uk: "Румунська", vi: "Tiếng Rumani" },
         ru: { cs: "Ruština", en: "Russian", de: "Russisch", es: "Ruso", fr: "Russe", zh: "俄语", ar: "الروسية", bn: "রুশ", bg: "Руски", "zh-tw": "俄語", da: "Russisk", fi: "Venäjä", he: "רוסית", hi: "रूसी", nl: "Russisch", hr: "Ruski", id: "Rusia", it: "Russo", ja: "ロシア語", ko: "러시아어", hu: "Orosz", no: "Russisk", pl: "Rosyjski", pt: "Russo", ro: "Rusă", ru: "Русский", el: "Ρωσικά", sk: "Ruština", sv: "Ryska", th: "รัสเซีย", tr: "Rusça", uk: "Російська", vi: "Tiếng Nga" },
-        el: { cs: "Řečtina", en: "Greek", de: "Griechisch", es: "Griego", fr: "Grec", zh: "希腊语", ar: "اليونانية", bn: "গ্রিক", bg: "Гръцки", "zh-tw": "希臘語", da: "Græsk", fi: "Kreikka", he: "יוונית", hi: "ग्रीक", nl: "Grieks", hr: "Grčki", id: "Yunani", it: "Greco", ja: "ギリシャ語", ko: "그리스어", hu: "Görög", no: "Gresk", pl: "Grecki", pt: "Grego", ro: "Greacă", ru: "Греческий", el: "Ελληνικά", sk: "Gréčtina", sv: "Grekiska", th: "กรีก", tr: "Yunanca", uk: "Гρεцька", vi: "Tiếng Hy Lạp" },
+        el: { cs: "Řečtina", en: "Greek", de: "Griechisch", es: "Griego", fr: "Grec", zh: "希腊语", ar: "اليونانية", bn: "গ্রিক", bg: "Гръцки", "zh-tw": "希臘語", da: "Græsk", fi: "Kreikka", he: "יוונית", hi: "ग्रीक", nl: "Grieks", hr: "Grčki", id: "Yunani", it: "Greco", ja: "ギリシャ語", ko: "그리스어", hu: "Görög", no: "Gresk", pl: "Grecki", pt: "Grego", ro: "Greacă", ru: "Греческий", el: "Ελληνικά", sk: "Gréčtina", sv: "Grekiska", th: "กรีก", tr: "Yunanca", uk: "Грецька", vi: "Tiếng Hy Lạp" },
         sk: { cs: "Slovenština", en: "Slovak", de: "Slowakisch", es: "Eslovaco", fr: "Slovaque", zh: "斯洛伐克语", ar: "السلوفاكية", bn: "স্লোভাক", bg: "Словашки", "zh-tw": "斯洛伐克語", da: "Slovakisk", fi: "Slovakki", he: "סלובקית", hi: "स्लोवाक", nl: "Slowaaks", hr: "Slovački", id: "Slowakia", it: "Slovacco", ja: "スロバキア語", ko: "슬로바키아어", hu: "Szlovák", no: "Slovakisk", pl: "Słowacki", pt: "Eslovaco", ro: "Slovacă", ru: "Словацкий", el: "Σλοβακικά", sk: "Slovenčina", sv: "Slovakiska", th: "สโลวัค", tr: "Slovakça", uk: "Словацька", vi: "Tiếng Slovák" },
-        es: { cs: "Španělština", en: "Spanish", de: "Spanisch", es: "Español", fr: "Espagnol", zh: "西班牙语", ar: "الإسبانية", bn: "স্প্যানিশ", bg: "Испански", "zh-tw": "西班牙語", da: "Spansk", fi: "Espanja", he: "ספרדית", hi: "स्पैनिश", nl: "Spaans", hr: "Španjolski", id: "Spanyol", it: "Spagnolo", ja: "スペイン語", ko: "스페인어", hu: "Spanyol", no: "Spansk", pl: "Hiszpański", pt: "Espanhol", ro: "Spaniolă", ru: "Испанский", el: "Ισπανικά", sk: "Španielčina", sv: "Spanska", th: "สเปน", tr: "İspanyolca", uk: "Іспаνська", vi: "Tiếng Tây Ban Nha" },
+        es: { cs: "Španělština", en: "Spanish", de: "Spanisch", es: "Español", fr: "Espagnol", zh: "西班牙语", ar: "الإسبانية", bn: "স্প্যানিশ", bg: "Испански", "zh-tw": "西班牙語", da: "Spansk", fi: "Espanja", he: "ספרדית", hi: "स्पैनिश", nl: "Spaans", hr: "Španjolski", id: "Spanyol", it: "Spagnolo", ja: "スペイン語", ko: "스เป인어", hu: "Spanyol", no: "Spansk", pl: "Hiszpański", pt: "Espanhol", ro: "Spaniolă", ru: "Испанский", el: "Ισπανικά", sk: "Španielčina", sv: "Spanska", th: "สเปน", tr: "İspanyolca", uk: "Іспанська", vi: "Tiếng Tây Ban Nha" },
         sv: { cs: "Švédština", en: "Swedish", de: "Schwedisch", es: "Sueco", fr: "Suédois", zh: "瑞典语", ar: "السويدية", bn: "সুইডিশ", bg: "Шведски", "zh-tw": "瑞典語", da: "Svensk", fi: "Ruotsi", he: "שוודית", hi: "स्वीडिश", nl: "Zweeds", hr: "Švedski", id: "Swedia", it: "Svedese", ja: "スウェーデン語", ko: "스웨덴어", hu: "Svéd", no: "Svensk", pl: "Szwedzki", pt: "Sueco", ro: "Suedeză", ru: "Шведский", el: "Σουηδικά", sk: "Švédčina", sv: "Svenska", th: "สวีเดน", tr: "İsveççe", uk: "Шведська", vi: "Tiếng Thụy Điển" },
         th: { cs: "Thajština", en: "Thai", de: "Thailändisch", es: "Tailandés", fr: "Thaïlandais", zh: "泰语", ar: "التايلاندية", bn: "থাই", bg: "Тайландски", "zh-tw": "泰語", da: "Thai", fi: "Thai", he: "תאילנדית", hi: "थाई", nl: "Thais", hr: "Tajlandski", id: "Thailand", it: "Thailandese", ja: "タイ語", ko: "태국어", hu: "Thai", no: "Thai", pl: "Tajski", pt: "Tailandês", ro: "Thailandeză", ru: "Тайский", el: "Ταϊλανδικά", sk: "Thajčina", sv: "Thailändska", th: "ไทย", tr: "Tayca", uk: "Тайська", vi: "Tiếng Thái" },
         tr: { cs: "Turečtina", en: "Turkish", de: "Türkisch", es: "Turco", fr: "Turc", zh: "土耳其语", ar: "التركية", bn: "তুর্কি", bg: "Турски", "zh-tw": "土耳其語", da: "Tyrkisk", fi: "Turkki", he: "טורקית", hi: "तुर्की", nl: "Turks", hr: "Turski", id: "Turki", it: "Turco", ja: "トルコ語", ko: "터키어", hu: "Török", no: "Tyrkisk", pl: "Turecki", pt: "Turco", ro: "Turcă", ru: "Турецкий", el: "Τουρκικά", sk: "Turečtina", sv: "Turkiska", th: "ตุรกี", tr: "Türkçe", uk: "Турецька", vi: "Tiếng Thổ Nhĩ Kỳ" },
@@ -1729,20 +1727,6 @@ iframe {
             about1_subtitle: "نقاط قوتي في العمل", about2_title: "لماذا تعمل معي؟", about2_text: "بفضل خبرتي المتنوعة، أستطيع التكيف بسرعة مع البيئات الجديدة وتحمل المسؤولية.",
             about2_motivation: "هل تبحث عن شخص يستحق الاستثمار فيه؟ دعنا نبتكر شيئاً رائعاً معاً.", contact_reach_out: "تواصل معي:", game_start: "ابدأ", footer_phone: "الهاتف:", footer_email: "البريد الإلكتروني:"
         },
-        hi: {
-            nav_home: "मुख्य पृष्ठ", nav_about: "मेरे बारे में", nav_gallery: "गैलरी", nav_games: "खेल", nav_contact: "संपर्क करें",
-            hero_portfolio_title: "पोर्टफोलियो", hero_portfolio_text: "मेरा नाम फिलिप दुदा है, मैं बुनियादी प्रोग्रामिंग, ग्राफिक डिजाइन और टेस्टिंग पर काम करता हूं।",
-            hero_welcome_title: "स्वागत है", hero_welcome_text: "साथ मिलकर हम आपके विचारों को हकीकत में बदलेंगे। हम रचनात्मकता और सटीकता को जोड़ते हैं!",
-            gallery_title: "गैलरी", gallery_eyebrow: "मेरा कार्य", gallery_lead: "हाल ही में मैंने जिन प्रोजेक्ट्स पर काम किया है, उनकी एक झलक — ग्राफिक डिजाइन से लेकर गेम विजुअल्स तक।", gallery_desc: "पोर्टफोलियो में प्रिंट डिजाइन, गेम ग्राफिक्स और 3D दुनिया की अवधारणाएं शामिल हैं।",
-            games_title: "एक खेल चुनें", contact_title: "मुझसे संपर्क करें", back_button: "वापस जाएं",
-            about_skill_1_title: "आईटी और विकास", about_skill_1_desc: "हार्डवेयर और सॉफ्टवेयर प्रबंधन, फ्रंटएंड/बैकएंड विकास (HTML, CSS, JS) और 3D वातावरण निर्माण।",
-            about_skill_2_title: "डिजाइन और 3D", about_skill_2_desc: "3D विज़ुअलाइज़ेशन, इंटीरियर डिज़ाइन और ग्राफ़िक सामग्री (Photoshop, GIMP, Corel)।",
-            about_skill_3_title: "नेतृत्व और व्यापार", about_skill_3_desc: "टीम का नेतृत्व, रसद, शिकायत निवारण और नए सिस्टम लागू करने का अनुभव।",
-            about_skill_4_title: "सॉफ्ट स्किल्स", about_skill_4_desc: "जटिल अवधारणाओं को सरल तरीके से समझाना, विश्लेषणात्मक सोच और ग्राहक पर ध्यान केंद्रित करना।",
-            lang_label: "HI ▾", about1_title: "मैं कौन हूं और मैं क्या लाता हूं", about1_text: "मैं हार्डवेयर और सॉफ्टवेयर प्रबंधन से लेकर वेब विकास और 3D विज़ुअलाइज़ेशन तक बहुमुखी प्रतिभा वाला व्यक्ति हूं।",
-            about1_subtitle: "अभ्यास में मेरी ताकत", about2_title: "मेरे साथ काम क्यों करें?", about2_text: "अपने विविध अनुभवों के कारण, मैं नए परिवेश में जल्दी ढल जाता हूं और परिणामों की जिम्मेदारी लेता हूं।",
-            about2_motivation: "क्या आप किसी ऐसे व्यक्ति की तलाश कर रहे हैं जो निवेश के लायक हो? आइए साथ मिलकर कुछ बेहतरीन बनाएं।", contact_reach_out: "मुझसे संपर्क करें:", game_start: "प्रारंभ", footer_phone: "फोन:", footer_email: "ईमेल:"
-        },
         bn: {
             nav_home: "মূল পাতা", nav_about: "আমার সম্পর্কে", nav_gallery: "গ্যালারি", nav_games: "গেমস", nav_contact: "যোগাযোগ",
             hero_portfolio_title: "পোর্টফোলিও", hero_portfolio_text: "আমার নাম ফিলিপ দুদা, আমি প্রোগ্রামিং, গ্রাফিক ডিজাইন এবং টেস্টিং নিয়ে কাজ করি।",
@@ -1753,7 +1737,7 @@ iframe {
             about_skill_2_title: "ডিজাইন এবং ৩ডি", about_skill_2_desc: "৩ডি ভিজ্যুয়ালাইজেশন, ইন্টেরিয়র ডিজাইন এবং গ্রাফিক সামগ্রী (Photoshop, GIMP, Corel)।",
             about_skill_3_title: "নেতৃত্ব ও ব্যবসা", about_skill_3_desc: "টিম লিডারশিপ, লজিস্টিকস, গ্রাহক সেবা এবং নতুন সিস্টেম বাস্তবায়নের অভিজ্ঞতা।",
             about_skill_4_title: "সফট স্কিলস", about_skill_4_desc: "জটিল বিষয় সহজভাবে ব্যাখ্যা করা, বিশ্লেষণাত্মক চিন্তাভাবনা এবং গ্রাহক-কেন্দ্রিক মনোভাব।",
-            lang_label: "BN ▾", about1_title: "আমি কে এবং আমি কী অফার করি", about1_text: "আমি একজন বহুমুখী দক্ষ ব্যক্তি যার অভিজ্ঞতা হার্ডওয়্যার ব্যবস্থাপনা থেকে শুরু করে ওয়েব ডেভেলপমেন্ট এবং ৩ডি ভিজ্যুয়লাইজেশন পর্যন্ত বিস্তৃত।",
+            lang_label: "BN ▾", about1_title: "আমি কে এবং আমি কী অফার করি", about1_text: "আমি একজন বহুমুখী দক্ষ ব্যক্তি যার অভিজ্ঞতা হার্ডওয়্যার ব্যবস্থাপনা থেকে শুরু করে ওয়েব ডেভেলপমেন্ট এবং ৩ডি ভিজ্যুয়ালাইজেশন পর্যন্ত বিস্তৃত।",
             about1_subtitle: "কাজে আমার মূল শক্তি", about2_title: "কেন আমার সাথে কাজ করবেন?", about2_text: "বিভিন্ন ক্ষেত্রে কাজের অভিজ্ঞতার কারণে আমি দ্রুত নতুন পরিবেশের সাথে খাপ খাইয়ে নিতে পারি।",
             about2_motivation: "বিনিয়োগ করার মতো কাউকে খুঁজছেন? চলুন একসাথে দারুণ কিছু তৈরি করি।", contact_reach_out: "যোগাযোগের ঠিকানা:", game_start: "শুরু করুন", footer_phone: "ফোন:", footer_email: "ইমেইল:"
         },
@@ -1768,90 +1752,478 @@ iframe {
             about_skill_3_title: "Лидерство и Бизнес", about_skill_3_desc: "Управление на екипи, логистика и внедряване на нови системи.",
             about_skill_4_title: "Меки умения", about_skill_4_desc: "Обяснение на сложни концепции по лесен начин, аналитично мислене.",
             lang_label: "BG ▾", about1_title: "Кой съм аз и какво предлагам", about1_text: "Аз съм гъвкав специалист с широк спектър от умения в ИТ и дигиталния дизайн.",
-            about1_subtitle: "Моите силни страни", about2_title: "Защо да работите с мен?", about2_text: "Бързо се адаптирам към нови среди и поемам отговорност за резултатите.",
-            about2_motivation: "Търсите някой, в когото си струва да инвестирате? Нека сътворим нещо страхотно заедно.", contact_reach_out: "Свържете се с мен:", game_start: "Старт", footer_phone: "Телефон:", footer_email: "Имейл:"
+            about1_subtitle: "Моите силни страни", about2_title: "Защо да работите с мен?", about2_text: "Благодарение на разнообразния ми опит, бързо се адаптирам и поемам отговорност.",
+            about2_motivation: "Търсите човек, в когото си струва да инвестирате? Нека създадем нещо страхотно.", contact_reach_out: "Свържете се с мен:", game_start: "Старт", footer_phone: "Телефон:", footer_email: "Имейл:"
+        },
+        sk: {
+            nav_home: "Hlavná", nav_about: "O mne", nav_gallery: "Galéria", nav_games: "Hry", nav_contact: "Kontakt",
+            hero_portfolio_title: "Portfólio", hero_portfolio_text: "Volám sa Filip Duda, venujem sa jednoduchému programovaniu, grafickému dizajnu a testovaniu.",
+            hero_welcome_title: "Vitajte", hero_welcome_text: "Spoločne premeníme Vaše nápady na realitu. Spojíme kreativitu a precíznosť k vytvoreniu niečoho výnimočného!",
+            gallery_title: "Galéria", gallery_eyebrow: "Moja práca", gallery_lead: "Tu je ukážka projektov, na ktorých som v poslednej dobe pracoval — od grafického dizajnu po herné vizuály.", gallery_desc: "Portfólio zahŕňa širokú škálu projektov, od návrhov pre tlač, cez hernú grafiku až po návrhy vlastných svetov.",
+            games_title: "Vyberte hru", contact_title: "Kontaktujte ma", back_button: "Späť",
+            about_skill_1_title: "IT & Vývoj", about_skill_1_desc: "Správa HW a SW, Frontend/Backend vývoj (HTML, CSS, JS a AI nástroje). Vývoj vlastného 3D prostredia.",
+            about_skill_2_title: "Design & 3D", about_skill_2_desc: "3D vizualizácie, interiérové návrhy, grafické materiály (Photoshop, GIMP, Corel).",
+            about_skill_3_title: "Leadership & Obchod", about_skill_3_desc: "Vedenie tímu, logistika, riešenie reklamácií a skúsenosti so zavádzaním nových systémov.",
+            about_skill_4_title: "Soft Skills", about_skill_4_desc: "Vysvetľovanie zložitého jednoduchým spôsobom, analytické myslenie, orientácia na zákazníka.",
+            lang_label: "SK ▾", about1_title: "Kto som a čo prinášam", about1_text: "Jsem všestranný človek s komplexným záběrem od správy hardvéru a softvéru cez webový vývoj až po 3D vizualizácie.",
+            about1_subtitle: "Moje silné stránky v praxi", about2_title: "Proč spolupracovať práve so mnou?", about2_text: "Vďaka pestré praxi som si zvykol rýchlo sa adaptovať na nové prostredie a preberať zodpovednosť za výsledky.",
+            about2_motivation: "Hľadáte niekoho, do koho sa oplatí investovať? Poďme spoločne vytvoriť niečo skvelé.", contact_reach_out: "Ozvite sa mi:", game_start: "Spustiť", footer_phone: "Telefón:", footer_email: "Email:"
+        },
+        pl: {
+            nav_home: "Główna", nav_about: "O mnie", nav_gallery: "Galeria", nav_games: "Gry", nav_contact: "Kontakt",
+            hero_portfolio_title: "Portfolio", hero_portfolio_text: "Nazywam się Filip Duda, zajmuję się programowaniem, projektowaniem graficznym i testowaniem.",
+            hero_welcome_title: "Witaj", hero_welcome_text: "Razem przekształcimy Twoje pomysły w rzeczywistość. Łączymy kreatywność i precyzję!",
+            gallery_title: "Galeria", gallery_eyebrow: "Moja praca", gallery_lead: "Oto wybrane projekty, nad którymi ostatnio pracowałem — od grafiki po wizualizacje gier.", gallery_desc: "Portfolio obejmuje projekty do druku, grafikę do gier oraz koncepcje światów 3D.",
+            games_title: "Wybierz grę", contact_title: "Skontaktuj się ze mną", back_button: "Wstecz",
+            about_skill_1_title: "IT i Rozwój", about_skill_1_desc: "Zarządzanie HW/SW, frontend/backend oraz tworzenie środowisk 3D.",
+            about_skill_2_title: "Design i 3D", about_skill_2_desc: "Wizualizacje 3D, projektowanie wnętrz i materiały graficzne.",
+            about_skill_3_title: "Liderstwo i Biznes", about_skill_3_desc: "Zarządzanie zespołem, logistyka i wdrażanie nowych systemów.",
+            about_skill_4_title: "Umiejętności Miękkie", about_skill_4_desc: "Proste wyjaśnianie trudnych pojęć, myślenie analityczne, nastawienie na klienta.",
+            lang_label: "PL ▾", about1_title: "Kim jestem i co oferuję", about1_text: "Jestem wszechstronną osobą o szerokim zakresie umiejętności w IT i projektowaniu wizualnym.",
+            about1_subtitle: "Moje mocne strony w praktyce", about2_title: "Dlaczego warto ze mną współpracować?", about2_text: "Dzięki różnorodnemu doświadczeniu szybko adaptuję się do nowych wyzwań i biorę odpowiedzialność za wyniki.",
+            about2_motivation: "Szukasz kogoś, w kogo warto zainwestować? Stwórzmy razem coś wyjątkowego.", contact_reach_out: "Napisz do mnie:", game_start: "Uruchom", footer_phone: "Telefon:", footer_email: "E-mail:"
+        },
+        uk: {
+            nav_home: "Головна", nav_about: "Про мене", nav_gallery: "Галерея", nav_games: "Ігри", nav_contact: "Контакти",
+            hero_portfolio_title: "Портфоліо", hero_portfolio_text: "Мене звати Філіп Дуда, я займаюся програмуванням, графічним дизайном та тестуванням.",
+            hero_welcome_title: "Ласкаво просимо", hero_welcome_text: "Разом ми перетворимо ваші ідеї на реальність. Поєднуємо креативність та точність!",
+            gallery_title: "Галерея", gallery_eyebrow: "Моя робота", gallery_lead: "Ось приклади проектів, над якими я працював останнім часом — від дизайну до ігрових візуалів.", gallery_desc: "Портфоліо включает друкований дизайн, графіку для ігор та 3D концепції.",
+            games_title: "Оберіть гру", contact_title: "Зв'яжіться зі мною", back_button: "Назад",
+            about_skill_1_title: "IT та Розробка", about_skill_1_desc: "Управління HW/SW, Frontend/Backend розробка та створення 3D середовищ.",
+            about_skill_2_title: "Дизайн та 3D", about_skill_2_desc: "3D візуалізація, дизайн інтер'єрів та графічні матеріали.",
+            about_skill_3_title: "Лідерство та Бізнес", about_skill_3_desc: "Управління командою, логістика та впровадження нових систем.",
+            about_skill_4_title: "Гнучкі навички", about_skill_4_desc: "Просте пояснення складних речей, аналітичне мислення, орієнтація на клієнта.",
+            lang_label: "UK ▾", about1_title: "Хто я і що пропоную", about1_text: "Я різнобічний фахівець із досвідом від адміністрування IT до 3D дизайну.",
+            about1_subtitle: "Мої сильні сторони", about2_title: "Чому варто співпрацювати зі мною?", about2_text: "Завдяки різноманітному досвіду я швидко адаптуюся та беру відповідальність за результат.",
+            about2_motivation: "Шукаєте людину, в яку варто інвестувати? Створимо щось чудове разом.", contact_reach_out: "Зв'яжіться зі мною:", game_start: "Запустити", footer_phone: "Телефон:", footer_email: "Email:"
+        },
+        ru: {
+            nav_home: "Главная", nav_about: "Обо мне", nav_gallery: "Галерея", nav_games: "Игры", nav_contact: "Контакты",
+            hero_portfolio_title: "Портфолио", hero_portfolio_text: "Меня зовут Филип Дуда, я занимаюсь программированием, графическим дизайном и тестированием.",
+            hero_welcome_title: "Добро пожаловать", hero_welcome_text: "Вместе мы превратим ваши идеи в реальность. Объединяем креативность и точность!",
+            gallery_title: "Галерея", gallery_eyebrow: "Моя работа", gallery_lead: "Примеры последних проектов — от графического дизайна до игровых визуэлов.", gallery_desc: "Портфолио включает печатную продукцию, графику для игр и 3D концепции.",
+            games_title: "Выберите игру", contact_title: "Свяжитесь со мной", back_button: "Назад",
+            about_skill_1_title: "IT и Разработка", about_skill_1_desc: "Управление HW/SW, Frontend/Backend разработка и создание 3D окружения.",
+            about_skill_2_title: "Дизайн и 3D", about_skill_2_desc: "3D визуализация, дизайн интерьеров и графические материалы.",
+            about_skill_3_title: "Лидерство и Бизнес", about_skill_3_desc: "Управление командой, логистика и внедрение новых систем.",
+            about_skill_4_title: "Гибкие навыки", about_skill_4_desc: "Простое объяснение сложных вещей, аналитическое мышление, ориентация на клиента.",
+            lang_label: "RU ▾", about1_title: "Кто я и что предлагаю", about1_text: "Я разносторонний специалист с опытом от администрирования IT до 3D дизайна.",
+            about1_subtitle: "Мои сильные стороны", about2_title: "Почему стоит работать со мной?", about2_text: "Благодаря разнообразному опыту я быстро адаптируюсь и беру ответственность за результат.",
+            about2_motivation: "Ищете человека, в которого стоит инвестировать? Создадим что-то отличное вместе.", contact_reach_out: "Свяжитесь со мной:", game_start: "Запустить", footer_phone: "Телефон:", footer_email: "Email:"
+        },
+        ja: {
+            nav_home: "ホーム", nav_about: "私について", nav_gallery: "ギャラリー", nav_games: "ゲーム", nav_contact: "お問い合わせ",
+            hero_portfolio_title: "ポートフォリオ", hero_portfolio_text: "フィリップ・ドゥダと申します。プログラミング、グラフィックデザイン、テストを担当しています。",
+            hero_welcome_title: "ようこそ", hero_welcome_text: "あなたのアイデアを共に形にします。創造性と正確さを融合させます！",
+            gallery_title: "ギャラリー", gallery_eyebrow: "実績・作品", gallery_lead: "最近手掛けたプロジェクトの紹介です — デザインからゲームビジュアルまで。", gallery_desc: "印刷デザイン、ゲームグラフィック、独自の3Dワールドコンセプトなど多岐にわたります。",
+            games_title: "ゲームを選択", contact_title: "お問い合わせ", back_button: "戻る",
+            about_skill_1_title: "IT & 開発", about_skill_1_desc: "HW/SW管理、Web開発（HTML/CSS/JS/AIツール）、3D環境構築。",
+            about_skill_2_title: "デザイン & 3D", about_skill_2_desc: "3Dビジュアル、インテリアデザイン、グラフィック制作 (Photoshop, GIMP, Corel)。",
+            about_skill_3_title: "リーダーシップ", about_skill_3_desc: "チーム管理、ロジスティクス、クレーム対応、新システム導入実績。",
+            about_skill_4_title: "ソフトスキル", about_skill_4_desc: "専門的な内容を分かりやすく説明する力、分析的思考、顧客志向。",
+            lang_label: "JA ▾", about1_title: "プロフィールと強み", about1_text: "ITインフラ管理からWeb開発、3Dデザインまで幅広く対応できるマルチクリエイターです。",
+            about1_subtitle: "実践における強み", about2_title: "パートナーに選ばれる理由", about2_text: "多様な職務経験により、新しい環境へ迅速に適応し、成果に対して責任を持ちます。",
+            about2_motivation: "投資価値のある人材をお探しですか？ 素晴らしいものを共に作りましょう。", contact_reach_out: "ご連絡はこちら:", game_start: "スタート", footer_phone: "電話番号:", footer_email: "メール:"
+        },
+        ko: {
+            nav_home: "홈", nav_about: "소개", nav_gallery: "갤러리", nav_games: "게임", nav_contact: "문의하기",
+            hero_portfolio_title: "포트폴리오", hero_portfolio_text: "안녕하세요, 필립 두다입니다. 프로그래밍, 그래픽 디자인 및 테스트를 담당하고 있습니다.",
+            hero_welcome_title: "환영합니다", hero_welcome_text: "당신의 아이디어를 함께 현실로 만들어 드립니다. 창의성과 정교함의 결합!",
+            gallery_title: "갤러리", gallery_eyebrow: "작업물", gallery_lead: "최근 진행한 프로젝트입니다 — 그래픽 디자인부터 게임 비주얼까지.", gallery_desc: "인쇄 디자인, 게임 그래픽, 3D 월드 컨셉 디자인 등 다양한 프로젝트를 포함합니다.",
+            games_title: "게임 선택", contact_title: "문의하기", back_button: "뒤로 가기",
+            about_skill_1_title: "IT 및 개발", about_skill_1_desc: "하드웨어/소프트웨어 관리, 프론트엔드/백엔드 개발 및 3D 환경 구축.",
+            about_skill_2_title: "디자인 및 3D", about_skill_2_desc: "3D 시각화, 인테리어 디자인, 그래픽 제작 (Photoshop, GIMP, Corel).",
+            about_skill_3_title: "리더십 및 비즈니스", about_skill_3_desc: "팀 리더십, 물류, 고객 응대 및 신규 시스템 도입 경험.",
+            about_skill_4_title: "소프트 스킬", about_skill_4_desc: "복잡한 개념을 쉬운 언어로 설명하는 능력, 분석적 사고방식.",
+            lang_label: "KO ▾", about1_title: "소개 및 강점", about1_text: "IT 관리부터 웹 개발, 3D 디자인에 이르기까지 폭넓은 역량을 갖춘 인재입니다.",
+            about1_subtitle: "실무에서의 핵심 강점", about2_title: "함께 일해야 하는 이유", about2_text: "다양한 실무 경험을 바탕으로 새로운 환경에 빠르게 적응하며 결과에 책임을 다합니다.",
+            about2_motivation: "투자할 가치가 있는 인재를 찾고 계신가요? 함께 멋진 결과를 만들어봅시다.", contact_reach_out: "연락처:", game_start: "시작", footer_phone: "전화번호:", footer_email: "이메일:"
+        },
+        it: {
+            nav_home: "Home", nav_about: "Chi sono", nav_gallery: "Galleria", nav_games: "Giochi", nav_contact: "Contatti",
+            hero_portfolio_title: "Portfolio", hero_portfolio_text: "Mi chiamo Filip Duda, mi occupo di programmazione, design grafico e testing.",
+            hero_welcome_title: "Benvenuto", hero_welcome_text: "Insieme trasformeremo le tue idee in realtà. Uniamo creatività e precisione!",
+            gallery_title: "Galleria", gallery_eyebrow: "Il mio lavoro", gallery_lead: "Ecco una selezione di progetti recenti — dal graphic design ai visual per videogiochi.", gallery_desc: "Il portfolio comprende grafica pubblicitaria, game art e concetti di mondi 3D.",
+            games_title: "Seleziona un gioco", contact_title: "Contattami", back_button: "Indietro",
+            about_skill_1_title: "IT & Sviluppo", about_skill_1_desc: "Gestione HW/SW, sviluppo Frontend/Backend e creazione di ambienti 3D.",
+            about_skill_2_title: "Design & 3D", about_skill_2_desc: "Visualizzazione 3D, interior design e materiale grafico.",
+            about_skill_3_title: "Leadership & Business", about_skill_3_desc: "Gestione del team, logistica e implementazione di nuovi sistemi.",
+            about_skill_4_title: "Competenze Trasversali", about_skill_4_desc: "Capacità di spiegare concetti complessi in modo semplice e pensiero analitico.",
+            lang_label: "IT ▾", about1_title: "Chi sono e cosa offro", about1_text: "Sono un professionista versatile con competenze che spaziano dall'IT al 3D design.",
+            about1_subtitle: "I miei punti di forza", about2_title: "Perché lavorare con me?", about2_text: "Grazie alla mia vasta esperienza, mi adatto rapidamente e mi assumo la responsabilità dei risultati.",
+            about2_motivation: "Cerchi qualcuno su cui valga la pena investire? Creiamo qualcosa di fantastico insieme.", contact_reach_out: "Contattami:", game_start: "Avvia", footer_phone: "Telefono:", footer_email: "Email:"
+        },
+        pt: {
+            nav_home: "Início", nav_about: "Sobre mim", nav_gallery: "Galeria", nav_games: "Jogos", nav_contact: "Contato",
+            hero_portfolio_title: "Portfólio", hero_portfolio_text: "Meu nome é Filip Duda, foco em programação, design gráfico e testes.",
+            hero_welcome_title: "Bem-vindo", hero_welcome_text: "Juntos transformaremos suas ideias em realidade. Unindo criatividade e precisão!",
+            gallery_title: "Galeria", gallery_eyebrow: "Meu Trabalho", gallery_lead: "Projetos recentes — de design gráfico a visuais para jogos.", gallery_desc: "O portfólio inclui materiais impressos, arte para jogos e conceitos 3D.",
+            games_title: "Selecione um jogo", contact_title: "Entre em contato", back_button: "Voltar",
+            about_skill_1_title: "TI & Desenvolvimento", about_skill_1_desc: "Gestão de HW/SW, desenvolvimento Frontend/Backend e ambientes 3D.",
+            about_skill_2_title: "Design & 3D", about_skill_2_desc: "Visualização 3D, design de interiores e artes gráficas.",
+            about_skill_3_title: "Liderança & Negócios", about_skill_3_desc: "Liderança de equipes, logística e implementação de sistemas.",
+            about_skill_4_title: "Soft Skills", about_skill_4_desc: "Facilidade para explicar conceitos complexos, pensamento analítico.",
+            lang_label: "PT ▾", about1_title: "Quem sou e o que ofereço", about1_text: "Sou um profissional versátil com atuação abrangente em TI e design digital.",
+            about1_subtitle: "Minhas forças na prática", about2_title: "Por que trabalhar comigo?", about2_text: "Com minha experiência diversificada, me adapto rapidamente e garanto resultados.",
+            about2_motivation: "Procurando alguém em quem valha a pena investir? Vamos criar algo incrível juntos.", contact_reach_out: "Fale comigo:", game_start: "Iniciar", footer_phone: "Telefone:", footer_email: "E-mail:"
+        },
+        nl: {
+            nav_home: "Home", nav_about: "Over mij", nav_gallery: "Galerij", nav_games: "Games", nav_contact: "Contact",
+            hero_portfolio_title: "Portfolio", hero_portfolio_text: "Mijn naam is Filip Duda, ik hou me bezig met programmeren, grafisch ontwerp en testen.",
+            hero_welcome_title: "Welkom", hero_welcome_text: "Samen zetten we uw ideeën om in realiteit. Creativiteit en precisie gecombineerd!",
+            gallery_title: "Galerij", gallery_eyebrow: "Mijn werk", gallery_lead: "Recente projecten — van grafisch ontwerp tot game visuals.", gallery_desc: "Het portfolio omvat printontwerpen, game visuals en 3D-wereldconcepten.",
+            games_title: "Selecteer een game", contact_title: "Neem contact op", back_button: "Terug",
+            about_skill_1_title: "IT & Ontwikkeling", about_skill_1_desc: "HW/SW beheer, Frontend/Backend ontwikkeling en 3D omgevingen.",
+            about_skill_2_title: "Design & 3D", about_skill_2_desc: "3D visualisatie, interieurontwerp en grafische materialen.",
+            about_skill_3_title: "Leiderschap & Business", about_skill_3_desc: "Teamleiding, logistiek en implementatie van nieuwe systemen.",
+            about_skill_4_title: "Soft Skills", about_skill_4_desc: "Eenvoudige uitleg van complexe concepten, analytisch denken.",
+            lang_label: "NL ▾", about1_title: "Wie ik ben en wat ik bied", about1_text: "Ik ben een veelzijdige professional met ervaring in IT en digitaal ontwerp.",
+            about1_subtitle: "Mijn sterke punten", about2_title: "Waarom met mij samenwerken?", about2_text: "Door mijn brede ervaring pas ik me snel aan en neem ik verantwoordelijkheid voor resultaten.",
+            about2_motivation: "Op zoek naar iemand die de investering waard is? Laten we samen iets moois maken.", contact_reach_out: "Neem contact op:", game_start: "Starten", footer_phone: "Telefoon:", footer_email: "E-mail:"
+        },
+        tr: {
+            nav_home: "Ana Sayfa", nav_about: "Hakkımda", nav_gallery: "Galeri", nav_games: "Oyunlar", nav_contact: "İletişim",
+            hero_portfolio_title: "Portfolyo", hero_portfolio_text: "Adım Filip Duda, basit programlama, grafik tasarım ve test süreçleriyle ilgileniyorum.",
+            hero_welcome_title: "Hoş Geldiniz", hero_welcome_text: "Fikirlerinizi birlikte gerçeğe dönüştürelim. Yaratıcılık ve hassasiyeti buluşturuyoruz!",
+            gallery_title: "Galeri", gallery_eyebrow: "Çalışmalarım", gallery_lead: "Son zamanlarda üzerinde çalıştığım projeler — grafik tasarımdan oyun görsellerine.", gallery_desc: "Portfolyo, baskı tasarımları, oyun grafikleri ve 3D konseptleri içerir.",
+            games_title: "Bir oyun seçin", contact_title: "İletişime geçin", back_button: "Geri",
+            about_skill_1_title: "Bilişim & Geliştirme", about_skill_1_desc: "Donanım/Yazılım yönetimi, Frontend/Backend ve 3D ortam geliştirme.",
+            about_skill_2_title: "Tasarım & 3D", about_skill_2_desc: "3D görselleştirme, iç mekan tasarımı ve grafik materyaller.",
+            about_skill_3_title: "Liderlik & İş Yönetimi", about_skill_3_desc: "Takım liderliği, lojistik ve yeni sistem kurulum deneyimi.",
+            about_skill_4_title: "Kişisel Beceriler", about_skill_4_desc: "Karmaşık kavramları basitleştirerek anlatma, analitik düşünme.",
+            lang_label: "TR ▾", about1_title: "Ben kimim ve ne sunuyorum?", about1_text: "IT yönetiminden 3D tasarıma kadar geniş bir alanda yetkin, çok yönlü bir uzmanım.",
+            about1_subtitle: "Pratikteki güçlü yönlerim", about2_title: "Neden benimle çalışmalısınız?", about2_text: "Çeşitli alanlardaki deneyimim sayesinde yeni ortamlara hızla uyum sağlarım.",
+            about2_motivation: "Yatırım yapmaya değer birini mi arıyorsunuz? Birlikte harika bir şey yaratalım.", contact_reach_out: "Bana ulaşın:", game_start: "Başlat", footer_phone: "Telefon:", footer_email: "E-posta:"
+        },
+        sv: {
+            nav_home: "Hem", nav_about: "Om mig", nav_gallery: "Galleri", nav_games: "Spel", nav_contact: "Kontakt",
+            hero_portfolio_title: "Portfolio", hero_portfolio_text: "Jag heter Filip Duda och arbetar med programmering, grafisk design och testning.",
+            hero_welcome_title: "Välkommen", hero_welcome_text: "Tillsammans förvandlar vi dina idéer till verklighet. Kreativitet och precision!",
+            gallery_title: "Galleri", gallery_eyebrow: "Mitt arbete", gallery_lead: "Senaste projekten — från grafisk design till spelvisualisering.", gallery_desc: "Portfolion innehåller trycksaker, spelgrafik och 3D-världskoncept.",
+            games_title: "Välj ett spel", contact_title: "Kontakta mig", back_button: "Tillbaka",
+            about_skill_1_title: "IT & Utveckling", about_skill_1_desc: "HW/SW-hantering, Frontend/Backend-utveckling och 3D-miljöer.",
+            about_skill_2_title: "Design & 3D", about_skill_2_desc: "3D-visualisering, inredningsdesign och grafiskt material.",
+            about_skill_3_title: "Ledarskap & Affärer", about_skill_3_desc: "Teamledarskap, logistik och implementering av nya system.",
+            about_skill_4_title: "Mjuk kompetens", about_skill_4_desc: "Förmåga att förklara komplexa saker enkelt, analytiskt tänkande.",
+            lang_label: "SV ▾", about1_title: "Vem jag är och vad jag erbjuder", about1_text: "Jag är en mångsidig specialist med bred erfarenhet inom IT och visuellt skapande.",
+            about1_subtitle: "Mina styrkor i praktiken", about2_title: "Varför arbeta med mig?", about2_text: "Tack vare min breda bakgrund anpassar jag mig snabbt och tar ansvar för resultatet.",
+            about2_motivation: "Letar du efter någon som är värd att satsa på? Låt oss skapa något fantastiskt tillsammans.", contact_reach_out: "Hör av dig:", game_start: "Starta", footer_phone: "Telefon:", footer_email: "E-post:"
+        },
+        da: {
+            nav_home: "Hjem", nav_about: "Om mig", nav_gallery: "Galleri", nav_games: "Spil", nav_contact: "Kontakt",
+            hero_portfolio_title: "Portfolio", hero_portfolio_text: "Jeg hedder Filip Duda og arbejder med programmering, grafisk design og test.",
+            hero_welcome_title: "Velkommen", hero_welcome_text: "Sammen forvandler vi dine idéer til virkelighed. Kreativitet og præcision i højsædet!",
+            gallery_title: "Galleri", gallery_eyebrow: "Mit arbejde", gallery_lead: "Seneste projekter — fra grafisk design til spilvisuals.", gallery_desc: "Porteføljen indeholder tryksager, spilgrafik og 3D-verdenskoncepter.",
+            games_title: "Vælg et spil", contact_title: "Kontakt mig", back_button: "Tilbage",
+            about_skill_1_title: "IT & Udvikling", about_skill_1_desc: "HW/SW-styring, Frontend/Backend-udvikling og 3D-miljøer.",
+            about_skill_2_title: "Design & 3D", about_skill_2_desc: "3D-visualisering, indretningsdesign og grafisk materiale.",
+            about_skill_3_title: "Lederskab & Forretning", about_skill_3_desc: "Teamledelse, logistik og implementering af nye systemer.",
+            about_skill_4_title: "Bløde kompetencer", about_skill_4_desc: "Evne til at forklare komplekse ting enkelt, analytisk tænkning.",
+            lang_label: "DA ▾", about1_title: "Hvem jeg er, og hvad jeg tilbyder", about1_text: "Jeg er en alsidig specialist med bred erfaring inden for IT og digitalt design.",
+            about1_subtitle: "Mina styrker i praksis", about2_title: "Hvorfor arbejde sammen med mig?", about2_text: "Takket være min brede baggrund tilpasser jeg mig hurtigt og tager ansvar for resultaterne.",
+            about2_motivation: "Leder du efter en, der er værd at investere i? Lad os skabe noget fantastisk sammen.", contact_reach_out: "Kontakt mig:", game_start: "Start", footer_phone: "Telefon:", footer_email: "E-mail:"
+        },
+        fi: {
+            nav_home: "Etusivu", nav_about: "Tietoa minusta", nav_gallery: "Galleria", nav_games: "Pelit", nav_contact: "Ota yhteyttä",
+            hero_portfolio_title: "Portfolio", hero_portfolio_text: "Nimeni on Filip Duda, teen ohjelmointia, graafista suunnittelua ja testausta.",
+            hero_welcome_title: "Tervetuloa", hero_welcome_text: "Muutetaan ideasi вместе realityksi. Luovuus ja tarkkuus kohtaavat!",
+            gallery_title: "Galleria", gallery_eyebrow: "Työni", gallery_lead: "Aiemmat projektini — graafisesta suunnittelusta pelivisuaaleihin.", gallery_desc: "Portfolio sisältää tulostusmateriaaleja, peligrafiikkaa ja 3D-konsepteja.",
+            games_title: "Valitse peli", contact_title: "Ota yhteyttä", back_button: "Takaisin",
+            about_skill_1_title: "IT & Kehitys", about_skill_1_desc: "HW/SW-hallinta, Frontend/Backend-kehitys ja 3D-ympäristöt.",
+            about_skill_2_title: "Muotoilu & 3D", about_skill_2_desc: "3D-visualisointi, sisustussuunnittelu ja graafiset materiaalit.",
+            about_skill_3_title: "Johtajuus & Liiketoiminta", about_skill_3_desc: "Tiiminjohto, logistiikka ja uutta järjestelmätyötä.",
+            about_skill_4_title: "Pehmeät taidot", about_skill_4_desc: "Kyky selittää monimutkaisia asioita yksinkertaisesti, analyyttisyys.",
+            lang_label: "FI ▾", about1_title: "Kuka olen ja mitä tarjoan", about1_text: "Olen monipuolinen IT- ja muotoilualan osaaja, jolla on laaja-alainen kokemus.",
+            about1_subtitle: "Vahvuuteni käytännössä", about2_title: "Miksi tehdä yhteistyötä kanssani?", about2_text: "Monipuolisen taustani ansiosta sopeudun nopeasti ja otan vastuun tuloksista.",
+            about2_motivation: "Etsitkö henkilöä, johon kannattaa investoida? Luodaan yhdessä jotain hienoa.", contact_reach_out: "Ota yhteyttä:", game_start: "Käynnistä", footer_phone: "Puhelin:", footer_email: "Sähköposti:"
+        },
+        no: {
+            nav_home: "Hjem", nav_about: "Om meg", nav_gallery: "Galleri", nav_games: "Spill", nav_contact: "Kontakt",
+            hero_portfolio_title: "Portefølje", hero_portfolio_text: "Jeg heter Filip Duda og driver med programmering, grafisk design og testing.",
+            hero_welcome_title: "Velkommen", hero_welcome_text: "Sammen gjør vi idéene dine om til virkelighet. Kreativitet og presisjon!",
+            gallery_title: "Galleri", gallery_eyebrow: "Mitt arbeid", gallery_lead: "Nyere prosjekter — fra grafisk design til spillvisuelle elementer.", gallery_desc: "Porteføljen inkluderer trykksaker, spillgrafikk og 3D-verdenskonsepter.",
+            games_title: "Velg et spill", contact_title: "Kontakt meg", back_button: "Tilbake",
+            about_skill_1_title: "IT & Utvikling", about_skill_1_desc: "HW/SW-styring, Frontend/Backend-utvikling og 3D-miljøer.",
+            about_skill_2_title: "Design & 3D", about_skill_2_desc: "3D-visualisering, interiørdesign og grafisk materiale.",
+            about_skill_3_title: "Lederskap & Business", about_skill_3_desc: "Teamledelse, logistikk og implementering av nye systemer.",
+            about_skill_4_title: "Myke ferdigheter", about_skill_4_desc: "Evne til å forklare komplekse ting på en enkel måte, analytisk tenkning.",
+            lang_label: "NO ▾", about1_title: "Hvem jeg er og hva jeg tilbyr", about1_text: "Jeg er en allsidig spesialist med bred erfaring innen IT og visuell utforming.",
+            about1_subtitle: "Mine styrker i praksis", about2_title: "Hvorfor jobbe med meg?", about2_text: "Takket være min brede bakgrunn tilpasser jeg meg raskt og tar ansvar for resultatene.",
+            about2_motivation: "Leter du etter noen det er verdt å satse på? La oss skape noe fantastisk sammen.", contact_reach_out: "Ta kontakt:", game_start: "Start", footer_phone: "Telefon:", footer_email: "E-post:"
+        },
+        ro: {
+            nav_home: "Acasă", nav_about: "Despre mine", nav_gallery: "Galerie", nav_games: "Jocuri", nav_contact: "Contact",
+            hero_portfolio_title: "Portofoliu", hero_portfolio_text: "Mă numesc Filip Duda, mă ocup cu programare, design grafic și testare.",
+            hero_welcome_title: "Bine ați venit", hero_welcome_text: "Împreună transformăm ideile în realitate. Creativitate și precizie!",
+            gallery_title: "Galerie", gallery_eyebrow: "Munca mea", gallery_lead: "Proiecte recente — de la design grafic la vizualuri de jocuri.", gallery_desc: "Portofoliul include materiale tipărite, grafică pentru jocuri și concepte 3D.",
+            games_title: "Selectează un joc", contact_title: "Contactează-mă", back_button: "Înapoi",
+            about_skill_1_title: "IT & Dezvoltare", about_skill_1_desc: "Administrare HW/SW, dezvoltare Frontend/Backend și medii 3D.",
+            about_skill_2_title: "Design & 3D", about_skill_2_desc: "Vizualizare 3D, design interior și materiale grafice.",
+            about_skill_3_title: "Leadership & Afaceri", about_skill_3_desc: "Coordonare echipă, logistică și implementare de sisteme noi.",
+            about_skill_4_title: "Aptitudini personale", about_skill_4_desc: "Explicații simple pentru concepte complexe, gândire analitică.",
+            lang_label: "RO ▾", about1_title: "Cine sunt și ce ofer", about1_text: "Sunt un specialist versatil, cu experiență atât în IT, cât și în design vizual.",
+            about1_subtitle: "Punctele mele forte", about2_title: "De ce să colaborăm?", about2_text: "Datorită experienței vaste, mă adaptez rapid și îmi asum responsabilitatea pentru rezultate.",
+            about2_motivation: "Cauți pe cineva în care merită să investești? Hai să creăm ceva grozav împreună.", contact_reach_out: "Contactează-mă:", game_start: "Start", footer_phone: "Telefon:", footer_email: "E-mail:"
+        },
+        hr: {
+            nav_home: "Početna", nav_about: "O meni", nav_gallery: "Galerija", nav_games: "Igre", nav_contact: "Kontakt",
+            hero_portfolio_title: "Portfolio", hero_portfolio_text: "Moje ime je Filip Duda, bavim se programiranjem, grafičkim dizajnom i testiranjem.",
+            hero_welcome_title: "Dobrodošli", hero_welcome_text: "Zajedno ćemo vaše ideje pretvoriti u stvarnost. Spajamo kreativnost i preciznost!",
+            gallery_title: "Galerija", gallery_eyebrow: "Moj rad", gallery_lead: "Primeri nedavnih projekata — od grafičkog dizajna do vizuala za igre.", gallery_desc: "Portfolio uključuje tisak, grafiku za igre i 3D koncepte.",
+            games_title: "Odaberite igru", contact_title: "Kontaktirajte me", back_button: "Natrag",
+            about_skill_1_title: "IT i Razvoj", about_skill_1_desc: "Upravljanje HW/SW-om, Frontend/Backend razvoj i izrada 3D okruženja.",
+            about_skill_2_title: "Dizajn i 3D", about_skill_2_desc: "3D vizualizacija, dizajn interijera i grafički materijali.",
+            about_skill_3_title: "Vodstvo i Posao", about_skill_3_desc: "Vođenje tima, logistika i uvođenje novih sustava.",
+            about_skill_4_title: "Meke vještine", about_skill_4_desc: "Jednostavno objašnjavanje složenih pojmova, analitičko razmišljanje.",
+            lang_label: "HR ▾", about1_title: "Tko sam i što nudim", about1_text: "Svestran sam stručnjak s opsežnim iskustvom u IT-u i digitalnom dizajnu.",
+            about1_subtitle: "Moje snage u praksi", about2_title: "Zašto surađivati sa mnom?", about2_text: "Zahvaljujući raznolikom iskustvu brzo se prilagođavam i preuzimam odgovornost za rezultate.",
+            about2_motivation: "Tražite nekoga u koga se vrijedi uložiti? Stvorimo nešto sjajno zajedno.", contact_reach_out: "Javite mi se:", game_start: "Pokreni", footer_phone: "Telefon:", footer_email: "E-mail:"
+        },
+        el: {
+            nav_home: "Αρχική", nav_about: "Σχετικά με εμένα", nav_gallery: "Γκαλερί", nav_games: "Παιχνίδια", nav_contact: "Επικοινωνία",
+            hero_portfolio_title: "Χαρτοφυλάκιο", hero_portfolio_text: "Ονομάζομαι Filip Duda, ασχολούμαι με τον προγραμματισμό, το γραφικό σχέδιο και τις δοκιμές.",
+            hero_welcome_title: "Καλώς ήρθατε", hero_welcome_text: "Μαζί θα κάνουμε τις ιδέες σας πραγματικότητα. Συνδυάζουμε δημιουργικότητα και ακρίβεια!",
+            gallery_title: "Γκαλερί", gallery_eyebrow: "Η δουλειά μου", gallery_lead: "Δείγμα πρόσφατων έργων — από γραφικό σχέδιο έως γραφικά παιχνιδιών.", gallery_desc: "Το χαρτοφυλάκιο περιλαμβάνει εκτυπώσεις, γραφικά παιχνιδιών και 3D κόσμους.",
+            games_title: "Επιλέξτε παιχνίδι", contact_title: "Επικοινωνήστε μαζί μου", back_button: "Πίσω",
+            about_skill_1_title: "IT & Ανάπτυξη", about_skill_1_desc: "Διαχείριση HW/SW, Frontend/Backend ανάπτυξη και δημιουργία 3D περιβάλλοντος.",
+            about_skill_2_title: "Σχεδιασμός & 3D", about_skill_2_desc: "3D οπτικοποίηση, εσωτερικός σχεδιασμός και γραφικά υλικά.",
+            about_skill_3_title: "Ηγεσία & Επιχειρήσεις", about_skill_3_desc: "Διοίκηση ομάδας, εφοδιαστική αλυσίδα και εφαρμογή νέων συστημάτων.",
+            about_skill_4_title: "Προσωπικές Δεξιότητες", about_skill_4_desc: "Απλή επεξήγηση σύνθετων εννοιών, αναλυτική σκέψη.",
+            lang_label: "EL ▾", about1_title: "Ποιος είμαι και τι προσφέρω", about1_text: "Είμαι ένας ευέλικτος επαγγελματίας με ευρύ φάσμα γνώσεων στην πληροφορική και το design.",
+            about1_subtitle: "Τα δυνατά μου σημεία", about2_title: "Γιατί να συνεργαστείτε μαζί μου;", about2_text: "Χάρη στην ποικίλη εμπειρία μου, προσαρμόζομαι γρήγορα και αναλαμβάνω την ευθύνη των αποτελεσμάτων.",
+            about2_motivation: "Ψάχνετε για κάποιον που αξίζει να επενδύσετε; Ας δημιουργήσουμε κάτι σπουδαίο μαζί.", contact_reach_out: "Επικοινωνήστε μαζί μου:", game_start: "Έναρξη", footer_phone: "Τηλέφωνο:", footer_email: "Email:"
+        },
+        th: {
+            nav_home: "หน้าแรก", nav_about: "เกี่ยวกับฉัน", nav_gallery: "แกลเลอรี", nav_games: "เกม", nav_contact: "ติดต่อ",
+            hero_portfolio_title: "แฟ้มสะสมผลงาน", hero_portfolio_text: "ฉันชื่อ Filip Duda ทำงานเกี่ยวกับการเขียนโปรแกรม กราฟิกดีไซน์ และการทดสอบระบบ",
+            hero_welcome_title: "ยินดีต้อนรับ", hero_welcome_text: "เราจะเปลี่ยนความคิดของคุณให้เป็นจริงร่วมกัน ผสมผสานความคิดสร้างสรรค์และความแม่นยำ!",
+            gallery_title: "แกลเลอรี", gallery_eyebrow: "ผลงานของฉัน", gallery_lead: "ตัวอย่างโปรเจกต์ล่าสุด — ตั้งแต่การออกแบบกราฟิกไปจนถึงภาพวิชวลในเกม", gallery_desc: "ผลงานรวมถึงสิ่งพิมพ์ กราฟิกเกม และคอนเซปต์โลก 3 มิติ",
+            games_title: "เลือกเกม", contact_title: "ติดต่อฉัน", back_button: "ย้อนกลับ",
+            about_skill_1_title: "ไอทีและการพัฒนา", about_skill_1_desc: "การจัดการ HW/SW, การพัฒนา Frontend/Backend และสร้างสภาพแวดล้อม 3 มิติ",
+            about_skill_2_title: "การออกแบบและ 3D", about_skill_2_desc: "ภาพจำลอง 3 มิติ, การตกแต่งภายใน และสื่อกราฟิก",
+            about_skill_3_title: "การนำและธุรกิจ", about_skill_3_desc: "การนำทีม, โลจิสติกส์ และการนำระบบใหม่มาใช้",
+            about_skill_4_title: "ทักษะด้านอารมณ์", about_skill_4_desc: "อธิบายเรื่องซับซ้อนให้เข้าใจง่าย มีความคิดเชิงวิเคราะห์",
+            lang_label: "TH ▾", about1_title: "ฉันเป็นใครและมีอะไรมานำเสนอ", about1_text: "ฉันเป็นผู้เชี่ยวชาญรอบด้านที่มีประสบการณ์ครอบคลุมตั้งแต่การดูแลระบบไอทีไปจนถึงงานออกแบบ 3D",
+            about1_subtitle: "จุดแข็งของฉันในการทำงาน", about2_title: "ทำไมต้องทำงานกับฉัน?", about2_text: "ด้วยประสบการณ์ที่หลากหลาย ฉันจึงปรับตัวเข้ากับสภาพแวดล้อมใหม่ได้เร็วและรับผิดชอบต่อผลงาน",
+            about2_motivation: "กำลังมองหาคนที่คุ้มค่าแก่การลงทุนใช่ไหม? มาสร้างสรรค์สิ่งเยี่ยมยอดร่วมกันเถอะ", contact_reach_out: "ติดต่อนัดหมาย:", game_start: "เริ่มเกม", footer_phone: "โทรศัพท์:", footer_email: "อีเมล:"
+        },
+        vi: {
+            nav_home: "Trang chủ", nav_about: "Giới thiệu", nav_gallery: "Bộ sưu tập", nav_games: "Trò chơi", nav_contact: "Liên hệ",
+            hero_portfolio_title: "Hồ sơ năng lực", hero_portfolio_text: "Tôi là Filip Duda, chuyên về lập trình cơ bản, thiết kế đồ họa và kiểm thử.",
+            hero_welcome_title: "Xin chào", hero_welcome_text: "Cùng nhau biến ý tưởng của bạn thành hiện thực. Kết hợp sự sáng tạo và độ chính xác!",
+            gallery_title: "Bộ sưu tập", gallery_eyebrow: "Tác phẩm", gallery_lead: "Một số dự án gần đây — từ thiết kế đồ họa đến hình ảnh trò chơi.", gallery_desc: "Hồ sơ bao gồm thiết kế in ấn, đồ họa game và ý tưởng thế giới 3D.",
+            games_title: "Chọn trò chơi", contact_title: "Liên hệ với tôi", back_button: "Quay lại",
+            about_skill_1_title: "CNTT & Phát triển", about_skill_1_desc: "Quản lý phần cứng/phần mềm, phát triển Frontend/Backend và môi trường 3D.",
+            about_skill_2_title: "Thiết kế & 3D", about_skill_2_desc: "Phối cảnh 3D, thiết kế nội thất và ấn phẩm đồ họa.",
+            about_skill_3_title: "Lãnh đạo & Kinh doanh", about_skill_3_desc: "Quản lý đội ngũ, hậu cần và triển khai hệ thống mới.",
+            about_skill_4_title: "Kỹ năng mềm", about_skill_4_desc: "Diễn đạt khái niệm phức tạp một cách đơn giản, tư duy phân tích.",
+            lang_label: "VI ▾", about1_title: "Tôi là ai và tôi mang lại điều gì", about1_text: "Tôi là một chuyên gia đa năng có kinh nghiệm bao quát từ quản trị CNTT đến thiết kế 3D.",
+            about1_subtitle: "Thế mạnh thực tế", about2_title: "Tại sao nên hợp tác với tôi?", about2_text: "Nhờ kinh nghiệm đa dạng, tôi thích nghi nhanh chóng và chịu trách nhiệm về kết quả công việc.",
+            about2_motivation: "Bạn đang tìm kiếm một người đáng để đầu tư? Hãy cùng nhau tạo ra điều tuyệt vời.", contact_reach_out: "Liên hệ ngay:", game_start: "Bắt đầu", footer_phone: "Điện thoại:", footer_email: "Email:"
         }
     };
 
-    function changeLanguage(lang) {
-        const dict = translations[lang] || translations['en'];
-        
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            if (dict[key]) {
-                element.textContent = dict[key];
+    const dropdownButton = document.getElementById('dropdown-button');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+
+    dropdownButton.addEventListener('click', () => {
+        const isVisible = dropdownMenu.style.display === 'block';
+        dropdownMenu.style.display = isVisible ? 'none' : 'block';
+    });
+
+    const langToggle = document.getElementById('lang-toggle');
+    const langCurrent = document.getElementById('lang-current');
+    const langSubmenu = document.getElementById('lang-submenu');
+
+    window.addEventListener('click', (e) => {
+        if (!e.target.closest('#dropdown-container')) {
+            dropdownMenu.style.display = 'none';
+            langToggle.classList.remove('open');
+        }
+    });
+
+    function setLanguage(lang) {
+        const dict = translations[lang] || translations.cs;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key] !== undefined) {
+                el.innerHTML = dict[key];
             }
         });
+        document.documentElement.lang = lang;
+        document.documentElement.dir = (lang === 'ar' || lang === 'he') ? 'rtl' : 'ltr';
+        
+        const upperLang = lang.split('-')[0].toUpperCase();
+        langCurrent.textContent = upperLang + ' ▾';
 
-        const langCurrent = document.getElementById('lang-current');
-        if (langCurrent) {
-            langCurrent.textContent = (lang.toUpperCase()) + " ▾";
+        // Aktualizace názvů v submenu jazyků
+        langSubmenu.querySelectorAll('li').forEach(li => {
+            const langCode = li.getAttribute('data-lang');
+            li.classList.toggle('active', langCode === lang);
+            
+            const czSpan = li.querySelector('.lang-cz');
+            if (czSpan && languageNamesMaster[langCode]) {
+                // Překlad název vlevo do aktuálně zvoleného jazyka (nebo záložní CS/EN)
+                czSpan.textContent = languageNamesMaster[langCode][lang] || languageNamesMaster[langCode]['cs'] || languageNamesMaster[langCode]['en'];
+            }
+        });
+        localStorage.setItem('fd_lang', lang);
+    }
+
+    langToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langToggle.classList.toggle('open');
+    });
+
+    langSubmenu.querySelectorAll('li').forEach(li => {
+        li.addEventListener('click', (e) => {
+            e.stopPropagation();
+            setLanguage(li.getAttribute('data-lang'));
+            langToggle.classList.remove('open');
+            dropdownMenu.style.display = 'none';
+        });
+    });
+
+    setLanguage(localStorage.getItem('fd_lang') || 'cs');
+
+    const radialMenu = document.getElementById('radial-menu');
+    const radialToggle = document.getElementById('radial-toggle');
+    const radialLinks = document.getElementById('radial-links');
+
+    function closeRadialMenu() {
+        radialLinks.classList.remove('open');
+        radialToggle.classList.remove('open');
+        radialMenu.classList.remove('shifted');
+        radialToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    radialToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = radialLinks.classList.toggle('open');
+        radialToggle.classList.toggle('open', isOpen);
+        radialMenu.classList.toggle('shifted', isOpen);
+        radialToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    radialLinks.querySelectorAll('.radial-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const modal = document.getElementById('previewModal');
+            if (modal && modal.style.display === 'flex') {
+                resetModalState();
+            }
+            closeRadialMenu();
+        });
+    });
+
+    window.addEventListener('click', (e) => {
+        if (!e.target.closest('#radial-menu')) {
+            closeRadialMenu();
         }
+    });
 
-        // Aktualizace seznamu jazyků v rozevírací nabídce podle vybraného jazyka
-        const langSubmenu = document.getElementById('lang-submenu');
-        if (langSubmenu) {
-            const listItems = langSubmenu.querySelectorAll('li[data-lang]');
-            listItems.forEach(li => {
-                const targetLang = li.getAttribute('data-lang');
-                const czSpan = li.querySelector('.lang-cz');
-                if (czSpan && languageNamesMaster[targetLang] && languageNamesMaster[targetLang][lang]) {
-                    czSpan.textContent = languageNamesMaster[targetLang][lang];
-                }
-            });
+    const TOTAL_BACKGROUND_VIDEOS = 3;
+    let currentVideoIndex = 0;
+
+    function videoList() {
+        const list = [];
+        for (let i = 1; i <= TOTAL_BACKGROUND_VIDEOS; i++) {
+            list.push(`pozadi/${i}.mp4`);
+        }
+        return list;
+    }
+
+    function setBackgroundVideo(index) {
+        const videos = videoList();
+        currentVideoIndex = ((index % videos.length) + videos.length) % videos.length;
+
+        const videoElement = document.getElementById('background-video');
+        const sourceElement = document.getElementById('video-source');
+        sourceElement.src = videos[currentVideoIndex];
+        videoElement.load();
+        videoElement.play().catch(error => console.error("Chyba při přehrávání videa:", error));
+        updateVideoBubbles();
+    }
+
+    function initVideoBubbles() {
+        const container = document.getElementById('video-bubbles');
+        if (!container) return;
+        container.innerHTML = '';
+        videoList().forEach((src, index) => {
+            const bubble = document.createElement('button');
+            bubble.type = 'button';
+            bubble.className = 'bubble';
+            bubble.setAttribute('aria-label', `Přepnout na video pozadí ${index + 1}`);
+            bubble.addEventListener('click', () => setBackgroundVideo(index));
+            container.appendChild(bubble);
+        });
+    }
+
+    function updateVideoBubbles() {
+        const bubbles = document.querySelectorAll('#video-bubbles .bubble');
+        bubbles.forEach((b, index) => {
+            b.classList.toggle('active', index === currentVideoIndex);
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        initVideoBubbles();
+        const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
+        setBackgroundVideo(randomIndex);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            const rawTarget = this.getAttribute('href').slice(1);
+            if (!rawTarget) return;
+            const targetId = decodeURIComponent(rawTarget);
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                e.preventDefault();
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                history.pushState(null, '', '#' + rawTarget);
+            }
+        });
+    });
+
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.about-section').forEach(section => {
+        section.style.opacity = '0';
+        observer.observe(section);
+    });
+
+    const footer = document.querySelector('.footer');
+    
+    function checkFooterScroll() {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const documentHeight = Math.max(
+            document.body.scrollHeight, 
+            document.documentElement.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.offsetHeight
+        );
+        
+        if (scrollPosition >= documentHeight - 30) {
+            footer.classList.add('visible');
+        } else {
+            footer.classList.remove('visible');
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const langToggle = document.getElementById('lang-toggle');
-        const langSubmenu = document.getElementById('lang-submenu');
-
-        if (langToggle) {
-            langToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                langToggle.classList.toggle('open');
-            });
-        }
-
-        document.addEventListener('click', () => {
-            if (langToggle) langToggle.classList.remove('open');
-        });
-
-        if (langSubmenu) {
-            langSubmenu.querySelectorAll('li[data-lang]').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    const selectedLang = item.getAttribute('data-lang');
-                    changeLanguage(selectedLang);
-                });
-            });
-        }
-
-        const dropdownBtn = document.getElementById('dropdown-button');
-        const dropdownMenu = document.getElementById('dropdown-menu');
-        
-        if (dropdownBtn && dropdownMenu) {
-            dropdownBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                dropdownMenu.style.display = (dropdownMenu.style.display === 'block') ? 'none' : 'block';
-            });
-
-            document.addEventListener('click', () => {
-                dropdownMenu.style.display = 'none';
-            });
-        }
-        
-        // Radial menu
-        const radialToggle = document.getElementById('radial-toggle');
-        const radialLinks = document.getElementById('radial-links');
-        if (radialToggle && radialLinks) {
-            radialToggle.addEventListener('click', () => {
-                const isOpen = radialLinks.classList.toggle('open');
-                radialToggle.classList.toggle('open', isOpen);
-                radialToggle.setAttribute('aria-expanded', isOpen);
-            });
-        }
-    });
+    window.addEventListener('scroll', checkFooterScroll);
+    window.addEventListener('resize', checkFooterScroll);
 </script>
-
 </body>
 </html>
