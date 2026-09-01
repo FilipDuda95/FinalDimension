@@ -420,7 +420,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   color: white;
   z-index: 23;
   display: block;
-  padding-bottom: 15%;
+  padding-bottom: 0;
   margin: 0;
   box-sizing: border-box;
 }
@@ -440,7 +440,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .hero-spacer {
-  padding-bottom: 120px;
+  position: relative;
+  width: 100%;
+  clear: both;
 }
 .footer.visible {
   opacity: 1;
@@ -451,8 +453,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .footer {
   display: none;
   opacity: 0;
-  position: absolute;
-  bottom:0px;
+  position: relative;
   z-index:1;
   color:black;
   background-color: #f8f8f8;
@@ -669,19 +670,18 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 #Patička{
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: relative;
   width: 100%;	 
   background-color: black;
   color: white;
-  z-index:23;
+  z-index: 23;
   display: flex;
-  padding-bottom: 20%;
+  padding-bottom: 60px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align:center;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 @media (orientation: portrait) {
@@ -923,12 +923,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   #padding { text-align: left; }
   
   #výška_herního_okna {
-    height: 80vh;
+    min-height: 80vh;
     padding-top: 80px;
-    padding-bottom: 80px;
+    padding-bottom: 40px;
   }
   #game-menu {
-    padding-bottom: 100px;
+    padding-bottom: 20px;
     margin-top: 30px;
     gap: 20px;
   }
@@ -939,10 +939,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 60vh;
+    min-height: 60vh;
+    height: auto;
     width:100%; 
     position: relative; 
-    padding-top: 150px;
+    padding-top: 80px;
+    padding-bottom: 60px;
     z-index: 2;
     box-sizing: border-box;
   }
@@ -963,8 +965,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     gap: 40px;
     width: 100%;
     max-width: 1100px;
-    margin-top: 60px;
-    padding-bottom: 100px;
+    margin-top: 40px;
+    padding-bottom: 20px;
     position: relative;
     z-index: 10;
     box-sizing: border-box;
@@ -1042,10 +1044,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
       display: block;
   }
   #konec {
-    position:absolute;
-    z-index:2;
-    bottom:0px;
-    color:black;
+    position: relative;
+    z-index: 2;
+    clear: both;
+    color: black;
   }
 
   </style>
@@ -1356,7 +1358,6 @@ loadFolder(ROOT_FOLDER_ID);
       </div>
     </div>
 
-
 <div class="hero-spacer">
 
     <div id="výška_herního_okna">
@@ -1403,10 +1404,7 @@ loadFolder(ROOT_FOLDER_ID);
 
 </div> 
 	
- <div id="konec">
-        <br>
-	    <br>
- </div> 
+ <div id="konec"></div> 
 
 <script>
     const seznamHer = [
@@ -1444,7 +1442,6 @@ loadFolder(ROOT_FOLDER_ID);
 
         document.getElementById('game-menu').style.visibility = 'hidden';
         document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
-        document.querySelector('.hero-spacer').style.paddingBottom = '0px';
 
         prizpusobVysku();
 
@@ -1461,7 +1458,6 @@ loadFolder(ROOT_FOLDER_ID);
         iframe.src = '';
         document.getElementById('game-menu').style.visibility = 'visible';
         document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
-        document.querySelector('.hero-spacer').style.paddingBottom = '120px';
         hlavniDiv.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -1775,7 +1771,7 @@ loadFolder(ROOT_FOLDER_ID);
     window.addEventListener('scroll', () => {
         const scrollPosition = window.scrollY + window.innerHeight;
         const documentHeight = document.documentElement.scrollHeight;
-        if (Math.ceil(scrollPosition) >= documentHeight) {
+        if (Math.ceil(scrollPosition) >= documentHeight - 50) {
             footer.classList.add('visible');
         } else {
             footer.classList.remove('visible');
