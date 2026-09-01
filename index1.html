@@ -150,11 +150,8 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .scrollupbutton {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  z-index: 50;
-  transform: translateX(-50%);
+  position: relative;
+  margin-top: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -449,13 +446,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .footer {
   display: block;
   position: fixed;
-  bottom: -100%; /* Skryto pod okrajem */
+  bottom: -150%; /* Skryto pod okrajem */
   left: 0;
   width: 100%;
   z-index: 9999; /* Překryje veškerý obsah */
   color: black;
   background-color: #f8f8f8;
-  padding: 40px 20px 40px 20px;
+  padding: 30px 20px;
   text-align: center;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
@@ -468,9 +465,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .footer img {
-  width: 150px;
+  width: 130px;
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 .footer a {
   text-decoration: none;
@@ -483,6 +480,42 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .social-icons img {
   width: 30px;
   height: 30px;
+}
+
+/* OPTIMALIZACE FOOTERU PRO TELEFON NA ŠÍŘKU (LANDSCAPE) */
+@media (max-height: 500px) and (orientation: landscape), (max-width: 900px) and (orientation: landscape) {
+  .footer {
+    padding: 12px 15px;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .footer img {
+    width: 65px;
+    margin-bottom: 5px;
+  }
+  .footer h2 {
+    font-size: 1.1rem;
+    margin: 4px 0;
+  }
+  .footer p {
+    margin: 2px 0;
+    font-size: 0.85rem;
+  }
+  .social-icons {
+    margin-top: 5px;
+  }
+  .social-icons img {
+    width: 24px;
+    height: 24px;
+  }
+  .scrollupbutton {
+    margin-top: 5px;
+  }
+  .scrollupbutton .back-button {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
 }
 
 /* ===== KEYFRAME ANIMACE ===== */
@@ -1395,7 +1428,6 @@ loadFolder(ROOT_FOLDER_ID);
         <h2 data-i18n="contact_title">Kontaktujte mě</h2>
         <p><strong data-i18n="footer_phone">Telefon:</strong> +420 608 122 052</p>
         <p><strong data-i18n="footer_email">Email:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
-<br>
         <div class="social-icons">
             <a href="https://www.linkedin.com/in/filip-duda-462b98210/" target="_blank" rel="noopener noreferrer"><img src="style/linkedin.png" alt="LinkedIn"></a>
 	    <a href="mailto:duda.filip.mail@gmail.com" target="_blank"><img src="style/gmail.png" alt="Gmail"></a>
@@ -1772,17 +1804,28 @@ loadFolder(ROOT_FOLDER_ID);
         observer.observe(section);
     });
 
-    /* OPRAVENÝ SKRIPT PRO VYSUVOVÁNÍ FOOTERU A PŘEKRYTÍ OBSAHU SEKCÍ */
+    /* OPRAVENÝ SKRIPT PRO VYSUVOVÁNÍ FOOTERU KDEKOLI I NA ŠÍŘKU */
     const footer = document.querySelector('.footer');
-    window.addEventListener('scroll', () => {
-        const scrollPosition = window.scrollY + window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
-        if (scrollPosition >= documentHeight - 20) {
+    
+    function checkFooterScroll() {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const documentHeight = Math.max(
+            document.body.scrollHeight, 
+            document.documentElement.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.offsetHeight
+        );
+        
+        // Zobrazí footer při dojetí do 30px od konce stránky
+        if (scrollPosition >= documentHeight - 30) {
             footer.classList.add('visible');
         } else {
             footer.classList.remove('visible');
         }
-    });
+    }
+
+    window.addEventListener('scroll', checkFooterScroll);
+    window.addEventListener('resize', checkFooterScroll);
 
 </script>
 
