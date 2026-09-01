@@ -27,8 +27,10 @@ html, body {
     -webkit-overflow-scrolling: touch; /* Hladký posun na iOS */
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
-		
 html, body {
   scroll-behavior: smooth;
   height: 100%;
@@ -403,6 +405,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .lang-submenu li.active {
   background-color: rgba(5, 212, 255, 0.25);
 }
+
 #black-section {
   position: absolute;
   top: 100%;
@@ -410,12 +413,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   width: 100%;
   background-color: black;
   color: white;
-  z-index:23;
-  display: flex;
-  padding-bottom:15%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  z-index: 23;
+  display: block;
+  padding-bottom: 15%;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .logo-section {
@@ -907,7 +909,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     padding: 0 !important; 
   }
   
-  #black-section { padding: 10px; }
+  #black-section { padding: 10px 0; }
   .inner-text { width:92%; margin:2%; text-align: center; flex-grow: 1; }
   .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
   #padding { text-align: left; }
@@ -930,10 +932,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     flex-direction: column;
     align-items: center;
     height: 60vh;
-    width:100vw; 
+    width:100%; 
     position: relative; 
     padding-top: 150px;
     z-index: 2;
+    box-sizing: border-box;
   }
 
   .top-vignette {
