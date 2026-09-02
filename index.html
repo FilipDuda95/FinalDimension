@@ -317,6 +317,14 @@ html, body {
             overflow: hidden;
         }
 
+        /* Zvětšení obsahu PC monitoru pro jemnější rozlišení (více pixelů) */
+        .device-frame.pc-monitor .viewport-iframe {
+            width: 133.3%;
+            height: 133.3%;
+            transform: scale(0.75);
+            transform-origin: top left;
+        }
+
         .pc-chin {
             width: 100%;
             height: 18px;
@@ -654,9 +662,10 @@ html, body {
     </div>
 
     <script>
+        // Změněné pořadí: 0 = index1.html, 1 = duální obrazovka, 2 = index3.html
         const availablePages = [
             "index1.html",
-            "index2.html",
+            "dual-screen", 
             "index3.html"
         ];
 
@@ -709,14 +718,13 @@ html, body {
         }
 
         function updatePhoneScale() {
-            if (currentFileIndex !== 2) return;
+            if (availablePages[currentFileIndex] !== "dual-screen") return;
             const phoneElement = viewportFrame.querySelector('.phone-portrait');
             if (!phoneElement) return;
 
             const currentH = viewportWrapper.offsetHeight;
             const baseH = 800;
             let scaleFactor = currentH / baseH;
-            // Rozšířený rozsah škálování telefonu pro větší/menší extrémy
             scaleFactor = Math.min(Math.max(scaleFactor, 0.45), 1.7);
 
             phoneElement.style.transform = `translateZ(90px) translateX(85px) rotateY(-6deg) rotateX(2deg) scale(${scaleFactor})`;
@@ -748,7 +756,6 @@ html, body {
                 ? startHeight + (deltaY * 2) 
                 : startHeight - (deltaY * 2);
 
-            // Rozšířené limity: menší minimum (320px) a větší maximum (98% výšky okna)
             const minHeight = 320;
             const maxHeight = window.innerHeight * 0.98;
 
@@ -810,14 +817,16 @@ html, body {
         }
 
         function renderContent(index) {
-            if (index === 2) {
+            const pageConfig = availablePages[index];
+
+            if (pageConfig === "dual-screen") {
                 viewportFrame.classList.add('is-dual-screen');
                 viewportFrame.innerHTML = `
                     <div class="resize-handle top" id="resizeTop"></div>
                     <div class="dual-screen-container">
                         <div class="device-frame pc-monitor">
                             <div class="pc-screen-area">
-                                <iframe class="viewport-iframe" src="index1.html"></iframe>
+                                <iframe class="viewport-iframe" src="index3.html"></iframe>
                             </div>
                             <div class="pc-chin"><div class="pc-led"></div></div>
                         </div>
@@ -832,7 +841,7 @@ html, body {
                 viewportFrame.classList.remove('is-dual-screen');
                 viewportFrame.innerHTML = `
                     <div class="resize-handle top" id="resizeTop"></div>
-                    <iframe class="viewport-iframe" id="contentIframe" src="${availablePages[index]}"></iframe>
+                    <iframe class="viewport-iframe" id="contentIframe" src="${pageConfig}"></iframe>
                     <div class="resize-handle bottom" id="resizeBottom"></div>
                 `;
             }
@@ -859,7 +868,7 @@ html, body {
             const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
             const inClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
 
-            const dualClassCheck = currentFileIndex === 2 ? 'is-dual-screen' : '';
+            const dualClassCheck = availablePages[currentFileIndex] === "dual-screen" ? 'is-dual-screen' : '';
             viewportFrame.className = `viewport-frame ${dualClassCheck} ${outClass}`;
 
             setTimeout(() => {
@@ -867,7 +876,7 @@ html, body {
                 renderContent(currentFileIndex);
                 updateNavButtons();
 
-                const newDualClassCheck = currentFileIndex === 2 ? 'is-dual-screen' : '';
+                const newDualClassCheck = availablePages[currentFileIndex] === "dual-screen" ? 'is-dual-screen' : '';
                 viewportFrame.className = `viewport-frame ${newDualClassCheck} ${inClass}`;
 
                 setTimeout(() => {
@@ -883,7 +892,7 @@ html, body {
             if (isFullscreen) {
                 document.body.classList.add('is-fullscreen');
                 viewportWrapper.classList.add('fullscreen');
-                if (currentFileIndex === 2) {
+                if (availablePages[currentFileIndex] === "dual-screen") {
                     viewportWrapper.classList.add('is-dual-fullscreen');
                 }
                 searchIcon.innerHTML = `
