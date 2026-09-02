@@ -1441,7 +1441,21 @@ iframe {
               };
               const folderDiv = document.createElement('div');
               folderDiv.className = 'folder';
-              folderDiv.innerHTML = file.name;
+              
+              // Podpora pro překlad názvů složek přes translations.js (klíč např. folder_nazev nebo přímý překlad)
+              const currentLang = localStorage.getItem('fd_lang') || 'cs';
+              let displayName = file.name;
+              
+              if (typeof translations !== 'undefined' && translations[currentLang]) {
+                  // Můžete definovat mapování ve slovníku, např. klíčem odpovídajícím názvu složky
+                  const folderKey = 'folder_' + file.name.toLowerCase().replace(/\s+/g, '_');
+                  if (translations[currentLang][folderKey]) {
+                      displayName = translations[currentLang][folderKey];
+                  }
+              }
+
+              folderDiv.setAttribute('data-original-name', file.name);
+              folderDiv.innerHTML = displayName;
               container.appendChild(folderDiv);
             } else {
               container.style.backgroundImage = 'none';
@@ -1683,6 +1697,20 @@ iframe {
                 el.innerHTML = dict[key];
             }
         });
+        
+        // Aktualizace názvů dynamicky načtených složek Google Disku podle nového jazyka
+        document.querySelectorAll('.folder').forEach(folderEl => {
+            const originalName = folderEl.getAttribute('data-original-name');
+            if (originalName) {
+                const folderKey = 'folder_' + originalName.toLowerCase().replace(/\s+/g, '_');
+                if (dict[folderKey] !== undefined) {
+                    folderEl.textContent = dict[folderKey];
+                } else {
+                    folderEl.textContent = originalName; // Fallback na původní název
+                }
+            }
+        });
+
         document.documentElement.lang = lang;
         document.documentElement.dir = (lang === 'ar' || lang === 'he') ? 'rtl' : 'ltr';
         
@@ -1735,7 +1763,6 @@ iframe {
         });
     });
 
-    // Automatická detekce jazyka podle IP adresy (s fallbackem na prohlížeč a češtinu)
     async function detectUserLanguage() {
         const savedLang = localStorage.getItem('fd_lang');
         if (savedLang) {
