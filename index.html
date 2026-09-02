@@ -297,7 +297,7 @@ html, body {
             transition: transform 0.3s ease;
         }
 
-        /* PC Monitor vlevo – pevný poměr stran, přiblížený ke středu */
+        /* PC Monitor vlevo – výchozí nastavení pro desktop */
         .device-frame.pc-monitor {
             width: 58%;
             height: 70%;
@@ -342,7 +342,7 @@ html, body {
             box-shadow: 0 0 6px #00ffcc;
         }
 
-        /* Telefon vpravo – zafixovaný poměr stran (230x460 = 1:2), přiblížený ke středu */
+        /* Telefon vpravo – výchozí nastavení pro desktop */
         .device-frame.phone-portrait {
             width: 230px;
             height: 460px;
@@ -542,6 +542,28 @@ html, body {
                 margin-top: -25px;
             }
 
+            /* Úprava rozměrů pro mobilní zobrazení (širší monitor) */
+            .device-frame.pc-monitor {
+                width: 82% !important;
+                max-width: none !important;
+                height: 55% !important;
+                transform: translateZ(10px) translateX(-15px) rotateY(4deg) !important;
+            }
+
+            .device-frame.phone-portrait {
+                width: 160px !important;
+                height: 320px !important;
+                max-width: 160px !important;
+                max-height: 320px !important;
+                transform: translateZ(70px) translateX(65px) rotateY(-4deg) rotateX(1deg) !important;
+            }
+
+            .device-frame.phone-portrait .viewport-iframe {
+                width: 153.8% !important;
+                height: 153.8% !important;
+                transform: scale(0.65) !important;
+            }
+
             .nav-arrow {
                 width: 32px;
                 height: 32px;
@@ -662,7 +684,7 @@ html, body {
     </div>
 
     <script>
-        // Změněné pořadí: 0 = index1.html, 1 = duální obrazovka, 2 = index3.html
+        // Správné pořadí: 0 = index1.html, 1 = duální obrazovka, 2 = index3.html
         const availablePages = [
             "index1.html",
             "dual-screen", 
@@ -727,7 +749,12 @@ html, body {
             let scaleFactor = currentH / baseH;
             scaleFactor = Math.min(Math.max(scaleFactor, 0.45), 1.7);
 
-            phoneElement.style.transform = `translateZ(90px) translateX(85px) rotateY(-6deg) rotateX(2deg) scale(${scaleFactor})`;
+            // Na mobilech respektujeme upravenou pozici, na desktopech zachováme původní
+            if (window.innerWidth <= 768 && window.matchMedia('(pointer: coarse)').matches) {
+                phoneElement.style.transform = `translateZ(70px) translateX(65px) rotateY(-4deg) rotateX(1deg) scale(${scaleFactor})`;
+            } else {
+                phoneElement.style.transform = `translateZ(90px) translateX(85px) rotateY(-6deg) rotateX(2deg) scale(${scaleFactor})`;
+            }
         }
 
         function onPointerDown(e, type) {
