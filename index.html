@@ -542,7 +542,7 @@ html, body {
                 margin-top: -25px;
             }
 
-            /* Úprava rozměrů pro mobilní zobrazení (širší monitor) */
+            /* Širší PC monitor pro mobil */
             .device-frame.pc-monitor {
                 width: 82% !important;
                 max-width: none !important;
@@ -550,18 +550,22 @@ html, body {
                 transform: translateZ(10px) translateX(-15px) rotateY(4deg) !important;
             }
 
+            /* Telefon pro mobil se zachováním poměru stran (1:2) a správným škálováním obsahu */
             .device-frame.phone-portrait {
-                width: 160px !important;
-                height: 320px !important;
-                max-width: 160px !important;
-                max-height: 320px !important;
+                width: 140px !important;
+                height: 280px !important;
+                max-width: 140px !important;
+                max-height: 280px !important;
+                border-width: 5px !important;
+                border-radius: 20px !important;
                 transform: translateZ(70px) translateX(65px) rotateY(-4deg) rotateX(1deg) !important;
             }
 
             .device-frame.phone-portrait .viewport-iframe {
-                width: 153.8% !important;
-                height: 153.8% !important;
-                transform: scale(0.65) !important;
+                width: 181.8% !important;
+                height: 181.8% !important;
+                transform: scale(0.55) !important;
+                transform-origin: top left;
             }
 
             .nav-arrow {
@@ -684,7 +688,6 @@ html, body {
     </div>
 
     <script>
-        // Správné pořadí: 0 = index1.html, 1 = duální obrazovka, 2 = index3.html
         const availablePages = [
             "index1.html",
             "dual-screen", 
@@ -749,7 +752,6 @@ html, body {
             let scaleFactor = currentH / baseH;
             scaleFactor = Math.min(Math.max(scaleFactor, 0.45), 1.7);
 
-            // Na mobilech respektujeme upravenou pozici, na desktopech zachováme původní
             if (window.innerWidth <= 768 && window.matchMedia('(pointer: coarse)').matches) {
                 phoneElement.style.transform = `translateZ(70px) translateX(65px) rotateY(-4deg) rotateX(1deg) scale(${scaleFactor})`;
             } else {
