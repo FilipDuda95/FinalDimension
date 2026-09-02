@@ -357,7 +357,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
   text-align: center;
-  width: min(90vw, 400px); /* Zvětšeno o dalších 100 px (z 350px na 450px) */
+  width: min(90vw, 400px); 
   box-sizing: border-box;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
@@ -1699,6 +1699,22 @@ iframe {
                 czSpan.textContent = languageNamesMaster[langCode][lang] || languageNamesMaster[langCode]['cs'] || languageNamesMaster[langCode]['en'];
             }
         });
+
+        const langSearch = document.getElementById('langSearch');
+        if (langSearch) {
+            const searchTexts = {
+                cs: "Hledat jazyk", en: "Search language", de: "Sprache suchen", fr: "Rechercher une langue", 
+                es: "Buscar idioma", ru: "Поиск языка", uk: "Пошук мови", sk: "Hľadať jazyk", pl: "Szukaj języka", it: "Cerca lingua",
+                ar: "بحث عن لغة", zh: "搜索语言", "zh-tw": "搜尋語言", ja: "言語を検索", ko: "언어 검색",
+                nl: "Taal zoeken", pt: "Pesquisar idioma", tr: "Dil ara", sv: "Sök språk", fi: "Etsi kieltä",
+                no: "Søk etter språk", da: "Søg efter sprog", hu: "Nyelv keresése", el: "Αναζήτηση γλώσσας",
+                ro: "Caută limba", hr: "Pretraži jezik", bg: "Търсене на език", th: "ค้นหาภาษา", vi: "Tìm kiếm ngôn ngữ",
+                hi: "भाषा खोजें", id: "Cari bahasa", bn: "ভাষা অনুসন্ধান করুন", he: "חפש שפה"
+            };
+            const currentSearchText = searchTexts[lang] || searchTexts['en'];
+            langSearch.placeholder = currentSearchText + " / Search language...";
+        }
+
         localStorage.setItem('fd_lang', lang);
     }
 
