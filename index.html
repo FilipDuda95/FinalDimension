@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Perspektivní Prohlížeč — Index Nekonečno</title>
+    
+    <!-- Open Graph / Sociální karta -->
+    <meta property="og:title" content="Final Dimension — Filip Duda">
+    <meta property="og:description" content="2D/3D grafika, design a herní vývoj.">
+    <meta property="og:image" content="style/logo.png">
+    
     <style>
 /* Skryje scrollbar pro WebKit (Chrome, Safari, Edge) */
 html::-webkit-scrollbar,
@@ -18,6 +24,7 @@ html, body {
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE a starý Edge */
     -webkit-overflow-scrolling: touch; /* Hladký posun na iOS */
+    background-color: #000000; /* Černé pozadí pro sociální kartu a stránku */
 }
 
         * {
@@ -412,7 +419,7 @@ html, body {
             .viewport-wrapper {
                 width: 92vw;
                 height: 74vh;
-                margin-top: -25px; /* Posun iframe trošku nahoru pro mobily */
+                margin-top: -25px;
             }
 
             .nav-arrow {
@@ -567,7 +574,6 @@ html, body {
 
         const isMobile = window.innerWidth <= 768 && window.matchMedia('(pointer: coarse)').matches;
 
-        // Definování výchozích hodnot při načtení
         const DEFAULT_ZOOM = 1;
         const DEFAULT_ROTATION_Y = isMobile ? 12 : 0;
         const DEFAULT_ROTATION_X = isMobile ? 0 : 12;
@@ -585,7 +591,6 @@ html, body {
         rotateYSlider.value = rotationY;
         rotateYValue.textContent = `${rotationY}°`;
 
-        /* Spolehlivé odchytávání pomocí Pointer Events (Myš i Dotyk) */
         let isResizing = false;
         let startY = 0;
         let startHeight = 0;
@@ -618,7 +623,6 @@ html, body {
                 ? startHeight + (deltaY * 2) 
                 : startHeight - (deltaY * 2);
 
-            /* Zvýšeno na 480px (2x větší minimální výška) */
             const minHeight = 480;
             const maxHeight = window.innerHeight * 0.95;
 
@@ -727,7 +731,6 @@ html, body {
             }
         });
 
-        // Tlačítko pro obnovení všech původních hodnot zobrazení
         resetRotation.addEventListener('click', () => {
             zoomLevel = DEFAULT_ZOOM;
             rotationX = DEFAULT_ROTATION_X;
