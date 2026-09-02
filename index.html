@@ -184,6 +184,7 @@ html, body {
             width: 100% !important;
             height: 100% !important;
             transform: none !important;
+	    blackground-color:black;
         }
 
         /* Lišty pro změnu výšky */
@@ -260,7 +261,7 @@ html, body {
             width: 100%;
             height: 100%;
             border: none;
-            background: white;
+            background: black;
             pointer-events: auto;
             scrollbar-width: none;
             border-radius: inherit;
@@ -957,6 +958,23 @@ html, body {
 
             updateView();
         });
+resetRotation.addEventListener('click', () => {
+    zoomLevel = DEFAULT_ZOOM;
+    rotationX = DEFAULT_ROTATION_X;
+    rotationY = DEFAULT_ROTATION_Y;
+
+    rotateXSlider.value = rotationX;
+    rotateYSlider.value = rotationY;
+    rotateXValue.textContent = `${rotationX}°`;
+    rotateYValue.textContent = `${rotationY}°`;
+
+    // Reset velikosti (výšky) viewportu zpět na výchozí CSS hodnoty
+    viewportWrapper.style.height = '';
+    viewportWrapper.style.maxHeight = '';
+    updatePhoneScale(); // Aktualizuje velikost v duálním režimu, pokud je aktivní
+
+    updateView();
+});
 
         zoomIn.addEventListener('click', () => {
             zoomLevel = Math.min(zoomLevel + 0.1, 1.8);
