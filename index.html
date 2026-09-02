@@ -11,7 +11,7 @@
     <meta property="og:title" content="Final Dimension — Filip Duda">
     <meta property="og:description" content="2D/3D grafický design a herní vývoj.">
     <meta property="og:image" content="https://filipduda95.github.io/final_dimension/style/Logo.jpg">
-  <link rel="shortcut icon" href="favicon.png" type="image/png">
+    <link rel="shortcut icon" href="favicon.png" type="image/png">
     
     <style>
 /* Skryje scrollbar pro WebKit (Chrome, Safari, Edge) */
@@ -116,13 +116,13 @@ html, body {
             z-index: 5;
             width: 85%;
             height: 80%;
-            max-width: 1100px;
-            max-height: 800px;
+            max-width: 1200px;
+            max-height: 95vh;
             transform-style: preserve-3d;
             transition: transform 0.3s ease-out, width 0.3s ease, max-width 0.3s ease, max-height 0.3s ease;
         }
 
-        /* Režim celé obrazovky pro iframe kontejner */
+        /* Režim celé obrazovky pro iframe kontejner (nebo duální telefon) */
         .viewport-wrapper.fullscreen {
             width: 100vw !important;
             height: 100vh !important;
@@ -143,8 +143,14 @@ html, body {
             background: #fff;
             box-shadow: 0 30px 90px rgba(0,0,0,0.85);
             border-radius: 6px;
-            overflow: visible; /* Umožní vyčnívání uchytů mimo rám okna */
+            overflow: visible;
             transition: transform 0.35s ease, opacity 0.35s ease, border-radius 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .viewport-frame.is-dual-screen {
+            background: transparent !important;
+            box-shadow: none !important;
         }
 
         .viewport-wrapper.fullscreen .viewport-frame {
@@ -153,7 +159,34 @@ html, body {
             overflow: hidden;
         }
 
-        /* Lišty pro změnu výšky (Resize bar nahoru/dolů) */
+        /* Speciální režim celé obrazovky pro duální zobrazení – skryje monitor, roztáhne telefon */
+        .viewport-wrapper.fullscreen.is-dual-fullscreen .pc-monitor {
+            display: none !important;
+        }
+
+        .viewport-wrapper.fullscreen.is-dual-fullscreen .phone-portrait {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            max-width: none !important;
+            max-height: none !important;
+            transform: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            z-index: 35 !important;
+        }
+
+        .viewport-wrapper.fullscreen.is-dual-fullscreen .phone-portrait .viewport-iframe {
+            width: 100% !important;
+            height: 100% !important;
+            transform: none !important;
+        }
+
+        /* Lišty pro změnu výšky */
         .resize-handle {
             position: absolute;
             left: 50%;
@@ -185,13 +218,8 @@ html, body {
             border-radius: 2px;
         }
 
-        .resize-handle.top {
-            top: -10px;
-        }
-
-        .resize-handle.bottom {
-            bottom: -10px;
-        }
+        .resize-handle.top { top: -10px; }
+        .resize-handle.bottom { bottom: -10px; }
 
         body.is-fullscreen .resize-handle {
             display: none !important;
@@ -244,6 +272,86 @@ html, body {
             display: none;
             width: 0;
             height: 0;
+        }
+
+        /* Styly pro duální zobrazení */
+        .dual-screen-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            background: transparent;
+        }
+
+        .device-frame {
+            position: absolute;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 35px 75px rgba(0,0,0,0.75);
+            background: #111;
+            border: 5px solid #1a1a1a;
+            pointer-events: auto;
+            transition: transform 0.3s ease;
+        }
+
+        /* PC Monitor vlevo – pevný poměr stran, přiblížený ke středu */
+        .device-frame.pc-monitor {
+            width: 58%;
+            height: 70%;
+            max-width: 620px;
+            max-height: 400px;
+            transform: translateZ(20px) translateX(-85px) rotateY(8deg);
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pc-screen-area {
+            position: relative;
+            width: 100%;
+            height: calc(100% - 18px);
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .pc-chin {
+            width: 100%;
+            height: 18px;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pc-led {
+            width: 4px;
+            height: 4px;
+            background: #00ffcc;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #00ffcc;
+        }
+
+        /* Telefon vpravo – zafixovaný poměr stran (230x460 = 1:2), přiblížený ke středu */
+        .device-frame.phone-portrait {
+            width: 230px;
+            height: 460px;
+            max-width: 230px;
+            max-height: 460px;
+            transform: translateZ(90px) translateX(85px) rotateY(-6deg) rotateX(2deg);
+            border-width: 7px;
+            border-radius: 28px;
+            z-index: 10;
+        }
+
+        /* Zmenšení obsahu telefonu, aby působil jemněji (více pixelů / menší ikony) */
+        .device-frame.phone-portrait .viewport-iframe {
+            width: 153.8%;
+            height: 153.8%;
+            transform: scale(0.65);
+            transform-origin: top left;
         }
 
         /* Šipky pro posun stránek */
@@ -404,6 +512,7 @@ html, body {
             height: 52px !important;
             padding: 6px !important;
             gap: 8px !important;
+            z-index: 40 !important;
         }
 
         body.is-fullscreen .control-btn {
@@ -499,11 +608,7 @@ html, body {
         <div class="viewport-wrapper" id="viewportWrapper">
             <div class="viewport-frame" id="viewportFrame">
                 <div class="resize-handle top" id="resizeTop"></div>
-                <iframe 
-                    class="viewport-iframe" 
-                    id="contentIframe"
-                    src=""
-                ></iframe>
+                <!-- Obsah iframe se vkládá dynamicky přes JS -->
                 <div class="resize-handle bottom" id="resizeBottom"></div>
             </div>
         </div>
@@ -557,7 +662,6 @@ html, body {
 
         const viewportWrapper = document.getElementById('viewportWrapper');
         const viewportFrame = document.getElementById('viewportFrame');
-        const iframe = document.getElementById('contentIframe');
         
         const rotateYSlider = document.getElementById('rotateYSlider');
         const rotateYValue = document.getElementById('rotateYValue');
@@ -600,6 +704,24 @@ html, body {
         let activeTarget = null;
         let handleType = '';
 
+        function getActiveIframes() {
+            return viewportFrame.querySelectorAll('iframe');
+        }
+
+        function updatePhoneScale() {
+            if (currentFileIndex !== 2) return;
+            const phoneElement = viewportFrame.querySelector('.phone-portrait');
+            if (!phoneElement) return;
+
+            const currentH = viewportWrapper.offsetHeight;
+            const baseH = 800;
+            let scaleFactor = currentH / baseH;
+            // Rozšířený rozsah škálování telefonu pro větší/menší extrémy
+            scaleFactor = Math.min(Math.max(scaleFactor, 0.45), 1.7);
+
+            phoneElement.style.transform = `translateZ(90px) translateX(85px) rotateY(-6deg) rotateX(2deg) scale(${scaleFactor})`;
+        }
+
         function onPointerDown(e, type) {
             if (isFullscreen) return;
             isResizing = true;
@@ -611,7 +733,7 @@ html, body {
             startY = e.clientY;
             startHeight = viewportWrapper.offsetHeight;
 
-            iframe.style.pointerEvents = 'none';
+            getActiveIframes().forEach(iframe => iframe.style.pointerEvents = 'none');
             viewportWrapper.style.transition = 'none';
             document.body.style.cursor = 'ns-resize';
             
@@ -626,12 +748,14 @@ html, body {
                 ? startHeight + (deltaY * 2) 
                 : startHeight - (deltaY * 2);
 
-            const minHeight = 480;
-            const maxHeight = window.innerHeight * 0.95;
+            // Rozšířené limity: menší minimum (320px) a větší maximum (98% výšky okna)
+            const minHeight = 320;
+            const maxHeight = window.innerHeight * 0.98;
 
             if (newHeight >= minHeight && newHeight <= maxHeight) {
                 viewportWrapper.style.height = `${newHeight}px`;
                 viewportWrapper.style.maxHeight = 'none';
+                updatePhoneScale();
             }
         }
 
@@ -646,7 +770,7 @@ html, body {
                 activeTarget.classList.remove('active');
             }
 
-            iframe.style.pointerEvents = 'auto';
+            getActiveIframes().forEach(iframe => iframe.style.pointerEvents = 'auto');
             viewportWrapper.style.transition = 'transform 0.3s ease-out, width 0.3s ease, height 0.3s ease, max-width 0.3s ease, max-height 0.3s ease';
             document.body.style.cursor = '';
             activeTarget = null;
@@ -685,6 +809,49 @@ html, body {
             `;
         }
 
+        function renderContent(index) {
+            if (index === 2) {
+                viewportFrame.classList.add('is-dual-screen');
+                viewportFrame.innerHTML = `
+                    <div class="resize-handle top" id="resizeTop"></div>
+                    <div class="dual-screen-container">
+                        <div class="device-frame pc-monitor">
+                            <div class="pc-screen-area">
+                                <iframe class="viewport-iframe" src="index1.html"></iframe>
+                            </div>
+                            <div class="pc-chin"><div class="pc-led"></div></div>
+                        </div>
+                        <div class="device-frame phone-portrait">
+                            <iframe class="viewport-iframe" src="index2.html"></iframe>
+                        </div>
+                    </div>
+                    <div class="resize-handle bottom" id="resizeBottom"></div>
+                `;
+                updatePhoneScale();
+            } else {
+                viewportFrame.classList.remove('is-dual-screen');
+                viewportFrame.innerHTML = `
+                    <div class="resize-handle top" id="resizeTop"></div>
+                    <iframe class="viewport-iframe" id="contentIframe" src="${availablePages[index]}"></iframe>
+                    <div class="resize-handle bottom" id="resizeBottom"></div>
+                `;
+            }
+
+            document.getElementById('resizeTop').addEventListener('pointerdown', (e) => onPointerDown(e, 'top'));
+            document.getElementById('resizeTop').addEventListener('pointermove', onPointerMove);
+            document.getElementById('resizeTop').addEventListener('pointerup', onPointerUp);
+            document.getElementById('resizeTop').addEventListener('pointercancel', onPointerUp);
+
+            document.getElementById('resizeBottom').addEventListener('pointerdown', (e) => onPointerDown(e, 'bottom'));
+            document.getElementById('resizeBottom').addEventListener('pointermove', onPointerMove);
+            document.getElementById('resizeBottom').addEventListener('pointerup', onPointerUp);
+            document.getElementById('resizeBottom').addEventListener('pointercancel', onPointerUp);
+
+            getActiveIframes().forEach(iframe => {
+                iframe.addEventListener('load', hideIframeScrollbar);
+            });
+        }
+
         function navigateTo(targetIndex, direction) {
             if (isAnimating || targetIndex === currentFileIndex || !availablePages[targetIndex]) return;
             isAnimating = true;
@@ -692,17 +859,19 @@ html, body {
             const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
             const inClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
 
-            viewportFrame.className = `viewport-frame ${outClass}`;
+            const dualClassCheck = currentFileIndex === 2 ? 'is-dual-screen' : '';
+            viewportFrame.className = `viewport-frame ${dualClassCheck} ${outClass}`;
 
             setTimeout(() => {
                 currentFileIndex = targetIndex;
-                iframe.src = availablePages[currentFileIndex];
+                renderContent(currentFileIndex);
                 updateNavButtons();
 
-                viewportFrame.className = `viewport-frame ${inClass}`;
+                const newDualClassCheck = currentFileIndex === 2 ? 'is-dual-screen' : '';
+                viewportFrame.className = `viewport-frame ${newDualClassCheck} ${inClass}`;
 
                 setTimeout(() => {
-                    viewportFrame.className = 'viewport-frame';
+                    viewportFrame.className = `viewport-frame ${newDualClassCheck}`;
                     isAnimating = false;
                 }, 350);
             }, 350);
@@ -714,6 +883,9 @@ html, body {
             if (isFullscreen) {
                 document.body.classList.add('is-fullscreen');
                 viewportWrapper.classList.add('fullscreen');
+                if (currentFileIndex === 2) {
+                    viewportWrapper.classList.add('is-dual-fullscreen');
+                }
                 searchIcon.innerHTML = `
                     <circle cx="11" cy="11" r="7"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -723,6 +895,7 @@ html, body {
             } else {
                 document.body.classList.remove('is-fullscreen');
                 viewportWrapper.classList.remove('fullscreen');
+                viewportWrapper.classList.remove('is-dual-fullscreen');
                 searchIcon.innerHTML = `
                     <circle cx="11" cy="11" r="7"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -789,15 +962,16 @@ html, body {
 
         function init() {
             if (availablePages.length > 0) {
-                iframe.src = availablePages[0];
+                renderContent(0);
             }
             updateNavButtons();
             updateView();
         }
 
-        function hideIframeScrollbar() {
+        function hideIframeScrollbar(e) {
             try {
-                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const targetIframe = e ? e.target : this;
+                const iframeDoc = targetIframe.contentDocument || targetIframe.contentWindow.document;
                 if (!iframeDoc) return;
 
                 const style = iframeDoc.createElement('style');
@@ -813,12 +987,10 @@ html, body {
                     }
                 `;
                 iframeDoc.head.appendChild(style);
-            } catch (e) {
-                console.warn("Nelze upravit styl iframe kvůli Same-Origin policy:", e);
+            } catch (err) {
+                console.warn("Nelze upravit styl iframe kvůli Same-Origin policy:", err);
             }
         }
-
-        iframe.addEventListener('load', hideIframeScrollbar);
 
         init();
     </script>
