@@ -1735,7 +1735,48 @@ iframe {
         });
     });
 
-    setLanguage(localStorage.getItem('fd_lang') || 'cs');
+    // Automatická detekce jazyka podle IP adresy (s fallbackem na prohlížeč a češtinu)
+    async function detectUserLanguage() {
+        const savedLang = localStorage.getItem('fd_lang');
+        if (savedLang) {
+            setLanguage(savedLang);
+            return;
+        }
+
+        let langToUse = 'cs';
+
+        try {
+            const response = await fetch('https://ipapi.co/json/');
+            const data = await response.json();
+            
+            if (data && data.country_code) {
+                const countryToLang = {
+                    'CZ': 'cs', 'SK': 'sk', 'DE': 'de', 'AT': 'de', 'CH': 'de',
+                    'FR': 'fr', 'ES': 'es', 'IT': 'it', 'PL': 'pl', 'RU': 'ru',
+                    'UA': 'uk', 'GB': 'en', 'US': 'en', 'NL': 'nl', 'HR': 'hr',
+                    'HU': 'hu', 'RO': 'ro', 'BG': 'bg', 'DK': 'da', 'FI': 'fi',
+                    'NO': 'no', 'SE': 'sv', 'TR': 'tr', 'VN': 'vi', 'TH': 'th',
+                    'JP': 'ja', 'KR': 'ko', 'CN': 'zh', 'TW': 'zh-tw', 'BR': 'pt',
+                    'PT': 'pt', 'GR': 'el', 'ID': 'id', 'IN': 'hi', 'IL': 'he', 'SA': 'ar'
+                };
+                
+                const country = data.country_code.toUpperCase();
+                if (countryToLang[country] && typeof translations !== 'undefined' && translations[countryToLang[country]]) {
+                    langToUse = countryToLang[country];
+                }
+            }
+        } catch (e) {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const shortLang = browserLang ? browserLang.split('-')[0] : 'cs';
+            if (typeof translations !== 'undefined' && translations[shortLang]) {
+                langToUse = shortLang;
+            }
+        }
+
+        setLanguage(langToUse);
+    }
+
+    detectUserLanguage();
 
     const radialMenu = document.getElementById('radial-menu');
     const radialToggle = document.getElementById('radial-toggle');
