@@ -344,20 +344,20 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 100%;
 }
 
-/* UPRAVENO: Hlavní nabídka přizpůsobená všem obrazovkám, texty na střed, jazyky vlevo */
+/* Hlavní nabídka a užší tlačítka uvnitř */
 #dropdown-menu {
   display: none;
   position: absolute;
   right: 2vw;
   top: 100%;
-  background-color: rgba(50, 50, 50, 0.98);
+  background-color: rgba(30, 30, 30, 0.95);
   color: white;
   list-style: none;
-  padding: 15px 15px;
-  border-radius: 5px;
+  padding: 12px 10px;
+  border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
-  text-align: center; /* Hlavní položky na střed */
-  width: min(94vw, 320px); /* Flexibilní šířka pro různé obrazovky */
+  text-align: center;
+  width: min(90vw, 400px); /* Zvětšeno o dalších 100 px (z 350px na 450px) */
   box-sizing: border-box;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
@@ -371,47 +371,59 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   display: block;
   margin: auto;
 }
+
 #dropdown-menu li {
-  padding: 8px 10px;
+  padding: 8px 12px;
+  margin: 6px auto; 
+  width: 75%; 
+  background-color: rgba(50, 50, 50, 0.6);
+  border-radius: 6px;
   cursor: pointer;
   white-space: normal;
   word-break: break-word;
   box-sizing: border-box;
-  text-align: center; /* Všechny běžné položky na střed */
+  text-align: center;
+  transition: background-color 0.2s, transform 0.2s;
 }
+
 #dropdown-menu li a {
   display: block;
   width: 100%;
 }
+
 #dropdown-menu li:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(5, 212, 255, 0.3);
 }
 
-/* Jazyková položka a její podnabídka výslovně vlevo */
+/* Jazyková položka a její podnabídka */
 .lang-item {
   position: relative;
   border-top: 1px solid rgba(255,255,255,0.15);
-  margin-top: 8px;
+  margin-top: 10px !important;
   padding-top: 10px !important;
   text-align: left !important;
+  width: 90% !important;
+  background-color: rgba(40, 40, 40, 0.8) !important;
 }
+
 #lang-current {
   display: block;
   text-align: left !important;
 }
+
 .lang-submenu {
   display: none;
   position: absolute;
-  left: 0; /* Zarovnání vlevo pod hlavní nabídku jazyků */
+  left: 0;
   top: 100%;
   transform: none;
-  background-color: rgba(30, 30, 30, 0.98);
+  background-color: rgba(25, 25, 25, 0.98);
   list-style: none;
-  padding: 10px;
+  padding: 8px;
   margin: 6px 0 0;
-  border-radius: 5px;
+  border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-  width: 100%; /* Přizpůsobení šířce menu */
+  width: 100%;
   box-sizing: border-box;
   max-height: 280px;
   overflow-y: auto;
@@ -419,23 +431,30 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   direction: ltr;
   text-align: left !important;
 }
+
 .lang-item.open .lang-submenu {
   display: block;
 }
+
 .lang-submenu li {
-  padding: 8px 10px;
+  padding: 6px 8px;
+  margin: 3px auto;
+  width: 94%; 
+  background-color: rgba(45, 45, 45, 0.7);
   white-space: normal;
   word-break: break-word;
   box-sizing: border-box;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
-  text-align: left !important; /* Jazyky napevno vlevo */
+  text-align: left !important;
 }
+
 .lang-submenu li[data-lang="ar"],
 .lang-submenu li[data-lang="he"] {
   direction: rtl;
   text-align: right;
 }
+
 .lang-submenu li:hover,
 .lang-submenu li.active {
   background-color: rgba(5, 212, 255, 0.25);
@@ -445,7 +464,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   padding: 4px 0 8px 0;
   box-sizing: border-box;
   text-align: left !important;
+  width: 94%;
+  margin: 0 auto;
 }
+
 .lang-search-wrapper input {
   width: 100%;
   padding: 8px;
@@ -456,10 +478,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-radius: 4px;
   font-size: 0.9em;
 }
+
 .lang-search-wrapper input:focus {
   outline: none;
   border-color: #05d4ff;
 }
+
 .lang-native {
   color: #aaa;
   font-size: 0.85em;
@@ -808,7 +832,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     top: 8%;
     left: 50%;
     transform: translateX(-50%);
-    width: min(94vw, 320px);
+    width: min(90vw, 450px);
     height: auto;
   }
   #top-bar { height: 8%; }
@@ -1038,7 +1062,7 @@ html[dir="rtl"] .footer p {
 
 @media (max-width: 768px) and (orientation: landscape) {
   #top-bar { height:15%; }
-  #dropdown-menu { width:35vw; }
+  #dropdown-menu { width:50vw; }
   #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; margin-top: 25px; }
   
   .logo-section { 
@@ -1348,7 +1372,7 @@ iframe {
     <div id="about-section-2" class="about-section">
         <div class="about-container">
             <h2 data-i18n="about2_title">Proč spolupracovat právě se mnou?</h2>
-            <p data-i18n="about2_text">Díky pestré praxi (od technické podpory na městkém úřadě, diagnostice hardwaru v NbServis a Klouček Computer přes vedení provozu ve SportVision až po navrhování interiérů v Oresi) jsem si zvykl rychle se adaptovat na nové prostředí a přebírat zodpovědnost za výsledky. Nezáleží na tom, zda řeším kód, stavím síť nebo komunikuji s klientem – vždy kladu důraz na preciznost, efektivitu a lidský přístup.</p>
+            <p data-i18n="about2_text">Díky pestré praxi (od technické podpory na městském úřadě, diagnostice hardwaru v NbServis a Klouček Computer přes vedení provozu ve SportVision až po navrhování interiérů v Oresi) jsem si zvykl rychle se adaptovat na nové prostředí a přebírat zodpovědnost za výsledky. Nezáleží na tom, zda řeším kód, stavím síť nebo komunikuji s klientem – vždy kladu důraz na preciznost, efektivitu a lidský přístup.</p>
             <p class="motivation-text" data-i18n="about2_motivation">Hledáte někoho, do koho se vyplatí investovat? Pojďme společně vytvořit něco skvělého.</p>
             <p class="contact-text"><strong data-i18n="contact_reach_out">Ozvěte se mi:</strong> <a href="mailto:duda.filip.mail@gmail.com">duda.filip.mail@gmail.com</a></p>
         </div>
