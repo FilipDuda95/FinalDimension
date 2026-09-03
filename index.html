@@ -631,40 +631,6 @@ html, body {
         }
     </style>
 </head>
-
-
-<script>
-    // Sledujeme, zda uživatel drží / má aktivní tlačítko plus (zoomIn)
-    let isPlusPressed = false;
-
-    const zoomInBtn = document.getElementById('zoomIn');
-
-    // Podpora pro myš i dotykové displeje
-    zoomInBtn.addEventListener('mousedown', () => { isPlusPressed = true; });
-    zoomInBtn.addEventListener('mouseup', () => { isPlusPressed = false; });
-    zoomInBtn.addEventListener('mouseleave', () => { isPlusPressed = false; });
-    
-    zoomInBtn.addEventListener('touchstart', () => { isPlusPressed = true; });
-    zoomInBtn.addEventListener('touchend', () => { isPlusPressed = false; });
-
-    // Odchycení události historie / tlačítka zpět na mobilu
-    window.addEventListener('popstate', (event) => {
-        if (isPlusPressed) {
-            // Pokud je stisknuté tlačítko plus, zabráníme zavření / odemčení
-            event.preventDefault();
-            history.pushState(null, '', window.location.href);
-        } else {
-            // Pokud tlačítko plus puštěné není, dovolíme standardní chování (zavření / návrat)
-            // Můžeme vynutit zavření okna, pokud to prohlížeč dovolí, nebo nechat historii plynout:
-            window.close();
-        }
-    });
-
-    // Inicializujeme historii, aby popstate vůbec na mobilech zachytilo akci zpět
-    history.pushState(null, '', window.location.href);
-</script>
-
-
 <body>
 
     <div class="clouds">
@@ -990,25 +956,13 @@ html, body {
             rotateXValue.textContent = `${rotationX}°`;
             rotateYValue.textContent = `${rotationY}°`;
 
+            // Reset velikosti (výšky) viewportu zpět na výchozí CSS hodnoty
+            viewportWrapper.style.height = '';
+            viewportWrapper.style.maxHeight = '';
+            updatePhoneScale();
+
             updateView();
         });
-resetRotation.addEventListener('click', () => {
-    zoomLevel = DEFAULT_ZOOM;
-    rotationX = DEFAULT_ROTATION_X;
-    rotationY = DEFAULT_ROTATION_Y;
-
-    rotateXSlider.value = rotationX;
-    rotateYSlider.value = rotationY;
-    rotateXValue.textContent = `${rotationX}°`;
-    rotateYValue.textContent = `${rotationY}°`;
-
-    // Reset velikosti (výšky) viewportu zpět na výchozí CSS hodnoty
-    viewportWrapper.style.height = '';
-    viewportWrapper.style.maxHeight = '';
-    updatePhoneScale(); // Aktualizuje velikost v duálním režimu, pokud je aktivní
-
-    updateView();
-});
 
         zoomIn.addEventListener('click', () => {
             zoomLevel = Math.min(zoomLevel + 0.1, 1.8);
@@ -1083,6 +1037,28 @@ resetRotation.addEventListener('click', () => {
         }
 
         init();
+
+        // --- Ošetření tlačítka Zpět na telefonu (umístěno zde, aby prvky bezpečně existovaly) ---
+        let isPlusPressed = false;
+        
+        zoomIn.addEventListener('mousedown', () => { isPlusPressed = true; });
+        zoomIn.addEventListener('mouseup', () => { isPlusPressed = false; });
+        zoomIn.addEventListener('mouseleave', () => { isPlusPressed = false; });
+        zoomIn.addEventListener('touchstart', () => { isPlusPressed = true; });
+        zoomIn.addEventListener('touchend', () => { isPlusPressed = false; });
+
+        window.addEventListener('popstate', (event) => {
+            if (isPlusPressed) {
+                event.preventDefault();
+                history.pushState(null, '', window.location.href);
+            } else {
+                // Pokus o zavření okna, popřípadě se uživatel vrátí v historii pryč
+                window.close();
+            }
+        });
+
+        // Vložení počátečního stavu do historie, aby prohlížeč na mobilech zachytil gesto zpět
+        history.pushState(null, '', window.location.href);
     </script>
 </body>
 </html>
