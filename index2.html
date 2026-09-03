@@ -53,66 +53,50 @@ h4 { font-size: clamp(15px, 2.2vw, 19px); }
 h5 { font-size: clamp(14px, 2vw, 18px); }
 h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
-/* --- 3D PRVEK (3D KRYCHLE) S ČERVENÝM NEONEM A POSUNUTÍM DOLŮ --- */
-.scene {
-  width: 200px;
-  height: 200px;
-  perspective: 600px;
-  margin: 70px auto 40px auto; /* Zvětšeno horní odsazení pro posun dolů */
+/* --- 3D PRVEK (3D SFÉRA) S ČERVENÝM NEONEM A POSUNUTÍM DOLŮ --- */
+.sphere-scene {
+  width: 220px;
+  height: 220px;
+  perspective: 800px;
+  margin: 70px auto 40px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.cube {
+.sphere {
   width: 100%;
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  animation: rotateCube 10s infinite linear;
+  animation: rotateSphere 15s infinite linear;
   cursor: grab;
 }
 
-.cube:active {
+.sphere:active {
   cursor: grabbing;
 }
 
-.cube-face {
+.sphere-dot {
   position: absolute;
-  width: 200px;
-  height: 200px;
-  border: 2px solid #ff1a1a;
-  background: rgba(255, 26, 26, 0.1);
-  box-shadow: 0 0 15px rgba(255, 26, 26, 0.4) inset;
-  font-size: 20px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  text-transform: uppercase;
-  backdrop-filter: blur(4px);
-  border-radius: 10px;
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 26, 26, 0.8);
+  border: 1px solid #ff4d4d;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff1a1a, 0 0 20px rgba(255, 26, 26, 0.6);
+  left: 50%;
+  top: 50%;
+  transform-style: preserve-3d;
 }
 
-.cube-face--front  { transform: rotateY(0deg) translateZ(100px); }
-.cube-face--right  { transform: rotateY(90deg) translateZ(100px); }
-.cube-face--back   { transform: rotateY(180deg) translateZ(100px); }
-.cube-face--left   { transform: rotateY(-90deg) translateZ(100px); }
-.cube-face--top    { transform: rotateX(90deg) translateZ(100px); }
-.cube-face--bottom { transform: rotateX(-90deg) translateZ(100px); }
-
-@keyframes rotateCube {
+@keyframes rotateSphere {
   0% { transform: rotateX(0deg) rotateY(0deg); }
   100% { transform: rotateX(360deg) rotateY(360deg); }
 }
 
 @media (max-width: 600px) {
-  .scene { width: 150px; height: 150px; margin: 50px auto 30px auto; }
-  .cube-face { width: 150px; height: 150px; font-size: 14px; }
-  .cube-face--front  { transform: rotateY(0deg) translateZ(75px); }
-  .cube-face--right  { transform: rotateY(90deg) translateZ(75px); }
-  .cube-face--back   { transform: rotateY(180deg) translateZ(75px); }
-  .cube-face--left   { transform: rotateY(-90deg) translateZ(75px); }
-  .cube-face--top    { transform: rotateX(90deg) translateZ(75px); }
-  .cube-face--bottom { transform: rotateX(-90deg) translateZ(75px); }
+  .sphere-scene { width: 160px; height: 160px; margin: 50px auto 30px auto; }
 }
 
 /* SJEDNOCENÁ TLAČÍTKA SCROLLOVÁNÍ (▼ a ▲) */
@@ -172,12 +156,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.95);
-  color: #ff1a1a; /* Červená barva písmen */
+  color: #ff1a1a;
   z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* Červený neonový stín pod lištou */
   box-shadow: 0 4px 20px rgba(255, 26, 26, 0.5), 0 0 10px rgba(255, 26, 26, 0.3);
   border-bottom: 1px solid rgba(255, 26, 26, 0.4);
   direction: ltr !important;
@@ -202,7 +185,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 100%;
 }
 
-/* Hlavní nabídka a užší tlačítka uvnitř */
 #dropdown-menu {
   display: none;
   position: absolute;
@@ -228,7 +210,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   object-fit: contain;
   display: block;
   margin: auto;
-  /* Červený filtr pro ikony v horní liště */
   filter: drop-shadow(0 0 4px rgba(255, 26, 26, 0.6));
 }
 
@@ -255,7 +236,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   background-color: rgba(255, 26, 26, 0.3);
 }
 
-/* Jazyková položka a její podnabídka */
 .lang-item {
   position: relative;
   border-top: 1px solid rgba(255,255,255,0.15);
@@ -963,21 +943,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         </div>
     </div>
 
-    <!-- INTERAKTIVNÍ 3D OBJEKT (POSUNUTÝ NÍŽE) -->
+    <!-- INTERAKTIVNÍ 3D OBJEKT (SFÉRA) -->
     <div class="inner-text" id="padding">
       <div class="gallery-container">
         <h2 class="gallery-eyebrow">3D Interaktivní Prvek</h2>
-        <p>Jednoduchá 3D ukázka vytvořená pomocí čistého CSS a JavaScriptu. Objekt můžete otáčet tahem myši.</p>
+        <p>Interaktivní 3D sféra vytvořená pomocí čistého CSS a JavaScriptu. Objekt můžete otáčet tahem myši.</p>
 
-        <div class="scene">
-          <div class="cube" id="interactiveCube">
-            <div class="cube-face cube-face--front">3D</div>
-            <div class="cube-face cube-face--back">Design</div>
-            <div class="cube-face cube-face--right">Filip</div>
-            <div class="cube-face cube-face--left">Duda</div>
-            <div class="cube-face cube-face--top">Web</div>
-            <div class="cube-face cube-face--bottom">Grafika</div>
-          </div>
+        <div class="sphere-scene">
+          <div class="sphere" id="interactiveSphere"></div>
         </div>
       </div>
     </div>
@@ -1023,34 +996,51 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
         });
     });
 
-    // Interaktivní otáčení 3D krychle myší / dotykem
-    const cube = document.getElementById('interactiveCube');
+    // Generování a interaktivní otáčení 3D sféry
+    const sphere = document.getElementById('interactiveSphere');
+    const radius = 80;
+    const numPoints = 80;
+
+    for (let i = 0; i < numPoints; i++) {
+        const phi = Math.acos(-1 + (2 * i) / numPoints);
+        const theta = Math.sqrt(numPoints * Math.PI) * phi;
+
+        const x = radius * Math.cos(theta) * Math.sin(phi);
+        const y = radius * Math.sin(theta) * Math.sin(phi);
+        const z = radius * Math.cos(phi);
+
+        const dot = document.createElement('div');
+        dot.className = 'sphere-dot';
+        dot.style.transform = `translate3d(${x}px, ${y}px, ${z}px)`;
+        sphere.appendChild(dot);
+    }
+
     let isDragging = false;
     let startX, startY;
     let rotateX = 0, rotateY = 0;
 
-    cube.addEventListener('pointerdown', (e) => {
+    sphere.addEventListener('pointerdown', (e) => {
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
-        cube.style.animation = 'none'; // Pozastaví automatickou animaci při interakci
-        cube.setPointerCapture(e.pointerId);
+        sphere.style.animation = 'none';
+        sphere.setPointerCapture(e.pointerId);
     });
 
-    cube.addEventListener('pointermove', (e) => {
+    sphere.addEventListener('pointermove', (e) => {
         if (!isDragging) return;
         const deltaX = e.clientX - startX;
         const deltaY = e.clientY - startY;
         rotateY += deltaX * 0.5;
         rotateX -= deltaY * 0.5;
-        cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        sphere.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
         startX = e.clientX;
         startY = e.clientY;
     });
 
-    cube.addEventListener('pointerup', (e) => {
+    sphere.addEventListener('pointerup', (e) => {
         isDragging = false;
-        cube.releasePointerCapture(e.pointerId);
+        sphere.releasePointerCapture(e.pointerId);
     });
 
     function filterLanguages() {
