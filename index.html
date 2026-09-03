@@ -152,11 +152,13 @@ html, body {
             transform-style: preserve-3d;
         }
 
-        .viewport-frame.is-dual-screen {
+.viewport-frame.is-dual-screen {
             background: transparent !important;
             box-shadow: none !important;
+            border: none !important;
+            outline: none !important;
+            overflow: visible !important; /* Důležité: zruší ořezávání */
         }
-
         .viewport-wrapper.fullscreen .viewport-frame {
             border-radius: 0;
             box-shadow: none;
