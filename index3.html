@@ -9,6 +9,10 @@
     <meta property="og:image" content="style/logo.png">
 	
     <link rel="shortcut icon" href="favicon.png" type="image/png"> 
+
+    <!-- Načtení Three.js a OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 	
     <style>
 /* Skryje scrollbar pro WebKit */
@@ -53,78 +57,22 @@ h4 { font-size: clamp(15px, 2.2vw, 19px); }
 h5 { font-size: clamp(14px, 2vw, 18px); }
 h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
-.controls {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-#gallery { 
-  margin: 0 auto;
-}
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  justify-content: center;
-  justify-items: center;
-  gap: 1rem;
-  max-width: 1100px;
+/* --- 3D KOULE KONTEJNER --- */
+.scene {
   width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  padding: 0;
-}
-.gallery a {
-  text-decoration: none;
-  color: silver;
-}
-
-.square {
-  color: silver;
+  max-width: 400px;
+  height: 400px;
+  margin: 30px auto;
   position: relative;
-  width: 100%;
-  padding-bottom: 100%;
-  background-color: black;
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
-  background-image: url('Folder.jpg');
-  background-size: cover;
-  background-position: bottom center;  
-}
-.square:hover {
-  cursor: pointer;
-}
-
-.square img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.folder {
-  display: flex;
-  background-color: white;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  font-weight: bold;
-  padding: 1rem;
-  text-align: center;
-  height: 25%;
-  width: auto;
+  box-shadow: 0 0 25px rgba(26, 140, 255, 0.3);
+  border: 1px solid rgba(26, 140, 255, 0.4);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 600px) {
-  .gallery {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
+  .scene { width: 280px; height: 280px; margin: 20px auto; }
 }
 
 /* SJEDNOCENÁ TLAČÍTKA SCROLLOVÁNÍ (▼ a ▲) */
@@ -173,163 +121,29 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .back-button:hover { 
-  background-color: #bf00ff; 
-  border-color: #bf00ff;
-  box-shadow: 0 0 12px rgba(191, 0, 255, 0.8);
+  background-color: #ff1a1a; 
+  border-color: #ff1a1a;
 }
 
-/* ===== PREVIEW MODAL ===== */
-.preview-modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  inset: 0;
-  background: rgba(0,0,0,0.95);
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-#previewContent {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.media-frame {
-  position: relative;
-  display: inline-flex;
-  max-width: 95vw;
-  max-height: 80vh;
-}
-.media-frame img,
-.media-frame .video-wrapper {
-  max-width: 95vw;
-  max-height: 80vh;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 30px rgba(0,0,0,0.5);
-  display: block;
-}
-.media-frame img {
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
-.video-wrapper {
-  position: relative;
-  width: min(92vw, 800px);
-  height: min(80vh, 500px);
-  background: #000;
-  overflow: hidden;
-}
-
-@media (max-width: 768px) {
-  .video-wrapper {
-    height: min(85vh, 550px);
-  }
-  .video-wrapper::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    z-index: 15;
-    pointer-events: none;
-  }
-}
-
-.video-inner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: height 0.3s ease, top 0.3s ease;
-}
-
-@media (max-width: 768px) {
-  .video-inner.playing {
-    height: 300%;
-    top: -100%;
-  }
-}
-
-.video-inner iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-  pointer-events: auto;
-}
-
-@media (max-width: 768px) {
-  .video-inner iframe {
-    pointer-events: none;
-  }
-  .video-inner.playing iframe {
-    pointer-events: auto;
-  }
-}
-
-.preview-modal .close {
-  position: absolute;
-  top: -16px;
-  right: -16px;
-  font-size: 28px;
-  color: white;
-  cursor: pointer;
-  z-index: 20;
-  background: rgba(0,0,0,0.9);
-  border: 2px solid rgba(255,255,255,0.6);
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  transition: 0.2s;
-  line-height: 0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-}
-
-.preview-modal .close:hover {
-  background: rgba(255,255,255,0.2);
-  border-color: #bf00ff;
-}
-
-@media (max-width: 480px) {
-  .preview-modal .close {
-    top: -12px;
-    right: -12px;
-    width: 36px;
-    height: 36px;
-    font-size: 22px;
-  }
-}
-
-/* ÚPRAVA TOP-BARU S TMAVĚ FIALOVÝM NEONOVÝM EFEKTEM */
+/* ===== HORNÍ LIŠTA S ČERVENÝM NEONEM ===== */
 #top-bar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  color: #bf00ff;
+  background-color: rgba(0, 0, 0, 0.95);
+  color: #ff1a1a;
   z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #bf00ff;
-  box-shadow: 0 4px 15px rgba(191, 0, 255, 0.6);
+  box-shadow: 0 4px 20px rgba(255, 26, 26, 0.5), 0 0 10px rgba(255, 26, 26, 0.3);
+  border-bottom: 1px solid rgba(255, 26, 26, 0.4);
   direction: ltr !important;
 }
 #top-bar a {
   text-decoration: none;
-  color: #bf00ff;
-  text-shadow: 0 0 6px rgba(191, 0, 255, 0.5);
+  color: #ff1a1a;
 }
 #icon, #dropdown-button {
   cursor: pointer;
@@ -347,18 +161,17 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 100%;
 }
 
-/* Hlavní nabídka a užší tlačítka uvnitř */
 #dropdown-menu {
   display: none;
   position: absolute;
   right: 2vw;
   top: 100%;
   background-color: rgba(30, 30, 30, 0.95);
-  color: #bf00ff;
+  color: white;
   list-style: none;
   padding: 12px 10px;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(191, 0, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
   text-align: center;
   width: min(90vw, 400px); 
   box-sizing: border-box;
@@ -367,14 +180,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   direction: ltr;
 }
 
-/* Fialová neonová úprava ikon v liště */
 .menu-icon {
   height: 100%;
   width: auto;
   object-fit: contain;
   display: block;
   margin: auto;
-  filter: brightness(0) invert(1) sepia(100%) saturate(10000%) hue-rotate(240deg) brightness(1.2) drop-shadow(0 0 8px rgba(191, 0, 255, 0.8));
+  filter: drop-shadow(0 0 4px rgba(255, 26, 26, 0.6));
 }
 
 #dropdown-menu li {
@@ -397,10 +209,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 #dropdown-menu li:hover {
-  background-color: rgba(191, 0, 255, 0.3);
+  background-color: rgba(255, 26, 26, 0.3);
 }
 
-/* Jazyková položka a její podnabídka */
 .lang-item {
   position: relative;
   border-top: 1px solid rgba(255,255,255,0.15);
@@ -454,15 +265,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   text-align: left !important;
 }
 
-.lang-submenu li[data-lang="ar"],
-.lang-submenu li[data-lang="he"] {
-  direction: rtl;
-  text-align: right;
-}
-
 .lang-submenu li:hover,
 .lang-submenu li.active {
-  background-color: rgba(191, 0, 255, 0.25);
+  background-color: rgba(255, 26, 26, 0.25);
 }
 
 .lang-search-wrapper {
@@ -478,15 +283,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   padding: 8px;
   box-sizing: border-box;
   background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(191, 0, 255, 0.5);
-  color: #bf00ff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
   border-radius: 4px;
   font-size: 0.9em;
 }
 
 .lang-search-wrapper input:focus {
   outline: none;
-  border-color: #bf00ff;
+  border-color: #ff1a1a;
 }
 
 .lang-native {
@@ -523,12 +328,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   z-index: 24;
 }
 
-.hero-spacer {
-  position: relative;
-  width: 100%;
-  clear: both;
-}
-
 /* ===== FOOTER ===== */
 .footer {
   display: flex;
@@ -540,7 +339,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   width: 100%;
   min-height: 360px;
-  z-index: 9999;
+  z-index: 9000;
   color: black;
   background-color: #f8f8f8;
   padding: 30px 20px 20px 20px;
@@ -585,47 +384,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   justify-content: center;
 }
 
-.social-icons a {
-  margin: 0;
-  display: inline-block;
-}
-
 .social-icons img {
   width: 30px;
   height: 30px;
   margin-bottom: 0;
-}
-
-@media (max-height: 550px) and (orientation: landscape) {
-  .footer {
-    min-height: auto;
-    padding: 30px 20px 20px 20px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .footer img {
-    width: 75px;
-    height: 75px;
-    margin-bottom: 5px;
-  }
-  .footer h2 {
-    font-size: 1.1rem;
-    margin: 2px 0;
-  }
-  .footer p {
-    margin: 2px 0;
-    font-size: 0.85rem;
-  }
-  .social-icons {
-    margin: 6px 0 2px 0;
-  }
-  .social-icons img {
-    width: 24px;
-    height: 24px;
-  }
-  .scrollupbutton {
-    margin-top: 8px;
-  }
 }
 
 @keyframes fadeInUp {
@@ -643,7 +405,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  background: linear-gradient(135deg, #1a1a1a 0%, #1f1f2e 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #2e1f1f 100%);
   color: #f0f0f0;
   padding: 60px 4%;
   text-align: center;
@@ -659,7 +421,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #bf00ff, transparent);
+  background: linear-gradient(90deg, transparent, #ff1a1a, transparent);
   animation: slideInLeft 1s ease-out;
 }
 
@@ -672,7 +434,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 120px;
   background: linear-gradient(to bottom, rgba(26, 26, 26, 0), rgba(0, 0, 0, 0.9));
   pointer-events: none;
-  z-index: 10;
+  z-index: 1;
 }
 
 .about-container,
@@ -680,13 +442,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   max-width: 1100px;
   margin: 0 auto;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   box-sizing: border-box;
 }
 
 .about-section h2 {
-  color: #bf00ff;
+  color: #ff1a1a;
   margin-bottom: 20px;
   position: relative;
   display: inline-block;
@@ -703,12 +465,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, #bf00ff, #bf00ff);
+  background: linear-gradient(90deg, #ff1a1a, #ff4d4d);
   animation: slideInLeft 0.6s ease-out 0.4s forwards;
 }
 
 .about-section h3 {
-  color: #bf00ff;
+  color: #ff1a1a;
   margin-top: 40px;
   margin-bottom: 30px;
   animation: fadeInUp 0.8s ease-out 0.3s backwards;
@@ -728,7 +490,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .motivation-text {
   margin-top: 30px !important;
   font-style: italic;
-  color: #bf00ff;
+  color: #ff1a1a;
   font-size: clamp(14px, 1.5vw, 18px);
 }
 
@@ -739,15 +501,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .contact-text a {
-  color: #bf00ff;
+  color: #ff1a1a;
   text-decoration: none;
   transition: color 0.3s ease;
   position: relative;
 }
 
 .contact-text a:hover {
-  color: #bf00ff;
-  text-shadow: 0 0 10px rgba(191, 0, 255, 0.8);
+  color: #ff4d4d;
+  text-shadow: 0 0 10px rgba(255, 26, 26, 0.8);
 }
 
 .about-section p {
@@ -766,10 +528,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .skill-item {
-  background-color: rgba(191, 0, 255, 0.08);
+  background-color: rgba(255, 26, 26, 0.08);
   padding: 20px;
   border-radius: 10px;
-  border-left: 4px solid #bf00ff;
+  border-left: 4px solid #ff1a1a;
   text-align: left;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   opacity: 0;
@@ -779,14 +541,9 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .skill-item h4 {
-  color: #bf00ff;
+  color: #ff1a1a;
   margin-bottom: 10px;
   font-size: clamp(16px, 2vw, 20px);
-}
-
-.skill-item:hover h4 {
-  color: #bf00ff;
-  text-shadow: 0 0 10px rgba(191, 0, 255, 0.8);
 }
 
 .skill-item p {
@@ -799,21 +556,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   .about-section { text-align: left; padding: 60px 4%; }
   .about-section h2, .about-section h3 { text-align: left; }
   .about-container { text-align: left; }
-}
-
-@media (max-width: 600px) {
-  .skills-grid { grid-template-columns: 1fr; }
-  .about-section { padding: 40px 4%; }
-  .skill-item { animation: fadeInUp 0.6s ease-out forwards; }
-  .skill-item:nth-child(1) { animation-delay: 0.3s; }
-  .skill-item:nth-child(2) { animation-delay: 0.4s; }
-  .skill-item:nth-child(3) { animation-delay: 0.5s; }
-  .skill-item:nth-child(4) { animation-delay: 0.6s; }
-  .skill-item:active { transform: translateY(-8px) scale(1.02); background-color: rgba(191, 0, 255, 0.15); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skill-item, .about-section, .about-section h2::after { animation: none !important; opacity: 1 !important; }
 }
 
 #Patička {
@@ -849,22 +591,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     padding: 0px; 
   }
 }
-
-/* === ÚPRAVA PRO RTL JAZYKY (AR, HE) === */
-@media (orientation: portrait) {
-  html[dir="rtl"] #dropdown-menu {
-    right: 50% !important;
-    left: auto !important;
-    transform: translateX(50%) !important;
-  }
-}
-
-html[dir="rtl"] .footer p {
-  direction: rtl;
-  unicode-bidi: embed;
-  text-align: center;
-}
-/* ===================================== */
 
 #background-video {
   position: fixed;
@@ -908,13 +634,13 @@ html[dir="rtl"] .footer p {
   flex-shrink: 0;
 }
 #video-bubbles .bubble:hover {
-  background: rgba(191, 0, 255, 0.6);
+  background: rgba(255, 26, 26, 0.6);
   transform: scale(1.15);
 }
 #video-bubbles .bubble.active {
-  background: #bf00ff;
-  border-color: #bf00ff;
-  box-shadow: 0 0 8px rgba(191, 0, 255, 0.8);
+  background: #ff1a1a;
+  border-color: #ff1a1a;
+  box-shadow: 0 0 8px rgba(255, 26, 26, 0.8);
 }
 
 /* ---------- Kruhové menu ---------- */
@@ -949,8 +675,8 @@ html[dir="rtl"] .footer p {
 }
 #radial-toggle.open {
   transform: rotate(45deg);
-  background: rgba(191, 0, 255, 0.55);
-  border-color: #bf00ff;
+  background: rgba(255, 26, 26, 0.55);
+  border-color: #ff1a1a;
 }
 .radial-links {
   position: absolute;
@@ -987,31 +713,8 @@ html[dir="rtl"] .footer p {
   transform: translate(var(--tx), var(--ty)) scale(1);
 }
 .radial-link:hover {
-  background: rgba(191, 0, 255, 0.55);
-  border-color: #bf00ff;
-}
-
-@media (max-width: 600px) {
-  #radial-menu { right: 16px; bottom: 20px; }
-  #radial-menu.shifted { transform: translateY(-70px); }
-  #radial-toggle { width: 46px; height: 46px; font-size: 1.1rem; }
-  .radial-link { width: 42px; height: 42px; font-size: 0.6rem; }
-  
-  #video-bubbles { 
-    left: 16px; 
-    bottom: 20px; 
-    height: 46px;
-    width: 22px;
-    padding: 5px; 
-  }
-  #video-bubbles .bubble { width: 6px; height: 6px; }
-  .scrollbutton { bottom: 20px; }
-  
-  .logo-section {
-    width: 220px !important;
-    height: 220px !important;
-    top: -120px !important;
-  }
+  background: rgba(255, 26, 26, 0.55);
+  border-color: #ff1a1a;
 }
 
 #center-section {
@@ -1033,7 +736,7 @@ html[dir="rtl"] .footer p {
   font-size: clamp(16px, 2.5vw, 21px);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #bf00ff;
+  color: #ff1a1a;
   margin-bottom: 8px;
 }
 
@@ -1055,7 +758,6 @@ html[dir="rtl"] .footer p {
 }
 
 @media (min-width: 768px) {
-  .modal-arrow { display: block; }
   #top-bar { height: 8%; }
   #center-section { flex-direction: row; justify-content: space-between; }
   .logo-section { z-index: 200; position: absolute; }
@@ -1063,147 +765,6 @@ html[dir="rtl"] .footer p {
   #center-section .inner-text { width:92%; margin:4%; }
   #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
   #padding { text-align: left; }
-}
-
-@media (max-width: 768px) and (orientation: landscape) {
-  #top-bar { height:15%; }
-  #dropdown-menu { width:50vw; }
-  #center-section { flex-direction: row; justify-content: space-evenly; padding: 10px; margin-top: 25px; }
-  
-  .logo-section { 
-    position: absolute !important; 
-    width: 180px !important; 
-    height: 180px !important; 
-    top: -100px !important; 
-    padding: 0 !important; 
-  }
-  
-  #black-section { padding: 0px 0; }
-  .inner-text { width:100%; margin:0 auto; text-align: center; flex-grow: 1; }
-  #center-section .inner-text { width:92%; margin:2%; }
-  #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
-  #padding { text-align: left; }
-  
-  #výška_herního_okna {
-    min-height: 80vh;
-    padding-top: 80px;
-    padding-bottom: 40px;
-  }
-  #game-menu {
-    padding-bottom: 20px;
-    margin-top: 30px;
-    gap: 20px;
-  }
-}
-
-#výška_herního_okna {
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 60vh;
-  height: auto;
-  width:100%; 
-  position: relative; 
-  padding-top: 80px;
-  padding-bottom: 60px;
-  z-index: 2;
-  box-sizing: border-box;
-}
-
-.top-vignette {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 250px;
-  z-index: 10005; 
-  pointer-events: none;
-}
-
-#game-menu {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 40px;
-  width: 100%;
-  max-width: 1100px;
-  margin-top: 40px;
-  padding-bottom: 20px;
-  position: relative;
-  z-index: 10;
-  box-sizing: border-box;
-}
-
-.game-card {
-  background: rgba(20, 20, 20, 0.6);
-  padding: 50px 20px;
-  text-align: center;
-  border-radius: 24px;
-  border: 1px solid #1a1a1a;
-  cursor: pointer;
-  transition: 0.5s;
-  backdrop-filter: blur(10px);
-}
-
-.game-card:hover {
-  border-color: #bf00ff;
-  transform: translateY(-10px);
-  background: rgba(30, 30, 30, 0.9);
-}
-
-#overlay {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent; 
-  z-index: 9999;
-  padding-top: 120px; 
-  box-sizing: border-box;
-}
-
-.back-btn {
-  position: absolute;
-  top: 50%;
-  right: 24px;
-  width: 44px;
-  height: 44px;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: 1px solid #333;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-  line-height: 1;
-  padding: 0;
-  z-index: 10010;
-  backdrop-filter: blur(15px);
-  transition: 0.4s;
-}
-
-.back-btn:hover { background-color: #bf00ff; }
-
-@media (max-width: 600px) {
-    .back-btn {
-        right: 14px;
-        width: 38px;
-        height: 38px;
-        font-size: 1rem;
-    }
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: #000;
-    display: block;
 }
 
 #konec {
@@ -1225,8 +786,7 @@ iframe {
             <ul id="dropdown-menu">
                 <li><a href="#top" data-i18n="nav_home">Hlavní</a></li>
                 <li><a href="#about-section-1" data-i18n="nav_about">O mě</a></li>
-                <li><a href="#padding" data-i18n="nav_gallery">Galerie</a></li>
-                <li><a href="#výška_herního_okna" data-i18n="nav_games">Hry</a></li>
+                <li><a href="#padding" data-i18n="nav_gallery">3D Ukázka</a></li>
                 <li><a href="#konec" data-i18n="nav_contact">Kontakt</a></li>
                 <li class="lang-item" id="lang-toggle">
                     <span id="lang-current">CS ▾</span>
@@ -1285,8 +845,7 @@ iframe {
         <nav id="radial-links" class="radial-links">
             <a href="#top" class="radial-link" style="--tx:0px; --ty:-70px;" data-i18n="nav_home">Hlavní</a>
             <a href="#about-section-1" class="radial-link" style="--tx:-50px; --ty:-50px;" data-i18n="nav_about">O mě</a>
-            <a href="#padding" class="radial-link" style="--tx:-70px; --ty:0px;" data-i18n="nav_gallery">Galerie</a>
-            <a href="#výška_herního_okna" class="radial-link" style="--tx:-50px; --ty:50px;" data-i18n="nav_games">Hry</a>
+            <a href="#padding" class="radial-link" style="--tx:-70px; --ty:0px;" data-i18n="nav_gallery">3D</a>
             <a href="#konec" class="radial-link" style="--tx:0px; --ty:70px;" data-i18n="nav_contact">Kontakt</a>
         </nav>
     </div>
@@ -1338,40 +897,14 @@ iframe {
         </div>
     </div>
 
+    <!-- INTERAKTIVNÍ 3D KOULE (THREE.JS) -->
     <div class="inner-text" id="padding">
       <div class="gallery-container">
-        <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
-        <p data-i18n="gallery_lead">Zde je ukázka projektů, na kterých jsem v poslední době pracoval — od grafického designu po herní vizuály.</p>
-        <p data-i18n="gallery_desc">Portfolio zahrnuje širokou škálu projektů, od návrhů pro tisk, přes herní grafiku až po návrhy vlastních světů. Podívejte se na některé z mých projektů, které reflektují mé dovednosti a přístup k detailu.</p>
+        <h2 class="gallery-eyebrow">3D Interaktivní Prvek</h2>
+        <p>Interaktivní 3D koule s texturou a heightmapou vytvořená pomocí Three.js. Objekt můžete otáčet tahem myši.</p>
 
-        <br>
-
-        <div class="controls">
-          <button class="back-button" onclick="goBack()" id="backBtn" style="display:none;" data-i18n="back_button">Zpět</button>
-        </div>
-
-        <div id="galerie">
-          <div class="gallery" id="gallery"></div>
-        </div>
-
-        <div id="previewModal" class="preview-modal" onclick="closePreview(event)">
-          <div id="previewContent"></div>
-        </div>
+        <div class="scene" id="globe-container"></div>
       </div>
-    </div>
-
-    <div class="hero-spacer">
-        <div id="výška_herního_okna">
-            <div class="top-vignette"></div>
-            <h3 data-i18n="games_title">Vyberte hru</h3>
-            <div id="game-menu"></div>
-
-            <div id="overlay">
-                <iframe id="game-frame" src=""></iframe>
-            </div>
-
-            <button id="back-btn" class="back-btn" onclick="zavritHru()" title="Návrat do menu" style="display: none;">✕</button>
-        </div>
     </div>
 
     <div id="about-section-2" class="about-section">
@@ -1415,237 +948,65 @@ iframe {
         });
     });
 
-    const API_KEY = 'AIzaSyAFRT_OOuYQDnSexM2SGLdSYZDKQ_10GME';
-    const ROOT_FOLDER_ID = '17BDpjapbHbx_unFVchSwgtWlgnZvG1sJ';
-    const folderStack = [ROOT_FOLDER_ID];
+    // --- THREE.JS INICIALIZACE MODRÉ KOULE ---
+    const container = document.getElementById('globe-container');
 
-    async function loadFolder(folderId, addToHistory = true) {
-      if (addToHistory) history.pushState({ folderId }, '');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 3;
 
-      const query = encodeURIComponent(`'${folderId}' in parents and trashed = false`);
-      const url = `https://www.googleapis.com/drive/v3/files?q=${query}&key=${API_KEY}&fields=files(id,name,mimeType,thumbnailLink)`;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
 
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
 
-        const gallery = document.getElementById('gallery');
-        const backBtn = document.getElementById('backBtn');
-        gallery.innerHTML = '';
-        backBtn.style.display = folderStack.length > 1 ? 'inline-block' : 'none';
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
 
-        if (data.files) {
-          data.files.forEach(file => {
-            const container = document.createElement('div');
-            container.className = 'square';
+    const pointLight = new THREE.PointLight(0xffffff, 1.5, 10);
+    pointLight.position.set(5, 3, 5);
+    scene.add(pointLight);
 
-            if (file.mimeType === 'application/vnd.google-apps.folder') {
-              container.onclick = () => {
-                folderStack.push(file.id);
-                loadFolder(file.id);
-              };
-              const folderDiv = document.createElement('div');
-              folderDiv.className = 'folder';
-              folderDiv.innerHTML = file.name;
-              container.appendChild(folderDiv);
-            } else {
-              container.style.backgroundImage = 'none';
-              const img = document.createElement('img');
-              img.src = file.thumbnailLink || 'https://via.placeholder.com/250?text=Soubor';
-              img.loading = 'lazy';
-              container.appendChild(img);
-              container.onclick = () => openPreview(file);
-            }
-            gallery.appendChild(container);
-          });
-        }
-      } catch (e) {
-        console.error("Chyba při načítání složky z Google Drive API:", e);
-      }
-    }
+    const geometry = new THREE.SphereGeometry(1, 128, 128);
+    const textureLoader = new THREE.TextureLoader();
+    
+    const planetTexture = textureLoader.load('Skin1.jpg');
+    const heightMap = textureLoader.load('HEIGHTMAP_1.jpg');
 
-    function resetModalState() {
-      const modal = document.getElementById('previewModal');
-      modal.style.display = 'none';
-      document.getElementById('previewContent').innerHTML = '';
-      const videoInners = document.querySelectorAll('.video-inner.playing');
-      videoInners.forEach(inner => inner.classList.remove('playing'));
-      document.body.style.overflow = '';
-      
-      const scrollBtn = document.getElementById('scroll-button');
-      if (scrollBtn) {
-        scrollBtn.style.visibility = 'visible';
-        scrollBtn.style.pointerEvents = 'auto';
-      }
-      
-      const gameBackBtn = document.getElementById('back-btn');
-      if (gameBackBtn) gameBackBtn.style.pointerEvents = 'auto';
-    }
-
-    function openPreview(file) {
-      const modal = document.getElementById('previewModal');
-      const content = document.getElementById('previewContent');
-      content.innerHTML = '';
-
-      const fileUrl = `https://drive.google.com/uc?export=download&id=${file.id}`;
-
-      const frame = document.createElement('div');
-      frame.className = 'media-frame';
-
-      const closeBtn = document.createElement('span');
-      closeBtn.className = 'close';
-      closeBtn.innerHTML = '×';
-      closeBtn.setAttribute('aria-label', 'Zavřít náhled');
-      closeBtn.onclick = (e) => {
-        e.stopPropagation();
-        resetModalState();
-      };
-
-      if (file.mimeType.startsWith('image/')) {
-        const img = document.createElement('img');
-        img.src = fileUrl;
-        img.onerror = () => {
-          img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w2000`;
-        };
-        frame.appendChild(img);
-      } else if (file.mimeType.startsWith('video/')) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'video-wrapper';
-        
-        const inner = document.createElement('div');
-        inner.className = 'video-inner';
-
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://drive.google.com/file/d/${file.id}/preview`;
-        iframe.allow = "autoplay; fullscreen";
-
-        inner.appendChild(iframe);
-        wrapper.appendChild(inner);
-        frame.appendChild(wrapper);
-        
-        const isMobile = () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (isMobile()) {
-          let isPlaying = false;
-          setTimeout(() => {
-            try {
-              isPlaying = true;
-              inner.classList.add('playing');
-              iframe.click();
-            } catch(err) {
-              console.log('Auto-play failed');
-            }
-          }, 1500);
-          
-          inner.addEventListener('click', () => {
-            if (!isPlaying) {
-              isPlaying = true;
-              inner.classList.add('playing');
-              setTimeout(() => { iframe.click(); }, 300);
-            }
-          }, { capture: true });
-        }
-      }
-
-      frame.appendChild(closeBtn);
-      content.appendChild(frame);
-
-      document.body.style.overflow = 'hidden';
-      const scrollBtn = document.getElementById('scroll-button');
-      if (scrollBtn) {
-        scrollBtn.style.visibility = 'hidden';
-        scrollBtn.style.pointerEvents = 'none';
-      }
-      
-      const gameBackBtn = document.getElementById('back-btn');
-      if (gameBackBtn) gameBackBtn.style.pointerEvents = 'none';
-
-      modal.style.display = 'flex';
-    }
-
-    function closePreview(event) {
-      if (event.target.id === 'previewModal') {
-        resetModalState();
-      }
-    }
-
-    function goBack() {
-      if (folderStack.length > 1) {
-        folderStack.pop();
-        loadFolder(folderStack[folderStack.length - 1], false);
-      }
-    }
-
-    window.onpopstate = function(event) {
-      if (event.state && event.state.folderId) {
-        if (folderStack.length > 1) folderStack.pop();
-        loadFolder(event.state.folderId, false);
-      }
-    };
-
-    loadFolder(ROOT_FOLDER_ID);
-
-    const seznamHer = [
-        { id: 'index1', nazev: 'Vesmírná-mise' }, 
-        { id: 'index2', nazev: 'Vesmírná-mise2' }
-    ];
-
-    const hlavniDiv = document.getElementById('výška_herního_okna');
-    const menuContainer = document.getElementById('game-menu');
-    const overlay = document.getElementById('overlay');
-    const iframe = document.getElementById('game-frame');
-    const gameBackBtn = document.getElementById('back-btn');
-
-    function prizpusobVysku() {
-        const vyskaRodice = hlavniDiv.offsetHeight;
-        const paddingTop = parseInt(window.getComputedStyle(overlay).paddingTop);
-        if (overlay.style.display === 'block') {
-            iframe.style.height = (vyskaRodice - paddingTop) + "px";
-        }
-    }
-
-    seznamHer.forEach(hra => {
-        const karta = document.createElement('div');
-        karta.className = 'game-card';
-        karta.innerHTML = `<h3>${hra.nazev}</h3><p data-i18n="game_start">Spustit</p>`;
-        karta.onclick = () => spustitHru(hra.id);
-        menuContainer.appendChild(karta);
+    const material = new THREE.MeshStandardMaterial({
+        color: 0x1a8cff, // Modrá barva koule
+        map: planetTexture,
+        bumpMap: heightMap,
+        bumpScale: 0.05,
+        roughness: 0.8,
+        metalness: 0.1
     });
 
-    function spustitHru(id, autoScroll = true) {
-        iframe.src = `hry/${id}.html`; 
-        
-        overlay.style.display = 'block';
-        gameBackBtn.style.display = 'flex';
+    const globe = new THREE.Mesh(geometry, material);
+    scene.add(globe);
 
-        document.getElementById('game-menu').style.visibility = 'hidden';
-        document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
-
-        prizpusobVysku();
-
-        if (autoScroll) {
-            const yOffset = -50; 
-            const y = hlavniDiv.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({top: y, behavior: 'smooth'});
-        }
+    function onWindowResize() {
+        if (!container) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
     }
 
-    function zavritHru() {
-        overlay.style.display = 'none';
-        gameBackBtn.style.display = 'none';
-        iframe.src = '';
-        document.getElementById('game-menu').style.visibility = 'visible';
-        document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
-        hlavniDiv.scrollIntoView({ behavior: 'smooth' });
+    window.addEventListener('resize', onWindowResize, false);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        globe.rotation.y += 0.001;
+        controls.update();
+        renderer.render(scene, camera);
     }
 
-    window.addEventListener('resize', prizpusobVysku);
-
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            spustitHru('index1', false); 
-        }, 800);
-    });
+    animate();
+    // ----------------------------------------
 
     function filterLanguages() {
       const input = document.getElementById('langSearch').value.toLowerCase();
@@ -1705,21 +1066,6 @@ iframe {
             }
         });
 
-        const langSearch = document.getElementById('langSearch');
-        if (langSearch) {
-            const searchTexts = {
-                cs: "Hledat jazyk", en: "Search language", de: "Sprache suchen", fr: "Rechercher une langue", 
-                es: "Buscar idioma", ru: "Поиск языка", uk: "Пошук мови", sk: "Hľadať jazyk", pl: "Szukaj języka", it: "Cerca lingua",
-                ar: "بحث عن لغة", zh: "搜索语言", "zh-tw": "搜尋語言", ja: "言語を検索", ko: "언어 검색",
-                nl: "Taal zoeken", pt: "Pesquisar idioma", tr: "Dil ara", sv: "Sök språk", fi: "Etsi kieltä",
-                no: "Søk etter språk", da: "Søg efter sprog", hu: "Nyelv keresése", el: "Αναζήτηση γλώσσας",
-                ro: "Caută limba", hr: "Pretraži jezik", bg: "Търсене на език", th: "ค้นหาภาษา", vi: "Tìm kiếm ngôn ngữ",
-                hi: "भाषा खोजें", id: "Cari bahasa", bn: "ভাষা অনুসন্ধান করুন", he: "חפש שפה"
-            };
-            const currentSearchText = searchTexts[lang] || searchTexts['en'];
-            langSearch.placeholder = currentSearchText + " / Search language...";
-        }
-
         localStorage.setItem('fd_lang', lang);
     }
 
@@ -1740,20 +1086,16 @@ iframe {
         });
     });
 
-    // Automatická detekce jazyka podle IP adresy (s fallbackem na prohlížeč a češtinu)
     async function detectUserLanguage() {
         const savedLang = localStorage.getItem('fd_lang');
         if (savedLang) {
             setLanguage(savedLang);
             return;
         }
-
         let langToUse = 'cs';
-
         try {
             const response = await fetch('https://ipapi.co/json/');
             const data = await response.json();
-            
             if (data && data.country_code) {
                 const countryToLang = {
                     'CZ': 'cs', 'SK': 'sk', 'DE': 'de', 'AT': 'de', 'CH': 'de',
@@ -1764,7 +1106,6 @@ iframe {
                     'JP': 'ja', 'KR': 'ko', 'CN': 'zh', 'TW': 'zh-tw', 'BR': 'pt',
                     'PT': 'pt', 'GR': 'el', 'ID': 'id', 'IN': 'hi', 'IL': 'he', 'SA': 'ar'
                 };
-                
                 const country = data.country_code.toUpperCase();
                 if (countryToLang[country] && typeof translations !== 'undefined' && translations[countryToLang[country]]) {
                     langToUse = countryToLang[country];
@@ -1777,7 +1118,6 @@ iframe {
                 langToUse = shortLang;
             }
         }
-
         setLanguage(langToUse);
     }
 
@@ -1802,16 +1142,6 @@ iframe {
         radialToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     });
 
-    radialLinks.querySelectorAll('.radial-link').forEach(link => {
-        link.addEventListener('click', () => {
-            const modal = document.getElementById('previewModal');
-            if (modal && modal.style.display === 'flex') {
-                resetModalState();
-            }
-            closeRadialMenu();
-        });
-    });
-
     window.addEventListener('click', (e) => {
         if (!e.target.closest('#radial-menu')) {
             closeRadialMenu();
@@ -1829,12 +1159,12 @@ iframe {
         return list;
     }
 
+    const videoElement = document.getElementById('background-video');
+    const sourceElement = document.getElementById('video-source');
+
     function setBackgroundVideo(index) {
         const videos = videoList();
         currentVideoIndex = ((index % videos.length) + videos.length) % videos.length;
-
-        const videoElement = document.getElementById('background-video');
-        const sourceElement = document.getElementById('video-source');
         sourceElement.src = videos[currentVideoIndex];
         videoElement.load();
         videoElement.play().catch(error => console.error("Chyba při přehrávání videa:", error));
