@@ -1464,7 +1464,10 @@ iframe {
       document.getElementById('previewContent').innerHTML = '';
       const videoInners = document.querySelectorAll('.video-inner.playing');
       videoInners.forEach(inner => inner.classList.remove('playing'));
+      
+      // Obnovení scrollování stránky
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
       
       const scrollBtn = document.getElementById('scroll-button');
       if (scrollBtn) {
@@ -1544,7 +1547,10 @@ iframe {
       frame.appendChild(closeBtn);
       content.appendChild(frame);
 
+      // Úplné zablokování scrollování stránky na pozadí (funguje spolehlivě i na mobilech)
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
       const scrollBtn = document.getElementById('scroll-button');
       if (scrollBtn) {
         scrollBtn.style.visibility = 'hidden';
