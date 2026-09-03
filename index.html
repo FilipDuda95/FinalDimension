@@ -722,6 +722,10 @@ html, body {
         let isAnimating = false;
         let isFullscreen = false;
 
+        // Omezení historie maximálně na 2 kroky
+        let historyStack = [0]; 
+        let historyPointer = 0;
+
         rotateXSlider.value = rotationX;
         rotateXValue.textContent = `${rotationX}°`;
 
@@ -886,9 +890,22 @@ html, body {
             });
         }
 
-        function navigateTo(targetIndex, direction) {
+        function navigateTo(targetIndex, direction, isPopState = false) {
             if (isAnimating || targetIndex === currentFileIndex || !availablePages[targetIndex]) return;
             isAnimating = true;
+
+            // Správa vlastního zásobníku historie na maximálně 2 položky zpět
+            if (!isPopState) {
+                historyStack = historyStack.slice(0, historyPointer + 1);
+                historyStack.push(targetIndex);
+                if (historyStack.length > 3) {
+                    historyStack.shift(); // Udrží aktuální + max 2 zpět
+                }
+                historyPointer = historyStack.length - 1;
+                
+                // Aktualizace historie v prohlížeči
+                window.history.replaceState({ index: targetIndex }, '');
+            }
 
             const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
             const inClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
@@ -910,6 +927,15 @@ html, body {
                 }, 350);
             }, 350);
         }
+
+        // Zachycení stisknutí tlačítka Zpět v prohlížeči
+        window.addEventListener('popstate', (e) => {
+            if (e.state && typeof e.state.index === 'number') {
+                const target = e.state.index;
+                const direction = target > currentFileIndex ? 'next' : 'prev';
+                navigateTo(target, direction, true);
+            }
+        });
 
         toggleFullscreen.addEventListener('click', () => {
             isFullscreen = !isFullscreen;
@@ -999,6 +1025,7 @@ html, body {
         });
 
         function init() {
+            window.history.replaceState({ index: 0 }, '');
             if (availablePages.length > 0) {
                 renderContent(0);
             }
@@ -1024,26 +1051,10 @@ html, body {
                         -ms-overflow-style: none !important;
                     }
                 `;
-                iframeDoc.head.appendChild(xmlEscape(style)); // Zde opraveno vkládání stylů
-
-                // Ochrana proti zanášení historie iframe do prohlížeče
-                if (iframeDoc.defaultView && iframeDoc.defaultView.history) {
-                    const originalPushState = iframeDoc.defaultView.history.pushState;
-                    const originalReplaceState = iframeDoc.defaultView.history.replaceState;
-                    
-                    // Zabrání vnitřním stránkám měnit historii okna, pokud to ruší
-                    // (Volitelně můžete nechat prázdné nebo nahradit)
-                }
+                iframeDoc.head.appendChild(style);
             } catch (err) {
                 console.warn("Nelze upravit styl iframe kvůli Same-Origin policy:", err);
             }
-        }
-
-        function xmlEscape(el) {
-            // Pomocná funkce pro vložení stylu
-            const iframeDoc = el.ownerDocument;
-            iframeDoc.head.appendChild(el);
-            return el;
         }
 
         init();
