@@ -123,7 +123,7 @@ html, body {
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease, max-width 0.3s ease, max-height 0.3s ease;
         }
 
-        /* Režim celé obrazovky pro iframe kontejner (nebo duální telefon) */
+        /* Režim celé obrazovky pro iframe kontejner */
         .viewport-wrapper.fullscreen {
             width: 100vw !important;
             height: 100vh !important;
@@ -144,8 +144,10 @@ html, body {
             background: #fff;
             box-shadow: 0 30px 90px rgba(0,0,0,0.85);
             border-radius: 6px;
-            overflow: visible;
+            overflow: hidden;
             will-change: transform, opacity;
+            backface-visibility: hidden;
+            transform: translateZ(0);
             transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, border-radius 0.3s ease;
             transform-style: preserve-3d;
         }
@@ -158,10 +160,9 @@ html, body {
         .viewport-wrapper.fullscreen .viewport-frame {
             border-radius: 0;
             box-shadow: none;
-            overflow: hidden;
         }
 
-        /* Speciální režim celé obrazovky pro duální zobrazení – skryje monitor, roztáhne telefon */
+        /* Speciální režim celé obrazovky pro duální zobrazení */
         .viewport-wrapper.fullscreen.is-dual-fullscreen .pc-monitor {
             display: none !important;
         }
@@ -189,35 +190,56 @@ html, body {
             background-color: black;
         }
 
-        /* Lišty pro změnu výšky */
+        /* Kontejner pro jednotlivé stránky uvnitř viewportu */
+        .page-slot {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            visibility: hidden;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .page-slot.active {
+            visibility: visible;
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        /* Lišty pro změnu výšky - přesunuty ven z viewport-frame */
         .resize-handle {
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             width: 80px;
             height: 16px;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 10px;
             cursor: ns-resize;
-            z-index: 35;
+            z-index: 50; /* Zajišťuje, že jsou zcela navrchu */
             display: flex;
             align-items: center;
             justify-content: center;
             transition: background 0.2s, opacity 0.3s, box-shadow 0.2s;
             user-select: none;
             touch-action: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .resize-handle:hover, .resize-handle.active {
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
         }
 
         .resize-handle::after {
             content: '';
             width: 30px;
             height: 3px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             border-radius: 2px;
         }
 
@@ -228,14 +250,14 @@ html, body {
             display: none !important;
         }
 
-        /* Třídy pro animovaný přechod stránek */
+        /* Přechodové třídy pro celý rám */
         .slide-out-left {
-            transform: translateX(-120%) rotateY(-15deg) translateZ(0);
+            transform: translate3d(-120%, 0, 0) rotateY(-15deg);
             opacity: 0;
         }
 
         .slide-out-right {
-            transform: translateX(120%) rotateY(15deg) translateZ(0);
+            transform: translate3d(120%, 0, 0) rotateY(15deg);
             opacity: 0;
         }
 
@@ -248,13 +270,13 @@ html, body {
         }
 
         @keyframes slideInFromLeft {
-            from { transform: translateX(-120%) rotateY(-15deg) translateZ(0); opacity: 0; }
-            to { transform: translateX(0) rotateY(0deg) translateZ(0); opacity: 1; }
+            from { transform: translate3d(-120%, 0, 0) rotateY(-15deg); opacity: 0; }
+            to { transform: translate3d(0, 0, 0) rotateY(0deg); opacity: 1; }
         }
 
         @keyframes slideInFromRight {
-            from { transform: translateX(120%) rotateY(15deg) translateZ(0); opacity: 0; }
-            to { transform: translateX(0) rotateY(0deg) translateZ(0); opacity: 1; }
+            from { transform: translate3d(120%, 0, 0) rotateY(15deg); opacity: 0; }
+            to { transform: translate3d(0, 0, 0) rotateY(0deg); opacity: 1; }
         }
 
         /* Iframe se skrytým posuvníkem */
@@ -639,9 +661,12 @@ html, body {
 
     <div class="scene">
         <div class="viewport-wrapper" id="viewportWrapper">
+            <!-- Lišty jsou nyní přímo zde, mimo ořezaný viewport-frame -->
+            <div class="resize-handle top" id="resizeTop"></div>
+            <div class="resize-handle bottom" id="resizeBottom"></div>
+
             <div class="viewport-frame" id="viewportFrame">
-                <div class="resize-handle top" id="resizeTop"></div>
-                <div class="resize-handle bottom" id="resizeBottom"></div>
+                <!-- Zde budou dynamicky vloženy sloty pro všechny stránky -->
             </div>
         </div>
 
@@ -724,7 +749,6 @@ html, body {
         let isAnimating = false;
         let isFullscreen = false;
 
-        // Omezení historie maximálně na 2 kroky
         let historyStack = [0]; 
         let historyPointer = 0;
 
@@ -745,8 +769,7 @@ html, body {
         }
 
         function updatePhoneScale() {
-            if (availablePages[currentFileIndex] !== "dual-screen") return;
-            const phoneElement = viewportFrame.querySelector('.phone-portrait');
+            const phoneElement = viewportFrame.querySelector('.page-slot.active .phone-portrait');
             if (!phoneElement) return;
 
             const currentH = viewportWrapper.offsetHeight;
@@ -847,90 +870,101 @@ html, body {
             `;
         }
 
-        function renderContent(index) {
-            const pageConfig = availablePages[index];
+        // Inicializativní vygenerování všech stránek najednou
+        function initAllPages() {
+            availablePages.forEach((pageConfig, index) => {
+                const slot = document.createElement('div');
+                slot.className = `page-slot ${index === currentFileIndex ? 'active' : ''}`;
+                slot.dataset.index = index;
 
-            if (pageConfig === "dual-screen") {
-                viewportFrame.classList.add('is-dual-screen');
-                viewportFrame.innerHTML = `
-                    <div class="resize-handle top" id="resizeTop"></div>
-                    <div class="dual-screen-container">
-                        <div class="device-frame pc-monitor">
-                            <div class="pc-screen-area">
-                                <iframe class="viewport-iframe" src="index3.html"></iframe>
+                if (pageConfig === "dual-screen") {
+                    slot.innerHTML = `
+                        <div class="dual-screen-container">
+                            <div class="device-frame pc-monitor">
+                                <div class="pc-screen-area">
+                                    <iframe class="viewport-iframe" src="index3.html"></iframe>
+                                </div>
+                                <div class="pc-chin"><div class="pc-led"></div></div>
                             </div>
-                            <div class="pc-chin"><div class="pc-led"></div></div>
+                            <div class="device-frame phone-portrait">
+                                <iframe class="viewport-iframe" src="index2.html"></iframe>
+                            </div>
                         </div>
-                        <div class="device-frame phone-portrait">
-                            <iframe class="viewport-iframe" src="index2.html"></iframe>
-                        </div>
-                    </div>
-                    <div class="resize-handle bottom" id="resizeBottom"></div>
-                `;
-                updatePhoneScale();
-            } else {
-                viewportFrame.classList.remove('is-dual-screen');
-                viewportFrame.innerHTML = `
-                    <div class="resize-handle top" id="resizeTop"></div>
-                    <iframe class="viewport-iframe" id="contentIframe" src="${pageConfig}"></iframe>
-                    <div class="resize-handle bottom" id="resizeBottom"></div>
-                `;
-            }
+                    `;
+                } else {
+                    slot.innerHTML = `
+                        <iframe class="viewport-iframe" src="${pageConfig}"></iframe>
+                    `;
+                }
 
-            document.getElementById('resizeTop').addEventListener('pointerdown', (e) => onPointerDown(e, 'top'));
-            document.getElementById('resizeTop').addEventListener('pointermove', onPointerMove);
-            document.getElementById('resizeTop').addEventListener('pointerup', onPointerUp);
-            document.getElementById('resizeTop').addEventListener('pointercancel', onPointerUp);
-
-            document.getElementById('resizeBottom').addEventListener('pointerdown', (e) => onPointerDown(e, 'bottom'));
-            document.getElementById('resizeBottom').addEventListener('pointermove', onPointerMove);
-            document.getElementById('resizeBottom').addEventListener('pointerup', onPointerUp);
-            document.getElementById('resizeBottom').addEventListener('pointercancel', onPointerUp);
+                viewportFrame.appendChild(slot);
+            });
 
             getActiveIframes().forEach(iframe => {
                 iframe.addEventListener('load', hideIframeScrollbar);
             });
+
+            updatePhoneScale();
         }
 
         function navigateTo(targetIndex, direction, isPopState = false) {
             if (isAnimating || targetIndex === currentFileIndex || !availablePages[targetIndex]) return;
             isAnimating = true;
 
-            // Správa vlastního zásobníku historie na maximálně 2 položky zpět
             if (!isPopState) {
                 historyStack = historyStack.slice(0, historyPointer + 1);
                 historyStack.push(targetIndex);
                 if (historyStack.length > 3) {
-                    historyStack.shift(); // Udrží aktuální + max 2 zpět
+                    historyStack.shift();
                 }
                 historyPointer = historyStack.length - 1;
-                
-                // Aktualizace historie v prohlížeči
                 window.history.replaceState({ index: targetIndex }, '');
             }
 
             const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
             const inClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
 
-            const dualClassCheck = availablePages[currentFileIndex] === "dual-screen" ? 'is-dual-screen' : '';
-            viewportFrame.className = `viewport-frame ${dualClassCheck} ${outClass}`;
+            const isDualNow = availablePages[currentFileIndex] === "dual-screen";
+            if (isDualNow) {
+                viewportFrame.classList.add('is-dual-screen');
+            } else {
+                viewportFrame.classList.remove('is-dual-screen');
+            }
+            
+            viewportFrame.classList.add(outClass);
 
             setTimeout(() => {
+                const slots = viewportFrame.querySelectorAll('.page-slot');
+                slots.forEach(slot => {
+                    if (parseInt(slot.dataset.index) === targetIndex) {
+                        slot.classList.add('active');
+                    } else {
+                        slot.classList.remove('active');
+                    }
+                });
+
                 currentFileIndex = targetIndex;
-                renderContent(currentFileIndex);
                 updateNavButtons();
 
-                const newDualClassCheck = availablePages[currentFileIndex] === "dual-screen" ? 'is-dual-screen' : '';
-                viewportFrame.className = `viewport-frame ${newDualClassCheck} ${inClass}`;
+                const isDualNext = availablePages[currentFileIndex] === "dual-screen";
+                if (isDualNext) {
+                    viewportFrame.classList.add('is-dual-screen');
+                } else {
+                    viewportFrame.classList.remove('is-dual-screen');
+                }
+
+                updatePhoneScale();
+
+                viewportFrame.classList.remove(outClass);
+                viewportFrame.classList.add(inClass);
 
                 setTimeout(() => {
-                    viewportFrame.className = `viewport-frame ${newDualClassCheck}`;
+                    viewportFrame.classList.remove(inClass);
                     isAnimating = false;
                 }, 350);
             }, 350);
         }
 
-        // Zachycení stisknutí tlačítka Zpět v prohlížeči
         window.addEventListener('popstate', (e) => {
             if (e.state && typeof e.state.index === 'number') {
                 const target = e.state.index;
@@ -1028,8 +1062,9 @@ html, body {
 
         function init() {
             window.history.replaceState({ index: 0 }, '');
-            if (availablePages.length > 0) {
-                renderContent(0);
+            initAllPages();
+            if (availablePages[0] === "dual-screen") {
+                viewportFrame.classList.add('is-dual-screen');
             }
             updateNavButtons();
             updateView();
