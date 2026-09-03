@@ -119,7 +119,8 @@ html, body {
             max-width: 1200px;
             max-height: 95vh;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease-out, width 0.3s ease, max-width 0.3s ease, max-height 0.3s ease;
+            will-change: transform;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease, max-width 0.3s ease, max-height 0.3s ease;
         }
 
         /* Režim celé obrazovky pro iframe kontejner (nebo duální telefon) */
@@ -144,7 +145,8 @@ html, body {
             box-shadow: 0 30px 90px rgba(0,0,0,0.85);
             border-radius: 6px;
             overflow: visible;
-            transition: transform 0.35s ease, opacity 0.35s ease, border-radius 0.3s ease;
+            will-change: transform, opacity;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, border-radius 0.3s ease;
             transform-style: preserve-3d;
         }
 
@@ -228,31 +230,31 @@ html, body {
 
         /* Třídy pro animovaný přechod stránek */
         .slide-out-left {
-            transform: translateX(-120%) rotateY(-15deg);
+            transform: translateX(-120%) rotateY(-15deg) translateZ(0);
             opacity: 0;
         }
 
         .slide-out-right {
-            transform: translateX(120%) rotateY(15deg);
+            transform: translateX(120%) rotateY(15deg) translateZ(0);
             opacity: 0;
         }
 
         .slide-in-left {
-            animation: slideInFromLeft 0.35s forwards cubic-bezier(0.25, 1, 0.5, 1);
+            animation: slideInFromLeft 0.35s forwards cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .slide-in-right {
-            animation: slideInFromRight 0.35s forwards cubic-bezier(0.25, 1, 0.5, 1);
+            animation: slideInFromRight 0.35s forwards cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes slideInFromLeft {
-            from { transform: translateX(-120%) rotateY(-15deg); opacity: 0; }
-            to { transform: translateX(0) rotateY(0deg); opacity: 1; }
+            from { transform: translateX(-120%) rotateY(-15deg) translateZ(0); opacity: 0; }
+            to { transform: translateX(0) rotateY(0deg) translateZ(0); opacity: 1; }
         }
 
         @keyframes slideInFromRight {
-            from { transform: translateX(120%) rotateY(15deg); opacity: 0; }
-            to { transform: translateX(0) rotateY(0deg); opacity: 1; }
+            from { transform: translateX(120%) rotateY(15deg) translateZ(0); opacity: 0; }
+            to { transform: translateX(0) rotateY(0deg) translateZ(0); opacity: 1; }
         }
 
         /* Iframe se skrytým posuvníkem */
@@ -261,7 +263,7 @@ html, body {
             width: 100%;
             height: 100%;
             border: 0;
-            background: none;
+            background: #fff;
             pointer-events: auto;
             scrollbar-width: none;
             border-radius: inherit;
