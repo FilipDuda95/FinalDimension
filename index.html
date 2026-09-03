@@ -260,8 +260,8 @@ html, body {
             display: block;
             width: 100%;
             height: 100%;
-            border: none;
-            background: black;
+            border: 20px;
+            background: none;
             pointer-events: auto;
             scrollbar-width: none;
             border-radius: inherit;
@@ -631,6 +631,40 @@ html, body {
         }
     </style>
 </head>
+
+
+<script>
+    // Sledujeme, zda uživatel drží / má aktivní tlačítko plus (zoomIn)
+    let isPlusPressed = false;
+
+    const zoomInBtn = document.getElementById('zoomIn');
+
+    // Podpora pro myš i dotykové displeje
+    zoomInBtn.addEventListener('mousedown', () => { isPlusPressed = true; });
+    zoomInBtn.addEventListener('mouseup', () => { isPlusPressed = false; });
+    zoomInBtn.addEventListener('mouseleave', () => { isPlusPressed = false; });
+    
+    zoomInBtn.addEventListener('touchstart', () => { isPlusPressed = true; });
+    zoomInBtn.addEventListener('touchend', () => { isPlusPressed = false; });
+
+    // Odchycení události historie / tlačítka zpět na mobilu
+    window.addEventListener('popstate', (event) => {
+        if (isPlusPressed) {
+            // Pokud je stisknuté tlačítko plus, zabráníme zavření / odemčení
+            event.preventDefault();
+            history.pushState(null, '', window.location.href);
+        } else {
+            // Pokud tlačítko plus puštěné není, dovolíme standardní chování (zavření / návrat)
+            // Můžeme vynutit zavření okna, pokud to prohlížeč dovolí, nebo nechat historii plynout:
+            window.close();
+        }
+    });
+
+    // Inicializujeme historii, aby popstate vůbec na mobilech zachytilo akci zpět
+    history.pushState(null, '', window.location.href);
+</script>
+
+
 <body>
 
     <div class="clouds">
