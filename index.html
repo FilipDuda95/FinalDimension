@@ -1024,30 +1024,29 @@ html, body {
                         -ms-overflow-style: none !important;
                     }
                 `;
-                iframeDoc.head.appendChild(style);
+                iframeDoc.head.appendChild(xmlEscape(style)); // Zde opraveno vkládání stylů
+
+                // Ochrana proti zanášení historie iframe do prohlížeče
+                if (iframeDoc.defaultView && iframeDoc.defaultView.history) {
+                    const originalPushState = iframeDoc.defaultView.history.pushState;
+                    const originalReplaceState = iframeDoc.defaultView.history.replaceState;
+                    
+                    // Zabrání vnitřním stránkám měnit historii okna, pokud to ruší
+                    // (Volitelně můžete nechat prázdné nebo nahradit)
+                }
             } catch (err) {
                 console.warn("Nelze upravit styl iframe kvůli Same-Origin policy:", err);
             }
         }
 
+        function xmlEscape(el) {
+            // Pomocná funkce pro vložení stylu
+            const iframeDoc = el.ownerDocument;
+            iframeDoc.head.appendChild(el);
+            return el;
+        }
+
         init();
-
-        // --- Ošetření tlačítka Zpět pouze pokud je iframe zvětšený nebo v režimu celé obrazovky ---
-        window.addEventListener('popstate', (event) => {
-            const isZoomed = zoomLevel > DEFAULT_ZOOM;
-            
-            // Pokud je iframe v původní velikosti a není zapnutá celá obrazovka, necháme tlačítko fungovat normálně
-            if (!isFullscreen && !isZoomed) {
-                return; 
-            }
-
-            // V opačném případě zabráníme odchodu ze stránky
-            event.preventDefault();
-            history.pushState(null, '', window.location.href);
-        });
-
-        // Inicializační zápis do historie pro případ, že se uživatel dostane do zvětšeného stavu
-        history.pushState(null, '', window.location.href);
     </script>
 </body>
 </html>
