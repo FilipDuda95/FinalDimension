@@ -756,7 +756,7 @@ html, body {
         let handleType = '';
 
         function getActiveIframes() {
-            return viewportFrame.querySelectorAll('iframe');
+            return viewportFrame.querySelectorAll('.page-slot.active iframe');
         }
 
         function updatePhoneScale() {
@@ -861,7 +861,7 @@ html, body {
             `;
         }
 
-        // Generování HTML obsahu pro konkrétní slot (lazy loading šablona)
+        // Generování HTML obsahu pro konkrétní slot
         function getSlotHTML(pageConfig, loadImmediately = false) {
             if (pageConfig === "dual-screen") {
                 const srcPC = loadImmediately ? 'index3.html' : '';
@@ -886,18 +886,27 @@ html, body {
             }
         }
 
-        // Načte iframy v daném slotu, pokud ještě nejsou načtené (nemají src)
+        // Načte iframy v daném slotu a skryje v nich scrollbar
         function activateSlotContent(slot) {
             const iframes = slot.querySelectorAll('iframe');
             iframes.forEach(iframe => {
                 if (!iframe.getAttribute('src') && iframe.dataset.src) {
                     iframe.src = iframe.dataset.src;
+                    iframe.removeEventListener('load', hideIframeScrollbar);
                     iframe.addEventListener('load', hideIframeScrollbar);
                 }
             });
         }
 
-        // Inicializace: Vytvoří strukturu VŠECH slotů, ale src vyplní POUZE pro aktuální úvodní stránku
+        // Zastaví/vymaže iframy v neaktivním slotu pro úsporu paměti a CPU
+        function deactivateSlotContent(slot) {
+            const iframes = slot.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                iframe.removeAttribute('src');
+            });
+        }
+
+        // Inicializace slotů
         function initAllPages() {
             availablePages.forEach((pageConfig, index) => {
                 const slot = document.createElement('div');
@@ -910,8 +919,8 @@ html, body {
                 viewportFrame.appendChild(slot);
             });
 
-            // Připojení listeneru na load pro úvodní iframe(y)
-            getActiveIframes().forEach(iframe => {
+            // Připojení listeneru pro úvodní iframe(y)
+            viewportFrame.querySelectorAll('.page-slot.active iframe').forEach(iframe => {
                 if (iframe.getAttribute('src')) {
                     iframe.addEventListener('load', hideIframeScrollbar);
                 }
@@ -934,9 +943,10 @@ html, body {
                 window.history.replaceState({ index: targetIndex }, '');
             }
 
-            // Zajistíme, že cílová stránka bude před zobrazením načtena (Lazy Load na vyžádání)
             const slots = viewportFrame.querySelectorAll('.page-slot');
             const targetSlot = Array.from(slots).find(s => parseInt(s.dataset.index) === targetIndex);
+            
+            // Aktivace (načtení) nového slotu
             if (targetSlot) {
                 activateSlotContent(targetSlot);
             }
@@ -955,10 +965,13 @@ html, body {
 
             setTimeout(() => {
                 slots.forEach(slot => {
-                    if (parseInt(slot.dataset.index) === targetIndex) {
+                    const slotIndex = parseInt(slot.dataset.index);
+                    if (slotIndex === targetIndex) {
                         slot.classList.add('active');
                     } else {
                         slot.classList.remove('active');
+                        // Zde se okno kompletně stopne/vymaže, aby neběželo na pozadí
+                        deactivateSlotContent(slot);
                     }
                 });
 
