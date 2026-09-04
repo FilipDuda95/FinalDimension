@@ -43,16 +43,30 @@ html, body {
             touch-action: manipulation;
         }
 
-        /* Mraky jsou PŘED iframe, ale končí nad spodním panelem s tlačítky */
+        /* Spodní mraky v pozadí (z-index: 1) */
         .clouds {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 65px; 
+            bottom: 0; 
             pointer-events: none; 
             overflow: hidden;
-            z-index: 3; 
+            z-index: 1; 
+            opacity: 0.75; 
+            transition: opacity 0.3s ease;
+        }
+
+        /* Vrchní mraky v popředí PŘED iframe (z-index: 6) */
+        .clouds-foreground {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0; 
+            pointer-events: none; 
+            overflow: hidden;
+            z-index: 6; 
             opacity: 0.75; 
             transition: opacity 0.3s ease;
         }
@@ -63,14 +77,15 @@ html, body {
             filter: url(#removeBlackPure);
         }
 
-        .cloud:nth-child(1) {
+        /* Vrchní tři mraky */
+        .clouds-foreground .cloud:nth-child(1) {
             width: 450px;
             top: 15%;
             left: -60px;
             animation: drift 22s infinite ease-in-out;
         }
 
-        .cloud:nth-child(2) {
+        .clouds-foreground .cloud:nth-child(2) {
             width: 380px;
             top: 40%;
             right: -40px;
@@ -78,7 +93,7 @@ html, body {
             animation-delay: 3s;
         }
 
-        .cloud:nth-child(3) {
+        .clouds-foreground .cloud:nth-child(3) {
             width: 320px;
             top: 60%;
             left: 15%;
@@ -86,32 +101,38 @@ html, body {
             animation-delay: 7s;
         }
 
-        /* Spodní kopie mraků – zrcadlené (scaleX(-1)) a s animací reverse */
-        .cloud:nth-child(4) {
-            width: 500px;
-            top: 75%;
-            left: -100px;
+        /* Spodní kopie mraků */
+        .clouds .cloud:nth-child(1) {
+            width: 700px;
+            top: 60%;
+            left: -140px;
             transform: scaleX(-1);
             animation: driftReverse 30s infinite ease-in-out;
             animation-delay: 1s;
+            -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
+            mask-image: linear-gradient(to top, transparent 0%, black 60%);
         }
 
-        .cloud:nth-child(5) {
-            width: 420px;
-            top: 80%;
-            right: -60px;
+        .clouds .cloud:nth-child(2) {
+            width: 600px;
+            top: 65%;
+            right: -100px;
             transform: scaleX(-1);
             animation: driftReverse 26s infinite ease-in-out;
             animation-delay: 4s;
+            -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
+            mask-image: linear-gradient(to top, transparent 0%, black 60%);
         }
 
-        .cloud:nth-child(6) {
-            width: 350px;
-            top: 85%;
-            left: 40%;
+        .clouds .cloud:nth-child(3) {
+            width: 520px;
+            top: 70%;
+            left: 25%;
             transform: scaleX(-1);
             animation: driftReverse 24s infinite ease-in-out;
             animation-delay: 9s;
+            -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
+            mask-image: linear-gradient(to top, transparent 0%, black 60%);
         }
 
         @keyframes drift {
@@ -119,7 +140,6 @@ html, body {
             50% { transform: translateX(80px) translateY(-15px); }
         }
 
-        /* Speciální klíčové snímky pro zrcadlené mraky, aby při scaleX(-1) neposkakovaly špatně */
         @keyframes driftReverse {
             0%, 100% { transform: scaleX(-1) translateX(0px) translateY(0px); }
             50% { transform: scaleX(-1) translateX(80px) translateY(-15px); }
@@ -552,7 +572,8 @@ html, body {
         body.is-fullscreen .nav-arrow,
         body.is-fullscreen .zoom-panel,
         body.is-fullscreen .rotate-panel,
-        body.is-fullscreen .clouds {
+        body.is-fullscreen .clouds,
+        body.is-fullscreen .clouds-foreground {
             display: none !important;
         }
 
@@ -579,12 +600,12 @@ html, body {
         }
 
         @media (max-width: 768px) and (pointer: coarse) {
-            .cloud:nth-child(1) { width: 240px; }
-            .cloud:nth-child(2) { width: 200px; }
-            .cloud:nth-child(3) { width: 170px; }
-            .cloud:nth-child(4) { width: 250px; }
-            .cloud:nth-child(5) { width: 210px; }
-            .cloud:nth-child(6) { width: 180px; }
+            .clouds-foreground .cloud:nth-child(1) { width: 240px; }
+            .clouds-foreground .cloud:nth-child(2) { width: 200px; }
+            .clouds-foreground .cloud:nth-child(3) { width: 170px; }
+            .clouds .cloud:nth-child(1) { width: 360px; }
+            .clouds .cloud:nth-child(2) { width: 300px; }
+            .clouds .cloud:nth-child(3) { width: 260px; }
 
             .viewport-wrapper {
                 width: 92vw;
@@ -695,10 +716,8 @@ html, body {
         </defs>
     </svg>
 
+    <!-- Spodní mraky v pozadí -->
     <div class="clouds">
-        <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
-        <img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
-        <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
         <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
         <img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
         <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
@@ -751,6 +770,13 @@ html, body {
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- Vrchní mraky v popředí (před iframe) -->
+    <div class="clouds-foreground">
+        <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
     </div>
 
     <script>
