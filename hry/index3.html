@@ -206,15 +206,15 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // Dynamické nastavení kamery podle poměru stran (PC vs Mobil)
+        // Nastavení kamery: při užším okně / 1x1 výrazně oddálit, při širším zachovat původní
         function updateCameraPosition() {
             const aspect = window.innerWidth / window.innerHeight;
-            if (aspect < 1) {
-                // Mobil / výšku orientovaný iframe -> oddálit a víc seshora
-                camera.position.set(0, 28, 22);
+            if (aspect < 1.1) {
+                // Užší nebo čtvercové okno (1x1) -> výrazně větší oddálení
+                camera.position.set(0, 38, 30);
             } else {
-                // PC / široký iframe -> roztáhnout pohled do stran
-                camera.position.set(0, 21, 16);
+                // Širší okno (PC) -> nechat standardní pohled
+                camera.position.set(0, 22, 18);
             }
             camera.lookAt(0, 0, 0);
         }
@@ -323,10 +323,8 @@
             enemySnakes.push({ parts: enemyParts, dir: { x: 1, z: 0 }, moveTimer: 0 });
         }
 
-        // Ovládání směrů z tlačítek
         function changeDir(x, z) {
             if (snakeDirection.x !== -x || snakeDirection.z !== -z) {
-                // Zamezení otočení do sebe sama okamžitě
                 if ((x !== 0 && snakeDirection.x === 0) || (z !== 0 && snakeDirection.z === 0)) {
                     nextDirection = { x, z };
                 }
@@ -367,13 +365,11 @@
             let newX = head.x + snakeDirection.x;
             let newZ = head.z + snakeDirection.z;
 
-            // Průchod stěnami
             if (newX > boardLimit) newX = -boardLimit;
             else if (newX < -boardLimit) newX = boardLimit;
             if (newZ > boardLimit) newZ = -boardLimit;
             else if (newZ < -boardLimit) newZ = boardLimit;
 
-            // Kontrola překážek
             for (let obs of obstacles) {
                 if (obs.x === newX && obs.z === newZ) {
                     triggerGameOver();
@@ -381,7 +377,6 @@
                 }
             }
 
-            // Kontrola sebe sama
             for (let i = 0; i < snake.length; i++) {
                 if (snake[i].x === newX && snake[i].z === newZ) {
                     triggerGameOver();
@@ -393,7 +388,6 @@
                 return snake.some(part => part.x === x && part.z === z);
             }
 
-            // Pohyb a logika nepřátelských hadů
             for (let eIndex = enemySnakes.length - 1; eIndex >= 0; eIndex--) {
                 let enemy = enemySnakes[eIndex];
                 enemy.moveTimer++;
