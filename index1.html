@@ -1802,35 +1802,44 @@ iframe {
         }
     }
 
-    async function nactiSeznamHer() {
-        let hry = [];
-        
 async function nactiSeznamHer() {
-        let hry = [];
-        
-        // Projdeme indexy 1 až 50 a ověříme existenci souborů
+        // 1. Předem daný seznam všech možných her od 1 do 50
+        let vsechnyHry = [];
         for (let i = 1; i <= 50; i++) {
-            const id = `index${i}`;
+            vsechnyHry.push({ id: `index${i}`, nazev: `Vesmírná-mise ${i}` });
+        }
+
+        let dostupneHry = [];
+
+        // 2. Fyzicky ověříme každou hru, jestli na serveru reálně existuje
+        for (let hra of vsechnyHry) {
             try {
-                const res = await fetch(`hry/${id}.html`, { method: 'HEAD' });
+                // Pokusíme se načíst hlavičku souboru
+                const res = await fetch(`hry/${hra.id}.html`, { method: 'HEAD' });
                 if (res.ok) {
-                    hry.push({ id: id, nazev: `Vesmírná-mise ${i}` });
+                    dostupneHry.push(hra); // Pokud soubor existuje, ponecháme ho
+                } else {
+                    // Pokud vrátí 404 nebo chybu, soubor fyzicky neexistuje -> odstraníme ze seznamu
                 }
             } catch (e) {
-                // Ignorujeme chybu sítě a pokračujeme
+                // Pokud fetch zablokuje CORS/iframe, jako pojistka pro první 3 hry (nebo ty, o kterých víme) 
+                // je nevyhodíme hned, nebo můžeme testovat jinak. 
+                // Prozatím pro ty úplně první (např. do 3) uděláme výjimku, pokud fetch selže kvůli iframe:
+                if (parseInt(hra.id.replace('index', '')) <= 3) {
+                    dostupneHry.push(hra);
+                }
             }
         }
 
-        // Pokud se nenašlo vůbec nic, vytvoříme nouzový základ
-        if (hry.length === 0) {
-            hry = [
-                { id: 'index1', nazev: 'Vesmírná-mise 1' }
-            ];
+        // Pokud by kvůli přísnému iframe blokování netrefilo fetch vůbec nic, 
+        // máme jistotu, že alespoň ty základní 3 zůstanou zobrazené:
+        if (dostupneHry.length === 0) {
+            dostupneHry = vsechnyHry.slice(0, 3);
         }
 
-        // Vygenerujeme karty přesně podle toho, co se reálně načetlo do pole 'hry'
+        // 3. Vykreslíme do menu *pouze* ty hry, které prošly ověřením
         menuContainer.innerHTML = '';
-        hry.forEach(hra => {
+        dostupneHry.forEach(hra => {
             const karta = document.createElement('div');
             karta.className = 'game-card';
             karta.innerHTML = `<h3>${hra.nazev}</h3><p data-i18n="game_start">Spustit</p>`;
@@ -1838,28 +1847,13 @@ async function nactiSeznamHer() {
             menuContainer.appendChild(karta);
         });
 
-        if (hry.length > 0) {
+        if (dostupneHry.length > 0) {
             setTimeout(() => {
-                spustitHru(hry[0].id, false); 
+                spustitHru(dostupneHry[0].id, false); 
             }, 800);
         }
     }
 
-        menuContainer.innerHTML = '';
-        hry.forEach(hra => {
-            const karta = document.createElement('div');
-            karta.className = 'game-card';
-            karta.innerHTML = `<h3>${hra.nazev}</h3><p data-i18n="game_start">Spustit</p>`;
-            karta.onclick = () => spustitHru(hra.id);
-            menuContainer.appendChild(karta);
-        });
-
-        if (hry.length > 0) {
-            setTimeout(() => {
-                spustitHru(hry[0].id, false); 
-            }, 800);
-        }
-    }
 
     function spustitHru(id, autoScroll = true) {
         iframe.src = `hry/${id}.html`; 
