@@ -44,12 +44,13 @@ body {
     align-items: center;
     height: 100vh;
     font-size: clamp(12px, 1.2vw, 16px);
+    color: var(--text-color, #ffffff); 
 }
 
-h1 { font-size: clamp(20px, 3.5vw, 26px); text-align: center; text-shadow: 0 0 5px rgba(255, 0, 51, 0.4); }
-h2 { font-size: clamp(18px, 3vw, 24px); text-shadow: 0 0 5px rgba(255, 0, 51, 0.4); }
-h3 { font-size: clamp(16px, 2.5vw, 21px); text-shadow: 0 0 5px rgba(255, 0, 51, 0.4); }
-h4 { font-size: clamp(15px, 2.2vw, 19px); text-shadow: 0 0 5px rgba(255, 0, 51, 0.4); }
+h1 { font-size: clamp(20px, 3.5vw, 26px); text-align: center; }
+h2 { font-size: clamp(18px, 3vw, 24px); }
+h3 { font-size: clamp(16px, 2.5vw, 21px); }
+h4 { font-size: clamp(15px, 2.2vw, 19px); }
 h5 { font-size: clamp(14px, 2vw, 18px); }
 h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
@@ -119,6 +120,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   text-align: center;
   height: 25%;
   width: auto;
+  color: #000;
 }
 
 @media (max-width: 600px) {
@@ -127,7 +129,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   }
 }
 
-/* SJEDNOCENÁ TLAČÍTKA SCROLLOVÁNÍ (▼ a ▲) */
 .scrollbutton {
   position: fixed;
   bottom: 24px;
@@ -159,7 +160,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   background: rgba(20, 20, 20, 0.6);
   text-align: center;
   border-radius: 50%;
-  border: 1px solid rgba(255, 0, 51, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: background-color 0.3s, border-color 0.3s;
   backdrop-filter: blur(10px);
@@ -167,22 +168,21 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   align-items: center;
   justify-content: center;
   padding: 0;
-  box-shadow: 0 4px 10px rgba(255,0,51,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   flex-shrink: 0 !important;
   box-sizing: border-box;
 }
 
 .back-button:hover { 
-  background-color: #ff0033; 
-  border-color: #ff0033;
-  box-shadow: 0 0 12px rgba(255, 0, 51, 0.8);
+  background-color: var(--dynamic-color, #05d4ff); 
+  border-color: var(--dynamic-color, #05d4ff);
 }
 
 /* ===== PREVIEW MODAL ===== */
 .preview-modal {
   display: none;
   position: fixed;
-  z-index: 9999;
+  z-index: 99999;
   inset: 0;
   background: rgba(0,0,0,0.95);
   justify-content: center;
@@ -236,7 +236,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     width: 100%;
     height: 80px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    z-index: 15;
+    z-index: 9990;
     pointer-events: none;
   }
 }
@@ -283,7 +283,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   cursor: pointer;
   z-index: 20;
   background: rgba(0,0,0,0.9);
-  border: 2px solid rgba(255,0,51,0.6);
+  border: 2px solid rgba(255,255,255,0.6);
   width: 40px;
   height: 40px;
   display: flex;
@@ -292,12 +292,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   border-radius: 50%;
   transition: 0.2s;
   line-height: 0;
-  box-shadow: 0 2px 10px rgba(255,0,51,0.3);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.6);
 }
 
 .preview-modal .close:hover {
-  background: rgba(255,0,51,0.2);
-  border-color: #ff0033;
+  background: rgba(255,255,255,0.2);
+  border-color: var(--dynamic-color, #05d4ff);
 }
 
 @media (max-width: 480px) {
@@ -310,26 +310,27 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   }
 }
 
-/* ÚPRAVA TOP-BARU S ČERVENÝM NEONEM */
 #top-bar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.9);
-  color: #ff0033;
+  color: white;
   z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #ff0033;
-  box-shadow: 0 4px 15px rgba(255, 0, 51, 0.6);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
   direction: ltr !important;
+  /* Neon do ztracena po stranách */
+  border-bottom: 2px solid var(--dynamic-color, #05d4ff);
+  border-image: linear-gradient(to right, transparent, var(--dynamic-color, #05d4ff), transparent) 1;
+  transition: border-bottom-color 0.3s, box-shadow 0.3s;
 }
 #top-bar a {
   text-decoration: none;
-  color: #ff0033;
-  text-shadow: 0 0 6px rgba(255, 0, 51, 0.5);
+  color: inherit;
 }
 #icon, #dropdown-button {
   cursor: pointer;
@@ -347,40 +348,38 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 100%;
 }
 
-/* Hlavní nabídka a užší tlačítka uvnitř */
 #dropdown-menu {
   display: none;
   position: absolute;
   right: 2vw;
   top: 100%;
   background-color: rgba(30, 30, 30, 0.95);
-  color: #ff0033;
+  color: #fff;
   list-style: none;
   padding: 12px 10px;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(255, 0, 51, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
   text-align: center;
-  width: min(90vw, 400px); 
+  width: min(90vw, 320px);
   box-sizing: border-box;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
   direction: ltr;
 }
 
-/* Přebarvení loga a ikony menu v liště do červeného neonu */
 .menu-icon {
   height: 100%;
   width: auto;
   object-fit: contain;
   display: block;
   margin: auto;
-  filter: brightness(0) saturate(100%) invert(18%) sepia(94%) saturate(7438%) hue-rotate(345deg) brightness(101%) contrast(104%) drop-shadow(0 0 8px rgba(255, 0, 51, 0.8));
+  transition: filter 0.3s;
 }
 
 #dropdown-menu li {
-  padding: 8px 12px;
+  padding: 10px 12px;
   margin: 6px auto; 
-  width: 75%; 
+  width: 88%; 
   background-color: rgba(50, 50, 50, 0.6);
   border-radius: 6px;
   cursor: pointer;
@@ -394,26 +393,74 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 #dropdown-menu li a {
   display: block;
   width: 100%;
+  color: inherit;
 }
 
-#dropdown-menu li:hover {
-  background-color: rgba(255, 0, 51, 0.3);
+#dropdown-menu li:hover,
+#radial-links .radial-link:hover,
+.game-card:hover {
+  background-color: var(--hover-bg-color, rgba(5, 212, 255, 0.3)) !important;
 }
 
-/* Jazyková položka a její podnabídka */
+.customizer-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  background-color: rgba(40, 40, 40, 0.8) !important;
+  width: 88% !important;
+}
+
+.customizer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.battery-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: inherit;
+}
+
+#colorPickerInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.intensity-slider {
+  width: 100%;
+  accent-color: var(--dynamic-color, #05d4ff);
+  cursor: pointer;
+}
+
 .lang-item {
   position: relative;
   border-top: 1px solid rgba(255,255,255,0.15);
   margin-top: 10px !important;
   padding-top: 10px !important;
-  text-align: left !important;
-  width: 90% !important;
+  text-align: center !important;
+  width: 88% !important;
   background-color: rgba(40, 40, 40, 0.8) !important;
 }
 
 #lang-current {
   display: block;
-  text-align: left !important;
+  text-align: center !important;
 }
 
 .lang-submenu {
@@ -462,7 +509,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 .lang-submenu li:hover,
 .lang-submenu li.active {
-  background-color: rgba(255, 0, 51, 0.25);
+  background-color: var(--hover-bg-color, rgba(5, 212, 255, 0.25)) !important;
 }
 
 .lang-search-wrapper {
@@ -478,15 +525,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   padding: 8px;
   box-sizing: border-box;
   background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 0, 51, 0.5);
-  color: #ff0033;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
   border-radius: 4px;
   font-size: 0.9em;
 }
 
 .lang-search-wrapper input:focus {
   outline: none;
-  border-color: #ff0033;
+  border-color: var(--dynamic-color, #05d4ff);
 }
 
 .lang-native {
@@ -509,19 +556,35 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   box-sizing: border-box;
 }
 
+/* Hlavní logo sekce (500px) */
 .logo-section {
   position: absolute;
   width: 500px;
   height: 500px;
-  top: -260px;
+  top: -270px;
   left: 50%;
   transform: translateX(-50%);
   background-image: url('style/logo.png');
   background-size: cover;
   background-position: center;
-  border-radius: 50%;
   z-index: 24;
-  filter: drop-shadow(0 0 12px rgba(255, 0, 51, 0.6));
+filter: url(#pngColorFilter);
+}
+
+/* Druhá logo sekce s polovičními rozměry (250px) dedikovaná čistě pro světelný efekt */
+.logo-section-glow {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: -110px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  z-index: 23; /* Skryta těsně pod hlavní ořezovou/vizuální vrstvou */
+  pointer-events: none;
+  background: transparent;
+  box-shadow: 0 0 calc(80px * var(--theme-intensity, 1)) var(--logo-glow-color, rgba(5, 215, 255, 0.8));
+  transition: box-shadow 0.3s ease;
 }
 
 .hero-spacer {
@@ -541,7 +604,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   width: 100%;
   min-height: 360px;
-  z-index: 9999;
+  z-index: 9000;
   color: black;
   background-color: #f8f8f8;
   padding: 30px 20px 20px 20px;
@@ -644,7 +707,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2e1f1f 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #1f1f2e 100%);
   color: #f0f0f0;
   padding: 60px 4%;
   text-align: center;
@@ -660,7 +723,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #ff0033, transparent);
+  background: linear-gradient(90deg, transparent, var(--dynamic-color, #05d4ff), transparent);
   animation: slideInLeft 1s ease-out;
 }
 
@@ -673,7 +736,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 120px;
   background: linear-gradient(to bottom, rgba(26, 26, 26, 0), rgba(0, 0, 0, 0.9));
   pointer-events: none;
-  z-index: 10;
+  z-index: 1;
 }
 
 .about-container,
@@ -681,13 +744,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   max-width: 1100px;
   margin: 0 auto;
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   box-sizing: border-box;
 }
 
 .about-section h2 {
-  color: #ff0033;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   margin-bottom: 20px;
   position: relative;
   display: inline-block;
@@ -695,6 +758,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-size: clamp(16px, 2.5vw, 21px);
+  transition: color 0.3s ease;
 }
 
 .about-section h2::after {
@@ -704,12 +768,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, #ff0033, #ff0033);
+  background: linear-gradient(90deg, var(--dynamic-color, #05d4ff), #00ffff);
   animation: slideInLeft 0.6s ease-out 0.4s forwards;
 }
 
 .about-section h3 {
-  color: #ff0033;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   margin-top: 40px;
   margin-bottom: 30px;
   animation: fadeInUp 0.8s ease-out 0.3s backwards;
@@ -717,10 +781,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-size: clamp(16px, 2.5vw, 21px);
+  transition: color 0.3s ease;
 }
 
 .about-section > p:first-of-type {
-  color: rgba(255,255,255,0.75);
+  color: #b0b0b0;
   font-size: 0.95rem;
   max-width: 520px;
   margin: 20px auto 14px;
@@ -729,35 +794,34 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .motivation-text {
   margin-top: 30px !important;
   font-style: italic;
-  color: #ff0033;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   font-size: clamp(14px, 1.5vw, 18px);
-  text-shadow: 0 0 6px rgba(255, 0, 51, 0.4);
+  transition: color 0.3s ease;
 }
 
 .contact-text {
   margin-top: 20px !important;
-  color: #d0d0d0;
+  color: #b0b0b0;
   font-size: clamp(14px, 1.5vw, 18px);
 }
 
 .contact-text a {
-  color: #ff0033;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   text-decoration: none;
   transition: color 0.3s ease;
   position: relative;
-  text-shadow: 0 0 6px rgba(255, 0, 51, 0.4);
 }
 
 .contact-text a:hover {
-  color: #ff0033;
-  text-shadow: 0 0 10px rgba(255, 0, 51, 0.8);
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(5, 212, 255, 0.8);
 }
 
 .about-section p {
   font-size: clamp(14px, 1.5vw, 18px);
   line-height: 1.6;
   margin-bottom: 15px;
-  color: #d0d0d0;
+  color: #b0b0b0;
   animation: fadeInUp 0.8s ease-out 0.25s backwards;
 }
 
@@ -769,10 +833,10 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .skill-item {
-  background-color: rgba(255, 0, 51, 0.08);
+  background-color: rgba(5, 212, 255, 0.08);
   padding: 20px;
   border-radius: 10px;
-  border-left: 4px solid #ff0033;
+  border-left: 4px solid var(--dynamic-color, #05d4ff);
   text-align: left;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   opacity: 0;
@@ -782,14 +846,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .skill-item h4 {
-  color: #ff0033;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   margin-bottom: 10px;
   font-size: clamp(16px, 2vw, 20px);
+  transition: color 0.3s ease;
 }
 
 .skill-item:hover h4 {
-  color: #ff0033;
-  text-shadow: 0 0 10px rgba(255, 0, 51, 0.8);
+  color: var(--heading-color, #00ffff);
+  text-shadow: 0 0 10px rgba(5, 212, 255, 0.8);
 }
 
 .skill-item p {
@@ -812,7 +877,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   .skill-item:nth-child(2) { animation-delay: 0.4s; }
   .skill-item:nth-child(3) { animation-delay: 0.5s; }
   .skill-item:nth-child(4) { animation-delay: 0.6s; }
-  .skill-item:active { transform: translateY(-8px) scale(1.02); background-color: rgba(255, 0, 51, 0.15); }
+  .skill-item:active { transform: translateY(-8px) scale(1.02); background-color: rgba(5, 212, 255, 0.15); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -840,20 +905,25 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     top: 8%;
     left: 50%;
     transform: translateX(-50%);
-    width: min(90vw, 450px);
+    width: min(90vw, 350px);
     height: auto;
   }
   #top-bar { height: 8%; }
   
   .logo-section { 
-    width: 220px !important; 
-    height: 220px !important; 
+    width: 220px !important;
+    height: 220px !important;
     top: -120px !important; 
     padding: 0px; 
   }
+
+  .logo-section-glow {
+    width: 80px !important;
+    height: 80px !important;
+    top: -50px !important;
+  }
 }
 
-/* === ÚPRAVA PRO RTL JAZYKY (AR, HE) === */
 @media (orientation: portrait) {
   html[dir="rtl"] #dropdown-menu {
     right: 50% !important;
@@ -867,7 +937,6 @@ html[dir="rtl"] .footer p {
   unicode-bidi: embed;
   text-align: center;
 }
-/* ===================================== */
 
 #background-video {
   position: fixed;
@@ -894,7 +963,7 @@ html[dir="rtl"] .footer p {
   backdrop-filter: blur(6px);
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 0, 51, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   height: 50px;
   width: 24px;
   box-sizing: border-box;
@@ -904,20 +973,20 @@ html[dir="rtl"] .footer p {
   height: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.35);
-  border: 1px solid rgba(255, 0, 51, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   cursor: pointer;
   padding: 0;
   transition: 0.25s;
   flex-shrink: 0;
 }
 #video-bubbles .bubble:hover {
-  background: rgba(255, 0, 51, 0.6);
+  background: var(--dynamic-color, #05d4ff);
   transform: scale(1.15);
 }
 #video-bubbles .bubble.active {
-  background: #ff0033;
-  border-color: #ff0033;
-  box-shadow: 0 0 8px rgba(255, 0, 51, 0.8);
+  background: var(--dynamic-color, #05d4ff);
+  border-color: var(--dynamic-color, #05d4ff);
+  box-shadow: 0 0 8px var(--dynamic-color, #05d4ff);
 }
 
 /* ---------- Kruhové menu ---------- */
@@ -938,7 +1007,7 @@ html[dir="rtl"] .footer p {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 0, 51, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(20, 20, 20, 0.6);
   backdrop-filter: blur(6px);
   color: #fff;
@@ -948,12 +1017,12 @@ html[dir="rtl"] .footer p {
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease, background 0.3s ease;
-  box-shadow: 0 4px 10px rgba(255,0,51,0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 #radial-toggle.open {
   transform: rotate(45deg);
-  background: rgba(255, 0, 51, 0.55);
-  border-color: #ff0033;
+  background: var(--dynamic-color, #05d4ff);
+  border-color: var(--dynamic-color, #05d4ff);
 }
 .radial-links {
   position: absolute;
@@ -967,7 +1036,7 @@ html[dir="rtl"] .footer p {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 0, 51, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(20, 20, 20, 0.85);
   backdrop-filter: blur(6px);
   color: #fff;
@@ -990,8 +1059,8 @@ html[dir="rtl"] .footer p {
   transform: translate(var(--tx), var(--ty)) scale(1);
 }
 .radial-link:hover {
-  background: rgba(255, 0, 51, 0.55);
-  border-color: #ff0033;
+  background: var(--dynamic-color, #05d4ff);
+  border-color: var(--dynamic-color, #05d4ff);
 }
 
 @media (max-width: 600px) {
@@ -1013,7 +1082,13 @@ html[dir="rtl"] .footer p {
   .logo-section {
     width: 220px !important;
     height: 220px !important;
-    top: -120px !important;
+    top: -135px !important;
+  }
+
+  .logo-section-glow {
+    width: 80px !important;
+    height: 80px !important;
+    top: -65px !important;
   }
 }
 
@@ -1030,15 +1105,15 @@ html[dir="rtl"] .footer p {
   flex-direction: column;
   align-items: stretch;
   z-index: 10;
-  border: 1px solid rgba(255, 0, 51, 0.2);
 }
 .gallery-eyebrow {
   display: inline-block;
   font-size: clamp(16px, 2.5vw, 21px);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #ff0033;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   margin-bottom: 8px;
+  transition: color 0.3s ease;
 }
 
 #padding {
@@ -1051,7 +1126,7 @@ html[dir="rtl"] .footer p {
 .inner-text {
   position:relative;
   width:100%;
-  color: white;
+  color: inherit;
   margin: 0 auto;
   text-align: center;
   flex-grow: 1;
@@ -1062,10 +1137,10 @@ html[dir="rtl"] .footer p {
   .modal-arrow { display: block; }
   #top-bar { height: 8%; }
   #center-section { flex-direction: row; justify-content: space-between; }
-  .logo-section { z-index: 200; position: absolute; }
+  .logo-section, .logo-section-glow { z-index: 200; position: absolute; }
   .inner-text { width:100%; padding:0; flex-grow: 1; }
   #center-section .inner-text { width:92%; margin:4%; }
-  #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 0, 51, 0.2); }
+  #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
   #padding { text-align: left; }
 }
 
@@ -1076,16 +1151,24 @@ html[dir="rtl"] .footer p {
   
   .logo-section { 
     position: absolute !important; 
-    width: 180px !important; 
-    height: 180px !important; 
-    top: -100px !important; 
+    width: 240px !important;
+    height: 240px !important;
+    top: -130px !important; 
     padding: 0 !important; 
+  }
+
+  .logo-section-glow {
+    position: absolute !important;
+    width: 86px !important;
+    height: 86px !important;
+    top: -52px !important;
+    padding: 0 !important;
   }
   
   #black-section { padding: 0px 0; }
   .inner-text { width:100%; margin:0 auto; text-align: center; flex-grow: 1; }
   #center-section .inner-text { width:92%; margin:2%; }
-  #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 0, 51, 0.2); }
+  #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
   #padding { text-align: left; }
   
   #výška_herního_okna {
@@ -1101,7 +1184,7 @@ html[dir="rtl"] .footer p {
 }
 
 #výška_herního_okna {
-  color: #ffffff;
+  color: inherit;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1121,7 +1204,7 @@ html[dir="rtl"] .footer p {
   left: 0;
   width: 100%;
   height: 250px;
-  z-index: 10005; 
+  z-index: 9001; 
   pointer-events: none;
 }
 
@@ -1143,17 +1226,16 @@ html[dir="rtl"] .footer p {
   padding: 50px 20px;
   text-align: center;
   border-radius: 24px;
-  border: 1px solid rgba(255, 0, 51, 0.2);
+  border: 1px solid #1a1a1a;
   cursor: pointer;
   transition: 0.5s;
   backdrop-filter: blur(10px);
 }
 
 .game-card:hover {
-  border-color: #ff0033;
+  border-color: var(--dynamic-color, #00d4ff);
   transform: translateY(-10px);
   background: rgba(30, 30, 30, 0.9);
-  box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
 }
 
 #overlay {
@@ -1164,7 +1246,7 @@ html[dir="rtl"] .footer p {
   width: 100%;
   height: 100%;
   background: transparent; 
-  z-index: 9999;
+  z-index: 9002;
   padding-top: 120px; 
   box-sizing: border-box;
 }
@@ -1179,7 +1261,7 @@ html[dir="rtl"] .footer p {
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.7);
   color: white;
-  border: 1px solid rgba(255, 0, 51, 0.4);
+  border: 1px solid #333;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -1187,12 +1269,12 @@ html[dir="rtl"] .footer p {
   font-size: 1.2rem;
   line-height: 1;
   padding: 0;
-  z-index: 10010;
+  z-index: 9003;
   backdrop-filter: blur(15px);
   transition: 0.4s;
 }
 
-.back-btn:hover { background-color: #ff0033; box-shadow: 0 0 10px rgba(255, 0, 51, 0.8); }
+.back-btn:hover { background-color: var(--dynamic-color, #05d4ff); }
 
 @media (max-width: 600px) {
     .back-btn {
@@ -1233,6 +1315,22 @@ iframe {
                 <li><a href="#padding" data-i18n="nav_gallery">Galerie</a></li>
                 <li><a href="#výška_herního_okna" data-i18n="nav_games">Hry</a></li>
                 <li><a href="#konec" data-i18n="nav_contact">Kontakt</a></li>
+                
+                <!-- PŘIZPŮSOBENÍ BARVY A INTENZITY V MENU -->
+                <li class="customizer-menu-item">
+                    <div class="customizer-row">
+                        <span>Barva & ikony:</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <button class="back-button battery-btn" id="lighting-power-btn" title="Vypnout/Zapnout svícení" aria-label="Vypnout nebo zapnout svícení rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">⏻</button>
+                            <button class="back-button battery-btn" id="battery-toggle-btn" title="Vybrat barvu" aria-label="Vybrat barvu rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important;">🔋</button>
+                        </div>
+                    </div>
+                    <div class="customizer-row" style="flex-direction: column; align-items: stretch;">
+                        <span style="font-size: 0.8rem; text-align: left; opacity: 0.8;">Intenzita / záře:</span>
+                        <input type="range" id="intensitySlider" class="intensity-slider" min="0.5" max="2.5" step="0.1" value="1">
+                    </div>
+                </li>
+
                 <li class="lang-item" id="lang-toggle">
                     <span id="lang-current">CS ▾</span>
                     <ul class="lang-submenu" id="lang-submenu">
@@ -1275,8 +1373,25 @@ iframe {
                     </ul>
                 </li>
             </ul>
+            <input type="color" id="colorPickerInput" value="#05d4ff">
         </div>
     </div>
+
+    <!-- Skrytá SVG definice pro reálné obarvení černobílých/šedých PNG ikon -->
+    <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+        <filter id="pngColorFilter">
+            <feColorMatrix type="matrix" values="
+                0 0 0 0 1
+                0 0 0 0 1
+                0 0 0 0 1
+                0 0 0 1 0" />
+            <feColorMatrix id="dynamicColorMatrix" type="matrix" values="
+                1 0 0 0 0.019
+                0 1 0 0 0.831
+                0 0 1 0 1.000
+                0 0 0 1 0" />
+        </filter>
+    </svg>
 
     <video id="background-video" autoplay muted loop>
         <source id="video-source" type="video/mp4" src="pozadi/1.mp4">
@@ -1297,7 +1412,10 @@ iframe {
     </div>
 
     <div id="center-section">
+        <!-- Hlavní logo prvek (500px) -->
         <div class="logo-section"></div>
+        <!-- Druhý logo prvek s polovičními rozměry (250px) pro světelný efekt -->
+        <div class="logo-section-glow"></div>
 
         <div class="inner-text">
             <h2 data-i18n="hero_welcome_title">Vítejte</h2>
@@ -1319,7 +1437,7 @@ iframe {
     <div id="about-section-1" class="about-section">
         <div class="about-container">
             <h2 data-i18n="about1_title">Kdo jsem a co přináším</h2>
-            <p data-i18n="about1_text">Jsem všestranný človek s komplexním záběrem od správa hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od technické části až po dotažený vizuální zážitek pro uživatele.</p>
+            <p data-i18n="about1_text">Jsem všestranný človek s komplexním záběrem od správy hardwaru a softwaru přes webový vývoj až po 3D vizualizace a grafický design. Věřím, že skutečná hodnota moderního specialisty nespočívá pouze v úzké specializaci, ale v schopnosti vidět projekt v širších souvislostech – od technické části až po dotažený vizuální zážitek pro uživatele.</p>
             
             <h3 data-i18n="about1_subtitle">Mé silné stránky v praxi</h3>
             <div class="skills-grid">
@@ -1343,7 +1461,7 @@ iframe {
         </div>
     </div>
 
-    <div class="inner-text" id="padding">
+    <div class="inner-text" id="padding" style="color: inherit;">
       <div class="gallery-container">
         <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
         <p data-i18n="gallery_lead">Zde je ukázka projektů, na kterých jsem v poslední době pracoval — od grafického designu po herní vizuály.</p>
@@ -1410,7 +1528,6 @@ iframe {
     <div id="konec"></div> 
 </div>
 
-<!-- Načtení externího souboru s překlady -->
 <script src="translations.js"></script>
 <script>
     document.getElementById("scroll-button").addEventListener("click", function() {
@@ -1418,6 +1535,130 @@ iframe {
             top: window.innerHeight, 
             behavior: "smooth"       
         });
+    });
+
+    // --- SPRÁVA BARVY A INTENZITY (VČETNĚ VYPÍNÁNÍ A HOVER ELEMENTŮ) ---
+    const batteryToggleBtn = document.getElementById('battery-toggle-btn');
+    const lightingPowerBtn = document.getElementById('lighting-power-btn');
+    const colorPickerInput = document.getElementById('colorPickerInput');
+    const intensitySlider = document.getElementById('intensitySlider');
+
+    let isLightingEnabled = true;
+
+    batteryToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        colorPickerInput.click();
+    });
+
+    lightingPowerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isLightingEnabled = !isLightingEnabled;
+        updateThemeFromControls();
+    });
+
+    colorPickerInput.addEventListener('input', updateThemeFromControls);
+    intensitySlider.addEventListener('input', updateThemeFromControls);
+
+    function hexToRgb(hex) {
+        let cleanHex = hex.replace('#', '');
+        if (cleanHex.length === 3) {
+            cleanHex = cleanHex.split('').map(c => c + c).join('');
+        }
+        const num = parseInt(cleanHex, 16);
+        return {
+            r: (num >> 16) & 255,
+            g: (num >> 8) & 255,
+            b: num & 255
+        };
+    }
+
+    function updateThemeFromControls() {
+        const colorHex = colorPickerInput.value;
+        const intensity = parseFloat(intensitySlider.value);
+        applyCustomTheme(colorHex, intensity, isLightingEnabled);
+    }
+
+    function applyCustomTheme(colorHex, intensity, enabled) {
+        const topBar = document.getElementById('top-bar');
+        
+        if (!enabled) {
+            document.documentElement.style.setProperty('--text-color', '#ffffff');
+            document.documentElement.style.setProperty('--heading-color', '#ffffff');
+            document.documentElement.style.setProperty('--dynamic-color', 'rgba(255, 255, 255, 0.3)');
+            document.documentElement.style.setProperty('--hover-bg-color', 'rgba(255, 255, 255, 0.2)');
+            document.documentElement.style.setProperty('--logo-glow-color', 'transparent');
+            document.documentElement.style.setProperty('--theme-intensity', '0');
+            topBar.style.boxShadow = '0 5px 5px rgba(0, 0, 0, 0.5)';
+            topBar.style.borderBottomColor = 'rgba(255, 255, 255, 0.3)';
+            lightingPowerBtn.style.opacity = '0.5';
+            
+            const colorMatrix = document.getElementById('dynamicColorMatrix');
+            if (colorMatrix) {
+                colorMatrix.setAttribute('values', `
+                    1 0 0 0 1
+                    0 1 0 0 1
+                    0 0 1 0 1
+                    0 0 0 1 0
+                `);
+                document.querySelectorAll('.menu-icon').forEach(icon => {
+                    icon.style.filter = 'url(#pngColorFilter)';
+                });
+            }
+        } else {
+            document.documentElement.style.setProperty('--text-color', '#ffffff');
+            document.documentElement.style.setProperty('--heading-color', colorHex);
+            document.documentElement.style.setProperty('--dynamic-color', colorHex);
+            document.documentElement.style.setProperty('--logo-glow-color', colorHex);
+            document.documentElement.style.setProperty('--theme-intensity', intensity);
+            
+            const rgb = hexToRgb(colorHex);
+            document.documentElement.style.setProperty('--hover-bg-color', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)');`);
+
+            const rNorm = (rgb.r / 255) * intensity;
+            const gNorm = (rgb.g / 255) * intensity;
+            const bNorm = (rgb.b / 255) * intensity;
+
+            topBar.style.boxShadow = `0 5px ${15 * intensity}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.4 * intensity})`;
+            lightingPowerBtn.style.opacity = '1';
+
+            const colorMatrix = document.getElementById('dynamicColorMatrix');
+            if (colorMatrix) {
+                colorMatrix.setAttribute('values', `
+                    ${rNorm} 0 0 0 0
+                    0 ${gNorm} 0 0 0
+                    0 0 ${bNorm} 0 0
+                    0 0 0 ${Math.min(intensity, 1)} 0
+                `);
+                document.querySelectorAll('.menu-icon').forEach(icon => {
+                    icon.style.filter = 'url(#pngColorFilter)';
+                });
+            }
+        }
+
+        localStorage.setItem('fd_theme_color', colorHex);
+        localStorage.setItem('fd_theme_intensity', intensity);
+        localStorage.setItem('fd_lighting_enabled', enabled);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedColor = localStorage.getItem('fd_theme_color');
+        const savedIntensity = localStorage.getItem('fd_theme_intensity');
+        const savedLighting = localStorage.getItem('fd_lighting_enabled');
+        
+        let color = '#05d4ff';
+        let intensity = 1;
+        isLightingEnabled = savedLighting !== null ? savedLighting === 'true' : true;
+
+        if (savedColor) {
+            color = savedColor;
+            colorPickerInput.value = savedColor;
+        }
+        if (savedIntensity) {
+            intensity = parseFloat(savedIntensity);
+            intensitySlider.value = intensity;
+        }
+
+        applyCustomTheme(color, intensity, isLightingEnabled);
     });
 
     const API_KEY = 'AIzaSyAFRT_OOuYQDnSexM2SGLdSYZDKQ_10GME';
@@ -1475,7 +1716,9 @@ iframe {
       document.getElementById('previewContent').innerHTML = '';
       const videoInners = document.querySelectorAll('.video-inner.playing');
       videoInners.forEach(inner => inner.classList.remove('playing'));
+      
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
       
       const scrollBtn = document.getElementById('scroll-button');
       if (scrollBtn) {
@@ -1556,6 +1799,8 @@ iframe {
       content.appendChild(frame);
 
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
       const scrollBtn = document.getElementById('scroll-button');
       if (scrollBtn) {
         scrollBtn.style.visibility = 'hidden';
@@ -1745,7 +1990,6 @@ iframe {
         });
     });
 
-    // Automatická detekce jazyka podle IP adresy (s fallbackem na prohlížeč a češtinu)
     async function detectUserLanguage() {
         const savedLang = localStorage.getItem('fd_lang');
         if (savedLang) {
@@ -1834,12 +2078,12 @@ iframe {
         return list;
     }
 
+    const videoElement = document.getElementById('background-video');
+    const sourceElement = document.getElementById('video-source');
+
     function setBackgroundVideo(index) {
         const videos = videoList();
         currentVideoIndex = ((index % videos.length) + videos.length) % videos.length;
-
-        const videoElement = document.getElementById('background-video');
-        const sourceElement = document.getElementById('video-source');
         sourceElement.src = videos[currentVideoIndex];
         videoElement.load();
         videoElement.play().catch(error => console.error("Chyba při přehrávání videa:", error));
@@ -1907,6 +2151,8 @@ iframe {
     });
 
     const footer = document.querySelector('.footer');
+    
+    checkFooterScroll();
     
     function checkFooterScroll() {
         const scrollPosition = window.innerHeight + window.scrollY;
