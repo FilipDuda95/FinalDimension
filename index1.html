@@ -44,6 +44,7 @@ body {
     align-items: center;
     height: 100vh;
     font-size: clamp(12px, 1.2vw, 16px);
+    color: var(--text-color, #ffffff); 
 }
 
 h1 { font-size: clamp(20px, 3.5vw, 26px); text-align: center; }
@@ -119,6 +120,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   text-align: center;
   height: 25%;
   width: auto;
+  color: #000;
 }
 
 @media (max-width: 600px) {
@@ -127,7 +129,6 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   }
 }
 
-/* SJEDNOCENÁ TLAČÍTKA SCROLLOVÁNÍ (▼ a ▲) */
 .scrollbutton {
   position: fixed;
   bottom: 24px;
@@ -173,15 +174,15 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .back-button:hover { 
-  background-color: #05d4ff; 
-  border-color: #05d4ff;
+  background-color: var(--dynamic-color, #05d4ff); 
+  border-color: var(--dynamic-color, #05d4ff);
 }
 
 /* ===== PREVIEW MODAL ===== */
 .preview-modal {
   display: none;
   position: fixed;
-  z-index: 99999; /* Zvýšeno, aby přebilo jakékoliv jiné prvky na stránce */
+  z-index: 99999;
   inset: 0;
   background: rgba(0,0,0,0.95);
   justify-content: center;
@@ -296,7 +297,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 .preview-modal .close:hover {
   background: rgba(255,255,255,0.2);
-  border-color: #05d4ff;
+  border-color: var(--dynamic-color, #05d4ff);
 }
 
 @media (max-width: 480px) {
@@ -322,10 +323,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   align-items: center;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
   direction: ltr !important;
+  /* Neon do ztracena po stranách */
+  border-bottom: 2px solid var(--dynamic-color, #05d4ff);
+  border-image: linear-gradient(to right, transparent, var(--dynamic-color, #05d4ff), transparent) 1;
+  transition: border-bottom-color 0.3s, box-shadow 0.3s;
 }
 #top-bar a {
   text-decoration: none;
-  color: white;
+  color: inherit;
 }
 #icon, #dropdown-button {
   cursor: pointer;
@@ -343,20 +348,19 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 100%;
 }
 
-/* Hlavní nabídka a užší tlačítka uvnitř */
 #dropdown-menu {
   display: none;
   position: absolute;
   right: 2vw;
   top: 100%;
   background-color: rgba(30, 30, 30, 0.95);
-  color: white;
+  color: #fff;
   list-style: none;
   padding: 12px 10px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
   text-align: center;
-  width: min(90vw, 400px); 
+  width: min(90vw, 320px);
   box-sizing: border-box;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
@@ -369,12 +373,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   object-fit: contain;
   display: block;
   margin: auto;
+  transition: filter 0.3s;
 }
 
 #dropdown-menu li {
-  padding: 8px 12px;
+  padding: 10px 12px;
   margin: 6px auto; 
-  width: 75%; 
+  width: 88%; 
   background-color: rgba(50, 50, 50, 0.6);
   border-radius: 6px;
   cursor: pointer;
@@ -388,26 +393,81 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 #dropdown-menu li a {
   display: block;
   width: 100%;
+  color: inherit;
 }
 
-#dropdown-menu li:hover {
-  background-color: rgba(5, 212, 255, 0.3);
+#dropdown-menu li:hover,
+#radial-links .radial-link:hover,
+.game-card:hover {
+  background-color: var(--hover-bg-color, rgba(5, 212, 255, 0.3)) !important;
 }
 
-/* Jazyková položka a její podnabídka */
+.customizer-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  background-color: rgba(40, 40, 40, 0.8) !important;
+  width: 88% !important;
+}
+
+.customizer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.battery-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* Aktivní stav pro tlačítko neonové animace */
+.battery-btn.neon-active {
+  background-color: var(--dynamic-color, #05d4ff) !important;
+  border-color: var(--dynamic-color, #05d4ff) !important;
+  box-shadow: 0 0 10px var(--dynamic-color, #05d4ff);
+}
+
+#colorPickerInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.intensity-slider {
+  width: 100%;
+  accent-color: var(--dynamic-color, #05d4ff);
+  cursor: pointer;
+}
+
 .lang-item {
   position: relative;
   border-top: 1px solid rgba(255,255,255,0.15);
   margin-top: 10px !important;
   padding-top: 10px !important;
-  text-align: left !important;
-  width: 90% !important;
+  text-align: center !important;
+  width: 88% !important;
   background-color: rgba(40, 40, 40, 0.8) !important;
 }
 
 #lang-current {
   display: block;
-  text-align: left !important;
+  text-align: center !important;
 }
 
 .lang-submenu {
@@ -456,7 +516,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 .lang-submenu li:hover,
 .lang-submenu li.active {
-  background-color: rgba(5, 212, 255, 0.25);
+  background-color: var(--hover-bg-color, rgba(5, 212, 255, 0.25)) !important;
 }
 
 .lang-search-wrapper {
@@ -480,7 +540,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 .lang-search-wrapper input:focus {
   outline: none;
-  border-color: #05d4ff;
+  border-color: var(--dynamic-color, #05d4ff);
 }
 
 .lang-native {
@@ -503,18 +563,35 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   box-sizing: border-box;
 }
 
+/* Hlavní logo sekce (500px) */
 .logo-section {
   position: absolute;
   width: 500px;
   height: 500px;
-  top: -260px;
+  top: -270px;
   left: 50%;
   transform: translateX(-50%);
   background-image: url('style/logo.png');
   background-size: cover;
   background-position: center;
-  border-radius: 50%;
   z-index: 24;
+filter: url(#pngColorFilter);
+}
+
+/* Druhá logo sekce s polovičními rozměry (250px) dedikovaná čistě pro světelný efekt */
+.logo-section-glow {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: -110px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  z-index: 23; /* Skryta těsně pod hlavní ořezovou/vizuální vrstvou */
+  pointer-events: none;
+  background: transparent;
+  box-shadow: 0 0 calc(80px * var(--theme-intensity, 1)) var(--logo-glow-color, rgba(5, 215, 255, 0.8));
+  transition: box-shadow 0.3s ease;
 }
 
 .hero-spacer {
@@ -653,7 +730,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #05d4ff, transparent);
+  background: linear-gradient(90deg, transparent, var(--dynamic-color, #05d4ff), transparent);
   animation: slideInLeft 1s ease-out;
 }
 
@@ -666,7 +743,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   height: 120px;
   background: linear-gradient(to bottom, rgba(26, 26, 26, 0), rgba(0, 0, 0, 0.9));
   pointer-events: none;
-  z-index: 1; /* Sníženo z 10 na 1, aby přechod nikdy nepřekrýval vyskakovací okna */
+  z-index: 1;
 }
 
 .about-container,
@@ -674,13 +751,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   max-width: 1100px;
   margin: 0 auto;
   position: relative;
-  z-index: 2; /* Zajišťuje, že obsah uvnitř sekce bude nad pozadím */
+  z-index: 2;
   width: 100%;
   box-sizing: border-box;
 }
 
 .about-section h2 {
-  color: #05d4ff;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   margin-bottom: 20px;
   position: relative;
   display: inline-block;
@@ -688,6 +765,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-size: clamp(16px, 2.5vw, 21px);
+  transition: color 0.3s ease;
 }
 
 .about-section h2::after {
@@ -697,12 +775,12 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   left: 0;
   width: 0;
   height: 3px;
-  background: linear-gradient(90deg, #05d4ff, #00ffff);
+  background: linear-gradient(90deg, var(--dynamic-color, #05d4ff), #00ffff);
   animation: slideInLeft 0.6s ease-out 0.4s forwards;
 }
 
 .about-section h3 {
-  color: #05d4ff;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   margin-top: 40px;
   margin-bottom: 30px;
   animation: fadeInUp 0.8s ease-out 0.3s backwards;
@@ -710,10 +788,11 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-size: clamp(16px, 2.5vw, 21px);
+  transition: color 0.3s ease;
 }
 
 .about-section > p:first-of-type {
-  color: rgba(255,255,255,0.7);
+  color: #b0b0b0;
   font-size: 0.95rem;
   max-width: 520px;
   margin: 20px auto 14px;
@@ -722,18 +801,19 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 .motivation-text {
   margin-top: 30px !important;
   font-style: italic;
-  color: #05d4ff;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   font-size: clamp(14px, 1.5vw, 18px);
+  transition: color 0.3s ease;
 }
 
 .contact-text {
   margin-top: 20px !important;
-  color: #d0d0d0;
+  color: #b0b0b0;
   font-size: clamp(14px, 1.5vw, 18px);
 }
 
 .contact-text a {
-  color: #05d4ff;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   text-decoration: none;
   transition: color 0.3s ease;
   position: relative;
@@ -748,7 +828,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   font-size: clamp(14px, 1.5vw, 18px);
   line-height: 1.6;
   margin-bottom: 15px;
-  color: #d0d0d0;
+  color: #b0b0b0;
   animation: fadeInUp 0.8s ease-out 0.25s backwards;
 }
 
@@ -763,7 +843,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   background-color: rgba(5, 212, 255, 0.08);
   padding: 20px;
   border-radius: 10px;
-  border-left: 4px solid #05d4ff;
+  border-left: 4px solid var(--dynamic-color, #05d4ff);
   text-align: left;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   opacity: 0;
@@ -773,13 +853,14 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 }
 
 .skill-item h4 {
-  color: #05d4ff;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   margin-bottom: 10px;
   font-size: clamp(16px, 2vw, 20px);
+  transition: color 0.3s ease;
 }
 
 .skill-item:hover h4 {
-  color: #00ffff;
+  color: var(--heading-color, #00ffff);
   text-shadow: 0 0 10px rgba(5, 212, 255, 0.8);
 }
 
@@ -831,20 +912,25 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
     top: 8%;
     left: 50%;
     transform: translateX(-50%);
-    width: min(90vw, 450px);
+    width: min(90vw, 350px);
     height: auto;
   }
   #top-bar { height: 8%; }
   
   .logo-section { 
-    width: 220px !important; 
-    height: 220px !important; 
+    width: 220px !important;
+    height: 220px !important;
     top: -120px !important; 
     padding: 0px; 
   }
+
+  .logo-section-glow {
+    width: 80px !important;
+    height: 80px !important;
+    top: -50px !important;
+  }
 }
 
-/* === ÚPRAVA PRO RTL JAZYKY (AR, HE) === */
 @media (orientation: portrait) {
   html[dir="rtl"] #dropdown-menu {
     right: 50% !important;
@@ -858,7 +944,6 @@ html[dir="rtl"] .footer p {
   unicode-bidi: embed;
   text-align: center;
 }
-/* ===================================== */
 
 #background-video {
   position: fixed;
@@ -902,13 +987,13 @@ html[dir="rtl"] .footer p {
   flex-shrink: 0;
 }
 #video-bubbles .bubble:hover {
-  background: rgba(5, 212, 255, 0.6);
+  background: var(--dynamic-color, #05d4ff);
   transform: scale(1.15);
 }
 #video-bubbles .bubble.active {
-  background: #05d4ff;
-  border-color: #05d4ff;
-  box-shadow: 0 0 8px rgba(5, 212, 255, 0.8);
+  background: var(--dynamic-color, #05d4ff);
+  border-color: var(--dynamic-color, #05d4ff);
+  box-shadow: 0 0 8px var(--dynamic-color, #05d4ff);
 }
 
 /* ---------- Kruhové menu ---------- */
@@ -943,8 +1028,8 @@ html[dir="rtl"] .footer p {
 }
 #radial-toggle.open {
   transform: rotate(45deg);
-  background: rgba(5, 212, 255, 0.55);
-  border-color: #05d4ff;
+  background: var(--dynamic-color, #05d4ff);
+  border-color: var(--dynamic-color, #05d4ff);
 }
 .radial-links {
   position: absolute;
@@ -981,8 +1066,8 @@ html[dir="rtl"] .footer p {
   transform: translate(var(--tx), var(--ty)) scale(1);
 }
 .radial-link:hover {
-  background: rgba(5, 212, 255, 0.55);
-  border-color: #05d4ff;
+  background: var(--dynamic-color, #05d4ff);
+  border-color: var(--dynamic-color, #05d4ff);
 }
 
 @media (max-width: 600px) {
@@ -1004,7 +1089,13 @@ html[dir="rtl"] .footer p {
   .logo-section {
     width: 220px !important;
     height: 220px !important;
-    top: -120px !important;
+    top: -135px !important;
+  }
+
+  .logo-section-glow {
+    width: 80px !important;
+    height: 80px !important;
+    top: -65px !important;
   }
 }
 
@@ -1027,8 +1118,9 @@ html[dir="rtl"] .footer p {
   font-size: clamp(16px, 2.5vw, 21px);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #05d4ff;
+  color: var(--heading-color, var(--dynamic-color, #05d4ff));
   margin-bottom: 8px;
+  transition: color 0.3s ease;
 }
 
 #padding {
@@ -1041,7 +1133,7 @@ html[dir="rtl"] .footer p {
 .inner-text {
   position:relative;
   width:100%;
-  color: white;
+  color: inherit;
   margin: 0 auto;
   text-align: center;
   flex-grow: 1;
@@ -1052,7 +1144,7 @@ html[dir="rtl"] .footer p {
   .modal-arrow { display: block; }
   #top-bar { height: 8%; }
   #center-section { flex-direction: row; justify-content: space-between; }
-  .logo-section { z-index: 200; position: absolute; }
+  .logo-section, .logo-section-glow { z-index: 200; position: absolute; }
   .inner-text { width:100%; padding:0; flex-grow: 1; }
   #center-section .inner-text { width:92%; margin:4%; }
   #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
@@ -1066,10 +1158,18 @@ html[dir="rtl"] .footer p {
   
   .logo-section { 
     position: absolute !important; 
-    width: 180px !important; 
-    height: 180px !important; 
-    top: -100px !important; 
+    width: 240px !important;
+    height: 240px !important;
+    top: -130px !important; 
     padding: 0 !important; 
+  }
+
+  .logo-section-glow {
+    position: absolute !important;
+    width: 86px !important;
+    height: 86px !important;
+    top: -52px !important;
+    padding: 0 !important;
   }
   
   #black-section { padding: 0px 0; }
@@ -1091,7 +1191,7 @@ html[dir="rtl"] .footer p {
 }
 
 #výška_herního_okna {
-  color: #ffffff;
+  color: inherit;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1140,7 +1240,7 @@ html[dir="rtl"] .footer p {
 }
 
 .game-card:hover {
-  border-color: #00d4ff;
+  border-color: var(--dynamic-color, #00d4ff);
   transform: translateY(-10px);
   background: rgba(30, 30, 30, 0.9);
 }
@@ -1181,7 +1281,7 @@ html[dir="rtl"] .footer p {
   transition: 0.4s;
 }
 
-.back-btn:hover { background-color: #05d4ff; }
+.back-btn:hover { background-color: var(--dynamic-color, #05d4ff); }
 
 @media (max-width: 600px) {
     .back-btn {
@@ -1222,6 +1322,24 @@ iframe {
                 <li><a href="#padding" data-i18n="nav_gallery">Galerie</a></li>
                 <li><a href="#výška_herního_okna" data-i18n="nav_games">Hry</a></li>
                 <li><a href="#konec" data-i18n="nav_contact">Kontakt</a></li>
+                
+                <!-- PŘIZPŮSOBENÍ BARVY A INTENZITY V MENU -->
+                <li class="customizer-menu-item">
+                    <div class="customizer-row">
+                        <span>Barva & ikony:</span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <button class="back-button battery-btn" id="lighting-power-btn" title="Vypnout/Zapnout svícení" aria-label="Vypnout nebo zapnout svícení rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">⏻</button>
+                            <!-- NOVÉ TLAČÍTKO PRO AUTOMATICKÝ NEONOVÝ PŘECHOD (DUHA) -->
+                            <button class="back-button battery-btn" id="neon-cycle-btn" title="Zapnout/Vypnout automatický neonový přechod barev" aria-label="Automatický neonový přechod barev" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">🌈</button>
+                            <button class="back-button battery-btn" id="battery-toggle-btn" title="Vybrat barvu" aria-label="Vybrat barvu rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important;">🔋</button>
+                        </div>
+                    </div>
+                    <div class="customizer-row" style="flex-direction: column; align-items: stretch;">
+                        <span style="font-size: 0.8rem; text-align: left; opacity: 0.8;">Intenzita / záře:</span>
+                        <input type="range" id="intensitySlider" class="intensity-slider" min="0.5" max="2.5" step="0.1" value="1">
+                    </div>
+                </li>
+
                 <li class="lang-item" id="lang-toggle">
                     <span id="lang-current">CS ▾</span>
                     <ul class="lang-submenu" id="lang-submenu">
@@ -1264,8 +1382,25 @@ iframe {
                     </ul>
                 </li>
             </ul>
+            <input type="color" id="colorPickerInput" value="#05d4ff">
         </div>
     </div>
+
+    <!-- Skrytá SVG definice pro reálné obarvení černobílých/šedých PNG ikon -->
+    <svg style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+        <filter id="pngColorFilter">
+            <feColorMatrix type="matrix" values="
+                0 0 0 0 1
+                0 0 0 0 1
+                0 0 0 0 1
+                0 0 0 1 0" />
+            <feColorMatrix id="dynamicColorMatrix" type="matrix" values="
+                1 0 0 0 0.019
+                0 1 0 0 0.831
+                0 0 1 0 1.000
+                0 0 0 1 0" />
+        </filter>
+    </svg>
 
     <video id="background-video" autoplay muted loop>
         <source id="video-source" type="video/mp4" src="pozadi/1.mp4">
@@ -1286,7 +1421,10 @@ iframe {
     </div>
 
     <div id="center-section">
+        <!-- Hlavní logo prvek (500px) -->
         <div class="logo-section"></div>
+        <!-- Druhý logo prvek s polovičními rozměry (250px) pro světelný efekt -->
+        <div class="logo-section-glow"></div>
 
         <div class="inner-text">
             <h2 data-i18n="hero_welcome_title">Vítejte</h2>
@@ -1332,7 +1470,7 @@ iframe {
         </div>
     </div>
 
-    <div class="inner-text" id="padding">
+    <div class="inner-text" id="padding" style="color: inherit;">
       <div class="gallery-container">
         <h2 data-i18n="gallery_title" class="gallery-eyebrow">Galerie</h2>
         <p data-i18n="gallery_lead">Zde je ukázka projektů, na kterých jsem v poslední době pracoval — od grafického designu po herní vizuály.</p>
@@ -1399,7 +1537,6 @@ iframe {
     <div id="konec"></div> 
 </div>
 
-<!-- Načtení externího souboru s překlady -->
 <script src="translations.js"></script>
 <script>
     document.getElementById("scroll-button").addEventListener("click", function() {
@@ -1407,6 +1544,201 @@ iframe {
             top: window.innerHeight, 
             behavior: "smooth"       
         });
+    });
+
+    // --- SPRÁVA BARVY A INTENZITY (VČETNĚ VYPÍNÁNÍ, HOVER ELEMENTŮ A NEONOVÉHO PŘECHODU) ---
+    const batteryToggleBtn = document.getElementById('battery-toggle-btn');
+    const lightingPowerBtn = document.getElementById('lighting-power-btn');
+    const neonCycleBtn = document.getElementById('neon-cycle-btn');
+    const colorPickerInput = document.getElementById('colorPickerInput');
+    const intensitySlider = document.getElementById('intensitySlider');
+
+    let isLightingEnabled = true;
+    let isNeonCycling = false;
+    let neonHue = 0;
+    let neonInterval = null;
+
+    batteryToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        colorPickerInput.click();
+    });
+
+    lightingPowerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isLightingEnabled = !isLightingEnabled;
+        if (isLightingEnabled && isNeonCycling) {
+            startNeonCycle(false); // Obnovit neon, pokud byl aktivní
+        }
+        updateThemeFromControls();
+    });
+
+    // Ovládání zapnutí/vypnutí automatického neonového přechodu barev
+    neonCycleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isNeonCycling = !isNeonCycling;
+        if (isNeonCycling) {
+            if (!isLightingEnabled) {
+                isLightingEnabled = true; // Zapnout svícení, pokud bylo vypnuté
+            }
+            neonCycleBtn.classList.add('neon-active');
+            startNeonCycle();
+        } else {
+            neonCycleBtn.classList.remove('neon-active');
+            stopNeonCycle();
+        }
+        updateThemeFromControls();
+    });
+
+    colorPickerInput.addEventListener('input', () => {
+        if (isNeonCycling) {
+            isNeonCycling = false;
+            neonCycleBtn.classList.remove('neon-active');
+            stopNeonCycle();
+        }
+        updateThemeFromControls();
+    });
+
+    intensitySlider.addEventListener('input', updateThemeFromControls);
+
+    function hslToHex(h, s, l) {
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = n => {
+            const k = (n + h / 30) % 12;
+            const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+            return Math.round(255 * color).toString(16).padStart(2, '0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+    }
+
+    function startNeonCycle() {
+        if (neonInterval) return;
+        neonInterval = setInterval(() => {
+            if (!isNeonCycling) return;
+            neonHue = (neonHue + 1) % 360;
+            const dynamicHex = hslToHex(neonHue, 100, 50);
+            colorPickerInput.value = dynamicHex;
+            applyCustomTheme(dynamicHex, parseFloat(intensitySlider.value), isLightingEnabled);
+        }, 120); // Zpomalený plynulý přechod barev (120 ms)
+    }
+
+    function stopNeonCycle() {
+        if (neonInterval) {
+            clearInterval(neonInterval);
+            neonInterval = null;
+        }
+    }
+
+    function hexToRgb(hex) {
+        let cleanHex = hex.replace('#', '');
+        if (cleanHex.length === 3) {
+            cleanHex = cleanHex.split('').map(c => c + c).join('');
+        }
+        const num = parseInt(cleanHex, 16);
+        return {
+            r: (num >> 16) & 255,
+            g: (num >> 8) & 255,
+            b: num & 255
+        };
+    }
+
+    function updateThemeFromControls() {
+        const colorHex = colorPickerInput.value;
+        const intensity = parseFloat(intensitySlider.value);
+        applyCustomTheme(colorHex, intensity, isLightingEnabled);
+    }
+
+    function applyCustomTheme(colorHex, intensity, enabled) {
+        const topBar = document.getElementById('top-bar');
+        
+        if (!enabled) {
+            document.documentElement.style.setProperty('--text-color', '#ffffff');
+            document.documentElement.style.setProperty('--heading-color', '#ffffff');
+            document.documentElement.style.setProperty('--dynamic-color', 'rgba(255, 255, 255, 0.3)');
+            document.documentElement.style.setProperty('--hover-bg-color', 'rgba(255, 255, 255, 0.2)');
+            document.documentElement.style.setProperty('--logo-glow-color', 'transparent');
+            document.documentElement.style.setProperty('--theme-intensity', '0');
+            topBar.style.boxShadow = '0 5px 5px rgba(0, 0, 0, 0.5)';
+            topBar.style.borderBottomColor = 'rgba(255, 255, 255, 0.3)';
+            lightingPowerBtn.style.opacity = '0.5';
+            neonCycleBtn.style.opacity = '0.5';
+            
+            const colorMatrix = document.getElementById('dynamicColorMatrix');
+            if (colorMatrix) {
+                colorMatrix.setAttribute('values', `
+                    1 0 0 0 1
+                    0 1 0 0 1
+                    0 0 1 0 1
+                    0 0 0 1 0
+                `);
+                document.querySelectorAll('.menu-icon').forEach(icon => {
+                    icon.style.filter = 'url(#pngColorFilter)';
+                });
+            }
+        } else {
+            document.documentElement.style.setProperty('--text-color', '#ffffff');
+            document.documentElement.style.setProperty('--heading-color', colorHex);
+            document.documentElement.style.setProperty('--dynamic-color', colorHex);
+            document.documentElement.style.setProperty('--logo-glow-color', colorHex);
+            document.documentElement.style.setProperty('--theme-intensity', intensity);
+            
+            const rgb = hexToRgb(colorHex);
+            document.documentElement.style.setProperty('--hover-bg-color', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`);
+
+            const rNorm = (rgb.r / 255) * intensity;
+            const gNorm = (rgb.g / 255) * intensity;
+            const bNorm = (rgb.b / 255) * intensity;
+
+            topBar.style.boxShadow = `0 5px ${15 * intensity}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.4 * intensity})`;
+            lightingPowerBtn.style.opacity = '1';
+            neonCycleBtn.style.opacity = '1';
+
+            const colorMatrix = document.getElementById('dynamicColorMatrix');
+            if (colorMatrix) {
+                colorMatrix.setAttribute('values', `
+                    ${rNorm} 0 0 0 0
+                    0 ${gNorm} 0 0 0
+                    0 0 ${bNorm} 0 0
+                    0 0 0 ${Math.min(intensity, 1)} 0
+                `);
+                document.querySelectorAll('.menu-icon').forEach(icon => {
+                    icon.style.filter = 'url(#pngColorFilter)';
+                });
+            }
+        }
+
+        localStorage.setItem('fd_theme_color', colorHex);
+        localStorage.setItem('fd_theme_intensity', intensity);
+        localStorage.setItem('fd_lighting_enabled', enabled);
+        localStorage.setItem('fd_neon_cycling', isNeonCycling);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedColor = localStorage.getItem('fd_theme_color');
+        const savedIntensity = localStorage.getItem('fd_theme_intensity');
+        const savedLighting = localStorage.getItem('fd_lighting_enabled');
+        const savedNeon = localStorage.getItem('fd_neon_cycling');
+        
+        let color = '#05d4ff';
+        let intensity = 1;
+        isLightingEnabled = savedLighting !== null ? savedLighting === 'true' : true;
+
+        if (savedColor) {
+            color = savedColor;
+            colorPickerInput.value = savedColor;
+        }
+        if (savedIntensity) {
+            intensity = parseFloat(savedIntensity);
+            intensitySlider.value = intensity;
+        }
+
+        applyCustomTheme(color, intensity, isLightingEnabled);
+
+        if (savedNeon === 'true' && isLightingEnabled) {
+            isNeonCycling = true;
+            neonCycleBtn.classList.add('neon-active');
+            startNeonCycle();
+        }
     });
 
     const API_KEY = 'AIzaSyAFRT_OOuYQDnSexM2SGLdSYZDKQ_10GME';
@@ -1465,7 +1797,6 @@ iframe {
       const videoInners = document.querySelectorAll('.video-inner.playing');
       videoInners.forEach(inner => inner.classList.remove('playing'));
       
-      // Obnovení scrollování stránky
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
       
@@ -1547,7 +1878,6 @@ iframe {
       frame.appendChild(closeBtn);
       content.appendChild(frame);
 
-      // Úplné zablokování scrollování stránky na pozadí (funguje spolehlivě i na mobilech)
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
 
@@ -1740,7 +2070,6 @@ iframe {
         });
     });
 
-    // Automatická detekce jazyka podle IP adresy (s fallbackem na prohlížeč a češtinu)
     async function detectUserLanguage() {
         const savedLang = localStorage.getItem('fd_lang');
         if (savedLang) {
@@ -1902,6 +2231,8 @@ iframe {
     });
 
     const footer = document.querySelector('.footer');
+    
+    checkFooterScroll();
     
     function checkFooterScroll() {
         const scrollPosition = window.innerHeight + window.scrollY;

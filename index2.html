@@ -434,6 +434,13 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   font-size: inherit;
 }
 
+/* Aktivní stav pro tlačítko neonové animace */
+.battery-btn.neon-active {
+  background-color: var(--dynamic-color, #05d4ff) !important;
+  border-color: var(--dynamic-color, #05d4ff) !important;
+  box-shadow: 0 0 10px var(--dynamic-color, #05d4ff);
+}
+
 #colorPickerInput {
   position: absolute;
   opacity: 0;
@@ -1322,6 +1329,8 @@ iframe {
                         <span>Barva & ikony:</span>
                         <div style="display: flex; gap: 6px; align-items: center;">
                             <button class="back-button battery-btn" id="lighting-power-btn" title="Vypnout/Zapnout svícení" aria-label="Vypnout nebo zapnout svícení rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">⏻</button>
+                            <!-- NOVÉ TLAČÍTKO PRO AUTOMATICKÝ NEONOVÝ PŘECHOD (DUHA) -->
+                            <button class="back-button battery-btn" id="neon-cycle-btn" title="Zapnout/Vypnout automatický neonový přechod barev" aria-label="Automatický neonový přechod barev" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">🌈</button>
                             <button class="back-button battery-btn" id="battery-toggle-btn" title="Vybrat barvu" aria-label="Vybrat barvu rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important;">🔋</button>
                         </div>
                     </div>
@@ -1537,13 +1546,17 @@ iframe {
         });
     });
 
-    // --- SPRÁVA BARVY A INTENZITY (VČETNĚ VYPÍNÁNÍ A HOVER ELEMENTŮ) ---
+    // --- SPRÁVA BARVY A INTENZITY (VČETNĚ VYPÍNÁNÍ, HOVER ELEMENTŮ A NEONOVÉHO PŘECHODU) ---
     const batteryToggleBtn = document.getElementById('battery-toggle-btn');
     const lightingPowerBtn = document.getElementById('lighting-power-btn');
+    const neonCycleBtn = document.getElementById('neon-cycle-btn');
     const colorPickerInput = document.getElementById('colorPickerInput');
     const intensitySlider = document.getElementById('intensitySlider');
 
     let isLightingEnabled = true;
+    let isNeonCycling = false;
+    let neonHue = 0;
+    let neonInterval = null;
 
     batteryToggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -1553,11 +1566,68 @@ iframe {
     lightingPowerBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         isLightingEnabled = !isLightingEnabled;
+        if (isLightingEnabled && isNeonCycling) {
+            startNeonCycle(false); // Obnovit neon, pokud byl aktivní
+        }
         updateThemeFromControls();
     });
 
-    colorPickerInput.addEventListener('input', updateThemeFromControls);
+    // Ovládání zapnutí/vypnutí automatického neonového přechodu barev
+    neonCycleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isNeonCycling = !isNeonCycling;
+        if (isNeonCycling) {
+            if (!isLightingEnabled) {
+                isLightingEnabled = true; // Zapnout svícení, pokud bylo vypnuté
+            }
+            neonCycleBtn.classList.add('neon-active');
+            startNeonCycle();
+        } else {
+            neonCycleBtn.classList.remove('neon-active');
+            stopNeonCycle();
+        }
+        updateThemeFromControls();
+    });
+
+    colorPickerInput.addEventListener('input', () => {
+        if (isNeonCycling) {
+            isNeonCycling = false;
+            neonCycleBtn.classList.remove('neon-active');
+            stopNeonCycle();
+        }
+        updateThemeFromControls();
+    });
+
     intensitySlider.addEventListener('input', updateThemeFromControls);
+
+    function hslToHex(h, s, l) {
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = n => {
+            const k = (n + h / 30) % 12;
+            const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+            return Math.round(255 * color).toString(16).padStart(2, '0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+    }
+
+    function startNeonCycle() {
+        if (neonInterval) return;
+        neonInterval = setInterval(() => {
+            if (!isNeonCycling) return;
+            neonHue = (neonHue + 1) % 360;
+            const dynamicHex = hslToHex(neonHue, 100, 50);
+            colorPickerInput.value = dynamicHex;
+            applyCustomTheme(dynamicHex, parseFloat(intensitySlider.value), isLightingEnabled);
+        }, 120); // Zpomalený plynulý přechod barev (120 ms)
+    }
+
+    function stopNeonCycle() {
+        if (neonInterval) {
+            clearInterval(neonInterval);
+            neonInterval = null;
+        }
+    }
 
     function hexToRgb(hex) {
         let cleanHex = hex.replace('#', '');
@@ -1591,6 +1661,7 @@ iframe {
             topBar.style.boxShadow = '0 5px 5px rgba(0, 0, 0, 0.5)';
             topBar.style.borderBottomColor = 'rgba(255, 255, 255, 0.3)';
             lightingPowerBtn.style.opacity = '0.5';
+            neonCycleBtn.style.opacity = '0.5';
             
             const colorMatrix = document.getElementById('dynamicColorMatrix');
             if (colorMatrix) {
@@ -1612,7 +1683,7 @@ iframe {
             document.documentElement.style.setProperty('--theme-intensity', intensity);
             
             const rgb = hexToRgb(colorHex);
-            document.documentElement.style.setProperty('--hover-bg-color', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)');`);
+            document.documentElement.style.setProperty('--hover-bg-color', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`);
 
             const rNorm = (rgb.r / 255) * intensity;
             const gNorm = (rgb.g / 255) * intensity;
@@ -1620,6 +1691,7 @@ iframe {
 
             topBar.style.boxShadow = `0 5px ${15 * intensity}px rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.4 * intensity})`;
             lightingPowerBtn.style.opacity = '1';
+            neonCycleBtn.style.opacity = '1';
 
             const colorMatrix = document.getElementById('dynamicColorMatrix');
             if (colorMatrix) {
@@ -1638,12 +1710,14 @@ iframe {
         localStorage.setItem('fd_theme_color', colorHex);
         localStorage.setItem('fd_theme_intensity', intensity);
         localStorage.setItem('fd_lighting_enabled', enabled);
+        localStorage.setItem('fd_neon_cycling', isNeonCycling);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
         const savedColor = localStorage.getItem('fd_theme_color');
         const savedIntensity = localStorage.getItem('fd_theme_intensity');
         const savedLighting = localStorage.getItem('fd_lighting_enabled');
+        const savedNeon = localStorage.getItem('fd_neon_cycling');
         
         let color = '#05d4ff';
         let intensity = 1;
@@ -1659,6 +1733,12 @@ iframe {
         }
 
         applyCustomTheme(color, intensity, isLightingEnabled);
+
+        if (savedNeon === 'true' && isLightingEnabled) {
+            isNeonCycling = true;
+            neonCycleBtn.classList.add('neon-active');
+            startNeonCycle();
+        }
     });
 
     const API_KEY = 'AIzaSyAFRT_OOuYQDnSexM2SGLdSYZDKQ_10GME';
