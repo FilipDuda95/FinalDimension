@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Filip Duda - 2D/3D grafický design a herní vývoj.</title>
+    <title>Final Dimension — Filip Duda</title>
     
-    <!-- Open Graph / Sociální karta -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://filipduda95.github.io/final_dimension/">
     <meta property="og:title" content="Final Dimension — Filip Duda">
@@ -14,7 +13,6 @@
     <link rel="shortcut icon" href="favicon.png" type="image/png">
     
     <style>
-/* Skryje scrollbar pro WebKit (Chrome, Safari, Edge) */
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
     display: none;
@@ -22,12 +20,11 @@ body::-webkit-scrollbar {
     height: 0;
 }
 
-/* Skryje scrollbar pro Firefox a IE/Edge */
 html, body {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE a starý Edge */
-    -webkit-overflow-scrolling: touch; /* Hladký posun na iOS */
-    background-color: #000000; /* Černé pozadí pro sociální kartu a stránku */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    background-color: #000000;
 }
 
         * {
@@ -46,6 +43,88 @@ html, body {
             touch-action: manipulation;
         }
 
+        /* Mraky jsou PŘED iframe, ale končí nad spodním panelem s tlačítky */
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 65px; 
+            pointer-events: none; 
+            overflow: hidden;
+            z-index: 3; 
+            opacity: 0.75; 
+            transition: opacity 0.3s ease;
+        }
+
+        .cloud {
+            position: absolute;
+            object-fit: contain;
+            filter: url(#removeBlackPure);
+        }
+
+        .cloud:nth-child(1) {
+            width: 450px;
+            top: 15%;
+            left: -60px;
+            animation: drift 22s infinite ease-in-out;
+        }
+
+        .cloud:nth-child(2) {
+            width: 380px;
+            top: 40%;
+            right: -40px;
+            animation: drift 28s infinite ease-in-out reverse;
+            animation-delay: 3s;
+        }
+
+        .cloud:nth-child(3) {
+            width: 320px;
+            top: 60%;
+            left: 15%;
+            animation: drift 25s infinite ease-in-out;
+            animation-delay: 7s;
+        }
+
+        /* Spodní kopie mraků – zrcadlené (scaleX(-1)) a s animací reverse */
+        .cloud:nth-child(4) {
+            width: 500px;
+            top: 75%;
+            left: -100px;
+            transform: scaleX(-1);
+            animation: driftReverse 30s infinite ease-in-out;
+            animation-delay: 1s;
+        }
+
+        .cloud:nth-child(5) {
+            width: 420px;
+            top: 80%;
+            right: -60px;
+            transform: scaleX(-1);
+            animation: driftReverse 26s infinite ease-in-out;
+            animation-delay: 4s;
+        }
+
+        .cloud:nth-child(6) {
+            width: 350px;
+            top: 85%;
+            left: 40%;
+            transform: scaleX(-1);
+            animation: driftReverse 24s infinite ease-in-out;
+            animation-delay: 9s;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translateX(0px) translateY(0px); }
+            50% { transform: translateX(80px) translateY(-15px); }
+        }
+
+        /* Speciální klíčové snímky pro zrcadlené mraky, aby při scaleX(-1) neposkakovaly špatně */
+        @keyframes driftReverse {
+            0%, 100% { transform: scaleX(-1) translateX(0px) translateY(0px); }
+            50% { transform: scaleX(-1) translateX(80px) translateY(-15px); }
+        }
+
         .scene {
             position: fixed;
             top: 0;
@@ -57,57 +136,7 @@ html, body {
             justify-content: center;
             perspective: 1200px;
             overflow: hidden;
-        }
-
-        /* Mraky před stránkou */
-        .clouds {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 15;
-            transition: opacity 0.3s ease;
-        }
-
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.25);
-            border-radius: 100px;
-            filter: blur(40px);
-        }
-
-        .cloud:nth-child(1) {
-            width: 400px;
-            height: 140px;
-            top: 10%;
-            left: -100px;
-            animation: drift 22s infinite ease-in-out;
-        }
-
-        .cloud:nth-child(2) {
-            width: 350px;
-            height: 120px;
-            top: 40%;
-            right: -80px;
-            animation: drift 28s infinite ease-in-out reverse;
-            animation-delay: 3s;
-        }
-
-        .cloud:nth-child(3) {
-            width: 300px;
-            height: 100px;
-            top: 65%;
-            left: 15%;
-            animation: drift 25s infinite ease-in-out;
-            animation-delay: 7s;
-        }
-
-        @keyframes drift {
-            0%, 100% { transform: translateX(0px) translateY(0px); }
-            50% { transform: translateX(120px) translateY(-20px); }
+            z-index: 2;
         }
 
         /* 3D Kontejner pro okno i obsah */
@@ -123,7 +152,6 @@ html, body {
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s ease, max-width 0.3s ease, max-height 0.3s ease;
         }
 
-        /* Režim celé obrazovky pro iframe kontejner */
         .viewport-wrapper.fullscreen {
             width: 100vw !important;
             height: 100vh !important;
@@ -426,7 +454,7 @@ html, body {
             flex-direction: row;
             align-items: center;
             gap: 6px;
-            z-index: 40;
+            z-index: 100;
             background: rgba(18, 18, 18, 0.85);
             padding: 5px;
             border-radius: 30px;
@@ -535,7 +563,7 @@ html, body {
             height: 52px !important;
             padding: 6px !important;
             gap: 8px !important;
-            z-index: 40 !important;
+            z-index: 100 !important;
         }
 
         body.is-fullscreen .control-btn {
@@ -551,6 +579,13 @@ html, body {
         }
 
         @media (max-width: 768px) and (pointer: coarse) {
+            .cloud:nth-child(1) { width: 240px; }
+            .cloud:nth-child(2) { width: 200px; }
+            .cloud:nth-child(3) { width: 170px; }
+            .cloud:nth-child(4) { width: 250px; }
+            .cloud:nth-child(5) { width: 210px; }
+            .cloud:nth-child(6) { width: 180px; }
+
             .viewport-wrapper {
                 width: 92vw;
                 height: 74vh;
@@ -645,10 +680,28 @@ html, body {
 </head>
 <body>
 
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <filter id="removeBlackPure">
+                <feColorMatrix type="matrix" values="
+                    1 0 0 0 0
+                    0 1 0 0 0
+                    0 0 1 0 0
+                    1 1 1 0 0" result="lum" />
+                <feComponentTransfer>
+                    <feFuncA type="linear" slope="3" intercept="-0.15" />
+                </feComponentTransfer>
+            </filter>
+        </defs>
+    </svg>
+
     <div class="clouds">
-        <div class="cloud"></div>
-        <div class="cloud"></div>
-        <div class="cloud"></div>
+        <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
     </div>
 
     <div class="scene">
@@ -657,7 +710,6 @@ html, body {
             <div class="resize-handle bottom" id="resizeBottom"></div>
 
             <div class="viewport-frame" id="viewportFrame">
-                <!-- Sloty se vytvoří dynamicky -->
             </div>
         </div>
 
@@ -861,7 +913,6 @@ html, body {
             `;
         }
 
-        // Generování HTML obsahu pro konkrétní slot
         function getSlotHTML(pageConfig, loadImmediately = false) {
             if (pageConfig === "dual-screen") {
                 const srcPC = loadImmediately ? 'index3.html' : '';
@@ -886,7 +937,6 @@ html, body {
             }
         }
 
-        // Načte iframy v daném slotu a skryje v nich scrollbar
         function activateSlotContent(slot) {
             const iframes = slot.querySelectorAll('iframe');
             iframes.forEach(iframe => {
@@ -898,7 +948,6 @@ html, body {
             });
         }
 
-        // Zastaví/vymaže iframy v neaktivním slotu pro úsporu paměti a CPU
         function deactivateSlotContent(slot) {
             const iframes = slot.querySelectorAll('iframe');
             iframes.forEach(iframe => {
@@ -906,7 +955,6 @@ html, body {
             });
         }
 
-        // Inicializace slotů
         function initAllPages() {
             availablePages.forEach((pageConfig, index) => {
                 const slot = document.createElement('div');
@@ -919,7 +967,6 @@ html, body {
                 viewportFrame.appendChild(slot);
             });
 
-            // Připojení listeneru pro úvodní iframe(y)
             viewportFrame.querySelectorAll('.page-slot.active iframe').forEach(iframe => {
                 if (iframe.getAttribute('src')) {
                     iframe.addEventListener('load', hideIframeScrollbar);
@@ -946,7 +993,6 @@ html, body {
             const slots = viewportFrame.querySelectorAll('.page-slot');
             const targetSlot = Array.from(slots).find(s => parseInt(s.dataset.index) === targetIndex);
             
-            // Aktivace (načtení) nového slotu
             if (targetSlot) {
                 activateSlotContent(targetSlot);
             }
@@ -970,7 +1016,6 @@ html, body {
                         slot.classList.add('active');
                     } else {
                         slot.classList.remove('active');
-                        // Zde se okno kompletně stopne/vymaže, aby neběželo na pozadí
                         deactivateSlotContent(slot);
                     }
                 });
