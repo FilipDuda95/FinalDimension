@@ -152,19 +152,18 @@ html, body {
             transform-style: preserve-3d;
         }
 
-.viewport-frame.is-dual-screen {
+        .viewport-frame.is-dual-screen {
             background: transparent !important;
             box-shadow: none !important;
             border: none !important;
             outline: none !important;
-            overflow: visible !important; /* Důležité: zruší ořezávání */
+            overflow: visible !important;
         }
         .viewport-wrapper.fullscreen .viewport-frame {
             border-radius: 0;
             box-shadow: none;
         }
 
-        /* Speciální režim celé obrazovky pro duální zobrazení */
         .viewport-wrapper.fullscreen.is-dual-fullscreen .pc-monitor {
             display: none !important;
         }
@@ -192,7 +191,6 @@ html, body {
             background-color: black;
         }
 
-        /* Kontejner pro jednotlivé stránky uvnitř viewportu */
         .page-slot {
             position: absolute;
             top: 0;
@@ -211,7 +209,6 @@ html, body {
             opacity: 1;
         }
 
-        /* Lišty pro změnu výšky - přesunuty ven z viewport-frame */
         .resize-handle {
             position: absolute;
             left: 50%;
@@ -222,7 +219,7 @@ html, body {
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 10px;
             cursor: ns-resize;
-            z-index: 50; /* Zajišťuje, že jsou zcela navrchu */
+            z-index: 50;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -252,7 +249,6 @@ html, body {
             display: none !important;
         }
 
-        /* Přechodové třídy pro celý rám */
         .slide-out-left {
             transform: translate3d(-120%, 0, 0) rotateY(-15deg);
             opacity: 0;
@@ -281,7 +277,6 @@ html, body {
             to { transform: translate3d(0, 0, 0) rotateY(0deg); opacity: 1; }
         }
 
-        /* Iframe se skrytým posuvníkem */
         .viewport-iframe {
             display: block;
             width: 100%;
@@ -301,7 +296,6 @@ html, body {
             height: 0;
         }
 
-        /* Styly pro duální zobrazení */
         .dual-screen-container {
             position: relative;
             width: 100%;
@@ -324,7 +318,6 @@ html, body {
             transition: transform 0.3s ease;
         }
 
-        /* PC Monitor vlevo */
         .device-frame.pc-monitor {
             width: 58%;
             height: 70%;
@@ -368,7 +361,6 @@ html, body {
             box-shadow: 0 0 6px #00ffcc;
         }
 
-        /* Telefon vpravo */
         .device-frame.phone-portrait {
             width: 230px;
             height: 460px;
@@ -387,7 +379,6 @@ html, body {
             transform-origin: top left;
         }
 
-        /* Šipky pro posun stránek */
         .nav-arrow {
             position: fixed;
             top: 50%;
@@ -426,7 +417,6 @@ html, body {
         .nav-arrow.left { left: 30px; }
         .nav-arrow.right { right: 30px; }
 
-        /* Ovládací panel */
         .controls-container {
             position: fixed;
             bottom: 8px;
@@ -663,12 +653,11 @@ html, body {
 
     <div class="scene">
         <div class="viewport-wrapper" id="viewportWrapper">
-            <!-- Lišty jsou nyní přímo zde, mimo ořezaný viewport-frame -->
             <div class="resize-handle top" id="resizeTop"></div>
             <div class="resize-handle bottom" id="resizeBottom"></div>
 
             <div class="viewport-frame" id="viewportFrame">
-                <!-- Zde budou dynamicky vloženy sloty pro všechny stránky -->
+                <!-- Sloty se vytvoří dynamicky -->
             </div>
         </div>
 
@@ -872,38 +861,60 @@ html, body {
             `;
         }
 
-        // Inicializativní vygenerování všech stránek najednou
+        // Generování HTML obsahu pro konkrétní slot (lazy loading šablona)
+        function getSlotHTML(pageConfig, loadImmediately = false) {
+            if (pageConfig === "dual-screen") {
+                const srcPC = loadImmediately ? 'index3.html' : '';
+                const srcPhone = loadImmediately ? 'index2.html' : '';
+                return `
+                    <div class="dual-screen-container">
+                        <div class="device-frame pc-monitor">
+                            <div class="pc-screen-area">
+                                <iframe class="viewport-iframe" data-src="index3.html" ${loadImmediately ? `src="${srcPC}"` : ''}></iframe>
+                            </div>
+                            <div class="pc-chin"><div class="pc-led"></div></div>
+                        </div>
+                        <div class="device-frame phone-portrait">
+                            <iframe class="viewport-iframe" data-src="index2.html" ${loadImmediately ? `src="${srcPhone}"` : ''}></iframe>
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <iframe class="viewport-iframe" data-src="${pageConfig}" ${loadImmediately ? `src="${pageConfig}"` : ''}></iframe>
+                `;
+            }
+        }
+
+        // Načte iframy v daném slotu, pokud ještě nejsou načtené (nemají src)
+        function activateSlotContent(slot) {
+            const iframes = slot.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                if (!iframe.getAttribute('src') && iframe.dataset.src) {
+                    iframe.src = iframe.dataset.src;
+                    iframe.addEventListener('load', hideIframeScrollbar);
+                }
+            });
+        }
+
+        // Inicializace: Vytvoří strukturu VŠECH slotů, ale src vyplní POUZE pro aktuální úvodní stránku
         function initAllPages() {
             availablePages.forEach((pageConfig, index) => {
                 const slot = document.createElement('div');
                 slot.className = `page-slot ${index === currentFileIndex ? 'active' : ''}`;
                 slot.dataset.index = index;
 
-                if (pageConfig === "dual-screen") {
-                    slot.innerHTML = `
-                        <div class="dual-screen-container">
-                            <div class="device-frame pc-monitor">
-                                <div class="pc-screen-area">
-                                    <iframe class="viewport-iframe" src="index3.html"></iframe>
-                                </div>
-                                <div class="pc-chin"><div class="pc-led"></div></div>
-                            </div>
-                            <div class="device-frame phone-portrait">
-                                <iframe class="viewport-iframe" src="index2.html"></iframe>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    slot.innerHTML = `
-                        <iframe class="viewport-iframe" src="${pageConfig}"></iframe>
-                    `;
-                }
+                const shouldLoad = (index === currentFileIndex);
+                slot.innerHTML = getSlotHTML(pageConfig, shouldLoad);
 
                 viewportFrame.appendChild(slot);
             });
 
+            // Připojení listeneru na load pro úvodní iframe(y)
             getActiveIframes().forEach(iframe => {
-                iframe.addEventListener('load', hideIframeScrollbar);
+                if (iframe.getAttribute('src')) {
+                    iframe.addEventListener('load', hideIframeScrollbar);
+                }
             });
 
             updatePhoneScale();
@@ -923,6 +934,13 @@ html, body {
                 window.history.replaceState({ index: targetIndex }, '');
             }
 
+            // Zajistíme, že cílová stránka bude před zobrazením načtena (Lazy Load na vyžádání)
+            const slots = viewportFrame.querySelectorAll('.page-slot');
+            const targetSlot = Array.from(slots).find(s => parseInt(s.dataset.index) === targetIndex);
+            if (targetSlot) {
+                activateSlotContent(targetSlot);
+            }
+
             const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
             const inClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
 
@@ -936,7 +954,6 @@ html, body {
             viewportFrame.classList.add(outClass);
 
             setTimeout(() => {
-                const slots = viewportFrame.querySelectorAll('.page-slot');
                 slots.forEach(slot => {
                     if (parseInt(slot.dataset.index) === targetIndex) {
                         slot.classList.add('active');
