@@ -86,7 +86,7 @@ html, body {
         }
 
         .clouds-foreground .cloud:nth-child(2) {
-            width: 380px;
+            width: 450px;
             top: 40%;
             right: -40px;
             animation: drift 28s infinite ease-in-out reverse;
@@ -94,7 +94,7 @@ html, body {
         }
 
         .clouds-foreground .cloud:nth-child(3) {
-            width: 320px;
+            width: 300px;
             top: 60%;
             left: 15%;
             animation: drift 25s infinite ease-in-out;
@@ -105,7 +105,7 @@ html, body {
         .clouds .cloud:nth-child(1) {
             width: 700px;
             top: 60%;
-            left: -140px;
+            right: -140px;
             transform: scaleX(-1);
             animation: driftReverse 30s infinite ease-in-out;
             animation-delay: 1s;
@@ -117,7 +117,7 @@ html, body {
         .clouds .cloud:nth-child(2) {
             width: 600px;
             top: 65%;
-            right: -100px;
+            left: -200px;
             transform: scaleX(-1);
             animation: driftReverse 26s infinite ease-in-out;
             animation-delay: 4s;
@@ -136,6 +136,17 @@ html, body {
             -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
             mask-image: linear-gradient(to top, transparent 0%, black 60%);
 	z-index:1;
+        }
+        .clouds .cloud:nth-child(4) {
+            width: 600px;
+            top: 65%;
+            right: 200px;
+            transform: scaleX(-1);
+            animation: driftReverse 26s infinite ease-in-out;
+            animation-delay: 4s;
+            -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
+            mask-image: linear-gradient(to top, transparent 0%, black 60%);
+	z-index:4;
         }
 
         @keyframes drift {
@@ -724,6 +735,8 @@ html, body {
         <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
         <img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
         <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
+ 	<img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
+
     </div>
 
     <div class="scene">
