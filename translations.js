@@ -1,3 +1,338 @@
+// 1. Překlady pro přizpůsobení barvy a intenzity v menu
+const additionalButtonTranslations = {
+    cs: {
+        color_customizer_title: "Barva & ikony:",
+        btn_lighting_power_title: "Vypnout/Zapnout svícení",
+        btn_lighting_power_aria: "Vypnout nebo zapnout svícení rozhraní",
+        btn_neon_title: "Zapnout/Vypnout automatický neonový přechod barev",
+        btn_neon_aria: "Automatický neonový přechod barev",
+        btn_battery_title: "Vybrat barvu",
+        btn_battery_aria: "Vybrat barvu rozhraní",
+        color_intensity_label: "Intenzita / záře:"
+    },
+    en: {
+        color_customizer_title: "Color & Icons:",
+        btn_lighting_power_title: "Turn lighting On/Off",
+        btn_lighting_power_aria: "Turn interface lighting on or off",
+        btn_neon_title: "Toggle automatic neon color transition",
+        btn_neon_aria: "Automatic neon color transition",
+        btn_battery_title: "Select Color",
+        btn_battery_aria: "Select interface color",
+        color_intensity_label: "Intensity / Glow:"
+    },
+    de: {
+        color_customizer_title: "Farbe & Symbole:",
+        btn_lighting_power_title: "Beleuchtung Ein/Aus",
+        btn_lighting_power_aria: "Schnittstellenbeleuchtung ein- oder ausschalten",
+        btn_neon_title: "Automatischen Neon-Farbverlauf umschalten",
+        btn_neon_aria: "Automatischer Neon-Farbverlauf",
+        btn_battery_title: "Farbe auswählen",
+        btn_battery_aria: "Schnittstellenfarbe auswählen",
+        color_intensity_label: "Intensität / Glühen:"
+    },
+    fr: {
+        color_customizer_title: "Couleur & Icônes :",
+        btn_lighting_power_title: "Activer/Désactiver l'éclairage",
+        btn_lighting_power_aria: "Activer ou désactiver l'éclairage de l'interface",
+        btn_neon_title: "Basculer la transition de couleur néon automatique",
+        btn_neon_aria: "Transition de couleur néon automatique",
+        btn_battery_title: "Sélectionner la couleur",
+        btn_battery_aria: "Sélectionner la couleur de l'interface",
+        color_intensity_label: "Intensité / Lueur :"
+    },
+    es: {
+        color_customizer_title: "Color e Iconos:",
+        btn_lighting_power_title: "Encender/Apagar iluminación",
+        btn_lighting_power_aria: "Encender o apagar la iluminación de la interfaz",
+        btn_neon_title: "Alternar transición de color neón automática",
+        btn_neon_aria: "Transición automática de color neón",
+        btn_battery_title: "Seleccionar color",
+        btn_battery_aria: "Seleccionar color de la interfaz",
+        color_intensity_label: "Intensidad / Brillo:"
+    },
+    it: {
+        color_customizer_title: "Colore e Icone:",
+        btn_lighting_power_title: "Accendi/Spegni illuminazione",
+        btn_lighting_power_aria: "Accendi o spegni l'illuminazione dell'interfaccia",
+        btn_neon_title: "Attiva/Disattiva transizione di colore neon automatica",
+        btn_neon_aria: "Transizione automatica colore neon",
+        btn_battery_title: "Seleziona colore",
+        btn_battery_aria: "Seleziona il colore dell'interfaccia",
+        color_intensity_label: "Intensità / Luminosità:"
+    },
+    sk: {
+        color_customizer_title: "Farba & ikony:",
+        btn_lighting_power_title: "Vypnúť/Zapnúť svietenie",
+        btn_lighting_power_aria: "Vypnúť alebo zapnúť svietenie rozhrania",
+        btn_neon_title: "Zapnúť/Vypnúť automatický neónový prechod farieb",
+        btn_neon_aria: "Automatický neónový prechod farieb",
+        btn_battery_title: "Vybrať farbu",
+        btn_battery_aria: "Vybrať farbu rozhrania",
+        color_intensity_label: "Intenzita / žiara:"
+    },
+    pl: {
+        color_customizer_title: "Kolor i ikony:",
+        btn_lighting_power_title: "Włącz/Wyłącz podświetlenie",
+        btn_lighting_power_aria: "Włącz lub wyłącz podświetlenie interfejsu",
+        btn_neon_title: "Przełącz automatyczne przejście kolorów neonowych",
+        btn_neon_aria: "Automatyczne przejście kolorów neonowych",
+        btn_battery_title: "Wybierz kolor",
+        btn_battery_aria: "Wybierz kolor interfejsu",
+        color_intensity_label: "Intensywność / Poświata:"
+    },
+    ru: {
+        color_customizer_title: "Цвет и значки:",
+        btn_lighting_power_title: "Включить/Выключить подсветку",
+        btn_lighting_power_aria: "Включить или выключить подсветку интерфейса",
+        btn_neon_title: "Включить/Выключить автоматический неоновый переход цветов",
+        btn_neon_aria: "Автоматический неоновый переход цветов",
+        btn_battery_title: "Выбрать цвет",
+        btn_battery_aria: "Выбрать цвет интерфейса",
+        color_intensity_label: "Интенсивность / Свечение:"
+    },
+    uk: {
+        color_customizer_title: "Колір та іконки:",
+        btn_lighting_power_title: "Увімкнути/Ввімкнути підсвічування",
+        btn_lighting_power_aria: "Увімкнути або вимкнути підсвічування інтерфейсу",
+        btn_neon_title: "Увімкнути/Вимкнути автоматичний неоновий перехід кольорів",
+        btn_neon_aria: "Автоматичний неоновий перехід кольорів",
+        btn_battery_title: "Вибрати колір",
+        btn_battery_aria: "Вибрати колір інтерфейсу",
+        color_intensity_label: "Інтенсивність / Світіння:"
+    },
+    ja: {
+        color_customizer_title: "カラー＆アイコン:",
+        btn_lighting_power_title: "照明のオン/オフ",
+        btn_lighting_power_aria: "インターフェースの照明をオンまたはオフにします",
+        btn_neon_title: "自動ネオンカラーの切り替え",
+        btn_neon_aria: "自動ネオンカラー遷移",
+        btn_battery_title: "色を選択",
+        btn_battery_aria: "インターフェースの色を選択",
+        color_intensity_label: "強度 / 輝度:"
+    },
+    zh: {
+        color_customizer_title: "颜色与图标:",
+        btn_lighting_power_title: "开启/关闭照明",
+        btn_lighting_power_aria: "开启或关闭界面照明",
+        btn_neon_title: "切换自动霓虹颜色过渡",
+        btn_neon_aria: "自动霓虹颜色过渡",
+        btn_battery_title: "选择颜色",
+        btn_battery_aria: "选择界面颜色",
+        color_intensity_label: "强度 / 光晕:"
+    },
+    "zh-tw": {
+        color_customizer_title: "顏色與圖示:",
+        btn_lighting_power_title: "開啟/關閉照明",
+        btn_lighting_power_aria: "開啟或關閉介面照明",
+        btn_neon_title: "切換自動霓虹顏色過渡",
+        btn_neon_aria: "自動霓虹顏色過渡",
+        btn_battery_title: "選擇顏色",
+        btn_battery_aria: "選擇介面顏色",
+        color_intensity_label: "強度 / 光暈:"
+    },
+    ar: {
+        color_customizer_title: "اللون والأيقونات:",
+        btn_lighting_power_title: "تشغيل/إيقاف الإضاءة",
+        btn_lighting_power_aria: "تشغيل أو إيقاف إضاءة الواجهة",
+        btn_neon_title: "تبديل انتقال ألوان النيون التلقائي",
+        btn_neon_aria: "انتقال تلقائي لألوان النيون",
+        btn_battery_title: "اختر اللون",
+        btn_battery_aria: "اختر لون الواجهة",
+        color_intensity_label: "الشدة / التوهج:"
+    },
+    bn: {
+        color_customizer_title: "রঙ এবং আইকন:",
+        btn_lighting_power_title: "লাইটিং চালু/বন্ধ করুন",
+        btn_lighting_power_aria: "ইন্টারফেস লাইটিং চালু বা বন্ধ করুন",
+        btn_neon_title: "স্বয়ংক্রিয় নিয়ন রঙের রূপান্তর টগল করুন",
+        btn_neon_aria: "স্বয়ংক্রিয় নিয়ন রঙের রূপান্তর",
+        btn_battery_title: "রঙ নির্বাচন করুন",
+        btn_battery_aria: "ইন্টারফেসের রঙ নির্বাচন করুন",
+        color_intensity_label: "তীব্রতা / দীপ্তি:"
+    },
+    bg: {
+        color_customizer_title: "Цвят и икони:",
+        btn_lighting_power_title: "Вкл/Изкл осветлението",
+        btn_lighting_power_aria: "Включване или изключване на осветлението на интерфейса",
+        btn_neon_title: "Превключване на автоматичен неонов преход на цветовете",
+        btn_neon_aria: "Автоматичен неонов преход на цветовете",
+        btn_battery_title: "Избери цвят",
+        btn_battery_aria: "Избери цвят на интерфейса",
+        color_intensity_label: "Интензивност / Сияние:"
+    },
+    da: {
+        color_customizer_title: "Farve & Ikoner:",
+        btn_lighting_power_title: "Tænd/Sluk belysning",
+        btn_lighting_power_aria: "Tænd eller sluk grænsefladebelysning",
+        btn_neon_title: "Skift automatisk neonfarveovergang",
+        btn_neon_aria: "Automatisk neonfarveovergang",
+        btn_battery_title: "Vælg farve",
+        btn_battery_aria: "Vælg grænsefladefarve",
+        color_intensity_label: "Intensitet / Glød:"
+    },
+    fi: {
+        color_customizer_title: "Väri & kuvakkeet:",
+        btn_lighting_power_title: "Valaistus Pälle/Pois",
+        btn_lighting_power_aria: "Kytke käyttöliittymän valaistus päälle tai pois",
+        btn_neon_title: "Vaihda automaattinen neon-värisiirtymä",
+        btn_neon_aria: "Automaattinen neon-värisiirtymä",
+        btn_battery_title: "Valitse väri",
+        btn_battery_aria: "Valitse käyttöliittymän väri",
+        color_intensity_label: "Intensiteetti / Hehku:"
+    },
+    hr: {
+        color_customizer_title: "Boja i ikone:",
+        btn_lighting_power_title: "Uključi/Isključi osvjetljenje",
+        btn_lighting_power_aria: "Uključi ili isključi osvjetljenje sučelja",
+        btn_neon_title: "Uključi/Isključi automatski neonski prijelaz boja",
+        btn_neon_aria: "Automatski neonski prijelaz boja",
+        btn_battery_title: "Odaberi boju",
+        btn_battery_aria: "Odaberi boju sučelja",
+        color_intensity_label: "Intenzitet / Sjaj:"
+    },
+    hu: {
+        color_customizer_title: "Szín és ikonok:",
+        btn_lighting_power_title: "Világítás Be/Ki",
+        btn_lighting_power_aria: "Felületi világítás be- vagy kikapcsolása",
+        btn_neon_title: "Automatikus neon színváltás be/ki",
+        btn_neon_aria: "Automatikus neon színátmenet",
+        btn_battery_title: "Szín kiválasztása",
+        btn_battery_aria: "Felület színének kiválasztása",
+        color_intensity_label: "Intenzitás / Fény:"
+    },
+    nl: {
+        color_customizer_title: "Kleur & Iconen:",
+        btn_lighting_power_title: "Verlichting Aan/Uit",
+        btn_lighting_power_aria: "Interfaceverlichting in- of uitschakelen",
+        btn_neon_title: "Automatische neonkleurovergang schakelen",
+        btn_neon_aria: "Automatische neonkleurovergang",
+        btn_battery_title: "Kleur selecteren",
+        btn_battery_aria: "Interfacekleur selecteren",
+        color_intensity_label: "Intensiteit / Gloed:"
+    },
+    no: {
+        color_customizer_title: "Farge og ikoner:",
+        btn_lighting_power_title: "Slå belysning På/Av",
+        btn_lighting_power_aria: "Slå grensesnittbelysning på eller av",
+        btn_neon_title: "Veksle automatisk neonfargeovergang",
+        btn_neon_aria: "Automatisk neonfargeovergang",
+        btn_battery_title: "Velg farge",
+        btn_battery_aria: "Velg grensesnittfarge",
+        color_intensity_label: "Intensitet / Glød:"
+    },
+    pt: {
+        color_customizer_title: "Cor e Ícones:",
+        btn_lighting_power_title: "Ligar/Desligar iluminação",
+        btn_lighting_power_aria: "Ligar ou desligar a iluminação da interface",
+        btn_neon_title: "Alternar transição automática de cores neon",
+        btn_neon_aria: "Transição automática de cores neon",
+        btn_battery_title: "Selecionar cor",
+        btn_battery_aria: "Selecionar cor da interface",
+        color_intensity_label: "Intensidade / Brilho:"
+    },
+    ro: {
+        color_customizer_title: "Culoare și pictograme:",
+        btn_lighting_power_title: "Pornește/Oprește iluminarea",
+        btn_lighting_power_aria: "Pornește sau oprește iluminarea interfeței",
+        btn_neon_title: "Comută tranziția automată a culorilor neon",
+        btn_neon_aria: "Tranziție automată a culorilor neon",
+        btn_battery_title: "Selectează culoarea",
+        btn_battery_aria: "Selectează culoarea interfeței",
+        color_intensity_label: "Intensitate / Strălucire:"
+    },
+    el: {
+        color_customizer_title: "Χρώμα & Εικonίδια:",
+        btn_lighting_power_title: "Ενεργοποίηση/Απενεργοποίηση φωτισμού",
+        btn_lighting_power_aria: "Ενεργοποίηση ή απενεργοποίηση φωτισμού διεπαφής",
+        btn_neon_title: "Εναλλαγή αυτόματης μετάβασης χρωμάτων neon",
+        btn_neon_aria: "Αυτόματη μετάβαση χρωμάτων neon",
+        btn_battery_title: "Επιλογή χρώματος",
+        btn_battery_aria: "Επιλογή χρώματος διεπαφής",
+        color_intensity_label: "Ένταση / Λάμψη:"
+    },
+    sv: {
+        color_customizer_title: "Färg & Ikoner:",
+        btn_lighting_power_title: "Slå på/av belysning",
+        btn_lighting_power_aria: "Slå på eller av gränssnittsbelysning",
+        btn_neon_title: "Växla automatisk neonfärgövergång",
+        btn_neon_aria: "Automatisk neonfärgövergång",
+        btn_battery_title: "Välj färg",
+        btn_battery_aria: "Välj gränssnittsfärg",
+        color_intensity_label: "Intensitet / Glöd:"
+    },
+    th: {
+        color_customizer_title: "สีและไอคอน:",
+        btn_lighting_power_title: "เปิด/ปิดไฟส่องสว่าง",
+        btn_lighting_power_aria: "เปิด or ปิดไฟส่องสว่างอินเทอร์เฟซ",
+        btn_neon_title: "สลับการเปลี่ยนสีนีออนอัตโนมัติ",
+        btn_neon_aria: "การเปลี่ยนสีนีออนอัตโนมัติ",
+        btn_battery_title: "เลือกสี",
+        btn_battery_aria: "เลือกสีอินเทอร์เฟซ",
+        color_intensity_label: "ความเข้ม / แสงเรือง:"
+    },
+    tr: {
+        color_customizer_title: "Renk ve Simgeler:",
+        btn_lighting_power_title: "Aydınlatmayı Aç/Kapat",
+        btn_lighting_power_aria: "Arayüz aydınlatmasını aç veya kapat",
+        btn_neon_title: "Otomatik neon renk geçişini aç/kapat",
+        btn_neon_aria: "Otomatik neon renk geçişi",
+        btn_battery_title: "Renk Seç",
+        btn_battery_aria: "Arayüz rengini seç",
+        color_intensity_label: "Yoğunluk / Parlama:"
+    },
+    vi: {
+        color_customizer_title: "Màu sắc & Biểu tượng:",
+        btn_lighting_power_title: "Bật/Tắt chiếu sáng",
+        btn_lighting_power_aria: "Bật hoặc tắt chiếu sáng giao diện",
+        btn_neon_title: "Chuyển đổi hiệu ứng chuyển màu neon tự động",
+        btn_neon_aria: "Hiệu ứng chuyển màu neon tự động",
+        btn_battery_title: "Chọn màu",
+        btn_battery_aria: "Chọn màu giao diện",
+        color_intensity_label: "Cường độ / Độ sáng:"
+    },
+    he: {
+        color_customizer_title: "צבע וסמלים:",
+        btn_lighting_power_title: "הדלקה/כבה תאורה",
+        btn_lighting_power_aria: "הדלק או כבה את תאורת הממשק",
+        btn_neon_title: "החלף מעבר צבעי ניאון אוטומטי",
+        btn_neon_aria: "מעבר צבעי ניאון אוטומטי",
+        btn_battery_title: "בחר צבע",
+        btn_battery_aria: "בחר צבע ממשק",
+        color_intensity_label: "עוצמה / זוהר:"
+    },
+    hi: {
+        color_customizer_title: "रंग और आइकन:",
+        btn_lighting_power_title: "लाइटिंग चालू/बंद करें",
+        btn_lighting_power_aria: "इंटरफ़ेस लाइटिंग चालू या बंद करें",
+        btn_neon_title: "स्वचालित नियॉन रंग परिवर्तन टॉगल करें",
+        btn_neon_aria: "स्वचालित नियॉन रंग परिवर्तन",
+        btn_battery_title: "रंग चुनें",
+        btn_battery_aria: "इंटरफ़ेस का रंग चुनें",
+        color_intensity_label: "तीव्रता / चमक:"
+    },
+    id: {
+        color_customizer_title: "Warna & Ikon:",
+        btn_lighting_power_title: "Nyalakan/Matikan Pencahayaan",
+        btn_lighting_power_aria: "Nyalakan atau matikan pencahayaan antarmuka",
+        btn_neon_title: "Beralih transisi warna neon otomatis",
+        btn_neon_aria: "Transisi warna neon otomatis",
+        btn_battery_title: "Pilih Warna",
+        btn_battery_aria: "Pilih warna antarmuka",
+        color_intensity_label: "Intensitas / Cahaya:"
+    },
+    ko: {
+        color_customizer_title: "색상 및 아이콘:",
+        btn_lighting_power_title: "조명 켜기/끄기",
+        btn_lighting_power_aria: "인터페이스 조명 켜기 또는 끄기",
+        btn_neon_title: "자동 네온 색상 전환 토글",
+        btn_neon_aria: "자동 네온 색상 전환",
+        btn_battery_title: "색상 선택",
+        btn_battery_aria: "인터페이스 색상 선택",
+        color_intensity_label: "강도 / 광채:"
+    }
+};
+
+
 const languageNamesMaster = {
     cs: { cs: "Čeština", en: "Czech", de: "Tschechisch", fr: "Tchèque" },
     en: { cs: "Angličtina", en: "English", de: "Englisch", fr: "Anglais" },

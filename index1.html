@@ -1326,16 +1326,16 @@ iframe {
                 <!-- PŘIZPŮSOBENÍ BARVY A INTENZITY V MENU -->
                 <li class="customizer-menu-item">
                     <div class="customizer-row">
-                        <span>Barva & ikony:</span>
+                        <span data-i18n-btn="color_customizer_title" data-i18n="color_customizer_title">Barva & ikony:</span>
                         <div style="display: flex; gap: 6px; align-items: center;">
-                            <button class="back-button battery-btn" id="lighting-power-btn" title="Vypnout/Zapnout svícení" aria-label="Vypnout nebo zapnout svícení rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">⏻</button>
-                            <!-- NOVÉ TLAČÍTKO PRO AUTOMATICKÝ NEONOVÝ PŘECHOD (DUHA) -->
-                            <button class="back-button battery-btn" id="neon-cycle-btn" title="Zapnout/Vypnout automatický neonový přechod barev" aria-label="Automatický neonový přechod barev" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">🌈</button>
-                            <button class="back-button battery-btn" id="battery-toggle-btn" title="Vybrat barvu" aria-label="Vybrat barvu rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important;">🔋</button>
+                            <button class="back-button battery-btn" id="lighting-power-btn" data-i18n-title="btn_lighting_power_title" data-i18n-aria="btn_lighting_power_aria" title="Vypnout/Zapnout svícení" aria-label="Vypnout nebo zapnout svícení rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">⏻</button>
+                            <!-- TLAČÍTKO PRO AUTOMATICKÝ NEONOVÝ PŘECHOD (DUHA) -->
+                            <button class="back-button battery-btn" id="neon-cycle-btn" data-i18n-title="btn_neon_title" data-i18n-aria="btn_neon_aria" title="Zapnout/Vypnout automatický neonový přechod barev" aria-label="Automatický neonový přechod barev" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important; font-size: 0.9rem !important;">🌈</button>
+                            <button class="back-button battery-btn" id="battery-toggle-btn" data-i18n-title="btn_battery_title" data-i18n-aria="btn_battery_aria" title="Vybrat barvu" aria-label="Vybrat barvu rozhraní" style="width: 38px !important; height: 38px !important; min-width: 38px !important; min-height: 38px !important;">🔋</button>
                         </div>
                     </div>
                     <div class="customizer-row" style="flex-direction: column; align-items: stretch;">
-                        <span style="font-size: 0.8rem; text-align: left; opacity: 0.8;">Intenzita / záře:</span>
+                        <span data-i18n-btn="color_intensity_label" data-i18n="color_intensity_label" style="font-size: 0.8rem; text-align: left; opacity: 0.8;">Intenzita / záře:</span>
                         <input type="range" id="intensitySlider" class="intensity-slider" min="0.5" max="2.5" step="0.1" value="1">
                     </div>
                 </li>
@@ -1567,7 +1567,7 @@ iframe {
         e.stopPropagation();
         isLightingEnabled = !isLightingEnabled;
         if (isLightingEnabled && isNeonCycling) {
-            startNeonCycle(false); // Obnovit neon, pokud byl aktivní
+            startNeonCycle(); // Obnovit neon, pokud byl aktivní
         }
         updateThemeFromControls();
     });
@@ -1723,10 +1723,25 @@ iframe {
         let intensity = 1;
         isLightingEnabled = savedLighting !== null ? savedLighting === 'true' : true;
 
-        if (savedColor) {
+        if (savedNeon === null) {
+            isNeonCycling = true;
+            neonCycleBtn.classList.add('neon-active');
+        } else {
+            isNeonCycling = savedNeon === 'true';
+            if (isNeonCycling) {
+                neonCycleBtn.classList.add('neon-active');
+            }
+        }
+
+        if (isNeonCycling) {
+            neonHue = Math.floor(Math.random() * 360);
+            color = hslToHex(neonHue, 100, 50);
+            colorPickerInput.value = color;
+        } else if (savedColor) {
             color = savedColor;
             colorPickerInput.value = savedColor;
         }
+
         if (savedIntensity) {
             intensity = parseFloat(savedIntensity);
             intensitySlider.value = intensity;
@@ -1734,9 +1749,7 @@ iframe {
 
         applyCustomTheme(color, intensity, isLightingEnabled);
 
-        if (savedNeon === 'true' && isLightingEnabled) {
-            isNeonCycling = true;
-            neonCycleBtn.classList.add('neon-active');
+        if (isNeonCycling && isLightingEnabled) {
             startNeonCycle();
         }
     });
@@ -2011,6 +2024,7 @@ iframe {
     });
 
     function setLanguage(lang) {
+        // Hlavní slovník pro obecné překlady
         const dict = (typeof translations !== 'undefined' ? translations[lang] : null) || (typeof translations !== 'undefined' ? translations.cs : {});
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
@@ -2018,6 +2032,30 @@ iframe {
                 el.innerHTML = dict[key];
             }
         });
+        
+        // Slovník dodatečných tlačítek z const additionalButtonTranslations
+        const btnDict = (typeof additionalButtonTranslations !== 'undefined' ? additionalButtonTranslations[lang] : null) || (typeof additionalButtonTranslations !== 'undefined' ? additionalButtonTranslations.cs : {});
+        document.querySelectorAll('[data-i18n-btn]').forEach(el => {
+            const key = el.getAttribute('data-i18n-btn');
+            if (btnDict[key] !== undefined) {
+                el.innerHTML = btnDict[key];
+            }
+        });
+
+        // Podpora pro překlady atributů title a aria-label u ovládacích tlačítek barvy
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            const key = el.getAttribute('data-i18n-title');
+            if (dict[key] !== undefined) {
+                el.setAttribute('title', dict[key]);
+            }
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+            const key = el.getAttribute('data-i18n-aria');
+            if (dict[key] !== undefined) {
+                el.setAttribute('aria-label', dict[key]);
+            }
+        });
+
         document.documentElement.lang = lang;
         document.documentElement.dir = (lang === 'ar' || lang === 'he') ? 'rtl' : 'ltr';
         
@@ -2192,6 +2230,7 @@ iframe {
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+        initVideoLogoBubbles = initVideoBubbles();
         initVideoBubbles();
         const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
         setBackgroundVideo(randomIndex);
@@ -2218,7 +2257,7 @@ iframe {
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isInsights || entry.isIntersecting) {
                 entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
                 observer.unobserve(entry.target);
             }
