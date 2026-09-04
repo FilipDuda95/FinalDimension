@@ -108,7 +108,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
 
 .folder {
   display: flex;
-  background-color: white;
+  background-color: rgba(20, 20, 20, 0.7);
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -120,7 +120,7 @@ h6 { font-size: clamp(13px, 1.8vw, 17px); }
   text-align: center;
   height: 25%;
   width: auto;
-  color: #000;
+  color: #d3d3d3;
 }
 
 @media (max-width: 600px) {
@@ -1283,9 +1283,74 @@ html[dir="rtl"] .footer p {
 
 .back-btn:hover { background-color: var(--dynamic-color, #05d4ff); }
 
+/* Tlačítko pro celou obrazovku v herní sekci (umístěno vedle křížku) */
+.fullscreen-game-btn {
+  position: absolute;
+  top: 50%;
+  right: 80px;
+  width: 44px;
+  height: 44px;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: 1px solid #333;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0;
+  z-index: 9003;
+  backdrop-filter: blur(15px);
+  transition: 0.4s;
+}
+
+.fullscreen-game-btn:hover { background-color: var(--dynamic-color, #05d4ff); }
+
+/* Třída aktivní při režimu celé obrazovky hry – skryje rušivé prvky stránky */
+body.game-fullscreen-mode #top-bar,
+body.game-fullscreen-mode #background-video,
+body.game-fullscreen-mode #video-bubbles,
+body.game-fullscreen-mode #radial-menu,
+body.game-fullscreen-mode .scrollbutton,
+body.game-fullscreen-mode #about-section-1,
+body.game-fullscreen-mode #about-section-2,
+body.game-fullscreen-mode #padding,
+body.game-fullscreen-mode #Patička,
+body.game-fullscreen-mode .logo-section,
+body.game-fullscreen-mode .logo-section-glow,
+body.game-fullscreen-mode #center-section {
+  display: none !important;
+}
+
+body.game-fullscreen-mode #výška_herního_okna {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  z-index: 99999 !important;
+  background: #000 !important;
+  padding: 0 !important;
+}
+
+body.game-fullscreen-mode #overlay {
+  padding-top: 0 !important;
+  height: 100% !important;
+}
+
 @media (max-width: 600px) {
     .back-btn {
         right: 14px;
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+    .fullscreen-game-btn {
+        right: 60px;
         width: 38px;
         height: 38px;
         font-size: 1rem;
@@ -1502,6 +1567,8 @@ iframe {
                 <iframe id="game-frame" src=""></iframe>
             </div>
 
+            <!-- Tlačítko pro celou obrazovku naproti křížku -->
+            <button id="fullscreen-game-btn" class="fullscreen-game-btn" onclick="toggleFullscreenGame()" title="Přepnout hru na celou obrazovku" style="display: none;">⛶</button>
             <button id="back-btn" class="back-btn" onclick="zavritHru()" title="Návrat do menu" style="display: none;">✕</button>
         </div>
     </div>
@@ -1940,6 +2007,7 @@ iframe {
     const overlay = document.getElementById('overlay');
     const iframe = document.getElementById('game-frame');
     const gameBackBtn = document.getElementById('back-btn');
+    const gameFullscreenBtn = document.getElementById('fullscreen-game-btn');
 
     function prizpusobVysku() {
         const vyskaRodice = hlavniDiv.offsetHeight;
@@ -1962,6 +2030,7 @@ iframe {
         
         overlay.style.display = 'block';
         gameBackBtn.style.display = 'flex';
+        gameFullscreenBtn.style.display = 'flex';
 
         document.getElementById('game-menu').style.visibility = 'hidden';
         document.querySelector('#výška_herního_okna h3').style.visibility = 'hidden';
@@ -1976,12 +2045,32 @@ iframe {
     }
 
     function zavritHru() {
+        // Pokud byla hra v celoobrazovkovém režimu, nejprve jej vypneme
+        if (document.body.classList.contains('game-fullscreen-mode')) {
+            toggleFullscreenGame();
+        }
         overlay.style.display = 'none';
         gameBackBtn.style.display = 'none';
+        gameFullscreenBtn.style.display = 'none';
         iframe.src = '';
         document.getElementById('game-menu').style.visibility = 'visible';
         document.querySelector('#výška_herního_okna h3').style.visibility = 'visible';
         hlavniDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleFullscreenGame() {
+        document.body.classList.toggle('game-fullscreen-mode');
+        const isFull = document.body.classList.contains('game-fullscreen-mode');
+        gameFullscreenBtn.title = isFull ? "Ukončit celou obrazovku" : "Přepnout hru na celou obrazovku";
+        gameFullscreenBtn.innerHTML = isFull ? "🗗" : "⛶";
+        prizpusobVysku();
+
+        // Pokud byl režim celé obrazovky zrušen (není již aktivní), počkáme na prodlevu a odsrolujeme k hernímu oknu
+        if (!isFull) {
+            setTimeout(() => {
+                hlavniDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300); // Prodleva 300 ms před scrollováním
+        }
     }
 
     window.addEventListener('resize', prizpusobVysku);
