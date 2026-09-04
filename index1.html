@@ -1984,14 +1984,10 @@ iframe {
 
     window.addEventListener('resize', prizpusobVysku);
 
-    // ZDE JE ÚPRAVA: Spuštění hry při načtení proběhne pouze na PC, nikoliv na mobilu
     window.addEventListener('load', () => {
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (!isMobile) {
-            setTimeout(() => {
-                spustitHru('index1', false); 
-            }, 800);
-        }
+        setTimeout(() => {
+            spustitHru('index1', false); 
+        }, 800);
     });
 
     function filterLanguages() {
