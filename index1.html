@@ -47,6 +47,21 @@ body {
     color: var(--text-color, #ffffff); 
 }
 
+#výška_herního_okna {
+    min-height: 80vh;
+    padding-top: 80px;
+    padding-bottom: 40px;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  width:100%; 
+  position: relative; 
+  z-index: 2;
+  box-sizing: border-box;
+}
+
 h1 { font-size: clamp(20px, 3.5vw, 26px); text-align: center; }
 h2 { font-size: clamp(18px, 3vw, 24px); }
 h3 { font-size: clamp(16px, 2.5vw, 21px); }
@@ -1151,7 +1166,7 @@ html[dir="rtl"] .footer p {
   #padding { text-align: left; }
 
 #výška_herního_okna {
-min-height: 30vh;
+min-height: 40vh;
   color: inherit;
   display: flex;
   flex-direction: column;
@@ -1199,22 +1214,23 @@ min-height: 30vh;
     margin-top: 30px;
     gap: 20px;
   }
-}
-
 #výška_herního_okna {
-    min-height: 80vh;
-    padding-top: 80px;
-    padding-bottom: 40px;
+min-height: 40vh;
   color: inherit;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 50vh;
   height: auto;
   width:100%; 
   position: relative; 
+  padding-top: 80px;
+  padding-bottom: 60px;
   z-index: 2;
   box-sizing: border-box;
 }
+}
+
 
 .top-vignette {
   position: absolute;
