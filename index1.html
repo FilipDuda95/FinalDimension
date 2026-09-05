@@ -2039,8 +2039,7 @@ iframe {
     const seznamHer = [
         { id: 'index1', nazev: 'Vesmírná-mise' }, 
         { id: 'index2', nazev: 'Vesmírná-mise2' },
-{ id: 'index3', nazev: 'Vesmírná-mise2' }
-
+        { id: 'index3', nazev: 'Vesmírná-mise3' }
     ];
 
     const hlavniDiv = document.getElementById('výška_herního_okna');
@@ -2328,6 +2327,7 @@ iframe {
     function videoList() {
         const list = [];
         for (let i = 1; i <= TOTAL_BACKGROUND_VIDEOS; i++) {
+            list.path = `pozadi/${i}.mp4`; // Opraveno pro korektní zápis cesty v poli
             list.push(`pozadi/${i}.mp4`);
         }
         return list;
@@ -2367,7 +2367,6 @@ iframe {
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-        initVideoLogoBubbles = initVideoBubbles();
         initVideoBubbles();
         const randomIndex = Math.floor(Math.random() * TOTAL_BACKGROUND_VIDEOS);
         setBackgroundVideo(randomIndex);
@@ -2394,7 +2393,7 @@ iframe {
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isInsights || entry.isIntersecting) {
+            if (entry.isIntersecting) {
                 entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
                 observer.unobserve(entry.target);
             }
