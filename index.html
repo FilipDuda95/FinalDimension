@@ -134,7 +134,7 @@ html, body {
             animation: driftReverse 30s infinite ease-in-out;      
             -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
             mask-image: linear-gradient(to top, transparent 0%, black 60%);
-	    z-index: 2;
+	   z-index:2;
         }
 
         .clouds .cloud:nth-child(2) {
@@ -146,7 +146,7 @@ html, body {
             animation-delay: 4s;
             -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
             mask-image: linear-gradient(to top, transparent 0%, black 60%);
-	    z-index: 3;
+	z-index:3;
         }
 
         .clouds .cloud:nth-child(3) {
@@ -158,17 +158,18 @@ html, body {
             animation-delay: 9s;
             -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
             mask-image: linear-gradient(to top, transparent 0%, black 60%);
-	    z-index: 2;
+	z-index:2;
         }
         .clouds .cloud:nth-child(4) {
             width: 600px;
             top: 65%;
             right: 200px;
+           
             animation: driftReverse 26s infinite ease-in-out;
             animation-delay: 4s;
             -webkit-mask-image: linear-gradient(to top, transparent 0%, black 60%);
             mask-image: linear-gradient(to top, transparent 0%, black 60%);
-	    z-index: 3;
+	z-index:3;
         }
 
         @keyframes drift {
@@ -292,42 +293,6 @@ html, body {
             pointer-events: auto;
             opacity: 1;
         }
-
-        /* --- STYLY PRO NAČÍTACÍ KOLEČKO (SPINNER) --- */
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            border-radius: inherit;
-            transition: opacity 0.4s ease;
-        }
-
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid rgba(255, 255, 255, 0.15);
-            border-top: 4px solid #ffffff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* ------------------------------------------- */
 
         .resize-handle {
             position: absolute;
@@ -716,10 +681,11 @@ html, body {
             .clouds-foreground .cloud:nth-child(1) { width: 240px; }
             .clouds-foreground .cloud:nth-child(2) { width: 200px; }
             .clouds-foreground .cloud:nth-child(3) { width: 170px; }
-            .clouds .cloud:nth-child(1) { width: 500px; }
-            .clouds .cloud:nth-child(2) { width: 450px; }
-            .clouds .cloud:nth-child(3) { width: 350px; }
-            .clouds .cloud:nth-child(4) { width: 460px; }
+		.clouds .cloud:nth-child(1) {width:500px }
+		.clouds .cloud:nth-child(2) {width:450px }
+		.clouds .cloud:nth-child(3) {width:350px }
+		.clouds .cloud:nth-child(4) {width:460px }
+
 
             .viewport-wrapper {
                 width: 92vw;
@@ -838,9 +804,11 @@ html, body {
     <!-- Spodní mraky v pozadí -->
     <div class="clouds">
         <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
-        <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
+	<img src="style/cload_big.jpg" class="cloud" alt="Mrak">
         <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
-        <img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
+	<img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
+ 	
+
     </div>
 
     <div class="scene">
@@ -910,7 +878,7 @@ html, body {
     </div>
 
     <script>
-        // Seznam dostupných pozadí ve složce background
+        // Seznam dostupných pozadí ve složce background (upravte názvy podle potřeby)
         const backgroundImages = [
             "background/1.jpg",
             "background/2.jpg",
@@ -924,8 +892,10 @@ html, body {
             bgImg.src = backgroundImages[index];
         }
 
+        // Při spuštění nastaví náhodné pozadí
         applyBackground(currentBgIndex);
 
+        // Tlačítko pro přepnutí pozadí
         document.getElementById('bgSwitchBtn').addEventListener('click', () => {
             currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
             applyBackground(currentBgIndex);
@@ -1090,19 +1060,11 @@ html, body {
             `;
         }
 
-        // --- UPRAVENÁ FUNKCE S PŘIDANÝM LOADEREM ---
         function getSlotHTML(pageConfig, loadImmediately = false) {
-            const loaderHTML = `
-                <div class="loading-overlay">
-                    <div class="spinner"></div>
-                </div>
-            `;
-
             if (pageConfig === "dual-screen") {
                 const srcPC = loadImmediately ? 'index3.html' : '';
                 const srcPhone = loadImmediately ? 'index2.html' : '';
                 return `
-                    ${loaderHTML}
                     <div class="dual-screen-container">
                         <div class="device-frame pc-monitor">
                             <div class="pc-screen-area">
@@ -1117,51 +1079,18 @@ html, body {
                 `;
             } else {
                 return `
-                    ${loaderHTML}
                     <iframe class="viewport-iframe" data-src="${pageConfig}" ${loadImmediately ? `src="${pageConfig}"` : ''}></iframe>
                 `;
             }
         }
 
-        // Funkce pro skrytí loaderu po načtení iframe(s)
-        function handleIframeLoad(e) {
-            hideIframeScrollbar(e);
-            
-            const slot = e.target.closest('.page-slot');
-            if (!slot) return;
-
-            // U dual-screen počkáme, až se načtou obě obrazovky (nebo aspoň zkontrolujeme stav)
-            const iframes = slot.querySelectorAll('iframe');
-            const allLoaded = Array.from(iframes).every(f => f.contentDocument && f.contentDocument.readyState === 'complete' || f.getAttribute('src'));
-
-            // Pro jistotu po prvním loadu iframe nebo po chvilce loader schováme
-            const loader = slot.querySelector('.loading-overlay');
-            if (loader) {
-                loader.classList.add('hidden');
-                setTimeout(() => loader.remove(), 400); // Úplné odstranění z DOM po doznění animace
-            }
-        }
-
         function activateSlotContent(slot) {
-            const loader = slot.querySelector('.loading-overlay');
-            if (!loader) {
-                // Pokud už byl loader smazán, vrátíme ho zpět pro nové načtení
-                const isDual = slot.querySelector('.dual-screen-container');
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = `
-                    <div class="loading-overlay">
-                        <div class="spinner"></div>
-                    </div>
-                `;
-                slot.insertBefore(tempDiv.firstElementChild, slot.firstChild);
-            }
-
             const iframes = slot.querySelectorAll('iframe');
             iframes.forEach(iframe => {
                 if (!iframe.getAttribute('src') && iframe.dataset.src) {
                     iframe.src = iframe.dataset.src;
-                    iframe.removeEventListener('load', handleIframeLoad);
-                    iframe.addEventListener('load', handleIframeLoad);
+                    iframe.removeEventListener('load', hideIframeScrollbar);
+                    iframe.addEventListener('load', hideIframeScrollbar);
                 }
             });
         }
@@ -1187,7 +1116,7 @@ html, body {
 
             viewportFrame.querySelectorAll('.page-slot.active iframe').forEach(iframe => {
                 if (iframe.getAttribute('src')) {
-                    iframe.addEventListener('load', handleIframeLoad);
+                    iframe.addEventListener('load', hideIframeScrollbar);
                 }
             });
 
@@ -1331,7 +1260,6 @@ html, body {
             updateView();
         });
 
-        rotateXSlider.value = rotationX;
         rotateXSlider.addEventListener('input', (e) => {
             rotationX = parseInt(e.target.value, 10);
             rotateXValue.textContent = `${rotationX}°`;
