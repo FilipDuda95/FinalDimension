@@ -1149,6 +1149,21 @@ html[dir="rtl"] .footer p {
   #center-section .inner-text { width:92%; margin:4%; }
   #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
   #padding { text-align: left; }
+
+#výška_herního_okna {
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 50vh;
+  height: auto;
+  width:100%; 
+  position: relative; 
+  padding-top: 80px;
+  padding-bottom: 60px;
+  z-index: 2;
+  box-sizing: border-box;
+}
 }
 
 @media (max-width: 768px) and (orientation: landscape) {
@@ -1178,11 +1193,6 @@ html[dir="rtl"] .footer p {
   #center-section .inner-text:first-child { border-right: 1px solid rgba(255, 255, 255, 0.18); }
   #padding { text-align: left; }
   
-  #výška_herního_okna {
-    min-height: 80vh;
-    padding-top: 80px;
-    padding-bottom: 40px;
-  }
   #game-menu {
     padding-bottom: 20px;
     margin-top: 30px;
@@ -1191,6 +1201,9 @@ html[dir="rtl"] .footer p {
 }
 
 #výška_herního_okna {
+    min-height: 80vh;
+    padding-top: 80px;
+    padding-bottom: 40px;
   color: inherit;
   display: flex;
   flex-direction: column;
