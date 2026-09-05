@@ -39,8 +39,32 @@ html, body {
             height: 100dvh;
             overflow: hidden;
             font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(180deg, #ffffff 0%, #333333 55%, #000000 100%);
+            background: #000000;
             touch-action: manipulation;
+        }
+
+        /* Pozadí přes celou obrazovku – centrované, zachovávající výšku */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+            background: #000000;
+        }
+
+        .background-container img {
+            height: 100%;
+            width: auto;
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
         /* Spodní mraky v pozadí (z-index: 1) */
@@ -545,6 +569,46 @@ html, body {
             transition: width 0.3s ease, height 0.3s ease;
         }
 
+        /* Tlačítko pro změnu pozadí v pravém dolním rohu */
+        .bg-switch-btn {
+            position: fixed;
+            bottom: 12px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(18, 18, 18, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            z-index: 100;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            transition: background 0.2s, transform 0.1s, color 0.2s;
+        }
+
+        .bg-switch-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        .bg-switch-btn:active {
+            transform: scale(0.92);
+        }
+
+        .bg-switch-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
         .rotate-panel {
             display: flex;
             flex-direction: row;
@@ -586,7 +650,8 @@ html, body {
         body.is-fullscreen .zoom-panel,
         body.is-fullscreen .rotate-panel,
         body.is-fullscreen .clouds,
-        body.is-fullscreen .clouds-foreground {
+        body.is-fullscreen .clouds-foreground,
+        body.is-fullscreen .bg-switch-btn {
             display: none !important;
         }
 
@@ -731,6 +796,11 @@ html, body {
         </defs>
     </svg>
 
+    <!-- Pozadí složky background -->
+    <div class="background-container" id="backgroundContainer">
+        <img id="backgroundImage" src="" alt="Pozadí">
+    </div>
+
     <!-- Spodní mraky v pozadí -->
     <div class="clouds">
         <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
@@ -752,6 +822,16 @@ html, body {
 
         <div class="nav-arrow left" id="navLeft">‹</div>
         <div class="nav-arrow right" id="navRight">›</div>
+
+        <button class="bg-switch-btn" id="bgSwitchBtn" title="Změnit pozadí">
+            <svg viewBox="0 0 24 24">
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
+                <line x1="16" y1="5" x2="22" y2="5"></line>
+                <line x1="19" y1="2" x2="19" y2="8"></line>
+                <circle cx="9" cy="11" r="2"></circle>
+                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+            </svg>
+        </button>
 
         <div class="controls-container">
             <div class="panel-box zoom-panel">
@@ -798,6 +878,29 @@ html, body {
     </div>
 
     <script>
+        // Seznam dostupných pozadí ve složce background (upravte názvy podle potřeby)
+        const backgroundImages = [
+            "background/1.jpg",
+            "background/2.jpg",
+            "background/3.jpg"
+        ];
+
+        let currentBgIndex = Math.floor(Math.random() * backgroundImages.length);
+
+        function applyBackground(index) {
+            const bgImg = document.getElementById('backgroundImage');
+            bgImg.src = backgroundImages[index];
+        }
+
+        // Při spuštění nastaví náhodné pozadí
+        applyBackground(currentBgIndex);
+
+        // Tlačítko pro přepnutí pozadí
+        document.getElementById('bgSwitchBtn').addEventListener('click', () => {
+            currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+            applyBackground(currentBgIndex);
+        });
+
         const availablePages = [
             "index1.html",
             "dual-screen", 
@@ -1193,8 +1296,8 @@ html, body {
 
         function hideIframeScrollbar(e) {
             try {
-                const targetIframe = e ? e.target : this;
-                const iframeDoc = targetIframe.contentDocument || targetIframe.contentWindow.document;
+                const targetIframe = e ? e.target : this,
+                iframeDoc = targetIframe.contentDocument || targetIframe.contentWindow.document;
                 if (!iframeDoc) return;
 
                 const style = iframeDoc.createElement('style');
