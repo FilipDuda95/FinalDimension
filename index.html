@@ -99,7 +99,6 @@ html, body {
             position: absolute;
             object-fit: contain;
             filter: url(#removeBlackPure);
-            will-change: transform;
         }
 
         /* Vrchní tři mraky */
@@ -227,13 +226,12 @@ html, body {
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000000 !important;
+            background: #fff;
             box-shadow: 0 30px 90px rgba(0,0,0,0.85);
             border-radius: 6px;
             overflow: hidden;
             will-change: transform, opacity;
             backface-visibility: hidden;
-            contain: layout style paint;
             transform: translateZ(0);
             transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, border-radius 0.3s ease;
             transform-style: preserve-3d;
@@ -275,7 +273,7 @@ html, body {
             width: 100% !important;
             height: 100% !important;
             transform: none !important;
-            background-color: #000000 !important;
+            background-color: black;
         }
 
         .page-slot {
@@ -369,7 +367,7 @@ html, body {
             width: 100%;
             height: 100%;
             border: 0;
-            background: #000000 !important; /* Změněno z bílé na černou, aby iframe neblikal bíle */
+            background: #fff;
             pointer-events: auto;
             scrollbar-width: none;
             border-radius: inherit;
@@ -420,7 +418,7 @@ html, body {
             position: relative;
             width: 100%;
             height: calc(100% - 18px);
-            background: #000000;
+            background: #fff;
             overflow: hidden;
         }
 
@@ -800,15 +798,17 @@ html, body {
 
     <!-- Pozadí složky background -->
     <div class="background-container" id="backgroundContainer">
-        <img id="backgroundImage" src="" alt="Pozadí" loading="eager">
+        <img id="backgroundImage" src="" alt="Pozadí">
     </div>
 
     <!-- Spodní mraky v pozadí -->
     <div class="clouds">
-        <img src="style/cload_big.jpg" class="cloud" alt="Mrak" loading="lazy">
-        <img src="style/cload_big.jpg" class="cloud" alt="Mrak" loading="lazy">
-        <img src="style/cload_small.jpg" class="cloud" alt="Mrak" loading="lazy">
-        <img src="style/cload_middle.jpg" class="cloud" alt="Mrak" loading="lazy">
+        <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
+	<img src="style/cload_big.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
+	<img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
+ 	
+
     </div>
 
     <div class="scene">
@@ -872,20 +872,12 @@ html, body {
 
     <!-- Vrchní mraky v popředí (před iframe) -->
     <div class="clouds-foreground">
-        <img src="style/cload_big.jpg" class="cloud" alt="Mrak" loading="lazy">
-        <img src="style/cload_middle.jpg" class="cloud" alt="Mrak" loading="lazy">
-        <img src="style/cload_small.jpg" class="cloud" alt="Mrak" loading="lazy">
+        <img src="style/cload_big.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_middle.jpg" class="cloud" alt="Mrak">
+        <img src="style/cload_small.jpg" class="cloud" alt="Mrak">
     </div>
 
     <script>
-        // Optimalizace: Pozastavení animací mraků, když je okno neaktivní (Page Visibility API)
-        document.addEventListener('visibilitychange', () => {
-            const clouds = document.querySelectorAll('.cloud');
-            clouds.forEach(cloud => {
-                cloud.style.animationPlayState = document.hidden ? 'paused' : 'running';
-            });
-        });
-
         // Seznam dostupných pozadí ve složce background (upravte názvy podle potřeby)
         const backgroundImages = [
             "background/1.jpg",
@@ -1146,14 +1138,6 @@ html, body {
             }
 
             const slots = viewportFrame.querySelectorAll('.page-slot');
-            
-            slots.forEach(slot => {
-                const slotIndex = parseInt(slot.dataset.index);
-                if (slotIndex !== targetIndex) {
-                    deactivateSlotContent(slot);
-                }
-            });
-
             const targetSlot = Array.from(slots).find(s => parseInt(s.dataset.index) === targetIndex);
             
             if (targetSlot) {
@@ -1326,7 +1310,6 @@ html, body {
                     html, body {
                         scrollbar-width: none !important;
                         -ms-overflow-style: none !important;
-                        background: #000000 !important;
                     }
                 `;
                 iframeDoc.head.appendChild(style);
